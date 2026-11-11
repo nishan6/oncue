@@ -301,10 +301,13 @@ struct ShotListView: View {
 
     /// Typing goes to the shot list, and the restored or current selection is brought into view.
     private func revealSelection(_ proxy: ScrollViewProxy) {
-        DispatchQueue.main.async {
-            listFocused = true
-            if let first = rows.first(where: { model.selectedShotIDs.contains($0.id) }) {
-                proxy.scrollTo(first.id.uuidString, anchor: .center)
+        DispatchQueue.main.async { listFocused = true }
+        // The list lays out its rows over the first few runloop passes, so scroll after it has.
+        for delay in [0.15, 0.6] {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                if let first = rows.first(where: { model.selectedShotIDs.contains($0.id) }) {
+                    proxy.scrollTo(first.id.uuidString, anchor: .center)
+                }
             }
         }
     }
