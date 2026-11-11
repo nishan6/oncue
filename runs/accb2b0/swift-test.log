@@ -1,0 +1,114 @@
+Building for debugging...
+[0/8] /Users/runner/work/oncue/oncue/Packages/OnCueCore/.build/arm64-apple-macosx/debug/OnCueCorePackageTests.derived/runner.swift
+[1/8] Write sources
+[3/8] Copying Fixtures
+[4/8] Write sources
+[5/8] Write swift-version--79AA4F9932D1E87A.txt
+[7/16] Emitting module OnCueCore
+[8/19] Compiling OnCueCore MachineProfile.swift
+[9/19] Compiling OnCueCore ShowCoding.swift
+[10/19] Compiling OnCueCore TolerantDecoding.swift
+[11/19] Compiling OnCueCore PTZService.swift
+[12/19] Compiling OnCueCore SwitcherDevice.swift
+[13/19] Compiling OnCueCore Model.swift
+[14/19] Compiling OnCueCore ATEMSwitcher.swift
+[15/19] Compiling OnCueCore CompanionClient.swift
+[16/19] Compiling OnCueCore MIDIManager.swift
+[17/19] Compiling OnCueCore OSC.swift
+[18/23] Compiling OnCueCoreTests PersistenceTests.swift
+[19/23] Compiling OnCueCoreTests MachineProfileTests.swift
+[20/23] Compiling OnCueCoreTests ModelTests.swift
+[21/23] Emitting module OnCueCoreTests
+[22/24] Compiling OnCueCoreTests resource_bundle_accessor.swift
+[23/26] Compiling OnCueCorePackageTests runner.swift
+[24/26] Emitting module OnCueCorePackageTests
+[24/26] Write Objects.LinkFileList
+[25/26] Linking OnCueCorePackageTests
+Build complete! (17.66s)
+Test Suite 'All tests' started at 2026-11-11 19:24:08.072.
+Test Suite 'OnCueCorePackageTests.xctest' started at 2026-11-11 19:24:08.073.
+Test Suite 'MachineProfileTests' started at 2026-11-11 19:24:08.073.
+Test Case '-[OnCueCoreTests.MachineProfileTests testCorruptProfileIsKeptAsBackupAndDefaultsUsed]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testCorruptProfileIsKeptAsBackupAndDefaultsUsed]' passed (0.007 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testMissingProfileIsCreatedWithDefaults]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testMissingProfileIsCreatedWithDefaults]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testNewerProfileFormatIsNotOverwrittenInPlace]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testNewerProfileFormatIsNotOverwrittenInPlace]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testOpeningAnotherShowDoesNotTouchTheProfile]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testOpeningAnotherShowDoesNotTouchTheProfile]' passed (0.005 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesDoNotMutateShows]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesDoNotMutateShows]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesPersistAcrossLaunches]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesPersistAcrossLaunches]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileMissingFieldsGetDefaults]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileMissingFieldsGetDefaults]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testShowFilesCarryNoMachineSettings]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testShowFilesCarryNoMachineSettings]' passed (0.003 seconds).
+Test Suite 'MachineProfileTests' passed at 2026-11-11 19:24:08.093.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.019 (0.020) seconds
+Test Suite 'ModelTests' started at 2026-11-11 19:24:08.093.
+Test Case '-[OnCueCoreTests.ModelTests testBarsPositionsParseAndFormat]' started.
+Test Case '-[OnCueCoreTests.ModelTests testBarsPositionsParseAndFormat]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testCameraLabels]' started.
+Test Case '-[OnCueCoreTests.ModelTests testCameraLabels]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testEnsureShotTracksAddsTrackPerOutput]' started.
+Test Case '-[OnCueCoreTests.ModelTests testEnsureShotTracksAddsTrackPerOutput]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testOrderPositions]' started.
+Test Case '-[OnCueCoreTests.ModelTests testOrderPositions]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testSecondsFromBeats]' started.
+Test Case '-[OnCueCoreTests.ModelTests testSecondsFromBeats]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testSecondsPositionsParseAndFormat]' started.
+Test Case '-[OnCueCoreTests.ModelTests testSecondsPositionsParseAndFormat]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testSectionsAndEnds]' started.
+Test Case '-[OnCueCoreTests.ModelTests testSectionsAndEnds]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testStarterShow]' started.
+Test Case '-[OnCueCoreTests.ModelTests testStarterShow]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testTimecodeHelpers]' started.
+Test Case '-[OnCueCoreTests.ModelTests testTimecodeHelpers]' passed (0.000 seconds).
+Test Suite 'ModelTests' passed at 2026-11-11 19:24:08.095.
+	 Executed 9 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
+Test Suite 'PersistenceTests' started at 2026-11-11 19:24:08.095.
+Test Case '-[OnCueCoreTests.PersistenceTests testCorruptFileOnDiskIsNotModified]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testCorruptFileOnDiskIsNotModified]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testEmptyFileGivesClearError]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testEmptyFileGivesClearError]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testEmptyObjectIsAnEmptyShow]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testEmptyObjectIsAnEmptyShow]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testEncodedFileCarriesCurrentSchemaVersion]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testEncodedFileCarriesCurrentSchemaVersion]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testEveryFieldSurvivesRoundTrip]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testEveryFieldSurvivesRoundTrip]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testFutureSchemaFileIsLeftUntouched]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testFutureSchemaFileIsLeftUntouched]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testFutureSchemaIsRefusedWithClearError]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testFutureSchemaIsRefusedWithClearError]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testGoldenFileResavesAsCurrentSchemaAndReopens]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testGoldenFileResavesAsCurrentSchemaAndReopens]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testGoldenSchema0FileOpens]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testGoldenSchema0FileOpens]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testJSONArrayIsNotAShow]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testJSONArrayIsNotAShow]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testMissingFieldsGetDefaults]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testMissingFieldsGetDefaults]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testMissingFileGivesError]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testMissingFileGivesError]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testNonJSONGivesClearError]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testNonJSONGivesClearError]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testSaveCloseReopenOnDisk]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testSaveCloseReopenOnDisk]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testStarterShowRoundTrips]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testStarterShowRoundTrips]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testUnknownEnumValuesFallBackSafely]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testUnknownEnumValuesFallBackSafely]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testWrongValueTypeNamesTheField]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testWrongValueTypeNamesTheField]' passed (0.000 seconds).
+Test Suite 'PersistenceTests' passed at 2026-11-11 19:24:08.105.
+	 Executed 17 tests, with 0 failures (0 unexpected) in 0.009 (0.010) seconds
+Test Suite 'OnCueCorePackageTests.xctest' passed at 2026-11-11 19:24:08.105.
+	 Executed 34 tests, with 0 failures (0 unexpected) in 0.031 (0.032) seconds
+Test Suite 'All tests' passed at 2026-11-11 19:24:08.105.
+	 Executed 34 tests, with 0 failures (0 unexpected) in 0.031 (0.033) seconds
+◇ Test run started.
+↳ Testing Library Version: 124.4
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests passed after 0.001 seconds.
