@@ -277,7 +277,7 @@ struct OutputConfig: Identifiable, Codable, Hashable {
     var mirrorMain: Bool = false
 }
 
-struct Section: Identifiable, Codable, Hashable {
+struct SongSection: Identifiable, Codable, Hashable {
     var id = UUID()
     var name: String
     /// Position in the item's time base.
@@ -339,11 +339,11 @@ struct RundownItem: Identifiable, Codable, Hashable {
     var plannedDuration: Double = 0
     /// Time of day the item must be off air, "HH:MM". Empty = none.
     var hardOut: String = ""
-    var sections: [Section] = []
+    var sections: [SongSection] = []
     var tracks: [Track] = []
     var notes: String = ""
 
-    var sortedSections: [Section] { sections.sorted { $0.at < $1.at } }
+    var sortedSections: [SongSection] { sections.sorted { $0.at < $1.at } }
 }
 
 struct OSCTarget: Identifiable, Codable, Hashable {
@@ -395,31 +395,22 @@ struct Comment: Identifiable, Codable, Hashable {
     var resolved = false
 }
 
+/// Production settings that travel with the show file.
+/// Per-Mac hardware settings live in `MachineProfile` (see MachineProfile.swift).
 struct ShowSettings: Codable, Hashable {
     var ltcFPS: Double = 25
-    var ltcDeviceUID: String = ""
-    var ltcChannel: Int = 0
-    var midiClockSource: String = ""
-    var controllerSource: String = ""
-    var controllerDestination: String = ""
-    var apcLEDs: Bool = true
-    var crewPort: Int = 8080
-    var crewInterface: String = ""
-    var oscControlPort: Int = 9000
-    var companionHost: String = "127.0.0.1"
-    var companionPort: Int = 8000
-    var companionVersion: CompanionVersion = .v3
     var minShotSeconds: Double = 1.5
     var unusedCameraMinutes: Double = 10
     var manualCutWindow: Double = 0.4
-    var backupRole: BackupRole = .off
-    var primaryHost: String = ""
     var monitors: [MonitorConfig] = []
-    var logFolder: String = ""
 }
 
-struct Show: Codable, Hashable {
-    var name: String = "New Show"
+public struct Show: Codable, Hashable {
+    /// Version of the show file format this build writes. See ShowCoding / ShowMigration.
+    public static let currentSchemaVersion = 1
+
+    public var schemaVersion: Int = Show.currentSchemaVersion
+    public var name: String = "New Show"
     var cameras: [Camera] = []
     var switchers: [SwitcherConfig] = []
     var outputs: [OutputConfig] = []
@@ -429,6 +420,10 @@ struct Show: Codable, Hashable {
     var comments: [Comment] = []
     var midiBindings: [MIDIBinding] = []
     var settings = ShowSettings()
+
+    /// Counts shown by the app shell without exposing the internal model types.
+    public var cameraCount: Int { cameras.count }
+    public var itemCount: Int { items.count }
 
     // MARK: lookups
     func camera(_ id: UUID?) -> Camera? { guard let id else { return nil }; return cameras.first { $0.id == id } }
@@ -441,7 +436,7 @@ struct Show: Codable, Hashable {
     func itemIndex(_ id: UUID?) -> Int? { guard let id else { return nil }; return items.firstIndex { $0.id == id } }
 
     // MARK: defaults
-    static func starter() -> Show {
+    public static func starter() -> Show {
         var show = Show()
         let sim = SwitcherConfig(name: "Simulator", kind: .simulator, role: .main)
         show.switchers = [sim]
@@ -465,7 +460,7 @@ struct Show: Codable, Hashable {
 extension RundownItem {
     static func newSong(title: String, show: Show) -> RundownItem {
         var item = RundownItem(kind: .song, title: title, timeBase: .bars, syncMode: .tap)
-        item.sections = [Section(name: "Intro", at: 0), Section(name: "Verse", at: 16), Section(name: "Chorus", at: 48)]
+        item.sections = [SongSection(name: "Intro", at: 0), SongSection(name: "Verse", at: 16), SongSection(name: "Chorus", at: 48)]
         item.tracks = show.outputs.map { Track(kind: .shots, name: "\($0.name) shots", outputID: $0.id) }
         item.tracks.append(Track(kind: .fx, name: "FX", switcherID: show.mainOutput?.switcherID))
         item.tracks.append(Track(kind: .control, name: "Control"))
@@ -488,13 +483,13 @@ extension RundownItem {
     }
 
     /// End of a section = start of the following one (nil for the last section).
-    func sectionEnd(_ section: Section) -> Double? {
+    func sectionEnd(_ section: SongSection) -> Double? {
         let s = sortedSections
         guard let i = s.firstIndex(where: { $0.id == section.id }), i + 1 < s.count else { return nil }
         return s[i + 1].at
     }
 
-    func section(at position: Double) -> Section? {
+    func section(at position: Double) -> SongSection? {
         sortedSections.last { $0.at <= position + 1e-9 }
     }
 

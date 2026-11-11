@@ -1,0 +1,63 @@
+# XcodeGen spec — the single source of truth for OnCue.xcodeproj.
+# Regenerate with:  xcodegen generate
+name: OnCue
+
+options:
+  bundleIdPrefix: com.nishanpani
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+  developmentLanguage: en
+
+settings:
+  base:
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    SWIFT_VERSION: "5.0"
+    SWIFT_STRICT_CONCURRENCY: minimal
+    # Newer Xcode templates default to main-actor isolation; device code runs on its own queues.
+    SWIFT_DEFAULT_ACTOR_ISOLATION: nonisolated
+    # Apple Silicon only, as required by the PRD.
+    ARCHS: arm64
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+
+packages:
+  OnCueCore:
+    path: Packages/OnCueCore
+
+targets:
+  OnCue:
+    type: application
+    platform: macOS
+    sources:
+      - path: OnCue
+        excludes:
+          - "Resources/Info.plist"
+          - "Resources/OnCue.entitlements"
+    dependencies:
+      - package: OnCueCore
+    settings:
+      base:
+        PRODUCT_NAME: OnCue
+        PRODUCT_BUNDLE_IDENTIFIER: com.nishanpani.oncue
+        INFOPLIST_FILE: OnCue/Resources/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        CODE_SIGN_ENTITLEMENTS: OnCue/Resources/OnCue.entitlements
+        ENABLE_HARDENED_RUNTIME: YES
+        # Ad-hoc signing so the app builds and launches anywhere (CI, any Mac).
+        # Set your team and "Developer ID Application" when packaging the signed DMG.
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: "-"
+        DEVELOPMENT_TEAM: ""
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        COMBINE_HIDPI_IMAGES: YES
+
+schemes:
+  OnCue:
+    build:
+      targets:
+        OnCue: all
+    run:
+      config: Debug
+    archive:
+      config: Release

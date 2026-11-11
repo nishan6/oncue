@@ -1,0 +1,358 @@
+{
+  "cameras": [
+    {
+      "id": "00000000-0000-0000-0000-000000000014",
+      "input": 1,
+      "name": "",
+      "number": 1,
+      "operatorName": "Ravi",
+      "switcherID": "00000000-0000-0000-0000-000000000001"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000015",
+      "input": 2,
+      "name": "Jib",
+      "number": 2,
+      "operatorName": "",
+      "ptzID": "00000000-0000-0000-0000-00000000003C",
+      "switcherID": "00000000-0000-0000-0000-000000000001"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000016",
+      "input": 4,
+      "name": "",
+      "number": 3,
+      "operatorName": "",
+      "switcherID": "00000000-0000-0000-0000-000000000002"
+    }
+  ],
+  "comments": [
+    {
+      "author": "Production",
+      "cueID": "00000000-0000-0000-0000-000000000029",
+      "date": "2026-11-11T18:00:00Z",
+      "id": "00000000-0000-0000-0000-000000000046",
+      "itemID": "00000000-0000-0000-0000-00000000001E",
+      "resolved": false,
+      "text": "Jib earlier?"
+    }
+  ],
+  "items": [
+    {
+      "beatsPerBar": 4,
+      "bpm": 124,
+      "hardOut": "",
+      "id": "00000000-0000-0000-0000-00000000001E",
+      "kind": "song",
+      "ltcStart": "",
+      "notes": "Band on click",
+      "plannedDuration": 0,
+      "sections": [
+        {
+          "at": 0,
+          "id": "00000000-0000-0000-0000-00000000001F",
+          "name": "Intro"
+        },
+        {
+          "at": 16,
+          "id": "00000000-0000-0000-0000-000000000020",
+          "name": "Verse"
+        },
+        {
+          "at": 48,
+          "id": "00000000-0000-0000-0000-000000000021",
+          "name": "Chorus"
+        }
+      ],
+      "syncMode": "midiClock",
+      "timeBase": "bars",
+      "title": "Opening song",
+      "tracks": [
+        {
+          "cues": [
+            {
+              "at": 0,
+              "cameraID": "00000000-0000-0000-0000-000000000014",
+              "fxIndex": 0,
+              "fxValue": 0,
+              "id": "00000000-0000-0000-0000-000000000028",
+              "note": "Hold wide",
+              "oscAddress": "",
+              "oscArgs": "",
+              "ptzPreset": 1,
+              "text": "Wide, stage",
+              "transition": "cut"
+            },
+            {
+              "at": 16,
+              "cameraID": "00000000-0000-0000-0000-000000000015",
+              "fxIndex": 0,
+              "fxValue": 0,
+              "id": "00000000-0000-0000-0000-000000000029",
+              "note": "",
+              "oscAddress": "",
+              "oscArgs": "",
+              "ptzPreset": 1,
+              "text": "Jib sweep",
+              "transition": "auto"
+            }
+          ],
+          "id": "00000000-0000-0000-0000-000000000023",
+          "kind": "shots",
+          "muted": false,
+          "name": "Program shots",
+          "outputID": "00000000-0000-0000-0000-00000000000A"
+        },
+        {
+          "cues": [
+            {
+              "at": 48,
+              "fxAction": "dskOn",
+              "fxIndex": 0,
+              "fxValue": 0,
+              "id": "00000000-0000-0000-0000-00000000002A",
+              "note": "",
+              "oscAddress": "",
+              "oscArgs": "",
+              "ptzPreset": 1,
+              "text": "Logo",
+              "transition": "cut"
+            }
+          ],
+          "id": "00000000-0000-0000-0000-000000000024",
+          "kind": "fx",
+          "muted": false,
+          "name": "FX",
+          "switcherID": "00000000-0000-0000-0000-000000000001"
+        },
+        {
+          "cues": [
+            {
+              "at": 48,
+              "fxIndex": 0,
+              "fxValue": 0,
+              "id": "00000000-0000-0000-0000-00000000002B",
+              "note": "",
+              "oscAddress": "/composition/columns/2/connect",
+              "oscArgs": "1",
+              "oscTargetID": "00000000-0000-0000-0000-000000000032",
+              "ptzPreset": 1,
+              "text": "",
+              "transition": "cut"
+            }
+          ],
+          "id": "00000000-0000-0000-0000-000000000025",
+          "kind": "osc",
+          "muted": false,
+          "name": "OSC"
+        },
+        {
+          "cues": [
+            {
+              "at": 96,
+              "controlAction": "loadNext",
+              "fxIndex": 0,
+              "fxValue": 0,
+              "id": "00000000-0000-0000-0000-00000000002C",
+              "note": "",
+              "oscAddress": "",
+              "oscArgs": "",
+              "ptzPreset": 1,
+              "text": "",
+              "transition": "cut"
+            }
+          ],
+          "id": "00000000-0000-0000-0000-000000000026",
+          "kind": "control",
+          "muted": false,
+          "name": "Control"
+        }
+      ]
+    },
+    {
+      "beatsPerBar": 4,
+      "bpm": 120,
+      "hardOut": "21:30",
+      "id": "00000000-0000-0000-0000-000000000022",
+      "kind": "segment",
+      "ltcStart": "",
+      "notes": "",
+      "plannedDuration": 300,
+      "sections": [],
+      "syncMode": "freeRun",
+      "timeBase": "seconds",
+      "title": "Award: best newcomer",
+      "tracks": []
+    }
+  ],
+  "midiBindings": [
+    {
+      "cameraNumber": 1,
+      "channel": 0,
+      "command": "takeCamera",
+      "id": "00000000-0000-0000-0000-000000000050",
+      "isCC": false,
+      "number": 0
+    },
+    {
+      "cameraNumber": 0,
+      "channel": 0,
+      "command": "next",
+      "id": "00000000-0000-0000-0000-000000000051",
+      "isCC": false,
+      "number": 82
+    }
+  ],
+  "name": "Golden v0 show",
+  "oscTargets": [
+    {
+      "host": "192.168.10.50",
+      "id": "00000000-0000-0000-0000-000000000032",
+      "name": "Resolume",
+      "port": 7000
+    }
+  ],
+  "outputs": [
+    {
+      "auxIndex": 0,
+      "bus": "program",
+      "id": "00000000-0000-0000-0000-00000000000A",
+      "mirrorMain": false,
+      "name": "Program",
+      "switcherID": "00000000-0000-0000-0000-000000000001"
+    },
+    {
+      "auxIndex": 1,
+      "bus": "aux",
+      "id": "00000000-0000-0000-0000-00000000000B",
+      "mirrorMain": true,
+      "name": "LED wall",
+      "switcherID": "00000000-0000-0000-0000-000000000001"
+    }
+  ],
+  "ptzCameras": [
+    {
+      "companionStart": {
+        "bank": 1,
+        "column": 0,
+        "enabled": false,
+        "page": 1,
+        "row": 0
+      },
+      "host": "192.168.10.80",
+      "id": "00000000-0000-0000-0000-00000000003C",
+      "macroBase": 0,
+      "name": "PTZ left",
+      "port": 80,
+      "proto": "panasonic"
+    }
+  ],
+  "settings": {
+    "apcLEDs": true,
+    "backupRole": "primary",
+    "companionHost": "127.0.0.1",
+    "companionPort": 8000,
+    "companionVersion": "v3",
+    "controllerDestination": "APC40 mkII",
+    "controllerSource": "APC40 mkII",
+    "crewInterface": "en0",
+    "crewPort": 8080,
+    "logFolder": "/Users/nishan/Documents/OnCue Logs",
+    "ltcChannel": 1,
+    "ltcDeviceUID": "AppleUSBAudioEngine:Focusrite:Scarlett 2i2:1",
+    "ltcFPS": 25,
+    "manualCutWindow": 0.4,
+    "midiClockSource": "IAC Driver Bus 1",
+    "minShotSeconds": 1.5,
+    "monitors": [
+      {
+        "cameraIDs": [
+          "00000000-0000-0000-0000-000000000014",
+          "00000000-0000-0000-0000-000000000015"
+        ],
+        "id": "00000000-0000-0000-0000-00000000005A",
+        "kind": "gallery",
+        "name": "Backstage",
+        "screenName": "DELL U2723QE"
+      }
+    ],
+    "oscControlPort": 9000,
+    "primaryHost": "192.168.10.20",
+    "unusedCameraMinutes": 10
+  },
+  "switchers": [
+    {
+      "companion": {
+        "auto": {
+          "bank": 1,
+          "column": 0,
+          "enabled": false,
+          "page": 1,
+          "row": 0
+        },
+        "cut": {
+          "bank": 1,
+          "column": 0,
+          "enabled": true,
+          "page": 1,
+          "row": 3
+        },
+        "inputs": [
+          {
+            "input": 1,
+            "preview": {
+              "bank": 1,
+              "column": 1,
+              "enabled": true,
+              "page": 1,
+              "row": 1
+            },
+            "program": {
+              "bank": 1,
+              "column": 1,
+              "enabled": false,
+              "page": 1,
+              "row": 2
+            }
+          }
+        ]
+      },
+      "feedInput": 0,
+      "host": "192.168.10.240",
+      "id": "00000000-0000-0000-0000-000000000001",
+      "inputCount": 20,
+      "kind": "atem",
+      "me": 0,
+      "name": "Main ATEM",
+      "role": "main"
+    },
+    {
+      "companion": {
+        "auto": {
+          "bank": 1,
+          "column": 0,
+          "enabled": false,
+          "page": 1,
+          "row": 0
+        },
+        "cut": {
+          "bank": 1,
+          "column": 0,
+          "enabled": false,
+          "page": 1,
+          "row": 0
+        },
+        "inputs": []
+      },
+      "feedInput": 8,
+      "host": "",
+      "id": "00000000-0000-0000-0000-000000000002",
+      "inputCount": 20,
+      "kind": "companion",
+      "me": 0,
+      "name": "Stage sub",
+      "parentID": "00000000-0000-0000-0000-000000000001",
+      "role": "sub"
+    }
+  ]
+}

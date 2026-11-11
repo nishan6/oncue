@@ -1,0 +1,141 @@
+name: Build and test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Toolchain
+        run: |
+          mkdir -p ci-logs
+          { sw_vers; xcodebuild -version; swift --version; uname -m; } 2>&1 | tee ci-logs/toolchain.log
+
+      - name: Install XcodeGen
+        run: brew install xcodegen 2>&1 | tail -n 5; xcodegen --version | tee -a ci-logs/toolchain.log
+
+      - name: Generate Xcode project from project.yml
+        id: generate
+        run: |
+          xcodegen generate --spec project.yml 2>&1 | tee ci-logs/xcodegen.log
+          if [ -n "$(git status --porcelain -- OnCue.xcodeproj)" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Committed OnCue.xcodeproj differs from project.yml (or is missing):" | tee -a ci-logs/xcodegen.log
+            git status --porcelain -- OnCue.xcodeproj | tee -a ci-logs/xcodegen.log
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Committed OnCue.xcodeproj matches project.yml." | tee -a ci-logs/xcodegen.log
+          fi
+
+      - name: OnCueCore package tests
+        id: tests
+        continue-on-error: true
+        run: swift test --package-path Packages/OnCueCore 2>&1 | tee ci-logs/swift-test.log
+
+      - name: Build OnCue.app
+        id: build
+        continue-on-error: true
+        run: |
+          xcodebuild -project OnCue.xcodeproj -scheme OnCue -configuration Debug \
+            -destination 'platform=macOS,arch=arm64' -derivedDataPath build/DerivedData \
+            build 2>&1 | tee ci-logs/xcodebuild.log
+          grep -E "warning:" ci-logs/xcodebuild.log | sort -u > ci-logs/xcodebuild-warnings.log || true
+
+      - name: Launch smoke test (create, save, close, reopen a show)
+        id: smoke
+        if: steps.build.outcome == 'success'
+        continue-on-error: true
+        run: |
+          APP="build/DerivedData/Build/Products/Debug/OnCue.app"
+          codesign -dv --verbose=2 "$APP" 2>&1 | tee ci-logs/codesign.log
+          SMOKE="$RUNNER_TEMP/smoke"
+          "$APP/Contents/MacOS/OnCue" --smoke-test "$SMOKE" 2>&1 | tee ci-logs/smoke.log
+          cp "$SMOKE/smoke-result.txt" ci-logs/ 2>/dev/null || true
+          cp "$SMOKE/smoke.oncue" ci-logs/smoke-saved-show.json 2>/dev/null || true
+          grep -q "PASS:" ci-logs/smoke.log
+
+      - name: Commit regenerated Xcode project
+        if: >-
+          steps.generate.outputs.changed == 'true' && steps.build.outcome == 'success' &&
+          github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add OnCue.xcodeproj
+          git commit -m "Regenerate OnCue.xcodeproj from project.yml"
+          git push origin HEAD:main
+
+      - name: Publish logs to the ci-results branch
+        if: always()
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          SHORT="${GITHUB_SHA::7}"
+          {
+            echo "# CI results for $SHORT"
+            echo
+            echo "- Commit: $GITHUB_SHA"
+            echo "- Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo "- Date (UTC): $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo
+            echo "| Step | Result |"
+            echo "| --- | --- |"
+            echo "| Generate project | ${{ steps.generate.outcome }} (project changed: ${{ steps.generate.outputs.changed }}) |"
+            echo "| Package tests | ${{ steps.tests.outcome }} |"
+            echo "| App build | ${{ steps.build.outcome }} |"
+            echo "| Launch smoke test | ${{ steps.smoke.outcome }} |"
+            echo
+            echo "## Toolchain"; echo '```'; cat ci-logs/toolchain.log 2>/dev/null; echo '```'
+            echo "## Test summary"; echo '```'
+            grep -E "Executed|error:|failed|passed" ci-logs/swift-test.log 2>/dev/null | tail -n 60; echo '```'
+            echo "## Build result"; echo '```'
+            grep -E "error:|BUILD SUCCEEDED|BUILD FAILED" ci-logs/xcodebuild.log 2>/dev/null | tail -n 60; echo '```'
+            echo "## Warnings ($(wc -l < ci-logs/xcodebuild-warnings.log 2>/dev/null || echo 0))"; echo '```'
+            cat ci-logs/xcodebuild-warnings.log 2>/dev/null | head -n 80; echo '```'
+            echo "## Smoke test"; echo '```'; cat ci-logs/smoke.log 2>/dev/null; echo '```'
+          } > ci-logs/SUMMARY.md
+          cat ci-logs/SUMMARY.md >> "$GITHUB_STEP_SUMMARY"
+
+          URL="https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          cd "$RUNNER_TEMP"
+          if ! git clone --quiet --depth 1 --branch ci-results "$URL" results 2>/dev/null; then
+            mkdir results && cd results && git init --quiet && git checkout --quiet -b ci-results && cd ..
+          fi
+          cd results
+          mkdir -p "runs/$SHORT"
+          cp -R "$GITHUB_WORKSPACE/ci-logs/." "runs/$SHORT/"
+          cp "$GITHUB_WORKSPACE/ci-logs/SUMMARY.md" LATEST.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit --quiet -m "CI results for $SHORT"
+          for i in 1 2 3; do
+            git push --quiet "$URL" HEAD:ci-results && break
+            git pull --quiet --rebase "$URL" ci-results || true
+          done
+
+      - name: Fail the job if any check failed
+        if: always()
+        run: |
+          fail=0
+          [ "${{ steps.tests.outcome }}" = "success" ] || { echo "Package tests failed"; fail=1; }
+          [ "${{ steps.build.outcome }}" = "success" ] || { echo "App build failed"; fail=1; }
+          [ "${{ steps.smoke.outcome }}" = "success" ] || { echo "Launch smoke test failed or did not run"; fail=1; }
+          exit $fail

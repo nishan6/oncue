@@ -145,14 +145,16 @@ final class CompanionSwitcher: SwitcherDevice {
     func cut() {
         guard config.companion.cut.enabled else { return }
         client.press(config.companion.cut)
-        swap(&state.program, &state.preview)
+        // Swap via a local copy: two inout accesses into `state` at once break exclusivity.
+        (state.program, state.preview) = (state.preview, state.program)
         onChange?()
     }
 
     func auto() {
         guard config.companion.auto.enabled else { return }
         client.press(config.companion.auto)
-        swap(&state.program, &state.preview)
+        // Swap via a local copy: two inout accesses into `state` at once break exclusivity.
+        (state.program, state.preview) = (state.preview, state.program)
         onChange?()
     }
 
