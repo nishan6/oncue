@@ -1,8 +1,8 @@
-# CI results for 6a114b3
+# CI results for fb11bc0
 
-- Commit: 6a114b3582cb086cb57d93f4b10164f6958727ca
-- Run: https://github.com/nishan6/oncue/actions/runs/43085084426
-- Date (UTC): 2026-11-11T19:20:11Z
+- Commit: fb11bc078cc5d1a8069e95ed63c8359ffd429aeb
+- Run: https://github.com/nishan6/oncue/actions/runs/43085192793
+- Date (UTC): 2026-11-11T19:22:27Z
 
 | Step | Result |
 | --- | --- |
@@ -25,16 +25,16 @@ Version: 2.46.0
 ```
 ## Test summary
 ```
-Test Case '-[OnCueCoreTests.MachineProfileTests testCorruptProfileIsKeptAsBackupAndDefaultsUsed]' passed (0.017 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testCorruptProfileIsKeptAsBackupAndDefaultsUsed]' passed (0.018 seconds).
 Test Case '-[OnCueCoreTests.MachineProfileTests testMissingProfileIsCreatedWithDefaults]' passed (0.003 seconds).
-Test Case '-[OnCueCoreTests.MachineProfileTests testNewerProfileFormatIsNotOverwrittenInPlace]' passed (0.004 seconds).
-Test Case '-[OnCueCoreTests.MachineProfileTests testOpeningAnotherShowDoesNotTouchTheProfile]' passed (0.008 seconds).
-Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesDoNotMutateShows]' passed (0.006 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testNewerProfileFormatIsNotOverwrittenInPlace]' passed (0.005 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testOpeningAnotherShowDoesNotTouchTheProfile]' passed (0.010 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesDoNotMutateShows]' passed (0.003 seconds).
 Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesPersistAcrossLaunches]' passed (0.004 seconds).
 Test Case '-[OnCueCoreTests.MachineProfileTests testProfileMissingFieldsGetDefaults]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.MachineProfileTests testShowFilesCarryNoMachineSettings]' passed (0.007 seconds).
-Test Suite 'MachineProfileTests' passed at 2026-11-11 19:18:52.115.
-	 Executed 8 tests, with 0 failures (0 unexpected) in 0.049 (0.050) seconds
+Test Case '-[OnCueCoreTests.MachineProfileTests testShowFilesCarryNoMachineSettings]' passed (0.004 seconds).
+Test Suite 'MachineProfileTests' passed at 2026-11-11 19:21:16.045.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.048 (0.049) seconds
 Test Case '-[OnCueCoreTests.ModelTests testBarsPositionsParseAndFormat]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.ModelTests testCameraLabels]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ModelTests testEnsureShotTracksAddsTrackPerOutput]' passed (0.001 seconds).
@@ -44,31 +44,31 @@ Test Case '-[OnCueCoreTests.ModelTests testSecondsPositionsParseAndFormat]' pass
 Test Case '-[OnCueCoreTests.ModelTests testSectionsAndEnds]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ModelTests testStarterShow]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ModelTests testTimecodeHelpers]' passed (0.000 seconds).
-Test Suite 'ModelTests' passed at 2026-11-11 19:18:52.118.
-	 Executed 9 tests, with 0 failures (0 unexpected) in 0.002 (0.003) seconds
-Test Case '-[OnCueCoreTests.PersistenceTests testCorruptFileOnDiskIsNotModified]' passed (0.001 seconds).
-Test Case '-[OnCueCoreTests.PersistenceTests testEmptyFileGivesClearError]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.PersistenceTests testEmptyObjectIsAnEmptyShow]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.PersistenceTests testEncodedFileCarriesCurrentSchemaVersion]' passed (0.001 seconds).
+Test Suite 'ModelTests' passed at 2026-11-11 19:21:16.050.
+	 Executed 9 tests, with 0 failures (0 unexpected) in 0.004 (0.005) seconds
+Test Case '-[OnCueCoreTests.PersistenceTests testCorruptFileOnDiskIsNotModified]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testEmptyFileGivesClearError]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testEmptyObjectIsAnEmptyShow]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testEncodedFileCarriesCurrentSchemaVersion]' passed (0.002 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testEveryFieldSurvivesRoundTrip]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testFutureSchemaFileIsLeftUntouched]' passed (0.002 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testFutureSchemaIsRefusedWithClearError]' passed (0.001 seconds).
-Test Case '-[OnCueCoreTests.PersistenceTests testGoldenFileResavesAsCurrentSchemaAndReopens]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testGoldenFileResavesAsCurrentSchemaAndReopens]' passed (0.002 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testGoldenSchema0FileOpens]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testJSONArrayIsNotAShow]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.PersistenceTests testMissingFieldsGetDefaults]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.PersistenceTests testMissingFileGivesError]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testMissingFieldsGetDefaults]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testMissingFileGivesError]' passed (0.006 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testNonJSONGivesClearError]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.PersistenceTests testSaveCloseReopenOnDisk]' passed (0.002 seconds).
-Test Case '-[OnCueCoreTests.PersistenceTests testStarterShowRoundTrips]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testSaveCloseReopenOnDisk]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testStarterShowRoundTrips]' passed (0.002 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testUnknownEnumValuesFallBackSafely]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testWrongValueTypeNamesTheField]' passed (0.000 seconds).
-Test Suite 'PersistenceTests' passed at 2026-11-11 19:18:52.132.
-	 Executed 17 tests, with 0 failures (0 unexpected) in 0.013 (0.014) seconds
-Test Suite 'OnCueCorePackageTests.xctest' passed at 2026-11-11 19:18:52.132.
-	 Executed 34 tests, with 0 failures (0 unexpected) in 0.064 (0.067) seconds
-Test Suite 'All tests' passed at 2026-11-11 19:18:52.132.
-	 Executed 34 tests, with 0 failures (0 unexpected) in 0.064 (0.073) seconds
+Test Suite 'PersistenceTests' passed at 2026-11-11 19:21:16.077.
+	 Executed 17 tests, with 0 failures (0 unexpected) in 0.026 (0.027) seconds
+Test Suite 'OnCueCorePackageTests.xctest' passed at 2026-11-11 19:21:16.077.
+	 Executed 34 tests, with 0 failures (0 unexpected) in 0.078 (0.081) seconds
+Test Suite 'All tests' passed at 2026-11-11 19:21:16.077.
+	 Executed 34 tests, with 0 failures (0 unexpected) in 0.078 (0.085) seconds
 ✔ Test run with 0 tests passed after 0.001 seconds.
 ```
 ## Build result
@@ -77,11 +77,11 @@ Test Suite 'All tests' passed at 2026-11-11 19:18:52.132.
 ```
 ## Warnings (       1)
 ```
-2026-11-11 19:20:04.439 appintentsmetadataprocessor[2774:12006] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+2026-11-11 19:22:18.474 appintentsmetadataprocessor[2857:12401] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
 ```
 ## Smoke test
 ```
-[smoke] app launched (pid 2789)
+[smoke] app launched (pid 2976)
 [smoke] machine profile created at /Users/runner/work/_temp/smoke/profile/MachineProfile.json
 [smoke] new show opened (type com.nishanpani.oncue.show, windows: 1)
 [smoke] saved to /Users/runner/work/_temp/smoke/smoke.oncue
