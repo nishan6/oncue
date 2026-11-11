@@ -107,6 +107,8 @@ jobs:
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Never abort while collecting logs: a failed build leaves some files missing.
+          set +e +o pipefail
           SHORT="${GITHUB_SHA::7}"
           {
             echo "# CI results for $SHORT"
@@ -127,7 +129,7 @@ jobs:
             echo "## Test summary"; echo '```'
             grep -E "Executed|error:|failed|passed" ci-logs/swift-test.log 2>/dev/null | tail -n 60; echo '```'
             echo "## Build result"; echo '```'
-            grep -E "error:|BUILD SUCCEEDED|BUILD FAILED" ci-logs/xcodebuild.log 2>/dev/null | tail -n 60; echo '```'
+            grep -E "error:|BUILD SUCCEEDED|BUILD FAILED" ci-logs/xcodebuild.log 2>/dev/null | sort -u | head -n 80; echo '```'
             echo "## Warnings ($(wc -l < ci-logs/xcodebuild-warnings.log 2>/dev/null || echo 0))"; echo '```'
             cat ci-logs/xcodebuild-warnings.log 2>/dev/null | head -n 80; echo '```'
             echo "## Smoke test"; echo '```'; cat ci-logs/smoke.log 2>/dev/null; echo '```'
