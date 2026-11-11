@@ -2,7 +2,33 @@
 
 A native macOS app (Swift / SwiftUI, macOS 14+, Apple Silicon) for scripting the camera shots of a live show and running that script on the switcher: concerts, TV-style music shows, esports and corporate shows, from 5 to 70+ cameras.
 
-The product requirements are in the OnCue PRD. Phase 0 (this state) is the engineering foundation only: the app opens, creates, saves and reopens an empty show. There is no show engine or production interface yet.
+The product requirements are in the OnCue PRD.
+
+**Current state (Phase 1):** a working show scripting workspace. Create a production, build the running order of songs and segments, add sections, configure cameras, and script shots with timing, transitions and notes. Everything saves to the show file, and each show reopens where you left it. There is no live show engine yet: OnCue does not drive switchers, follow MIDI or LTC, or serve the crew page.
+
+## Using the workspace
+
+- **Running order** (left): songs and segments. Drag to reorder; right-click to rename, duplicate or delete.
+- **Header**: title, timing (bars and beats, seconds, or NEXT order), tempo, beats per bar, planned length and hard out.
+- **Section strip**: the song structure, sized by length. Click a block to jump to it. Drag a block onto another to move that section, with its shots, before it.
+- **Shot list**: shots grouped by section. Drag to reorder within a section: the time slots stay and the shots move between them. Edit descriptions and notes inline, and click CUT/MIX to switch the transition.
+- **Camera keys** (bottom): red is the selected shot's camera, green is the next shot's camera. Click a key to set the camera on the selected shots; Option-click adds a new shot.
+- **Inspector** (right): the full properties of the selected shot or shots, or of the song or segment when no shot is selected.
+- **Cameras** (Production > Cameras): numbers, names, the operator for this show, and the switcher input.
+
+| Action | Keys |
+| --- | --- |
+| New song / new segment | ⌥⌘N / ⌥⇧⌘N |
+| New section | ⌥⌘E |
+| New shot | Return (shot list selected) or ⌘Return |
+| Set camera of selected shot | Type its number (e.g. 1, 2 for camera 12) |
+| Duplicate shot | ⌘D |
+| Move shot up / down | ⌥⌘↑ / ⌥⌘↓ |
+| Switch cut or mix | ⌥⌘T |
+| Delete shot | Delete or ⌘Delete |
+| Previous / next song | ⌘[ / ⌘] |
+| Cameras / inspector | ⌥⌘C / ⌥⌘I |
+| Undo / redo | ⌘Z / ⇧⌘Z |
 
 ## Project structure
 
@@ -12,16 +38,21 @@ oncue/
   OnCue.xcodeproj               generated from project.yml (committed; CI keeps it in sync)
   OnCue/                        the Mac app target (thin shell)
     App/
-      OnCueApp.swift            @main, DocumentGroup, Settings scene, MachineProfileModel
+      OnCueApp.swift            @main, DocumentGroup, menus, Settings scene, MachineProfileModel
       ShowDocument.swift        FileDocument wrapper around OnCueCore's ShowCoding
-      ShowWindow.swift          placeholder show window and This Mac settings (Phase 0 only)
       SmokeTest.swift           `--smoke-test <folder>` launch check used by CI
+      ScreenshotRun.swift       `--screenshots <folder>` window images used by CI
+    Workspace/                  the scripting workspace (views + WorkspaceModel)
+    UI/                         gallery theme and shared components, This Mac settings
     Resources/
       Info.plist                file type (.oncue), local network / microphone / ATS keys
       OnCue.entitlements        hardened-runtime audio input (LTC)
   Packages/OnCueCore/           Swift package with all non-UI code, independently testable
     Sources/OnCueCore/
       Model/Model.swift         show model: cameras, switchers, outputs, items, sections, tracks, cues...
+      Editing/
+        ShowEditing.swift       every edit the workspace makes (running order, sections, cameras, shots)
+        SampleShow.swift        sample production used by tests and CI screenshots
       Persistence/
         ShowCoding.swift        encode/decode, schema version check, migration, file IO, errors
         TolerantDecoding.swift  backward-compatible decoding (defaults for missing fields)
@@ -35,7 +66,8 @@ oncue/
 ## Architecture overview
 
 - **OnCueCore** holds everything that does not need the UI: the show model, persistence and the device integrations. It has no external dependencies and is tested with `swift test`.
-- **The app target** is a thin SwiftUI shell. It owns windows and documents and talks to OnCueCore only through its public API (`Show`, `ShowCoding`, `ShowFileIO`, `ShowFileError`, `MachineProfile`, `MachineProfileStore`). Most model and device types are still internal to the package; they become public when the engine and UI phases need them.
+- **The app target** is SwiftUI. Views never change the show directly. Every edit goes through `WorkspaceModel.edit`, which applies an OnCueCore editing operation (`ShowEditing.swift`) to the document as one undoable step. Device types in OnCueCore stay internal until the engine phase.
+- **Workspace state** (selected song and shots, inspector) is kept per show on this Mac, keyed by the show's id, and restored when the show reopens. It never marks the show as edited.
 - **Show files** (`.oncue`, JSON) are portable between Macs. Each file carries `schemaVersion`. Older files are migrated in memory on open, missing fields get defaults, and unknown enum values from newer builds fall back safely. Files from a newer OnCue are refused with a clear message, and are never modified.
 - **Machine profile** (`~/Library/Application Support/OnCue/MachineProfile.json`) holds this Mac's hardware settings: MIDI ports, LTC input, crew network interface, Companion address, backup role, log folder. Opening a show never changes it, and changing it never changes a show. An unreadable profile is kept as `MachineProfile.unreadable-<date>.json` and replaced with defaults.
 - **Documents** use SwiftUI `DocumentGroup`, so autosave and macOS version history (File > Revert To) come from the system.
@@ -82,9 +114,8 @@ CI (`.github/workflows/build.yml`) runs all of the above on a macOS runner for e
 ## Temporary technical compromises
 
 - **Swift 5 language mode** with minimal concurrency checking. The device classes use dispatch queues and non-Sendable closures. Moving to Swift 6 depends on the concurrency model decision (audit item C10).
-- **Most OnCueCore types are internal.** Only what the app shell needs is public.
+- **Device types in OnCueCore are internal.** The model and editing API are public.
 - **Schema 0 files lose their per-Mac settings on open**: MIDI ports, LTC device, crew interface and the like. This is deliberate, so a show from another Mac cannot overwrite this Mac's hardware setup. Re-enter them in Settings.
 - **Machine-profile enums are stored as text** (`backupRole`, `companionVersion`) to keep the profile independent of the show model's enums.
 - **The device integrations (ATEM, Companion, OSC, PTZ, MIDI) are unchanged** from the initial commit, apart from the compile fix in `SwitcherDevice.swift`. They are still untested on hardware, and audit items C7–C12 are not started.
 - **Monitor configurations stay in the show file**, including their screen names, which are per-Mac. To revisit when operator monitors are built.
-- **The Phase 0 window is a placeholder**, not the production interface.

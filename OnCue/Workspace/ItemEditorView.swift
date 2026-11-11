@@ -169,7 +169,7 @@ struct SectionStripView: View {
                 .lineLimit(1)
             HStack(spacing: 6) {
                 Text(item.format(section.at)).font(.readout(10))
-                Text("\(shots)").font(.readout(10, weight: .semibold))
+                Text(shots == 1 ? "1 shot" : "\(shots) shots").font(.umd(10))
             }
             .foregroundStyle(Gallery.dim)
         }
@@ -222,6 +222,7 @@ struct ShotListView: View {
     let groups: [ShotGroup]
     let rows: [ShotRow]
     @ObservedObject var model: WorkspaceModel
+    @FocusState private var listFocused: Bool
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -259,6 +260,9 @@ struct ShotListView: View {
                     .allowsHitTesting(false)
                 }
             }
+            .focused($listFocused)
+            .onAppear { revealSelection(proxy) }
+            .onChange(of: item.id) { _, _ in revealSelection(proxy) }
             .onDeleteCommand { model.deleteSelectedShots() }
             .onKeyPress(.return) {
                 model.addShot()
@@ -291,6 +295,16 @@ struct ShotListView: View {
                 guard let target else { return }
                 withAnimation(.easeOut(duration: 0.2)) { proxy.scrollTo(target, anchor: .center) }
                 DispatchQueue.main.async { model.scrollTarget = nil }
+            }
+        }
+    }
+
+    /// Typing goes to the shot list, and the restored or current selection is brought into view.
+    private func revealSelection(_ proxy: ScrollViewProxy) {
+        DispatchQueue.main.async {
+            listFocused = true
+            if let first = rows.first(where: { model.selectedShotIDs.contains($0.id) }) {
+                proxy.scrollTo(first.id.uuidString, anchor: .center)
             }
         }
     }
@@ -404,7 +418,7 @@ struct ShotRowView: View {
                     model.updateShot(row.id, "Edit Shot") { $0.text = text }
                     return true
                 }
-                CommitField(placeholder: "Note for the operator", value: row.cue.note, font: .system(size: 11)) { text in
+                CommitField(placeholder: "Operator note", value: row.cue.note, font: .system(size: 11)) { text in
                     model.updateShot(row.id, "Edit Operator Note") { $0.note = text }
                     return true
                 }
