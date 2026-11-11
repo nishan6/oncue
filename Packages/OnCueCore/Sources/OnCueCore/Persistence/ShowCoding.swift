@@ -71,7 +71,7 @@ public enum ShowCoding {
     static func describe(_ error: Error) -> String {
         guard let e = error as? DecodingError else { return error.localizedDescription }
         func path(_ ctx: DecodingError.Context) -> String {
-            let p = ctx.codingPath.map { $0.intValue.map(String.init) ?? $0.stringValue }.joined(separator: " › ")
+            let p = ctx.codingPath.map { key in key.intValue.map { String($0) } ?? key.stringValue }.joined(separator: " › ")
             return p.isEmpty ? "the top level" : p
         }
         switch e {
