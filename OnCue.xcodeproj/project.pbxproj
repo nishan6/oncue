@@ -1,0 +1,369 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		03D8F26709785501F6787D88 /* ShowWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDB109B5604F5EF1B9EA8F5 /* ShowWindow.swift */; };
+		675AE418F5CA08A9DE0DDEF3 /* OnCueApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780AE26026DBAFD2B65DEF9D /* OnCueApp.swift */; };
+		86701766F106877478C0200B /* ShowDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FC41C44C1F7695F918F07D /* ShowDocument.swift */; };
+		AE6AE7C6777F266F9A225BD4 /* OnCueCore in Frameworks */ = {isa = PBXBuildFile; productRef = B336DDE3611B72052511C115 /* OnCueCore */; };
+		B684D8B1BFB1C4569341263E /* SmokeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3D28E021667A79D4C7536F /* SmokeTest.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		05FC41C44C1F7695F918F07D /* ShowDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDocument.swift; sourceTree = "<group>"; };
+		1F3D28E021667A79D4C7536F /* SmokeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmokeTest.swift; sourceTree = "<group>"; };
+		780AE26026DBAFD2B65DEF9D /* OnCueApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnCueApp.swift; sourceTree = "<group>"; };
+		AD9250067025E369E6EAD1D4 /* OnCueCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = OnCueCore; path = Packages/OnCueCore; sourceTree = SOURCE_ROOT; };
+		AE93C49E05A47DAEC508FA0D /* OnCue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnCue.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDDB109B5604F5EF1B9EA8F5 /* ShowWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowWindow.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A7D3E36E059AB7BEA8A29235 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AE6AE7C6777F266F9A225BD4 /* OnCueCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7B2758E19F059E2DE788E5C0 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				780AE26026DBAFD2B65DEF9D /* OnCueApp.swift */,
+				05FC41C44C1F7695F918F07D /* ShowDocument.swift */,
+				DDDB109B5604F5EF1B9EA8F5 /* ShowWindow.swift */,
+				1F3D28E021667A79D4C7536F /* SmokeTest.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		85612F7BA7C64AFFA75FC0E3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AE93C49E05A47DAEC508FA0D /* OnCue.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BA2F2383AF9201BA168307DF /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				AD9250067025E369E6EAD1D4 /* OnCueCore */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
+		DFDCEA17FDB0F42F72D65880 = {
+			isa = PBXGroup;
+			children = (
+				FD3EB6AB3DC07FF3A71643FC /* OnCue */,
+				BA2F2383AF9201BA168307DF /* Packages */,
+				85612F7BA7C64AFFA75FC0E3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FD3EB6AB3DC07FF3A71643FC /* OnCue */ = {
+			isa = PBXGroup;
+			children = (
+				7B2758E19F059E2DE788E5C0 /* App */,
+			);
+			path = OnCue;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		96204DA1A4C11BFE71BD3D89 /* OnCue */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3DB47D25AAF5D854ABF0C099 /* Build configuration list for PBXNativeTarget "OnCue" */;
+			buildPhases = (
+				A8971E2702FD3B2898E56B42 /* Sources */,
+				A7D3E36E059AB7BEA8A29235 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OnCue;
+			packageProductDependencies = (
+				B336DDE3611B72052511C115 /* OnCueCore */,
+			);
+			productName = OnCue;
+			productReference = AE93C49E05A47DAEC508FA0D /* OnCue.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9C3F8C68D69D317CA7F7A10E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					96204DA1A4C11BFE71BD3D89 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = B856DB29A9975190A941AD73 /* Build configuration list for PBXProject "OnCue" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = DFDCEA17FDB0F42F72D65880;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				F21DBE1B2E3E11B61C86C016 /* XCLocalSwiftPackageReference "Packages/OnCueCore" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 85612F7BA7C64AFFA75FC0E3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				96204DA1A4C11BFE71BD3D89 /* OnCue */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A8971E2702FD3B2898E56B42 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				675AE418F5CA08A9DE0DDEF3 /* OnCueApp.swift in Sources */,
+				86701766F106877478C0200B /* ShowDocument.swift in Sources */,
+				03D8F26709785501F6787D88 /* ShowWindow.swift in Sources */,
+				B684D8B1BFB1C4569341263E /* SmokeTest.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		024884DE47396627A41BB639 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = OnCue/Resources/OnCue.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = OnCue/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nishanpani.oncue;
+				PRODUCT_NAME = OnCue;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		3F4181A301097F92456B2B5B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = nonisolated;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		44D2C0188147EFA624F6ADF2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = nonisolated;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		E1EBC4B64E1439E2EAE2449C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = OnCue/Resources/OnCue.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = OnCue/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nishanpani.oncue;
+				PRODUCT_NAME = OnCue;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3DB47D25AAF5D854ABF0C099 /* Build configuration list for PBXNativeTarget "OnCue" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				024884DE47396627A41BB639 /* Debug */,
+				E1EBC4B64E1439E2EAE2449C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B856DB29A9975190A941AD73 /* Build configuration list for PBXProject "OnCue" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44D2C0188147EFA624F6ADF2 /* Debug */,
+				3F4181A301097F92456B2B5B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		F21DBE1B2E3E11B61C86C016 /* XCLocalSwiftPackageReference "Packages/OnCueCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/OnCueCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B336DDE3611B72052511C115 /* OnCueCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OnCueCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 9C3F8C68D69D317CA7F7A10E /* Project object */;
+}
