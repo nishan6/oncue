@@ -21,7 +21,7 @@ final class WorkspaceModel: ObservableObject {
     /// Shot list scrolls here when set (a shot or section id).
     @Published var scrollTarget: String?
 
-    private var read: () -> Show = { Show() }
+    private var read: () -> Show = { Show.starter() }
     private var write: (Show) -> Void = { _ in }
     private weak var undoManager: UndoManager?
     private var attachedShowID: UUID?
