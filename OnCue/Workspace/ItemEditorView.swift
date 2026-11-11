@@ -233,7 +233,6 @@ struct ShotListView: View {
                             ShotRowView(row: row, item: item, camera: show.camera(row.cue.cameraID),
                                         tally: model.tally(forShot: row.id, in: rows), model: model)
                                 .tag(row.id)
-                                .id(row.id.uuidString)
                                 .listRowSeparator(.hidden)
                                 .listRowInsets(EdgeInsets(top: 1, leading: 8, bottom: 1, trailing: 12))
                         }
@@ -293,7 +292,7 @@ struct ShotListView: View {
             }
             .onChange(of: model.scrollTarget) { _, target in
                 guard let target else { return }
-                withAnimation(.easeOut(duration: 0.2)) { proxy.scrollTo(target, anchor: .center) }
+                scroll(proxy, to: target)
                 DispatchQueue.main.async { model.scrollTarget = nil }
             }
         }
@@ -306,7 +305,24 @@ struct ShotListView: View {
         for delay in [0.15, 0.6] {
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                 if let first = rows.first(where: { model.selectedShotIDs.contains($0.id) }) {
-                    proxy.scrollTo(first.id.uuidString, anchor: .center)
+                    proxy.scrollTo(first.id, anchor: .center)
+                }
+            }
+        }
+    }
+
+    /// Targets are shot or section ids (as text). A List scrolls by its rows' own identity, so a
+    /// section scrolls to its first shot (or its header when it has none).
+    private func scroll(_ proxy: ScrollViewProxy, to target: String) {
+        guard let uuid = UUID(uuidString: target) else { return }
+        withAnimation(.easeOut(duration: 0.2)) {
+            if rows.contains(where: { $0.id == uuid }) {
+                proxy.scrollTo(uuid, anchor: .center)
+            } else if let group = groups.first(where: { $0.section?.id == uuid }) {
+                if let firstRow = group.rows.first {
+                    proxy.scrollTo(firstRow.id, anchor: .top)
+                } else {
+                    proxy.scrollTo(target, anchor: .top)
                 }
             }
         }
