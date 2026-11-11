@@ -9,9 +9,11 @@ struct OnCueApp: App {
 
     var body: some Scene {
         DocumentGroup(newDocument: ShowDocument()) { file in
-            ShowWindow(document: file.$document, fileURL: file.fileURL)
+            ShowWorkspaceView(document: file.$document, fileURL: file.fileURL)
                 .environmentObject(machine)
         }
+        .defaultSize(width: 1440, height: 900)
+        .commands { WorkspaceCommands() }
 
         Settings {
             MachineProfileView()
@@ -25,6 +27,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // `OnCue --smoke-test <folder>` is used by CI to prove the app launches and that a show can
         // be created, saved, closed and reopened through the real document system.
         SmokeTest.runIfRequested()
+        // `OnCue --screenshots <folder>` opens the sample production and saves window images.
+        ScreenshotRun.runIfRequested()
     }
 }
 

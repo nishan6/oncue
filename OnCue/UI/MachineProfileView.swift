@@ -1,36 +1,7 @@
 import SwiftUI
 import OnCueCore
 
-/// Placeholder window for Phase 0: proves documents open, edit and save.
-/// The production interface is a later phase.
-struct ShowWindow: View {
-    @Binding var document: ShowDocument
-    let fileURL: URL?
-    @EnvironmentObject private var machine: MachineProfileModel
-
-    var body: some View {
-        Form {
-            Section("Show") {
-                TextField("Name", text: $document.show.name)
-                LabeledContent("Songs and segments", value: "\(document.show.itemCount)")
-                LabeledContent("Cameras", value: "\(document.show.cameraCount)")
-                LabeledContent("Show format", value: "\(document.show.schemaVersion)")
-                LabeledContent("File", value: fileURL?.path ?? "Not saved yet")
-            }
-            Section("This Mac") {
-                LabeledContent("Profile", value: machine.profile.machineName.isEmpty ? "This Mac" : machine.profile.machineName)
-                if let issue = machine.issue {
-                    Text(issue).foregroundStyle(.orange)
-                }
-                Text("Hardware settings belong to this Mac, not to the show. Edit them in Settings.")
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .formStyle(.grouped)
-        .frame(minWidth: 520, minHeight: 360)
-    }
-}
-
+/// Settings window: this Mac's hardware profile (never stored in shows).
 struct MachineProfileView: View {
     @EnvironmentObject private var machine: MachineProfileModel
 

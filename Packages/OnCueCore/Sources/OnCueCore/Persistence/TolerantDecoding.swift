@@ -42,7 +42,7 @@ extension KeyedDecodingContainer where K == AnyCodingKey {
 }
 
 extension Camera {
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: AnyCodingKey.self)
         self.init(number: try c.value("number", 0))
         id = try c.value("id", UUID())
@@ -55,7 +55,7 @@ extension Camera {
 }
 
 extension CompanionButton {
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: AnyCodingKey.self)
         self.init()
         page = try c.value("page", 1)
@@ -67,7 +67,7 @@ extension CompanionButton {
 }
 
 extension CompanionInputButtons {
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: AnyCodingKey.self)
         self.init(input: try c.value("input", 0))
         preview = try c.value("preview", CompanionButton())
@@ -76,7 +76,7 @@ extension CompanionInputButtons {
 }
 
 extension CompanionMapping {
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: AnyCodingKey.self)
         self.init()
         inputs = try c.value("inputs", [])
@@ -86,7 +86,7 @@ extension CompanionMapping {
 }
 
 extension SwitcherConfig {
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: AnyCodingKey.self)
         self.init(name: try c.value("name", "Switcher"))
         id = try c.value("id", UUID())
@@ -102,7 +102,7 @@ extension SwitcherConfig {
 }
 
 extension OutputConfig {
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: AnyCodingKey.self)
         self.init(name: try c.value("name", "Output"))
         id = try c.value("id", UUID())
@@ -114,7 +114,7 @@ extension OutputConfig {
 }
 
 extension SongSection {
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: AnyCodingKey.self)
         self.init(name: try c.value("name", "Section"), at: try c.value("at", 0.0))
         id = try c.value("id", UUID())
@@ -122,7 +122,7 @@ extension SongSection {
 }
 
 extension Cue {
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: AnyCodingKey.self)
         self.init(at: try c.value("at", 0.0))
         id = try c.value("id", UUID())
@@ -144,7 +144,7 @@ extension Cue {
 }
 
 extension Track {
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: AnyCodingKey.self)
         // An unknown track kind from a newer OnCue is kept as notes so its cues are not lost.
         self.init(kind: try c.enumValue("kind", .notes), name: try c.value("name", "Track"))
@@ -157,7 +157,7 @@ extension Track {
 }
 
 extension RundownItem {
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: AnyCodingKey.self)
         self.init(title: try c.value("title", "Untitled"))
         id = try c.value("id", UUID())
@@ -176,7 +176,7 @@ extension RundownItem {
 }
 
 extension OSCTarget {
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: AnyCodingKey.self)
         self.init(name: try c.value("name", "OSC target"))
         id = try c.value("id", UUID())
@@ -186,7 +186,7 @@ extension OSCTarget {
 }
 
 extension PTZCamera {
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: AnyCodingKey.self)
         self.init(name: try c.value("name", "PTZ"))
         id = try c.value("id", UUID())
@@ -200,7 +200,7 @@ extension PTZCamera {
 }
 
 extension MIDIBinding {
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: AnyCodingKey.self)
         // An unknown command from a newer OnCue becomes "stop", the safest action, and is
         // never bound to a camera.
@@ -214,7 +214,7 @@ extension MIDIBinding {
 }
 
 extension MonitorConfig {
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: AnyCodingKey.self)
         self.init(name: try c.value("name", "Monitor"))
         id = try c.value("id", UUID())
@@ -225,7 +225,7 @@ extension MonitorConfig {
 }
 
 extension Comment {
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: AnyCodingKey.self)
         self.init(author: try c.value("author", ""), text: try c.value("text", ""))
         id = try c.value("id", UUID())
@@ -237,7 +237,7 @@ extension Comment {
 }
 
 extension ShowSettings {
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         // Schema 0 files also carry per-Mac keys (MIDI ports, LTC device, crew interface...).
         // They are deliberately ignored here: opening a show never changes this Mac's profile.
         let c = try decoder.container(keyedBy: AnyCodingKey.self)
@@ -256,6 +256,7 @@ extension Show {
         self.init()
         // Files written before versioning have no schemaVersion: they are schema 0.
         schemaVersion = try c.value("schemaVersion", 0)
+        id = try c.value("id", UUID())
         name = try c.value("name", "Untitled show")
         cameras = try c.value("cameras", [])
         switchers = try c.value("switchers", [])

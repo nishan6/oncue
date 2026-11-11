@@ -71,6 +71,19 @@ jobs:
           cp "$SMOKE/smoke.oncue" ci-logs/smoke-saved-show.json 2>/dev/null || true
           grep -q "PASS:" ci-logs/smoke.log
 
+      - name: Screenshots of the running app
+        id: screenshots
+        if: steps.build.outcome == 'success'
+        continue-on-error: true
+        run: |
+          APP="build/DerivedData/Build/Products/Debug/OnCue.app"
+          SHOTS="$RUNNER_TEMP/screenshots"
+          "$APP/Contents/MacOS/OnCue" --screenshots "$SHOTS" 2>&1 | tee ci-logs/screenshots.log
+          mkdir -p ci-logs/screenshots
+          cp "$SHOTS"/*.png ci-logs/screenshots/ 2>/dev/null || true
+          screencapture -x ci-logs/screenshots/full-screen-after.png 2>/dev/null || true
+          grep -q "PASS:" ci-logs/screenshots.log
+
       - name: Commit regenerated Xcode project
         if: >-
           steps.generate.outputs.changed == 'true' && steps.build.outcome == 'success' &&
@@ -108,6 +121,7 @@ jobs:
             echo "| Package tests | ${{ steps.tests.outcome }} |"
             echo "| App build | ${{ steps.build.outcome }} |"
             echo "| Launch smoke test | ${{ steps.smoke.outcome }} |"
+            echo "| Screenshots | ${{ steps.screenshots.outcome }} |"
             echo
             echo "## Toolchain"; echo '```'; cat ci-logs/toolchain.log 2>/dev/null; echo '```'
             echo "## Test summary"; echo '```'
