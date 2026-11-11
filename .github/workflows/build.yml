@@ -78,6 +78,13 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Only the run for the newest commit on main may commit; an older run whose commit has
+          # been superseded skips (the newer run regenerates and commits instead).
+          git fetch --quiet origin main
+          if [ "$(git rev-parse origin/main)" != "$GITHUB_SHA" ]; then
+            echo "main has moved on since $GITHUB_SHA; skipping, the newer run will commit the project."
+            exit 0
+          fi
           git add OnCue.xcodeproj
           git commit -m "Regenerate OnCue.xcodeproj from project.yml"
           git push origin HEAD:main
