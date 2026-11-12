@@ -589,6 +589,8 @@ struct ControlsPanel: View {
                       symbol: "metronome", action: nil)
                 group("Controllers", detail: "Keyboard, Akai APC40 mkII, any MIDI controller by MIDI learn, and Stream Deck through Companion.",
                       symbol: "slider.horizontal.below.square.filled.and.square", action: nil)
+                group("Trigger routes", detail: "\(model.project.properties.triggerRoutes.count) \(model.project.properties.triggerRoutes.count == 1 ? "route" : "routes"): OSC, MIDI, MIDI Show Control and Art-Net from Companion, a grandMA3, the playback rig or a pedal.",
+                      symbol: "point.3.connected.trianglepath.dotted", action: ("Trigger Routes…", { model.triggerRoutesOpen = true }))
                 group("OSC out", detail: "\(show.oscTargets.count) \(show.oscTargets.count == 1 ? "target" : "targets") (Resolume, Disguise, CasparCG, lighting desks).",
                       symbol: "antenna.radiowaves.left.and.right", action: ("Show Setup…", { model.switcherSetupOpen = true }))
                 group("PTZ", detail: "\(show.ptzCameras.count) PTZ \(show.ptzCameras.count == 1 ? "camera" : "cameras"): Panasonic, Sony VISCA over IP, VISCA over TCP, ATEM macros or Companion.",
@@ -643,6 +645,7 @@ struct ShowToolsPanel: View {
                 DeckPanelTitle(title: "Show")
                 tool("Show Setup", "Switchers, outputs, OSC, PTZ, monitors", "rectangle.3.group", "⌥⌘S") { model.switcherSetupOpen = true }
                 tool("Cameras", "Numbers, names, operators, colours, inputs", "video", "⌥⌘C") { model.cameraManagerOpen = true }
+                tool("Trigger Routes", "OSC, MIDI, MSC and Art-Net in", "point.3.connected.trianglepath.dotted", "⌥⌘R") { model.triggerRoutesOpen = true }
                 tool("Pre-show Check", "Switchers, inputs, script, devices", "checklist", "⌥⌘K") { model.preShowCheckOpen = true }
                 tool("Camera Plot", "Cameras on the venue plan", "map", "⌥⌘P") { model.plotOpen = true }
                 tool("Export", "Script and call sheet PDFs, CSV, EDL", "square.and.arrow.up", "⇧⌘E") { model.exportOpen = true }

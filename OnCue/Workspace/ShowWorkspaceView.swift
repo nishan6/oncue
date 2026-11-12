@@ -70,6 +70,9 @@ struct ShowWorkspaceView: View {
             LegacyShowSheet(show: box.show, originalURL: fileURL, model: model)
                 .interactiveDismissDisabled()
         }
+        .sheet(isPresented: $model.triggerRoutesOpen) {
+            TriggerRoutesView(project: document.project, model: model)
+        }
         .sheet(isPresented: $model.moveAllOpen) {
             MoveAllSheet(item: model.selectedItem, start: model.moveAllStart, model: model)
         }
@@ -105,6 +108,9 @@ struct ShowWorkspaceView: View {
         }
         .onAppear { model.attach(document: $document, fileURL: fileURL, undoManager: undoManager) }
         .onChange(of: show.id) { _, _ in model.attach(document: $document, fileURL: fileURL, undoManager: undoManager) }
+        .onChange(of: document.project.properties) { _, _ in
+            if let engine = model.engine { model.configureTriggers(engine) }
+        }
         .onChange(of: show) { _, newShow in
             model.validateSelection()
             model.engine?.update(show: newShow.forLive(document.project.properties.shots))

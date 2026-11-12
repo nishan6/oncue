@@ -896,9 +896,30 @@ final class WorkspaceModel: ObservableObject {
         let profile = MachineProfileStore().profile
         let controller = EngineController(show: show.forLive(project.properties.shots), itemID: id, profile: profile)
         controller.connectSwitcher()
+        configureTriggers(controller)
         engine = controller
         startBackupLink(controller, role: BackupRole(rawValue: profile.backupRole) ?? .off, primaryHost: profile.primaryHost)
     }
+
+    /// Trigger Routes for the live engine: song N from a value, and rehearsal notes filed on the
+    /// shot on air (Inspector › Reviews).
+    func configureTriggers(_ controller: EngineController) {
+        let playlistID = activePlaylistID
+        controller.resolveItem = { [weak self] value in
+            self?.project.resolveItem(number: value, playlist: playlistID)?.id
+        }
+        controller.onMarkNote = { [weak self] itemID, shotID, text in
+            guard let self, let shotID else {
+                self?.errorMessage = "Note not marked: no shot is on air."
+                return
+            }
+            let note = ShotNote(text: text, author: NSFullUserName())
+            self.edit("Mark Note") { $0.updateCue(shotID, inItem: itemID) { $0.reviews.append(note) } }
+        }
+        controller.configureTriggers(routes: project.properties.triggerRoutes, chase: project.properties.chase)
+    }
+
+    @Published var triggerRoutesOpen = false
 
     /// Leaves Live Mode, selecting the song and the shot that was on air.
     func exitLive() {
