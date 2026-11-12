@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 import OnCueCore
 
 /// The three pages of the shot inspector.
