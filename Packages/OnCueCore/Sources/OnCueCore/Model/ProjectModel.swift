@@ -353,8 +353,6 @@ public struct Project: Identifiable, Codable, Hashable {
     public var venue: String = ""
     public var showDate: Date?
     public var frameRate: FrameRate = .r25
-    public var pinned: Bool = false
-    public var archived: Bool = false
     public var createdAt = Date()
     public var editedAt = Date()
 

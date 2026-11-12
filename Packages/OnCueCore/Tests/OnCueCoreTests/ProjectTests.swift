@@ -245,3 +245,45 @@ final class ProjectVersionTests: XCTestCase {
         XCTAssertFalse(project.saveVersion(name: "2", automatic: true))
     }
 }
+
+final class SceneNumberingTests: XCTestCase {
+    private func items(_ numbers: [String]) -> [RundownItem] {
+        numbers.map { n in var i = RundownItem(title: "S\(n)"); i.number = n; return i }
+    }
+
+    func testAutomaticFollowsPosition() {
+        XCTAssertEqual(SceneNumbering.numberForInsert(at: 1, in: items(["1", "2", "3"]), mode: .automatic, from: 1), "2")
+    }
+
+    func testFixedTakesNextFreeNumber() {
+        XCTAssertEqual(SceneNumbering.numberForInsert(at: 1, in: items(["1", "2", "3"]), mode: .fixed, from: 1), "4")
+        XCTAssertEqual(SceneNumbering.numberForInsert(at: 0, in: [], mode: .fixed, from: 10), "10")
+    }
+
+    func testSuffixInsertsLetters() {
+        let list = items(["1", "2", "3", "3a"])
+        XCTAssertEqual(SceneNumbering.numberForInsert(at: 3, in: list, mode: .fixedWithSuffix, from: 1), "3b")
+        XCTAssertEqual(SceneNumbering.numberForInsert(at: 1, in: list, mode: .fixedWithSuffix, from: 1), "1a")
+        XCTAssertEqual(SceneNumbering.numberForInsert(at: 4, in: list, mode: .fixedWithSuffix, from: 1), "4", "at the end: next whole number")
+    }
+
+    func testRenumber() {
+        let out = SceneNumbering.renumbered(items(["3", "1", "2a"]), from: 1)
+        XCTAssertEqual(out.map(\.number), ["1", "2", "3"])
+        XCTAssertTrue(SceneNumbering.followsOrder(out, from: 1))
+        XCTAssertFalse(SceneNumbering.followsOrder(items(["2", "1"]), from: 1))
+    }
+
+    func testStartTimecodeChoices() {
+        var defaults = SceneDefaults()
+        defaults.startTimecode = "01:00:00:00"
+        XCTAssertEqual(SceneNumbering.startTimecode(.projectDefault, number: "5", previous: nil, defaults: defaults, rate: .r25), "01:00:00:00")
+        XCTAssertEqual(SceneNumbering.startTimecode(.hourPerNumber, number: "3", previous: nil, defaults: defaults, rate: .r25), "03:00:00:00")
+        XCTAssertNil(SceneNumbering.startTimecode(.hourPerNumber, number: "30", previous: nil, defaults: defaults, rate: .r25))
+        var prev = RundownItem(title: "Prev")
+        prev.ltcStart = "01:00:00:00"
+        prev.plannedDuration = 180
+        XCTAssertEqual(SceneNumbering.startTimecode(.continueFromPrevious, number: "2", previous: prev, defaults: defaults, rate: .r25), "01:03:00:00")
+        XCTAssertNil(SceneNumbering.startTimecode(.continueFromPrevious, number: "2", previous: nil, defaults: defaults, rate: .r25))
+    }
+}

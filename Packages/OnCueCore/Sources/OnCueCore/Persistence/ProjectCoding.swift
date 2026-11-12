@@ -78,8 +78,6 @@ extension Project {
         venue = try c.value("venue", "")
         showDate = try c.optional("showDate")
         frameRate = try c.value("frameRate", FrameRate.r25)
-        pinned = try c.value("pinned", false)
-        archived = try c.value("archived", false)
         createdAt = try c.value("createdAt", Date(timeIntervalSince1970: 0))
         editedAt = try c.value("editedAt", Date(timeIntervalSince1970: 0))
         cameras = try c.value("cameras", [])
@@ -204,8 +202,6 @@ extension Project {
         saveVersion(name: "Before restoring “\(v.name)”", automatic: true, reason: "Before restore", author: author, date: date, force: true)
         old.versions = versions
         old.id = self.id
-        old.pinned = pinned
-        old.archived = archived
         self = old
         editedAt = date
         saveVersion(name: "Restored “\(v.name)”", automatic: false, reason: "Restore", author: author, date: date)
