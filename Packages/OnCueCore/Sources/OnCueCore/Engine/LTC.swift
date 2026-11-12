@@ -159,6 +159,10 @@ public enum LTCEncoder {
                 clock = end
             }
         }
+        // A real stream keeps going: the next frame's first edge completes the last bit.
+        level = -level
+        let tail = clock + perBit
+        while Double(out.count) < tail { out.append(level) }
         return out
     }
 }
