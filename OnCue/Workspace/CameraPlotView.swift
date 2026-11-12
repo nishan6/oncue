@@ -224,6 +224,10 @@ struct PlotCanvas: View {
     let dragging: (id: UUID, x: Double, y: Double)?
     let turning: (id: UUID, angle: Double)?
     var printing = false
+    /// Live tally: the camera on program and on preview are lit, the rest dimmed.
+    var live: UUID? = nil
+    var next: UUID? = nil
+    var tally = false
     var select: (UUID?) -> Void = { _ in }
     var drag: (UUID, Double, Double) -> Void = { _, _, _ in }
     var endDrag: (UUID, Double, Double) -> Void = { _, _, _ in }
@@ -304,12 +308,21 @@ struct PlotCanvas: View {
     }
 
     private func markerView(_ marker: PlotMarker, _ cam: Camera, _ area: CGRect) -> some View {
+        markerBody(marker, cam, area)
+            .opacity(tally && live != marker.cameraID && next != marker.cameraID ? 0.35 : 1)
+            .animation(.easeOut(duration: 0.12), value: live)
+    }
+
+    private func markerBody(_ marker: PlotMarker, _ cam: Camera, _ area: CGRect) -> some View {
         let mx = dragging?.id == marker.cameraID ? dragging!.x : marker.x
         let my = dragging?.id == marker.cameraID ? dragging!.y : marker.y
         let angle = turning?.id == marker.cameraID ? turning!.angle : marker.angle
         let center = CGPoint(x: area.minX + mx * area.width, y: area.minY + my * area.height)
         let color = cam.swiftUIColor
         let isSelected = selected == marker.cameraID
+        let isLive = tally && live == marker.cameraID
+        let isNext = tally && !isLive && next == marker.cameraID
+        let ring: Color = isLive ? Gallery.tally : (isNext ? Gallery.next : (isSelected ? Gallery.ink : Gallery.well))
         let reach: CGFloat = min(area.width, area.height) * 0.16
         let radians = CGFloat((angle - 90) * .pi / 180)
         let tip = CGPoint(x: center.x + cos(radians) * reach, y: center.y + sin(radians) * reach)
@@ -321,7 +334,7 @@ struct PlotCanvas: View {
                     p.addArc(center: center, radius: reach, startAngle: .degrees(angle - 90 - 20), endAngle: .degrees(angle - 90 + 20), clockwise: false)
                     p.closeSubpath()
                 }
-                .fill(LinearGradient(colors: [color.opacity(0.45), color.opacity(0.04)],
+                .fill(LinearGradient(colors: [(isLive ? Gallery.tally : color).opacity(isLive ? 0.7 : 0.45), color.opacity(0.04)],
                                      startPoint: UnitPoint(x: 0.5, y: 0.5), endPoint: UnitPoint(x: 0.5 + cos(radians) * 0.5, y: 0.5 + sin(radians) * 0.5)))
                 .allowsHitTesting(false)
             }
@@ -344,8 +357,10 @@ struct PlotCanvas: View {
                 .foregroundStyle(Gallery.well)
                 .frame(width: 32, height: 32)
                 .background(color, in: Circle())
-                .overlay(Circle().strokeBorder(isSelected ? Gallery.ink : Gallery.well, lineWidth: isSelected ? 2.5 : 1.5))
-                .shadow(color: .black.opacity(0.4), radius: 3, y: 1)
+                .overlay(Circle().strokeBorder(ring, lineWidth: isLive || isNext ? 3.5 : (isSelected ? 2.5 : 1.5)))
+                .shadow(color: isLive ? Gallery.tally.opacity(0.9) : (isNext ? Gallery.next.opacity(0.8) : .black.opacity(0.4)),
+                        radius: isLive || isNext ? 12 : 3, y: isLive || isNext ? 0 : 1)
+                .scaleEffect(isLive ? 1.35 : (isNext ? 1.15 : 1))
                 .position(center)
                 .gesture(printing ? nil : DragGesture(minimumDistance: 1, coordinateSpace: .local)
                     .onChanged { v in

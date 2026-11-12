@@ -528,6 +528,7 @@ struct UpcomingStrip: View {
 struct LiveCameraGrid: View {
     let show: Show
     let status: EngineStatus
+    @AppStorage("live.cameraView") private var view = "grid"
 
     var body: some View {
         let fromSwitcher = status.switcherConnected && status.program != nil
@@ -540,15 +541,31 @@ struct LiveCameraGrid: View {
         VStack(alignment: .leading, spacing: Space.s) {
             HStack {
                 Text("Cameras").sectionLabel()
+                if !show.plot.markers.isEmpty {
+                    Picker("Show", selection: $view) {
+                        Text("Grid").tag("grid")
+                        Text("Plot").tag("plot")
+                    }
+                    .pickerStyle(.segmented)
+                    .labelsHidden()
+                    .frame(width: 110)
+                    .help("Cameras as keys, or on the camera plot with the live and next cameras lit")
+                }
                 Spacer()
                 Text(fromSwitcher ? (status.switcherAssumed ? "Tally as OnCue last set it" : "Tally from the switcher")
                      : "Tally follows the script")
                     .font(.ocMeta).foregroundStyle(Gallery.faint)
             }
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: Space.s)], alignment: .leading, spacing: Space.s) {
-                ForEach(show.sortedCameras) { cam in
-                    SourceButton(camera: cam, tally: pgm(cam) ? .current : (pvw(cam) ? .next : .off),
-                                 live: true, width: 150, height: 62, numeral: 28)
+            if view == "plot" && !show.plot.markers.isEmpty {
+                PlotCanvas(show: show, plot: show.plot, selected: nil, dragging: nil, turning: nil, printing: true,
+                           live: show.sortedCameras.first(where: pgm)?.id, next: show.sortedCameras.first(where: pvw)?.id, tally: true)
+                    .frame(minHeight: 260, maxHeight: 420)
+            } else {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: Space.s)], alignment: .leading, spacing: Space.s) {
+                    ForEach(show.sortedCameras) { cam in
+                        SourceButton(camera: cam, tally: pgm(cam) ? .current : (pvw(cam) ? .next : .off),
+                                     live: true, width: 150, height: 62, numeral: 28)
+                    }
                 }
             }
         }

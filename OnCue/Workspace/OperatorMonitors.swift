@@ -91,6 +91,11 @@ private struct MonitorContent: View {
                 MonitorShotlist(show: show, snap: snap)
             case .countdown:
                 MonitorCountdown(show: show, snap: snap)
+            case .plot:
+                PlotCanvas(show: show, plot: show.plot, selected: nil, dragging: nil, turning: nil, printing: true,
+                           live: snap.program.flatMap { show.camera(number: $0)?.id },
+                           next: snap.preview.flatMap { show.camera(number: $0)?.id }, tally: true)
+                    .padding(Space.xl)
             }
         }
     }

@@ -162,7 +162,7 @@ public enum BackupRole: String, Codable, CaseIterable, Identifiable {
 }
 
 public enum MonitorKind: String, Codable, CaseIterable, Identifiable {
-    case gallery, cameras, shotlist, countdown
+    case gallery, cameras, shotlist, countdown, plot
     public var id: String { rawValue }
     public var label: String {
         switch self {
@@ -170,6 +170,7 @@ public enum MonitorKind: String, Codable, CaseIterable, Identifiable {
         case .cameras: return "Camera positions (chosen cameras)"
         case .shotlist: return "Shotlist"
         case .countdown: return "Big countdown"
+        case .plot: return "Camera plot (live and next lit)"
         }
     }
 }

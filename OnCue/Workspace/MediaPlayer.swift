@@ -225,6 +225,9 @@ struct MediaControls: View {
     @ObservedObject var model: WorkspaceModel
     @ObservedObject var player: MediaPlayer
     @State private var menuOpen = false
+    @State private var detecting = false
+    @State private var estimate: TempoEstimate?
+    @State private var detectFailed = false
 
     var body: some View {
         HStack(spacing: 4) {
@@ -247,6 +250,56 @@ struct MediaControls: View {
         }
     }
 
+    @ViewBuilder private func tempoSection(_ media: ItemMedia) -> some View {
+        Divider().overlay(Gallery.hairline)
+        if let est = estimate {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(String(format: "%.1f BPM, first beat at %.2f s", est.bpm, est.firstBeat))
+                    .font(.readout(12, weight: .semibold)).foregroundStyle(Gallery.ink)
+                Text(est.confidence < 0.3 ? "Weak beat: check it by playing along." : "Clear beat.")
+                    .font(.ocMeta).foregroundStyle(est.confidence < 0.3 ? Gallery.amber : Gallery.dim)
+                HStack {
+                    Button("Use") { apply(est) }.buttonStyle(QuietButtonStyle(prominent: true))
+                    Button("Use ×2") { apply(TempoEstimate(bpm: est.bpm * 2, firstBeat: est.firstBeat, confidence: est.confidence)) }
+                        .buttonStyle(QuietButtonStyle())
+                    Button("Use ÷2") { apply(TempoEstimate(bpm: est.bpm / 2, firstBeat: est.firstBeat, confidence: est.confidence)) }
+                        .buttonStyle(QuietButtonStyle())
+                }
+                Text("Sets the song's tempo and puts its start on the first beat found. Shots keep their bars and beats.")
+                    .font(.ocMeta).foregroundStyle(Gallery.faint).fixedSize(horizontal: false, vertical: true)
+            }
+        } else {
+            HStack {
+                Button(detecting ? "Listening…" : "Detect Tempo") { detect(media) }
+                    .buttonStyle(QuietButtonStyle())
+                    .disabled(detecting)
+                if detectFailed { Text("No steady beat found.").font(.ocMeta).foregroundStyle(Gallery.amber) }
+            }
+        }
+    }
+
+    private func detect(_ media: ItemMedia) {
+        guard let url = media.resolvedURL() else { return }
+        detecting = true
+        detectFailed = false
+        DispatchQueue.global(qos: .userInitiated).async {
+            let est = try? TempoDetector.detect(url: url)
+            DispatchQueue.main.async {
+                detecting = false
+                estimate = est ?? nil
+                detectFailed = (est ?? nil) == nil
+            }
+        }
+    }
+
+    private func apply(_ est: TempoEstimate) {
+        let bpm = (est.bpm * 10).rounded() / 10
+        model.edit("Detected Tempo") { s in
+            s.updateItem(item.id) { $0.bpm = bpm; $0.media?.offset = est.firstBeat }
+        }
+        estimate = nil
+    }
+
     private var popover: some View {
         VStack(alignment: .leading, spacing: Space.s) {
             Text("Media under the timeline").font(.ocHeading).foregroundStyle(Gallery.ink)
@@ -266,6 +319,9 @@ struct MediaControls: View {
                 }
                 .buttonStyle(QuietButtonStyle())
                 .help("Play or scrub to the first beat of the song, then press this")
+                if item.timeBase == .bars {
+                    tempoSection(media)
+                }
                 if media.kind == .video {
                     Button(player.videoWindowOpen ? "Hide Video" : "Show Video") {
                         player.prepare(item)

@@ -46,3 +46,44 @@ final class MediaTests: XCTestCase {
         XCTAssertEqual(back.items[0].media, show.items[0].media)
     }
 }
+
+final class TempoTests: XCTestCase {
+    /// Kick-like hits at a tempo, from a first beat, over a quiet tone (a crude song).
+    private func song(bpm: Double, firstBeat: Double, seconds: Double, rate: Double = 11_025) -> [Float] {
+        let n = Int(seconds * rate)
+        var out = [Float](repeating: 0, count: n)
+        let period = 60 / bpm
+        for i in 0..<n {
+            let t = Double(i) / rate
+            out[i] = Float(0.05 * sin(t * 2 * .pi * 220))
+            if t >= firstBeat {
+                let since = (t - firstBeat).truncatingRemainder(dividingBy: period)
+                let beatIndex = Int((t - firstBeat) / period)
+                let level = beatIndex % 4 == 0 ? 0.9 : 0.6
+                out[i] += Float(level * exp(-since * 30) * sin(since * 2 * .pi * 60))
+            }
+        }
+        return out
+    }
+
+    func testDetectsTempoAndFirstBeat() throws {
+        for (bpm, first) in [(128.0, 0.41), (92.0, 1.2), (174.0, 0.05)] {
+            let est = try XCTUnwrap(TempoDetector.detect(samples: song(bpm: bpm, firstBeat: first, seconds: 30), sampleRate: 11_025))
+            // Half or double tempo is a matter of taste (the editor offers ×2 and ÷2); within that, exact.
+            let octave = [bpm, bpm / 2, bpm * 2].min { abs($0 - est.bpm) < abs($1 - est.bpm) }!
+            XCTAssertEqual(est.bpm, octave, accuracy: 1.0, "\(bpm) BPM")
+            if bpm < 150 { XCTAssertEqual(octave, bpm, "common tempos are not halved or doubled") }
+            // The first beat found may be any beat; it must sit on the grid.
+            let period = 60 / max(bpm, octave)
+            var off = (est.firstBeat - first).truncatingRemainder(dividingBy: period)
+            if off > period / 2 { off -= period }
+            if off < -period / 2 { off += period }
+            XCTAssertEqual(off, 0, accuracy: 0.03, "\(bpm) BPM phase")
+            XCTAssertGreaterThan(est.confidence, 0.2)
+        }
+    }
+
+    func testSilenceHasNoTempo() {
+        XCTAssertNil(TempoDetector.detect(samples: [Float](repeating: 0, count: 11_025 * 10), sampleRate: 11_025))
+    }
+}
