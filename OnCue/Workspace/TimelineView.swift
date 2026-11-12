@@ -118,6 +118,22 @@ extension TimelineLane {
         case .media: return Gallery.next
         }
     }
+
+    /// Solid fill of the track's header tab.
+    var headerFill: Color {
+        switch self {
+        case .sections: return Deck.trackSections
+        case .shots: return Deck.trackVision
+        case .output: return Deck.trackOutput
+        case .lyrics: return Deck.trackLyrics
+        case .notes: return Deck.trackNotes
+        case .fx: return Deck.trackFX
+        case .control: return Deck.trackControl
+        case .osc: return Deck.trackOSC
+        case .ptz: return Deck.trackPTZ
+        case .media: return Deck.trackMedia
+        }
+    }
 }
 
 /// Ruler and grid marks for the visible scale.
@@ -437,30 +453,33 @@ struct TrackHeaderCell: View {
         .frame(width: TimelineLayout.headerWidth, height: height, alignment: .topLeading)
         .background(hovering ? Gallery.raised : Gallery.panel)
         .overlay(alignment: .leading) {
-            RoundedRectangle(cornerRadius: 1)
-                .fill(lane.tone.opacity(hidden ? 0.35 : 0.9))
-                .frame(width: 2)
-                .padding(.vertical, hidden ? 3 : 6)
-                .padding(.leading, Space.s)
+            // Solid colour tab with the track's symbol: the track type reads at a glance.
+            Rectangle()
+                .fill(lane.headerFill.opacity(hidden ? 0.4 : 1))
+                .frame(width: Self.tabWidth)
+                .overlay(alignment: height >= 80 && !hidden ? .top : .center) {
+                    Image(systemName: lane.symbol)
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(Color.white.opacity(hidden ? 0.6 : 0.95))
+                        .padding(.top, height >= 80 && !hidden ? Space.s + 3 : 0)
+                }
         }
         .onHover { hovering = $0 }
         .animation(.easeOut(duration: 0.12), value: hovering)
     }
 
+    static let tabWidth: CGFloat = 26
+
     /// Tall tracks (the vision track): name at the top, then the track's facts.
     private var tall: some View {
         VStack(alignment: .leading, spacing: Space.xs) {
             HStack(spacing: 7) {
-                Image(systemName: lane.symbol)
-                    .font(.system(size: 11, weight: .medium))
-                    .foregroundStyle(Gallery.dim)
-                    .frame(width: 14)
                 Text(title ?? lane.label).font(.system(size: 12.5, weight: .semibold)).foregroundStyle(Gallery.ink).lineLimit(1)
                 Spacer(minLength: 0)
                 controls
             }
             if let subtitle {
-                Text(subtitle).font(.ocMeta).foregroundStyle(Gallery.faint).padding(.leading, 21)
+                Text(subtitle).font(.ocMeta).foregroundStyle(Gallery.faint)
             }
             VStack(alignment: .leading, spacing: 3) {
                 ForEach(details, id: \.self) { line in
@@ -470,23 +489,16 @@ struct TrackHeaderCell: View {
                         .lineLimit(1)
                 }
             }
-            .padding(.leading, 21)
             .padding(.top, Space.s)
             Spacer(minLength: 0)
         }
-        .padding(.leading, Space.m + 2)
+        .padding(.leading, Self.tabWidth + Space.s)
         .padding(.trailing, Space.xs)
         .padding(.top, Space.s + 2)
     }
 
     private var compact: some View {
         HStack(spacing: 7) {
-            if !hidden {
-                Image(systemName: lane.symbol)
-                    .font(.system(size: 11, weight: .medium))
-                    .foregroundStyle(Gallery.dim)
-                    .frame(width: 14)
-            }
             VStack(alignment: .leading, spacing: 0) {
                 Text(title ?? lane.label)
                     .font(hidden ? .ocMeta : .ocLabel)
@@ -500,7 +512,7 @@ struct TrackHeaderCell: View {
             Spacer(minLength: 0)
             controls
         }
-        .padding(.leading, Space.m + 2)
+        .padding(.leading, Self.tabWidth + Space.s)
         .padding(.trailing, Space.xs)
         .frame(maxHeight: .infinity)
     }

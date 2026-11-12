@@ -35,7 +35,6 @@ struct ItemEditorView: View {
             }
             .transition(.opacity)
             .id(model.editorMode)
-            CameraPaletteView(show: show, model: model)
         }
         .background(Gallery.base)
         .animation(.easeOut(duration: 0.16), value: model.editorMode)
