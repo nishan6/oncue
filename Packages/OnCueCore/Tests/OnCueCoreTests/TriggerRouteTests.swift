@@ -200,3 +200,21 @@ final class EngineTriggerTests: XCTestCase {
         XCTAssertEqual(controller.engine.onAir?.id, ids[2])
     }
 }
+
+final class TriggerLearnTests: XCTestCase {
+    func testLearnedInputMatchesItsEvent() {
+        let events = [
+            TriggerEvent(kind: .osc, address: "/companion/go"),
+            TriggerEvent(kind: .midiNote, channel: 10, number: 36, value: 90),
+            TriggerEvent(kind: .midiProgram, channel: 2, value: 7),
+            TriggerEvent(kind: .msc, value: 4, msc: .fire),
+        ]
+        for e in events {
+            var router = TriggerRouter(routes: [TriggerRoute(input: .learned(from: e))])
+            XCTAssertEqual(router.match(e).count, 1, e.summary)
+        }
+        let cc = TriggerEvent(kind: .midiCC, channel: 1, number: 21, value: 127)
+        var router = TriggerRouter(routes: [TriggerRoute(input: .learned(from: cc))])
+        XCTAssertEqual(router.match(cc).count, 1)
+    }
+}
