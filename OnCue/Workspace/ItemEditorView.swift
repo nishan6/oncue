@@ -65,6 +65,18 @@ struct ItemHeaderView: View {
                 }
                 HStack(alignment: .top, spacing: Space.m) {
                     MetaItem(label: "Timing") { TimingMenu(item: item, model: model) }
+                    MetaItem(label: "Live follows") { SyncMenu(item: item, model: model) }
+                    if item.syncMode == .ltc && item.timeBase != .order {
+                        MetaItem(label: "LTC start") {
+                            CommitField(placeholder: "First frame", value: item.ltcStart, font: .readout(13), width: 96) { text in
+                                let t = text.trimmingCharacters(in: .whitespaces)
+                                guard t.isEmpty || TimeFormat.parseTimecode(t, fps: 25) != nil else { return false }
+                                model.updateItem("Change LTC Start") { $0.ltcStart = t }
+                                return true
+                            }
+                            .help("Timecode at the song's start, HH:MM:SS:FF. Empty: the first timecode after GO.")
+                        }
+                    }
                     if item.timeBase == .bars {
                         MetaItem(label: "Tempo") {
                             HStack(spacing: 0) {
@@ -208,6 +220,69 @@ struct TimingMenu: View {
                 }
             }
             .padding(Space.s)
+        }
+    }
+}
+
+/// What drives the playhead in Live Mode: section taps, NEXT, MIDI clock, LTC or OnCue's clock.
+struct SyncMenu: View {
+    let item: RundownItem
+    @ObservedObject var model: WorkspaceModel
+    @State private var open = false
+
+    var body: some View {
+        let order = item.timeBase == .order
+        Button { if !order { open = true } } label: {
+            HStack(spacing: 4) {
+                Text(order ? "NEXT" : item.syncMode.label).font(.ocBodyStrong).foregroundStyle(Gallery.ink)
+                if !order {
+                    Image(systemName: "chevron.down").font(.system(size: 8, weight: .bold)).foregroundStyle(Gallery.faint)
+                }
+            }
+            .padding(.horizontal, 5)
+            .padding(.vertical, 3)
+            .contentShape(Rectangle())
+            .interactive()
+        }
+        .buttonStyle(.plain)
+        .help(order ? "Items in NEXT order always step on NEXT." : "What moves the playhead in Live Mode.")
+        .popover(isPresented: $open, arrowEdge: .bottom) {
+            VStack(alignment: .leading, spacing: 1) {
+                ForEach(SyncMode.allCases) { mode in
+                    Button {
+                        open = false
+                        model.updateItem("Change Live Timing") { $0.syncMode = mode }
+                    } label: {
+                        HStack(alignment: .firstTextBaseline) {
+                            VStack(alignment: .leading, spacing: 1) {
+                                Text(mode.label).font(.ocBodyStrong).foregroundStyle(Gallery.ink)
+                                Text(Self.detail(mode)).font(.ocMeta).foregroundStyle(Gallery.faint)
+                            }
+                            Spacer()
+                            if mode == item.syncMode {
+                                Image(systemName: "checkmark").font(.system(size: 10, weight: .bold)).foregroundStyle(Gallery.selection)
+                            }
+                        }
+                        .padding(.horizontal, Space.s)
+                        .padding(.vertical, 5)
+                        .frame(width: 290, alignment: .leading)
+                        .contentShape(Rectangle())
+                        .interactive()
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(Space.s)
+        }
+    }
+
+    static func detail(_ mode: SyncMode) -> String {
+        switch mode {
+        case .tap: return "Tap each section; OnCue runs at the tempo between taps"
+        case .next: return "Every shot on NEXT"
+        case .midiClock: return "Ableton or a DAW sends MIDI clock"
+        case .ltc: return "Timecode on an audio input"
+        case .freeRun: return "OnCue's own clock from GO"
         }
     }
 }

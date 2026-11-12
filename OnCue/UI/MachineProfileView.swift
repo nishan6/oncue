@@ -4,6 +4,8 @@ import OnCueCore
 /// Settings window: this Mac's hardware profile (never stored in shows).
 struct MachineProfileView: View {
     @EnvironmentObject private var machine: MachineProfileModel
+    @State private var midiSources: [String] = MIDISources.names()
+    @State private var audioInputs: [AudioInputDevice] = AudioInputDevice.all()
 
     var body: some View {
         Form {
@@ -11,9 +13,25 @@ struct MachineProfileView: View {
                 field("Name", \.machineName, prompt: "Main Mac")
             }
             Section("MIDI") {
-                field("Clock source", \.midiClockSource, prompt: "IAC Driver Bus 1")
+                Picker("Clock source", selection: Binding(get: { machine.profile.midiClockSource },
+                                                          set: { v in machine.update { $0.midiClockSource = v } })) {
+                    Text("None").tag("")
+                    ForEach(midiSources, id: \.self) { Text($0).tag($0) }
+                    if !machine.profile.midiClockSource.isEmpty && !midiSources.contains(machine.profile.midiClockSource) {
+                        Text("\(machine.profile.midiClockSource) (not connected)").tag(machine.profile.midiClockSource)
+                    }
+                }
                 field("Controller in", \.controllerSource, prompt: "APC40 mkII")
                 field("Controller out", \.controllerDestination, prompt: "APC40 mkII")
+            }
+            Section("LTC") {
+                Picker("Audio input", selection: Binding(get: { machine.profile.ltcDeviceUID },
+                                                         set: { v in machine.update { $0.ltcDeviceUID = v } })) {
+                    Text("Default input").tag("")
+                    ForEach(audioInputs) { Text($0.name).tag($0.uid) }
+                }
+                Stepper("Channel \(machine.profile.ltcChannel + 1)", value: Binding(get: { machine.profile.ltcChannel },
+                                                                                set: { v in machine.update { $0.ltcChannel = max(0, v) } }), in: 0...63)
             }
             Section("Network") {
                 field("Crew page interface", \.crewInterface, prompt: "en0")

@@ -16,17 +16,19 @@ struct WorkspaceCommands: Commands {
                 .keyboardShortcut("e", modifiers: [.command, .option])
             Divider()
             Button("Previous Song or Segment") {
-                if workspace?.live != nil { workspace?.liveMoveItem(by: -1) } else { workspace?.selectItem(offset: -1) }
+                if let engine = workspace?.engine { engine.moveItem(by: -1) } else { workspace?.selectItem(offset: -1) }
             }
                 .keyboardShortcut("[", modifiers: .command)
             Button("Next Song or Segment") {
-                if workspace?.live != nil { workspace?.liveMoveItem(by: 1) } else { workspace?.selectItem(offset: 1) }
+                if let engine = workspace?.engine { engine.moveItem(by: 1) } else { workspace?.selectItem(offset: 1) }
             }
                 .keyboardShortcut("]", modifiers: .command)
             Divider()
-            Button(workspace?.live == nil ? "Enter Live Mode" : "Exit Live Mode") { workspace?.toggleLive() }
+            Button(workspace?.isLive == true ? "Exit Live Mode" : "Enter Live Mode") { workspace?.toggleLive() }
                 .keyboardShortcut("l", modifiers: .command)
             Divider()
+            Button("Switcher…") { workspace?.switcherSetupOpen = true }
+                .keyboardShortcut("s", modifiers: [.command, .option])
             Button("Cameras…") { workspace?.cameraManagerOpen = true }
                 .keyboardShortcut("c", modifiers: [.command, .option])
             Button("Show or Hide Inspector") { workspace?.showInspector.toggle() }

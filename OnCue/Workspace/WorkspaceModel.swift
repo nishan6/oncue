@@ -76,14 +76,14 @@ final class WorkspaceModel: ObservableObject {
     /// Timeline zoom, 1 = default scale.
     @Published var zoom: Double = 1 { didSet { persistState() } }
     @Published var hiddenLanes: Set<TimelineLane> = [] { didSet { persistState() } }
-    /// Live Mode position, nil in Edit Mode.
-    @Published var live: LiveCursor?
-    /// When the shot on air was taken (drives the elapsed and countdown readouts).
-    @Published var liveTakenAt: Date?
+    /// The show engine while in Live Mode, nil in Edit Mode.
+    @Published var engine: EngineController?
+    var isLive: Bool { engine != nil }
     /// Used by the screenshot run: shows that open straight into Live Mode at a shot index.
     static var openLive: [UUID: Int] = [:]
     @Published var lockedLanes: Set<TimelineLane> = [] { didSet { persistState() } }
     @Published var cameraManagerOpen = false
+    @Published var switcherSetupOpen = false
     @Published var renamingItemID: UUID?
     @Published var errorMessage: String?
     /// Shot list scrolls here when set (a shot or section id).
@@ -107,9 +107,10 @@ final class WorkspaceModel: ObservableObject {
         if attachedShowID != show.id {
             attachedShowID = show.id
             restoreState(for: show)
-            if let index = Self.openLive[show.id], let item = selectedItemID {
-                live = LiveCursor(itemID: item, index: index)
-                liveTakenAt = Date().addingTimeInterval(-3.4)
+            if let index = Self.openLive[show.id] {
+                enterLive()
+                engine?.setMode(.cut)
+                for _ in 0...index { engine?.next() }
             }
         }
     }
@@ -511,22 +512,39 @@ final class WorkspaceModel: ObservableObject {
         edit("Delete Camera") { $0.deleteCamera(id) }
     }
 
+    // MARK: - Switcher
+
+    func ensureMainSwitcher() {
+        edit("Add Switcher") { $0.ensureMainSwitcher() }
+    }
+
+    func updateMainSwitcher(_ actionName: String, _ change: @escaping (inout SwitcherConfig) -> Void) {
+        edit(actionName) { show in
+            let id = show.ensureMainSwitcher()
+            show.updateSwitcher(id) { change(&$0) }
+        }
+    }
+
     // MARK: - Live Mode
 
-    /// Enters Live Mode on the selected song or segment, standing by (nothing taken yet).
+    /// Enters Live Mode on the selected song or segment: the engine stands by in Display mode
+    /// (nothing is sent to the switcher until the director picks Auto preview or Auto cut), and
+    /// OnCue connects to the show's main switcher.
     func enterLive() {
         guard let id = selectedItemID ?? show.items.first?.id else { return }
         editingCueID = nil
-        live = LiveCursor(itemID: id)
-        liveTakenAt = nil
+        let controller = EngineController(show: show, itemID: id, profile: MachineProfileStore().profile)
+        controller.connectSwitcher()
+        engine = controller
     }
 
     /// Leaves Live Mode, selecting the song and the shot that was on air.
     func exitLive() {
-        guard let cursor = live else { return }
+        guard let controller = engine else { return }
+        let cursor = controller.status.cursor
         let onAir = show.liveNow(cursor)
-        live = nil
-        liveTakenAt = nil
+        controller.shutdown()
+        engine = nil
         if selectedItemID != cursor.itemID { selectedItemID = cursor.itemID }
         if let onAir {
             selectedShotIDs = [onAir.id]
@@ -535,39 +553,7 @@ final class WorkspaceModel: ObservableObject {
     }
 
     func toggleLive() {
-        if live == nil { enterLive() } else { exitLive() }
-    }
-
-    func liveAdvance() {
-        guard var cursor = live else { return }
-        if show.advance(&cursor) {
-            live = cursor
-            liveTakenAt = Date()
-        }
-    }
-
-    func liveBack() {
-        guard var cursor = live else { return }
-        if show.stepBack(&cursor) {
-            live = cursor
-            liveTakenAt = cursor.isStandingBy ? nil : Date()
-        }
-    }
-
-    func liveJump(toSection sectionID: UUID) {
-        guard var cursor = live else { return }
-        if show.jump(&cursor, toSection: sectionID) {
-            live = cursor
-            liveTakenAt = Date()
-        }
-    }
-
-    func liveMoveItem(by delta: Int) {
-        guard var cursor = live else { return }
-        if show.moveItem(&cursor, by: delta) {
-            live = cursor
-            liveTakenAt = nil
-        }
+        if engine == nil { enterLive() } else { exitLive() }
     }
 
     // MARK: - Workspace persistence (per show, per Mac)

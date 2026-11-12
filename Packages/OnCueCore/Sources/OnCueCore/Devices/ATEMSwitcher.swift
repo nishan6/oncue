@@ -85,7 +85,14 @@ final class ATEMSwitcher: SwitcherDevice {
         publish()
         guard !host.isEmpty else { return }
 
-        let conn = NWConnection(host: NWEndpoint.Host(host), port: 9910, using: .udp)
+        // "host" or "host:port" (the port is for testing against a local stand-in switcher).
+        var name = host
+        var port: UInt16 = 9910
+        if let colon = host.lastIndex(of: ":"), let p = UInt16(host[host.index(after: colon)...]) {
+            name = String(host[..<colon])
+            port = p
+        }
+        let conn = NWConnection(host: NWEndpoint.Host(name), port: NWEndpoint.Port(rawValue: port) ?? 9910, using: .udp)
         connection = conn
         conn.stateUpdateHandler = { [weak self, weak conn] st in
             guard let self, let conn, conn === self.connection else { return }

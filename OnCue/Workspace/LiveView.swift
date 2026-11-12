@@ -1,12 +1,9 @@
 import SwiftUI
 import OnCueCore
 
-// Live Mode: the script as a gallery display. NOW and NEXT dominate; the camera grid shows which
-// camera is on program (PGM) and preview (PVW) according to the script position.
-//
-// What is real here: stepping (NEXT, back, section jumps, song changes) and the clock, which
-// measures time since the current shot was taken. What is not built yet is said plainly in the
-// status bar: OnCue does not drive a switcher or follow MIDI clock or LTC until the show engine.
+// Live Mode: the show engine running the script. NOW and NEXT dominate; the camera grid shows
+// program (PGM) and preview (PVW) as the switcher reports them, or as the script has them when no
+// switcher is connected. The status in the window toolbar shows the timing source and the switcher.
 
 enum LivePalette {
     static let base = Color(hex: "#0A0B0D")
@@ -16,59 +13,102 @@ enum LivePalette {
 
 struct LiveView: View {
     let show: Show
-    let cursor: LiveCursor
+    @ObservedObject var engine: EngineController
     @ObservedObject var model: WorkspaceModel
     @FocusState private var focused: Bool
 
     var body: some View {
+        let status = engine.status
+        let cursor = status.cursor
         let item = show.item(cursor.itemID)
-        VStack(spacing: 0) {
-            HStack(spacing: 0) {
-                VStack(spacing: Space.l) {
-                    TimelineView(.periodic(from: .now, by: 0.1)) { context in
-                        NowNextPanels(show: show, item: item, cursor: cursor, takenAt: model.liveTakenAt, now: context.date)
-                    }
-                    UpcomingStrip(show: show, cursor: cursor)
-                    LiveCameraGrid(show: show, cursor: cursor)
+        HStack(spacing: 0) {
+            VStack(spacing: Space.l) {
+                if let reason = status.pauseReason {
+                    PausedBanner(reason: reason) { engine.resume() }
                 }
-                .padding(Space.xl)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                Rectangle().fill(Gallery.hairline).frame(width: 1)
-                LiveControls(show: show, item: item, cursor: cursor, model: model)
-                    .frame(width: 280)
+                TimelineView(.periodic(from: .now, by: 0.1)) { context in
+                    NowNextPanels(show: show, item: item, cursor: cursor, takenAt: status.takenAt,
+                                  secondsToNext: status.secondsToNext, now: context.date)
+                }
+                UpcomingStrip(show: show, cursor: cursor)
+                LiveCameraGrid(show: show, status: status)
             }
+            .padding(Space.xl)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            Rectangle().fill(Gallery.hairline).frame(width: 1)
+            LiveControls(show: show, item: item, engine: engine)
+                .frame(width: 290)
         }
         .background(LivePalette.base)
+        .animation(.easeOut(duration: 0.15), value: status.pauseReason)
         .focusable()
         .focusEffectDisabled()
         .focused($focused)
         .onAppear { DispatchQueue.main.async { focused = true } }
-        .onKeyPress(.space) { model.liveAdvance(); return .handled }
-        .onKeyPress(.rightArrow) { model.liveAdvance(); return .handled }
-        .onKeyPress(.leftArrow) { model.liveBack(); return .handled }
+        .onKeyPress(.space) { engine.next(); return .handled }
+        .onKeyPress(.rightArrow) { engine.next(); return .handled }
+        .onKeyPress(.leftArrow) { engine.back(); return .handled }
+        .onKeyPress(.return) {
+            if status.transport == .running { engine.stop() } else { engine.go() }
+            return .handled
+        }
+        .onKeyPress(characters: CharacterSet(charactersIn: "tTrR")) { press in
+            if press.characters.lowercased() == "t" { engine.tap() } else { engine.resume() }
+            return .handled
+        }
         .onExitCommand { model.exitLive() }
     }
 }
 
-// MARK: - Status bar
+/// Automation stopped because the director cut by hand.
+struct PausedBanner: View {
+    let reason: String
+    let resume: () -> Void
+
+    var body: some View {
+        HStack(spacing: Space.m) {
+            Image(systemName: "pause.circle.fill").font(.system(size: 20)).foregroundStyle(Gallery.amber)
+            VStack(alignment: .leading, spacing: 1) {
+                Text("Automation paused").font(.system(size: 15, weight: .semibold)).foregroundStyle(Gallery.ink)
+                Text("\(reason). OnCue follows the script but sends nothing until you resume.")
+                    .font(.ocMeta).foregroundStyle(Gallery.dim)
+            }
+            Spacer()
+            Button(action: resume) { Label("Resume", systemImage: "play.fill").padding(.horizontal, 6) }
+                .buttonStyle(QuietButtonStyle(prominent: true))
+                .help("Resume automation (R)")
+        }
+        .padding(.horizontal, Space.l)
+        .frame(height: 56)
+        .background(Gallery.amber.opacity(0.12), in: RoundedRectangle(cornerRadius: Radius.l))
+        .overlay(RoundedRectangle(cornerRadius: Radius.l).strokeBorder(Gallery.amber.opacity(0.7), lineWidth: 1.5))
+        .transition(.move(edge: .top).combined(with: .opacity))
+    }
+}
+
+// MARK: - Toolbar
 
 /// Live Mode's context in the window toolbar: LIVE, the song or segment, and the section on air.
 struct LiveToolbarContext: View {
     let show: Show
-    let cursor: LiveCursor
+    @ObservedObject var engine: EngineController
 
     var body: some View {
+        let cursor = engine.status.cursor
         let item = show.item(cursor.itemID)
         let now = show.liveNow(cursor)
         let section = item?.sections.first { $0.id == now?.sectionID }
+        let running = engine.status.transport == .running
         HStack(spacing: Space.m) {
             HStack(spacing: 6) {
-                Circle().fill(Gallery.tally).frame(width: 8, height: 8)
-                Text("LIVE").font(.system(size: 11, weight: .heavy)).tracking(1.2).foregroundStyle(Gallery.tally)
+                Circle().fill(running ? Gallery.tally : Gallery.faint).frame(width: 8, height: 8)
+                Text(running ? "LIVE" : "STANDBY")
+                    .font(.system(size: 11, weight: .heavy)).tracking(1.2)
+                    .foregroundStyle(running ? Gallery.tally : Gallery.dim)
             }
             .padding(.horizontal, 8)
             .frame(height: 22)
-            .background(Gallery.tally.opacity(0.14), in: Capsule())
+            .background((running ? Gallery.tally : Gallery.dim).opacity(0.14), in: Capsule())
             VStack(alignment: .leading, spacing: 0) {
                 Text(item?.title ?? "No item").font(.ocHeading).foregroundStyle(Gallery.ink)
                 Text(section?.name ?? (cursor.isStandingBy ? "Standing by" : show.name))
@@ -78,26 +118,105 @@ struct LiveToolbarContext: View {
     }
 }
 
-/// Live Mode's status in the window toolbar: timing source, mode, switcher, and Exit.
+/// Live Mode's status in the window toolbar: timing source, switcher, and Exit.
 struct LiveToolbarStatus: View {
     let show: Show
-    let cursor: LiveCursor
+    @ObservedObject var engine: EngineController
     @ObservedObject var model: WorkspaceModel
+    @State private var switcherOpen = false
 
     var body: some View {
-        let item = show.item(cursor.itemID)
+        let status = engine.status
         HStack(spacing: Space.s) {
-            StatusChip(symbol: "hand.tap", label: "Timing", value: "Manual NEXT",
-                       help: "Live Mode steps on NEXT. This item is planned for \(item?.syncMode.label ?? "manual") timing, which follows once the show engine is built.")
-            StatusChip(symbol: "rectangle.on.rectangle", label: "Mode", value: "Display only",
-                       help: "OnCue shows the calls; it does not cut the switcher yet.")
-            StatusChip(symbol: "cable.connector.slash", label: "Switcher", value: "Not connected", warning: true,
-                       help: "Switcher control comes with the show engine.")
+            StatusChip(symbol: timingSymbol(status.timing), label: "Timing · \(status.timing.label)",
+                       value: timingValue(status), warning: !status.timingSignal, help: timingHelp(status))
+            Button { switcherOpen = true } label: {
+                StatusChip(symbol: status.switcherConnected ? "cable.connector" : "cable.connector.slash",
+                           label: "Switcher · \(status.switcherName)",
+                           value: switcherValue(status),
+                           warning: !status.switcherConnected,
+                           help: "Click to connect or disconnect")
+            }
+            .buttonStyle(.plain)
+            .popover(isPresented: $switcherOpen, arrowEdge: .bottom) {
+                SwitcherPopover(engine: engine, model: model)
+            }
             Button { model.exitLive() } label: { Label("Exit Live", systemImage: "xmark") }
                 .labelStyle(.titleAndIcon)
                 .buttonStyle(QuietButtonStyle())
                 .help("Back to editing (Esc or ⌘L)")
         }
+    }
+
+    private func timingSymbol(_ t: TimingSourceKind) -> String {
+        switch t {
+        case .manual: return "hand.tap"
+        case .taps: return "hand.point.up.left"
+        case .internalClock: return "clock"
+        case .midiClock: return "pianokeys"
+        case .ltc: return "waveform"
+        }
+    }
+
+    private func timingValue(_ s: EngineStatus) -> String {
+        switch s.timing {
+        case .manual: return "NEXT"
+        case .taps, .internalClock:
+            return s.timingSignal ? "Running · \(Int((s.tempo ?? 0).rounded())) BPM" : "Waiting for GO"
+        case .midiClock:
+            guard s.timingSignal else { return "No clock" }
+            return s.tempo.map { String(format: "%.1f BPM", $0) } ?? "Receiving"
+        case .ltc:
+            return s.timingSignal ? (s.timecode ?? "Receiving") : "No timecode"
+        }
+    }
+
+    private func timingHelp(_ s: EngineStatus) -> String {
+        switch s.timing {
+        case .manual: return "Shots change on NEXT (Space)."
+        case .taps: return "Tap at each section (T); OnCue runs at the song's tempo between taps."
+        case .internalClock: return "OnCue's own clock runs from GO (Return) at the item's tempo."
+        case .midiClock: return "Following MIDI clock from the source set in Settings (This Mac). Start in Ableton starts the song."
+        case .ltc: return "Following LTC on the audio input set in Settings (This Mac)."
+        }
+    }
+
+    private func switcherValue(_ s: EngineStatus) -> String {
+        if s.switcherConnected {
+            if let p = s.program, let v = s.preview { return "PGM \(p) · PVW \(v)" }
+            return "Connected"
+        }
+        return s.switcherConnecting ? "Connecting…" : "Not connected"
+    }
+}
+
+/// Connect or disconnect the main switcher from Live Mode.
+struct SwitcherPopover: View {
+    @ObservedObject var engine: EngineController
+    @ObservedObject var model: WorkspaceModel
+
+    var body: some View {
+        let s = engine.status
+        VStack(alignment: .leading, spacing: Space.s) {
+            Text(s.switcherName).font(.ocHeading).foregroundStyle(Gallery.ink)
+            MetaLine(parts: [s.switcherKind?.label ?? "No switcher", s.switcherHost])
+            if s.switcherAssumed {
+                Text("Companion does not report tally back: program and preview are what OnCue last set, and manual cuts cannot be detected.")
+                    .font(.ocMeta).foregroundStyle(Gallery.faint).fixedSize(horizontal: false, vertical: true)
+            }
+            HStack {
+                if s.switcherConnected || s.switcherConnecting {
+                    Button("Disconnect") { engine.disconnectSwitcher() }.buttonStyle(QuietButtonStyle())
+                } else {
+                    Button("Connect") { engine.connectSwitcher() }.buttonStyle(QuietButtonStyle(prominent: true))
+                }
+                Spacer()
+                Button("Switcher Settings…") { model.exitLive(); model.switcherSetupOpen = true }
+                    .buttonStyle(QuietButtonStyle())
+            }
+        }
+        .padding(Space.l)
+        .frame(width: 300)
     }
 }
 
@@ -113,8 +232,8 @@ struct StatusChip: View {
             Image(systemName: symbol).font(.system(size: 11, weight: .medium))
                 .foregroundStyle(warning ? Gallery.amber : Gallery.dim)
             VStack(alignment: .leading, spacing: 0) {
-                Text(label).font(.system(size: 9.5, weight: .medium)).foregroundStyle(Gallery.faint)
-                Text(value).font(.ocLabel).foregroundStyle(warning ? Gallery.amber : Gallery.ink)
+                Text(label).font(.system(size: 9.5, weight: .medium)).foregroundStyle(Gallery.faint).lineLimit(1)
+                Text(value).font(.ocLabel.monospacedDigit()).foregroundStyle(warning ? Gallery.amber : Gallery.ink).lineLimit(1)
             }
         }
         .padding(.horizontal, Space.s + 2)
@@ -131,22 +250,25 @@ struct NowNextPanels: View {
     let item: RundownItem?
     let cursor: LiveCursor
     let takenAt: Date?
+    /// From the engine when a timing source is running: the real time to the next cut.
+    let secondsToNext: Double?
     let now: Date
 
     var body: some View {
         let onAir = show.liveNow(cursor)
         let next = show.liveNext(cursor)
         let elapsed = takenAt.map { now.timeIntervalSince($0) }
-        let remaining: Double? = {
+        let planned: Double? = {
             guard let length = onAir?.lengthSeconds, let elapsed else { return nil }
             return length - elapsed
         }()
+        let remaining = secondsToNext ?? planned
         HStack(spacing: Space.l) {
             LiveShotPanel(role: .current, show: show, item: item, row: onAir,
                           timeLabel: "On air", timeValue: elapsed.map(liveClock),
                           emptyText: "Standing by. Press NEXT to take the first shot.")
             LiveShotPanel(role: .next, show: show, item: item, row: next,
-                          timeLabel: remaining == nil ? (next == nil ? "" : "On NEXT") : (remaining! >= 0 ? "Planned in" : "Over plan"),
+                          timeLabel: remaining == nil ? (next == nil ? "" : "On NEXT") : (secondsToNext != nil ? "Cut in" : (remaining! >= 0 ? "Planned in" : "Over plan")),
                           timeValue: remaining.map { $0 >= 0 ? liveClock($0) : "+" + liveClock(-$0) },
                           timeWarning: (remaining ?? 0) < 0,
                           emptyText: "End of \(item?.kind == .segment ? "segment" : "song")")
@@ -332,20 +454,27 @@ struct UpcomingStrip: View {
 
 struct LiveCameraGrid: View {
     let show: Show
-    let cursor: LiveCursor
+    let status: EngineStatus
 
     var body: some View {
-        let pgm = show.liveNow(cursor)?.cue.cameraID
-        let pvw = show.liveNext(cursor)?.cue.cameraID
+        let fromSwitcher = status.switcherConnected && status.program != nil
+        let pgm: (Camera) -> Bool = { cam in
+            fromSwitcher ? cam.input == status.program : cam.id == show.liveNow(status.cursor)?.cue.cameraID
+        }
+        let pvw: (Camera) -> Bool = { cam in
+            fromSwitcher ? cam.input == status.preview : cam.id == show.liveNext(status.cursor)?.cue.cameraID
+        }
         VStack(alignment: .leading, spacing: Space.s) {
             HStack {
                 Text("Cameras").sectionLabel()
                 Spacer()
-                Text("Tally follows the script position").font(.ocMeta).foregroundStyle(Gallery.faint)
+                Text(fromSwitcher ? (status.switcherAssumed ? "Tally as OnCue last set it" : "Tally from the switcher")
+                     : "Tally follows the script")
+                    .font(.ocMeta).foregroundStyle(Gallery.faint)
             }
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: Space.s)], alignment: .leading, spacing: Space.s) {
                 ForEach(show.sortedCameras) { cam in
-                    SourceButton(camera: cam, tally: cam.id == pgm ? .current : (cam.id == pvw ? .next : .off),
+                    SourceButton(camera: cam, tally: pgm(cam) ? .current : (pvw(cam) ? .next : .off),
                                  live: true, width: 150, height: 62, numeral: 28)
                 }
             }
@@ -358,13 +487,39 @@ struct LiveCameraGrid: View {
 struct LiveControls: View {
     let show: Show
     let item: RundownItem?
-    let cursor: LiveCursor
-    @ObservedObject var model: WorkspaceModel
+    @ObservedObject var engine: EngineController
 
     var body: some View {
+        let status = engine.status
+        let cursor = status.cursor
         let now = show.liveNow(cursor)
-        VStack(alignment: .leading, spacing: Space.l) {
-            Button { model.liveAdvance() } label: {
+        let running = status.transport == .running
+        VStack(alignment: .leading, spacing: Space.m) {
+            Text("Switcher mode").sectionLabel()
+            Picker("Mode", selection: Binding(get: { status.mode }, set: { engine.setMode($0) })) {
+                Text("Display").tag(OutputMode.display)
+                Text("Preview").tag(OutputMode.preview)
+                Text("Cut").tag(OutputMode.cut)
+            }
+            .labelsHidden()
+            .pickerStyle(.segmented)
+            .help("Display: OnCue only shows the calls. Preview: OnCue puts the next shot on preview; you cut. Cut: OnCue cuts on the script.")
+            if status.mode != .display && !status.switcherConnected {
+                Label("No switcher connected: nothing is sent.", systemImage: "exclamationmark.triangle.fill")
+                    .font(.ocMeta).foregroundStyle(Gallery.amber)
+            }
+
+            if status.timing != .manual {
+                Button { running ? engine.stop() : engine.go() } label: {
+                    Label(running ? "Stop" : "GO", systemImage: running ? "stop.fill" : "play.fill")
+                        .font(.system(size: 15, weight: .bold))
+                        .frame(maxWidth: .infinity, minHeight: 40)
+                }
+                .buttonStyle(LiveKeyStyle(color: running ? Gallery.dim : Gallery.tally, subtle: running))
+                .help(running ? "Stop following the timing source (Return)" : "Start following the timing source (Return)")
+            }
+
+            Button { engine.next() } label: {
                 VStack(spacing: 6) {
                     Text("NEXT").font(.system(size: 24, weight: .heavy)).tracking(3)
                     if let next = show.liveNext(cursor) {
@@ -377,19 +532,27 @@ struct LiveControls: View {
                     }
                     Text("Space").font(.system(size: 10.5, weight: .medium)).foregroundStyle(Gallery.faint)
                 }
-                .frame(maxWidth: .infinity, minHeight: 112)
+                .frame(maxWidth: .infinity, minHeight: 100)
             }
             .buttonStyle(LiveKeyStyle(color: Gallery.next))
             .disabled(show.liveNext(cursor) == nil)
-            .help("Take the next shot (Space or →)")
+            .help("Take the next shot now (Space or →)")
 
-            Button { model.liveBack() } label: {
-                Label("Back one shot", systemImage: "arrow.uturn.backward")
-                    .frame(maxWidth: .infinity, minHeight: 34)
+            HStack(spacing: Space.s) {
+                Button { engine.back() } label: {
+                    Label("Back", systemImage: "arrow.uturn.backward").frame(maxWidth: .infinity, minHeight: 32)
+                }
+                .buttonStyle(LiveKeyStyle(color: Gallery.dim, subtle: true))
+                .disabled(cursor.isStandingBy)
+                .help("Back one shot (←)")
+                if status.timing == .taps {
+                    Button { engine.tap() } label: {
+                        Label("Tap", systemImage: "hand.point.up.left").frame(maxWidth: .infinity, minHeight: 32)
+                    }
+                    .buttonStyle(LiveKeyStyle(color: Gallery.selection))
+                    .help("Next section starts now (T)")
+                }
             }
-            .buttonStyle(LiveKeyStyle(color: Gallery.dim, subtle: true))
-            .disabled(cursor.isStandingBy)
-            .help("Back one shot (←)")
 
             if let item, !item.sections.isEmpty {
                 VStack(alignment: .leading, spacing: Space.xs) {
@@ -398,7 +561,7 @@ struct LiveControls: View {
                         VStack(spacing: 2) {
                             ForEach(item.sortedSections) { section in
                                 let active = now?.sectionID == section.id
-                                Button { model.liveJump(toSection: section.id) } label: {
+                                Button { engine.jump(toSection: section.id) } label: {
                                     HStack {
                                         Text(section.name).font(.ocBodyStrong)
                                         Spacer()
@@ -425,9 +588,9 @@ struct LiveControls: View {
             VStack(alignment: .leading, spacing: Space.xs) {
                 Text("Running order").sectionLabel()
                 HStack(spacing: Space.s) {
-                    Button { model.liveMoveItem(by: -1) } label: { Label("Previous", systemImage: "backward.end") }
+                    Button { engine.moveItem(by: -1) } label: { Label("Previous", systemImage: "backward.end") }
                         .help("Previous song or segment (⌘[)")
-                    Button { model.liveMoveItem(by: 1) } label: { Label("Next item", systemImage: "forward.end") }
+                    Button { engine.moveItem(by: 1) } label: { Label("Next item", systemImage: "forward.end") }
                         .help("Next song or segment (⌘])")
                 }
                 .buttonStyle(QuietButtonStyle())

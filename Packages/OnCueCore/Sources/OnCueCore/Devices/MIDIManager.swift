@@ -207,3 +207,17 @@ final class MIDIManager {
         return "MIDI \(ref)"
     }
 }
+
+/// Names of the MIDI sources this Mac can receive from (USB devices, IAC buses, network sessions).
+public enum MIDISources {
+    public static func names() -> [String] {
+        (0..<MIDIGetNumberOfSources()).map { i in
+            let ref = MIDIGetSource(i)
+            var cf: Unmanaged<CFString>?
+            if MIDIObjectGetStringProperty(ref, kMIDIPropertyDisplayName, &cf) == noErr, let s = cf?.takeRetainedValue() {
+                return s as String
+            }
+            return "MIDI \(i + 1)"
+        }
+    }
+}

@@ -32,23 +32,23 @@ struct ShowWorkspaceView: View {
             InspectorView(show: show, model: model)
                 .inspectorColumnWidth(min: 280, ideal: 320, max: 460)
         }
-        if let cursor = model.live {
-            LiveView(show: show, cursor: cursor, model: model)
+        if let engine = model.engine {
+            LiveView(show: show, engine: engine, model: model)
                 .transition(.opacity)
         }
         }
-        .animation(.easeOut(duration: 0.18), value: model.live == nil)
-        .toolbarBackground(model.live == nil ? Gallery.panel : LivePalette.base, for: .windowToolbar)
-        .toolbarBackground(model.live == nil ? .automatic : .visible, for: .windowToolbar)
+        .animation(.easeOut(duration: 0.18), value: model.isLive)
+        .toolbarBackground(model.isLive ? LivePalette.base : Gallery.panel, for: .windowToolbar)
+        .toolbarBackground(model.isLive ? .visible : .automatic, for: .windowToolbar)
         .toolbar {
             ToolbarItem(placement: .navigation) {
-                if let cursor = model.live {
-                    LiveToolbarContext(show: show, cursor: cursor)
+                if let engine = model.engine {
+                    LiveToolbarContext(show: show, engine: engine)
                 }
             }
             ToolbarItemGroup(placement: .primaryAction) {
-                if let cursor = model.live {
-                    LiveToolbarStatus(show: show, cursor: cursor, model: model)
+                if let engine = model.engine {
+                    LiveToolbarStatus(show: show, engine: engine, model: model)
                 } else {
                 Button { model.addSong() } label: { Label("New Song", systemImage: "music.note.list") }
                     .help("New song (⌥⌘N)")
@@ -66,6 +66,9 @@ struct ShowWorkspaceView: View {
         .sheet(isPresented: $model.cameraManagerOpen) {
             CameraManagerView(show: show, model: model)
         }
+        .sheet(isPresented: $model.switcherSetupOpen) {
+            SwitcherSetupView(show: show, model: model)
+        }
         .alert("Can't do that", isPresented: Binding(get: { model.errorMessage != nil },
                                                       set: { if !$0 { model.errorMessage = nil } })) {
             Button("OK") { model.errorMessage = nil }
@@ -78,7 +81,10 @@ struct ShowWorkspaceView: View {
         .focusedSceneObject(model)
         .onAppear { model.attach(document: $document, undoManager: undoManager) }
         .onChange(of: show.id) { _, _ in model.attach(document: $document, undoManager: undoManager) }
-        .onChange(of: show) { _, _ in model.validateSelection() }
+        .onChange(of: show) { _, newShow in
+            model.validateSelection()
+            model.engine?.update(show: newShow)
+        }
     }
 }
 
