@@ -421,9 +421,13 @@ final class MTCTests: XCTestCase {
 
     func testFullFrame() {
         var d = MTCDecoder()
-        let t = d.fullFrame([0xF0, 0x7F, 0x7F, 0x01, 0x01, 0x20 | 10, 30, 15, 12, 0xF7])
+        let hourByte: UInt8 = 0x20 | 10
+        let message: [UInt8] = [0xF0, 0x7F, 0x7F, 0x01, 0x01, hourByte, 30, 15, 12, 0xF7]
+        let t = d.fullFrame(message)
         XCTAssertEqual(d.fps, 25)
-        XCTAssertEqual(t!, 10 * 3600 + 30 * 60 + 15 + 12.0 / 25, accuracy: 1e-9)
+        let wholeSeconds: Double = 10 * 3600 + 30 * 60 + 15
+        let expected: Double = wholeSeconds + 12.0 / 25
+        XCTAssertEqual(t!, expected, accuracy: 1e-9)
         XCTAssertNil(d.fullFrame([0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7]))
     }
 }
@@ -431,7 +435,8 @@ final class MTCTests: XCTestCase {
 final class LTCOutputTests: XCTestCase {
     func testGeneratorStreamDecodes() {
         var gen = LTCGenerator(sampleRate: 48_000, fps: 25)
-        var t = 3600.0 + 59 * 60 + 59 + 20.0 / 25   // 01:59:59:20, so the hour rolls over
+        let wholeSeconds: Double = 3600 + 59 * 60 + 59
+        var t: Double = wholeSeconds + 20.0 / 25   // 01:59:59:20, so the hour rolls over
         // Rendered in odd-sized chunks, as an audio callback would.
         var samples: [Float] = []
         for size in [512, 333, 1024, 4096, 17, 9000, 20000, 30000] {
