@@ -1,0 +1,560 @@
+{
+  "cameras" : [
+    {
+      "color" : "",
+      "id" : "2D95CBA5-D594-4A46-AC61-6AA2A1AA38F4",
+      "input" : 1,
+      "name" : "",
+      "number" : 1,
+      "operatorName" : "",
+      "switcherID" : "71448FF1-2D3B-445C-80F4-BA543570BA81"
+    },
+    {
+      "color" : "",
+      "id" : "1321E6F6-AD34-441E-A878-0036D531DEF5",
+      "input" : 2,
+      "name" : "",
+      "number" : 2,
+      "operatorName" : "",
+      "switcherID" : "71448FF1-2D3B-445C-80F4-BA543570BA81"
+    },
+    {
+      "color" : "",
+      "id" : "8BB5B869-C563-4115-84D8-C7539493C73E",
+      "input" : 3,
+      "name" : "",
+      "number" : 3,
+      "operatorName" : "",
+      "switcherID" : "71448FF1-2D3B-445C-80F4-BA543570BA81"
+    },
+    {
+      "color" : "",
+      "id" : "18F5CFC2-7386-48E0-99E9-54E773B9D2C0",
+      "input" : 4,
+      "name" : "",
+      "number" : 4,
+      "operatorName" : "",
+      "switcherID" : "71448FF1-2D3B-445C-80F4-BA543570BA81"
+    }
+  ],
+  "comments" : [
+
+  ],
+  "id" : "044F781C-DECE-4F04-BE0C-297ED5B4C401",
+  "items" : [
+    {
+      "beatsPerBar" : 4,
+      "bpm" : 120,
+      "hardOut" : "",
+      "id" : "B6A5299F-212E-4F26-95A5-4B17638F7463",
+      "kind" : "song",
+      "ltcStart" : "",
+      "notes" : "",
+      "plannedDuration" : 0,
+      "sections" : [
+        {
+          "at" : 0,
+          "id" : "69FB2051-9083-486B-B0B4-DBB6134BCDC2",
+          "name" : "Intro"
+        },
+        {
+          "at" : 16,
+          "id" : "49D7B48C-29C5-41E3-8008-49EEF8B7D566",
+          "name" : "Verse"
+        },
+        {
+          "at" : 48,
+          "id" : "DD335247-6ADC-4DBD-B2CB-911912AAE239",
+          "name" : "Chorus"
+        }
+      ],
+      "syncMode" : "tap",
+      "timeBase" : "bars",
+      "title" : "Song 1",
+      "tracks" : [
+        {
+          "cues" : [
+
+          ],
+          "id" : "590919C8-404D-4BB4-A69B-CCECAA06A4EA",
+          "kind" : "shots",
+          "muted" : false,
+          "name" : "Program shots",
+          "outputID" : "A4D7087F-0E91-44AB-95E0-BF1F37F5C7A8"
+        },
+        {
+          "cues" : [
+
+          ],
+          "id" : "A30A2441-CEF1-4D9E-85E5-7D54AC22327B",
+          "kind" : "fx",
+          "muted" : false,
+          "name" : "FX",
+          "switcherID" : "71448FF1-2D3B-445C-80F4-BA543570BA81"
+        },
+        {
+          "cues" : [
+
+          ],
+          "id" : "A68455B8-0AEB-4C64-B59D-A34A52EE1929",
+          "kind" : "control",
+          "muted" : false,
+          "name" : "Control"
+        },
+        {
+          "cues" : [
+
+          ],
+          "id" : "1DCF343C-8E28-4CE1-A9C6-F2D7A88A8598",
+          "kind" : "lyrics",
+          "muted" : false,
+          "name" : "Lyrics"
+        }
+      ]
+    }
+  ],
+  "midiBindings" : [
+    {
+      "cameraNumber" : 1,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "1BB71FB8-2004-44F1-8E49-AF1FC1A20E98",
+      "isCC" : false,
+      "number" : 0
+    },
+    {
+      "cameraNumber" : 2,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "DB07E8C5-9F73-480E-BF18-1F8235725145",
+      "isCC" : false,
+      "number" : 1
+    },
+    {
+      "cameraNumber" : 3,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "564A965B-9946-4175-8500-F18606D8C75C",
+      "isCC" : false,
+      "number" : 2
+    },
+    {
+      "cameraNumber" : 4,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "3865F845-F02D-4CD1-AA9F-D46014353ABC",
+      "isCC" : false,
+      "number" : 3
+    },
+    {
+      "cameraNumber" : 5,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "2AC0A652-2E4D-4373-B32D-86AA7F6BD07E",
+      "isCC" : false,
+      "number" : 4
+    },
+    {
+      "cameraNumber" : 6,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "1A4CB6F9-A163-4C0E-B87A-3E1C8FEA7ED5",
+      "isCC" : false,
+      "number" : 5
+    },
+    {
+      "cameraNumber" : 7,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "07C658B1-4411-4D34-834A-10B1911AA809",
+      "isCC" : false,
+      "number" : 6
+    },
+    {
+      "cameraNumber" : 8,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "8F8404C3-4E8E-4E7F-81C0-9C8820E050A6",
+      "isCC" : false,
+      "number" : 7
+    },
+    {
+      "cameraNumber" : 9,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "F8D5C2C2-74A0-45BC-9E15-83551A69AC11",
+      "isCC" : false,
+      "number" : 8
+    },
+    {
+      "cameraNumber" : 10,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "C1E52E8E-1F3A-442B-9A5C-9AED62216822",
+      "isCC" : false,
+      "number" : 9
+    },
+    {
+      "cameraNumber" : 11,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "EFDD7475-C2FB-4743-AAEE-5CE93BB83F4B",
+      "isCC" : false,
+      "number" : 10
+    },
+    {
+      "cameraNumber" : 12,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "DF9C3FD3-DE9C-466D-91A0-DB52B999DAA5",
+      "isCC" : false,
+      "number" : 11
+    },
+    {
+      "cameraNumber" : 13,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "AFC078A7-22FC-43CC-90B6-F5C181A4740C",
+      "isCC" : false,
+      "number" : 12
+    },
+    {
+      "cameraNumber" : 14,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "C4FEA9D0-4278-4EE1-A951-EC394733872A",
+      "isCC" : false,
+      "number" : 13
+    },
+    {
+      "cameraNumber" : 15,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "F0C8E55A-ACF9-43D1-AFEA-A44F4600FEC9",
+      "isCC" : false,
+      "number" : 14
+    },
+    {
+      "cameraNumber" : 16,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "33AFBCE6-D9E5-404B-B7AB-C7B8F7D5764D",
+      "isCC" : false,
+      "number" : 15
+    },
+    {
+      "cameraNumber" : 17,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "FEDB35F6-A9B2-43C4-8674-D895E3F3FF2D",
+      "isCC" : false,
+      "number" : 16
+    },
+    {
+      "cameraNumber" : 18,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "34C15886-7EF2-477A-9F7D-8E8A702E8B9E",
+      "isCC" : false,
+      "number" : 17
+    },
+    {
+      "cameraNumber" : 19,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "B9957280-0499-4062-B257-2D744047A0BF",
+      "isCC" : false,
+      "number" : 18
+    },
+    {
+      "cameraNumber" : 20,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "B74E0BB8-7405-46EB-9CE0-E061FC3DB7F7",
+      "isCC" : false,
+      "number" : 19
+    },
+    {
+      "cameraNumber" : 21,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "F0F6F8FC-0B80-4C20-9F7B-C7CC8800EB13",
+      "isCC" : false,
+      "number" : 20
+    },
+    {
+      "cameraNumber" : 22,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "D2A51673-C75E-4DCF-802E-70FB686CA95F",
+      "isCC" : false,
+      "number" : 21
+    },
+    {
+      "cameraNumber" : 23,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "88C4BF88-3003-4BEC-9F81-9FA5DE0ADDE4",
+      "isCC" : false,
+      "number" : 22
+    },
+    {
+      "cameraNumber" : 24,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "301FDC78-5C61-4CEA-9E6A-F24421B63327",
+      "isCC" : false,
+      "number" : 23
+    },
+    {
+      "cameraNumber" : 25,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "43021CB6-19FB-43A4-855B-8B921D4C125A",
+      "isCC" : false,
+      "number" : 24
+    },
+    {
+      "cameraNumber" : 26,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "5F2652C6-847F-4C4F-B806-3D7EB4EC8ACD",
+      "isCC" : false,
+      "number" : 25
+    },
+    {
+      "cameraNumber" : 27,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "6B39508D-3316-440E-B28F-A7429508F817",
+      "isCC" : false,
+      "number" : 26
+    },
+    {
+      "cameraNumber" : 28,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "50BF6505-A08A-40E7-B3B2-29462414D767",
+      "isCC" : false,
+      "number" : 27
+    },
+    {
+      "cameraNumber" : 29,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "878DBD06-CB27-47E9-B4B3-111262A222D6",
+      "isCC" : false,
+      "number" : 28
+    },
+    {
+      "cameraNumber" : 30,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "A6E32649-981C-44E0-9B1E-A9AE313BC12A",
+      "isCC" : false,
+      "number" : 29
+    },
+    {
+      "cameraNumber" : 31,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "F6D07BF3-879F-4F88-BFD3-7967D59C1A5C",
+      "isCC" : false,
+      "number" : 30
+    },
+    {
+      "cameraNumber" : 32,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "E21D9969-513C-4ACD-A3F2-7F652C1AD32F",
+      "isCC" : false,
+      "number" : 31
+    },
+    {
+      "cameraNumber" : 33,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "9C5D374E-E8D4-437F-80DC-E60202802E7C",
+      "isCC" : false,
+      "number" : 32
+    },
+    {
+      "cameraNumber" : 34,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "A566A011-71CA-4E12-957B-1217C4AFB56B",
+      "isCC" : false,
+      "number" : 33
+    },
+    {
+      "cameraNumber" : 35,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "619BB9A4-57C8-4793-8E08-FB8BDB20073D",
+      "isCC" : false,
+      "number" : 34
+    },
+    {
+      "cameraNumber" : 36,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "DC8A8121-8206-4BC3-8011-BE138A69C39F",
+      "isCC" : false,
+      "number" : 35
+    },
+    {
+      "cameraNumber" : 37,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "73379F38-BFA5-4B18-A9C5-DAD612D2F301",
+      "isCC" : false,
+      "number" : 36
+    },
+    {
+      "cameraNumber" : 38,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "84E6C58C-AC3F-4130-ADBA-6AC814925706",
+      "isCC" : false,
+      "number" : 37
+    },
+    {
+      "cameraNumber" : 39,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "08206DC7-6742-4C34-947D-7B40CC190171",
+      "isCC" : false,
+      "number" : 38
+    },
+    {
+      "cameraNumber" : 40,
+      "channel" : 0,
+      "command" : "takeCamera",
+      "id" : "25E6E464-4EFE-4065-9CFA-9FFD9CC0E417",
+      "isCC" : false,
+      "number" : 39
+    },
+    {
+      "cameraNumber" : 0,
+      "channel" : 0,
+      "command" : "next",
+      "id" : "9A7BC692-B4E5-467E-A439-F64833110EEA",
+      "isCC" : false,
+      "number" : 82
+    },
+    {
+      "cameraNumber" : 0,
+      "channel" : 0,
+      "command" : "previous",
+      "id" : "66744490-0A9E-496F-870C-43B3ECBF507E",
+      "isCC" : false,
+      "number" : 83
+    },
+    {
+      "cameraNumber" : 0,
+      "channel" : 0,
+      "command" : "tapSection",
+      "id" : "8033299B-2668-4395-9F17-BEE818066993",
+      "isCC" : false,
+      "number" : 84
+    },
+    {
+      "cameraNumber" : 0,
+      "channel" : 0,
+      "command" : "loopToggle",
+      "id" : "8B6C4C32-60E2-42F4-A61B-74CC1D46EB70",
+      "isCC" : false,
+      "number" : 85
+    },
+    {
+      "cameraNumber" : 0,
+      "channel" : 0,
+      "command" : "resume",
+      "id" : "EF0385FA-0535-48F5-93B7-B356498FC8A8",
+      "isCC" : false,
+      "number" : 86
+    },
+    {
+      "cameraNumber" : 0,
+      "channel" : 0,
+      "command" : "go",
+      "id" : "E5FE3AEE-D294-4617-A0FE-D57E5D1DE4AC",
+      "isCC" : false,
+      "number" : 91
+    },
+    {
+      "cameraNumber" : 0,
+      "channel" : 0,
+      "command" : "panic",
+      "id" : "193D2D2F-B9E3-4F79-8906-4E53BA4B3B71",
+      "isCC" : false,
+      "number" : 93
+    },
+    {
+      "cameraNumber" : 0,
+      "channel" : 0,
+      "command" : "tapBeat",
+      "id" : "6E9E24EB-FA61-4C45-B1DB-C88313AE1C1A",
+      "isCC" : false,
+      "number" : 99
+    }
+  ],
+  "name" : "New Show",
+  "oscTargets" : [
+
+  ],
+  "outputs" : [
+    {
+      "auxIndex" : 0,
+      "bus" : "program",
+      "id" : "A4D7087F-0E91-44AB-95E0-BF1F37F5C7A8",
+      "mirrorMain" : false,
+      "name" : "Program",
+      "switcherID" : "71448FF1-2D3B-445C-80F4-BA543570BA81"
+    }
+  ],
+  "ptzCameras" : [
+
+  ],
+  "schemaVersion" : 1,
+  "settings" : {
+    "ltcFPS" : 25,
+    "manualCutWindow" : 0.4,
+    "minShotSeconds" : 1.5,
+    "monitors" : [
+
+    ],
+    "unusedCameraMinutes" : 10
+  },
+  "switchers" : [
+    {
+      "companion" : {
+        "auto" : {
+          "bank" : 1,
+          "column" : 0,
+          "enabled" : false,
+          "page" : 1,
+          "row" : 0
+        },
+        "cut" : {
+          "bank" : 1,
+          "column" : 0,
+          "enabled" : false,
+          "page" : 1,
+          "row" : 0
+        },
+        "inputs" : [
+
+        ]
+      },
+      "feedInput" : 0,
+      "host" : "",
+      "id" : "71448FF1-2D3B-445C-80F4-BA543570BA81",
+      "inputCount" : 20,
+      "kind" : "simulator",
+      "me" : 0,
+      "name" : "Simulator",
+      "role" : "main"
+    }
+  ]
+}
