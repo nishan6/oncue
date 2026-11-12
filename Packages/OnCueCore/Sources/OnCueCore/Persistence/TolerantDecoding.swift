@@ -175,7 +175,76 @@ extension RundownItem {
         tracks = try c.value("tracks", [])
         notes = try c.value("notes", "")
         media = try c.value("media", ItemMedia?.none)
+        number = try c.value("number", "")
+        artist = try c.value("artist", "")
+        status = try c.enumValue("status", SceneStatus.unset)
+        frameRate = try c.optional("frameRate")
+        if let frames: Int = try c.optional("plannedDurationFrames"), let key: String = try c.optional("frameRateUsed"),
+           let rate = FrameRate(key: key) {
+            plannedDuration = rate.seconds(frames: frames)
+        }
+        // Schema 2 stores positions as whole frames or ticks; turn them back into seconds or beats.
+        if let unit: String = try c.optional("positionUnit"), let scale: Double = try c.optional("positionScale"), scale > 0 {
+            if unit == "frames" || unit == "ticks" {
+                for i in sections.indices { sections[i].at /= scale }
+                for t in tracks.indices {
+                    for k in tracks[t].cues.indices { tracks[t].cues[k].at /= scale }
+                }
+            }
+        }
     }
+
+    // Encoding is written out (not synthesized) so a project file can store positions as whole
+    // frames or ticks. Without a project frame rate in the encoder's userInfo (schema 1 shows,
+    // version snapshots of shows, the backup link) it writes exactly the synthesized form.
+    public func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: AnyCodingKey.self)
+        try c.encode(id, forKey: AnyCodingKey("id"))
+        try c.encode(kind, forKey: AnyCodingKey("kind"))
+        try c.encode(title, forKey: AnyCodingKey("title"))
+        try c.encode(timeBase, forKey: AnyCodingKey("timeBase"))
+        try c.encode(syncMode, forKey: AnyCodingKey("syncMode"))
+        try c.encode(bpm, forKey: AnyCodingKey("bpm"))
+        try c.encode(beatsPerBar, forKey: AnyCodingKey("beatsPerBar"))
+        try c.encode(ltcStart, forKey: AnyCodingKey("ltcStart"))
+        try c.encode(hardOut, forKey: AnyCodingKey("hardOut"))
+        try c.encode(notes, forKey: AnyCodingKey("notes"))
+        try c.encodeIfPresent(media, forKey: AnyCodingKey("media"))
+        try c.encode(number, forKey: AnyCodingKey("number"))
+        try c.encode(artist, forKey: AnyCodingKey("artist"))
+        try c.encode(status, forKey: AnyCodingKey("status"))
+        try c.encodeIfPresent(frameRate, forKey: AnyCodingKey("frameRate"))
+
+        guard let projectRate = encoder.userInfo[.oncueProjectFrameRate] as? FrameRate else {
+            try c.encode(plannedDuration, forKey: AnyCodingKey("plannedDuration"))
+            try c.encode(sections, forKey: AnyCodingKey("sections"))
+            try c.encode(tracks, forKey: AnyCodingKey("tracks"))
+            return
+        }
+        let rate = frameRate ?? projectRate
+        try c.encode(rate.frames(seconds: plannedDuration), forKey: AnyCodingKey("plannedDurationFrames"))
+        try c.encode(rate.key, forKey: AnyCodingKey("frameRateUsed"))
+        guard let scale = positionScale(projectRate: projectRate) else {
+            try c.encode(sections, forKey: AnyCodingKey("sections"))
+            try c.encode(tracks, forKey: AnyCodingKey("tracks"))
+            return
+        }
+        // Whole numbers in the file: frames for timecode scenes, ticks for bars scenes.
+        var whole = self
+        for i in whole.sections.indices { whole.sections[i].at = (whole.sections[i].at * scale).rounded() }
+        for t in whole.tracks.indices {
+            for k in whole.tracks[t].cues.indices { whole.tracks[t].cues[k].at = (whole.tracks[t].cues[k].at * scale).rounded() }
+        }
+        try c.encode(timeBase == .bars ? "ticks" : "frames", forKey: AnyCodingKey("positionUnit"))
+        try c.encode(scale, forKey: AnyCodingKey("positionScale"))
+        try c.encode(whole.sections, forKey: AnyCodingKey("sections"))
+        try c.encode(whole.tracks, forKey: AnyCodingKey("tracks"))
+    }
+}
+
+extension CodingUserInfoKey {
+    /// Set by `ProjectCoding`: the project's frame rate, so scenes store whole frames and ticks.
+    public static let oncueProjectFrameRate = CodingUserInfoKey(rawValue: "oncue.projectFrameRate")!
 }
 
 extension OSCTarget {

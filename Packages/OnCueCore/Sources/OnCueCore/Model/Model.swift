@@ -407,6 +407,12 @@ public struct RundownItem: Identifiable, Codable, Hashable {
     public var notes: String = ""
     /// Song audio or a PGM recording under the timeline.
     public var media: ItemMedia?
+    /// Scene number as shown ("3", "3a"). Text so fixed numbering can insert letters.
+    public var number: String = ""
+    public var artist: String = ""
+    public var status: SceneStatus = .unset
+    /// This scene's own frame rate; nil = the project's.
+    public var frameRate: FrameRate?
 
     public var sortedSections: [SongSection] { sections.sorted { $0.at < $1.at } }
 }
