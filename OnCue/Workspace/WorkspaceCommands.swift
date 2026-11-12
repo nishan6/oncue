@@ -62,8 +62,19 @@ struct WorkspaceCommands: Commands {
                 .keyboardShortcut(.upArrow, modifiers: [.command, .option])
             Button("Move Shot Down") { workspace?.nudgeSelectedShot(by: 1) }
                 .keyboardShortcut(.downArrow, modifiers: [.command, .option])
-            Button("Switch Cut or Mix") { workspace?.toggleTransitionOfSelection() }
+            Button("Switch Cut or Transition") { workspace?.toggleTransitionOfSelection() }
                 .keyboardShortcut("t", modifiers: [.command, .option])
+            Divider()
+            Menu("Quantise") {
+                ForEach(workspace?.selectedItem.map { QuantizeGrid.choices(for: $0) } ?? []) { grid in
+                    Button(grid.label) { workspace?.quantize(to: grid) }
+                }
+            }
+            .disabled(workspace?.selectedItem?.timeBase == .order)
+            Button("Move All From Here…") { workspace?.moveAllOpen = true }
+                .disabled(workspace?.moveAllStart == nil || workspace?.selectedItem?.timeBase == .order)
+            Button("Select Shots From Here to the End") { workspace?.selectShotsFromHere() }
+            Button("Select Shots in This Section") { workspace?.selectShotsInSection() }
             Divider()
             Button("Delete") { workspace?.deleteSelection() }
                 .keyboardShortcut(.delete, modifiers: .command)

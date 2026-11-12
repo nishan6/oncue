@@ -448,3 +448,46 @@ extension ShotVocabulary {
         return transition(cue.transitionStyle)?.short ?? "MIX"
     }
 }
+
+// MARK: - Move All
+
+/// Shot › Move All From Here: opens or closes a gap by moving everything from the selection on.
+struct MoveAllSheet: View {
+    let item: RundownItem?
+    let start: Double?
+    @ObservedObject var model: WorkspaceModel
+    @Environment(\.dismiss) private var dismiss
+    @State private var amount = "1"
+
+    private var bars: Bool { item?.timeBase == .bars }
+    private var value: Double? { Double(amount.trimmingCharacters(in: .whitespaces).replacingOccurrences(of: ",", with: ".")) }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Space.m) {
+            Text("MOVE ALL FROM HERE").font(.system(size: 13, weight: .bold)).tracking(0.8).foregroundStyle(Gallery.ink)
+            if let item, let start {
+                Text("Every shot, cue and section from \(item.format(start)) to the end moves together. Use a negative number to close a gap.")
+                    .font(.ocBody).foregroundStyle(Gallery.dim).fixedSize(horizontal: false, vertical: true)
+            }
+            HStack(spacing: Space.s) {
+                TextField("1", text: $amount).textFieldStyle(.roundedBorder).frame(width: 80).font(.readout(13))
+                Text(bars ? "bars (½ = 0.5)" : "seconds").font(.ocBody).foregroundStyle(Gallery.dim)
+            }
+            HStack {
+                Spacer()
+                Button("Cancel") { dismiss() }.buttonStyle(QuietButtonStyle()).keyboardShortcut(.cancelAction)
+                Button("Move") {
+                    if let value { model.moveAll(by: value) }
+                    dismiss()
+                }
+                .buttonStyle(QuietButtonStyle(prominent: true))
+                .keyboardShortcut(.defaultAction)
+                .disabled(value == nil || value == 0 || start == nil)
+            }
+        }
+        .padding(Space.l)
+        .frame(width: 420)
+        .background(Gallery.panel)
+        .preferredColorScheme(.dark)
+    }
+}

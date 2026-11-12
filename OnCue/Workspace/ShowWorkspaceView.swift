@@ -70,6 +70,9 @@ struct ShowWorkspaceView: View {
             LegacyShowSheet(show: box.show, originalURL: fileURL, model: model)
                 .interactiveDismissDisabled()
         }
+        .sheet(isPresented: $model.moveAllOpen) {
+            MoveAllSheet(item: model.selectedItem, start: model.moveAllStart, model: model)
+        }
         .alert("Renumber the scenes?", isPresented: $model.renumberPromptOpen) {
             Button("Renumber") { model.renumberScenes() }
             Button("Keep Numbers", role: .cancel) {}

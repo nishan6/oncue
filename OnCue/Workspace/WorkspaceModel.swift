@@ -743,6 +743,45 @@ final class WorkspaceModel: ObservableObject {
         edit(actionName) { $0.updateCue(shotID, inItem: id) { change(&$0) } }
     }
 
+    // MARK: - Bulk edits
+
+    /// Snaps the selected shots (or every shot when none is selected) to a grid.
+    func quantize(to grid: QuantizeGrid) {
+        guard let id = selectedItemID else { return }
+        let ids = selectedShotIDs.isEmpty ? Set(show.shotRows(forItem: id).map(\.id)) : selectedShotIDs
+        edit("Quantise to \(grid.label)") { $0.quantizeShots(ids, inItem: id, to: grid) }
+    }
+
+    /// Where "Move All" starts: the first selected shot, or the selected cue.
+    var moveAllStart: Double? {
+        guard let id = selectedItemID else { return nil }
+        if let first = show.shotRows(forItem: id).first(where: { selectedShotIDs.contains($0.id) }) { return first.cue.at }
+        if let cue = selectedCueID { return show.cue(cue, inItem: id)?.at }
+        return nil
+    }
+
+    @Published var moveAllOpen = false
+
+    /// Moves everything from the selection to the end by `amount` bars (songs in bars) or
+    /// seconds (segments). Negative closes a gap.
+    func moveAll(by amount: Double) {
+        guard let id = selectedItemID, let item = selectedItem, let start = moveAllStart else { return }
+        let delta = item.timeBase == .bars ? amount * Double(max(item.beatsPerBar, 1)) : amount
+        var ok = true
+        edit(amount >= 0 ? "Move All Later" : "Move All Earlier") { ok = $0.moveAll(inItem: id, from: start, by: delta) }
+        if !ok { errorMessage = "Nothing moved: that would run into the shots before it, or before the start." }
+    }
+
+    func selectShotsFromHere() {
+        guard let id = selectedItemID, let start = moveAllStart else { return }
+        selectedShotIDs = Set(show.shotIDs(inItem: id, from: start))
+    }
+
+    func selectShotsInSection() {
+        guard let id = selectedItemID, let first = selectedRows.first else { return }
+        selectedShotIDs = Set(show.shotIDs(inItem: id, section: first.sectionID))
+    }
+
     /// One undo step that changes several shots in the selected song or segment.
     func updateShots(_ ids: Set<UUID>, _ actionName: String, _ change: @escaping (inout Cue) -> Void) {
         guard let itemID = selectedItemID, !ids.isEmpty else { return }
