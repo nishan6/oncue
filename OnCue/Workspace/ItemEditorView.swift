@@ -486,6 +486,12 @@ struct ShotRowView: View {
     let camera: Camera?
     let tally: TallyState
     @ObservedObject var model: WorkspaceModel
+    @State private var hovering = false
+    @State private var noteFocused = false
+
+    private var noteVisible: Bool {
+        !row.cue.note.isEmpty || hovering || noteFocused || model.selectedShotIDs.contains(row.id)
+    }
 
     var body: some View {
         HStack(spacing: Space.m) {
@@ -517,11 +523,14 @@ struct ShotRowView: View {
                     model.updateShot(row.id, "Edit Shot") { $0.text = text }
                     return true
                 }
-                CommitField(placeholder: "Add a note for the operator", value: row.cue.note, font: .ocMeta) { text in
+                // The note field shows when there is a note, or on hover and selection, so empty
+                // rows stay quiet. It keeps its space so rows never change height.
+                CommitField(placeholder: "Add a note for the operator", value: row.cue.note, font: .ocMeta,
+                            onFocusChange: { noteFocused = $0 }) { text in
                     model.updateShot(row.id, "Edit Operator Note") { $0.note = text }
                     return true
                 }
-                .opacity(row.cue.note.isEmpty ? 0.55 : 0.85)
+                .opacity(noteVisible ? (row.cue.note.isEmpty ? 0.6 : 0.85) : 0)
             }
 
             Spacer(minLength: Space.xs)
@@ -559,6 +568,8 @@ struct ShotRowView: View {
                 .frame(width: 3)
                 .padding(.vertical, 7)
         }
+        .onHover { hovering = $0 }
+        .animation(.easeOut(duration: 0.12), value: hovering)
     }
 }
 

@@ -146,10 +146,7 @@ private struct ShotInspector: View {
                 HStack(alignment: .center, spacing: Space.m) {
                     CameraChip(camera: camera, missing: missing, size: 46)
                     VStack(alignment: .leading, spacing: 3) {
-                        HStack(spacing: Space.s) {
-                            Text("Shot \(row.number)").font(.ocTitle).foregroundStyle(Gallery.ink)
-                            TallyTag(state: .current)
-                        }
+                        Text("Shot \(row.number)").font(.ocTitle).foregroundStyle(Gallery.ink)
                         MetaLine(parts: [sectionName, item.format(row.cue.at)])
                     }
                 }

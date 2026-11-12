@@ -174,7 +174,7 @@ struct TimelineEditorView: View {
                     model.zoom = min(max(Double(available) / (Double(TimelineMetrics.baseUnit(for: item)) * units), 0.15), 6)
                 }
                 HStack(alignment: .top, spacing: 0) {
-                    TrackHeaderColumn(show: show, lanes: lanes, shotHeight: shotHeight, model: model)
+                    TrackHeaderColumn(show: show, item: item, lanes: lanes, shotHeight: shotHeight, model: model)
                     Rectangle().fill(Gallery.hairline).frame(width: 1)
                     ScrollView(.horizontal) {
                         TimelineCanvas(show: show, item: item, model: model, metrics: metrics, width: width,
@@ -336,6 +336,7 @@ struct TimelineToolbar: View {
 
 struct TrackHeaderColumn: View {
     let show: Show
+    let item: RundownItem
     let lanes: [TimelineLane]
     let shotHeight: CGFloat
     @ObservedObject var model: WorkspaceModel
@@ -345,6 +346,7 @@ struct TrackHeaderColumn: View {
             Color.clear.frame(height: TimelineLayout.ruler)
             ForEach(lanes) { lane in
                 TrackHeaderCell(lane: lane, subtitle: lane == .shots ? (show.mainOutput?.name ?? "Program") : nil,
+                                details: lane == .shots ? visionDetails : [],
                                 hidden: model.hiddenLanes.contains(lane), locked: model.lockedLanes.contains(lane),
                                 height: TimelineLayout.height(of: lane, hidden: model.hiddenLanes.contains(lane), shotHeight: shotHeight),
                                 model: model)
@@ -354,11 +356,28 @@ struct TrackHeaderColumn: View {
         .background(Gallery.hairline)
         .background(Gallery.panel)
     }
+
+    /// Script facts for the vision track header: shots, cameras used, average shot length.
+    private var visionDetails: [String] {
+        let rows = show.shotRows(forItem: item.id)
+        guard !rows.isEmpty else { return ["No shots yet", "Double-click to add"] }
+        var lines = ["\(rows.count) \(rows.count == 1 ? "shot" : "shots")"]
+        let cameras = Set(rows.compactMap(\.cue.cameraID)).count
+        lines.append("\(cameras) \(cameras == 1 ? "camera" : "cameras")")
+        let lengths = rows.compactMap(\.lengthSeconds)
+        if !lengths.isEmpty {
+            lines.append(String(format: "%.1f s average", lengths.reduce(0, +) / Double(lengths.count)))
+        }
+        let issues = rows.filter { !$0.issues.isEmpty }.count
+        if issues > 0 { lines.append("\(issues) to check") }
+        return lines
+    }
 }
 
 struct TrackHeaderCell: View {
     let lane: TimelineLane
     let subtitle: String?
+    var details: [String] = []
     let hidden: Bool
     let locked: Bool
     let height: CGFloat
@@ -366,11 +385,60 @@ struct TrackHeaderCell: View {
     @State private var hovering = false
 
     var body: some View {
-        HStack(spacing: 7) {
+        Group {
+            if height >= 80, !hidden {
+                tall
+            } else {
+                compact
+            }
+        }
+        .frame(width: TimelineLayout.headerWidth, height: height, alignment: .topLeading)
+        .background(hovering ? Gallery.raised : Gallery.panel)
+        .overlay(alignment: .leading) {
             RoundedRectangle(cornerRadius: 1)
                 .fill(lane.tone.opacity(hidden ? 0.35 : 0.9))
                 .frame(width: 2)
                 .padding(.vertical, hidden ? 3 : 6)
+                .padding(.leading, Space.s)
+        }
+        .onHover { hovering = $0 }
+        .animation(.easeOut(duration: 0.12), value: hovering)
+    }
+
+    /// Tall tracks (the vision track): name at the top, then the track's facts.
+    private var tall: some View {
+        VStack(alignment: .leading, spacing: Space.xs) {
+            HStack(spacing: 7) {
+                Image(systemName: lane.symbol)
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(Gallery.dim)
+                    .frame(width: 14)
+                Text(lane.label).font(.system(size: 12.5, weight: .semibold)).foregroundStyle(Gallery.ink)
+                Spacer(minLength: 0)
+                controls
+            }
+            if let subtitle {
+                Text(subtitle).font(.ocMeta).foregroundStyle(Gallery.faint).padding(.leading, 21)
+            }
+            VStack(alignment: .leading, spacing: 3) {
+                ForEach(details, id: \.self) { line in
+                    Text(line)
+                        .font(.readout(11, weight: .regular))
+                        .foregroundStyle(line.hasSuffix("to check") ? Gallery.amber : Gallery.dim)
+                        .lineLimit(1)
+                }
+            }
+            .padding(.leading, 21)
+            .padding(.top, Space.s)
+            Spacer(minLength: 0)
+        }
+        .padding(.leading, Space.m + 2)
+        .padding(.trailing, Space.xs)
+        .padding(.top, Space.s + 2)
+    }
+
+    private var compact: some View {
+        HStack(spacing: 7) {
             if !hidden {
                 Image(systemName: lane.symbol)
                     .font(.system(size: 11, weight: .medium))
@@ -388,25 +456,27 @@ struct TrackHeaderCell: View {
                 }
             }
             Spacer(minLength: 0)
-            if lane != .shots, hovering || hidden {
-                toggle(symbol: hidden ? "eye.slash" : "eye", on: hidden,
-                       help: hidden ? "Show the \(lane.label.lowercased()) track" : "Hide the \(lane.label.lowercased()) track (its cues are kept)") {
-                    model.toggleLaneHidden(lane)
-                }
-            }
-            if !hidden, hovering || locked {
-                toggle(symbol: locked ? "lock.fill" : "lock.open", on: locked,
-                       help: locked ? "Unlock this track" : "Lock this track against edits") {
-                    model.toggleLaneLocked(lane)
-                }
+            controls
+        }
+        .padding(.leading, Space.m + 2)
+        .padding(.trailing, Space.xs)
+        .frame(maxHeight: .infinity)
+    }
+
+    @ViewBuilder
+    private var controls: some View {
+        if lane != .shots, hovering || hidden {
+            toggle(symbol: hidden ? "eye.slash" : "eye", on: hidden,
+                   help: hidden ? "Show the \(lane.label.lowercased()) track" : "Hide the \(lane.label.lowercased()) track (its cues are kept)") {
+                model.toggleLaneHidden(lane)
             }
         }
-        .padding(.leading, Space.s)
-        .padding(.trailing, Space.xs)
-        .frame(width: TimelineLayout.headerWidth, height: height)
-        .background(hovering ? Gallery.raised : Gallery.panel)
-        .onHover { hovering = $0 }
-        .animation(.easeOut(duration: 0.12), value: hovering)
+        if !hidden, hovering || locked {
+            toggle(symbol: locked ? "lock.fill" : "lock.open", on: locked,
+                   help: locked ? "Unlock this track" : "Lock this track against edits") {
+                model.toggleLaneLocked(lane)
+            }
+        }
     }
 
     private func toggle(symbol: String, on: Bool, help: String, action: @escaping () -> Void) -> some View {

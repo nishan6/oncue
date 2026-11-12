@@ -287,6 +287,7 @@ struct CommitField: View {
     var font: Font = .readout()
     var width: CGFloat? = nil
     var alignment: TextAlignment = .leading
+    var onFocusChange: ((Bool) -> Void)? = nil
     let commit: (String) -> Bool
 
     @State private var draft = ""
@@ -311,7 +312,10 @@ struct CommitField: View {
             .onHover { hovering = $0 }
             .onAppear { draft = value }
             .onChange(of: value) { _, new in if !focused { draft = new } }
-            .onChange(of: focused) { _, isFocused in if !isFocused { apply() } }
+            .onChange(of: focused) { _, isFocused in
+                onFocusChange?(isFocused)
+                if !isFocused { apply() }
+            }
             .onSubmit { apply() }
     }
 

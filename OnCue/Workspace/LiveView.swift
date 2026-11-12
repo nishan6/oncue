@@ -23,8 +23,6 @@ struct LiveView: View {
     var body: some View {
         let item = show.item(cursor.itemID)
         VStack(spacing: 0) {
-            LiveStatusBar(show: show, item: item, cursor: cursor, model: model)
-            Rectangle().fill(Gallery.hairline).frame(height: 1)
             HStack(spacing: 0) {
                 VStack(spacing: Space.l) {
                     TimelineView(.periodic(from: .now, by: 0.1)) { context in
@@ -54,38 +52,51 @@ struct LiveView: View {
 
 // MARK: - Status bar
 
-struct LiveStatusBar: View {
+/// Live Mode's context in the window toolbar: LIVE, the song or segment, and the section on air.
+struct LiveToolbarContext: View {
     let show: Show
-    let item: RundownItem?
+    let cursor: LiveCursor
+
+    var body: some View {
+        let item = show.item(cursor.itemID)
+        let now = show.liveNow(cursor)
+        let section = item?.sections.first { $0.id == now?.sectionID }
+        HStack(spacing: Space.m) {
+            HStack(spacing: 6) {
+                Circle().fill(Gallery.tally).frame(width: 8, height: 8)
+                Text("LIVE").font(.system(size: 11, weight: .heavy)).tracking(1.2).foregroundStyle(Gallery.tally)
+            }
+            .padding(.horizontal, 8)
+            .frame(height: 22)
+            .background(Gallery.tally.opacity(0.14), in: Capsule())
+            VStack(alignment: .leading, spacing: 0) {
+                Text(item?.title ?? "No item").font(.ocHeading).foregroundStyle(Gallery.ink)
+                Text(section?.name ?? (cursor.isStandingBy ? "Standing by" : show.name))
+                    .font(.ocMeta).foregroundStyle(Gallery.dim)
+            }
+        }
+    }
+}
+
+/// Live Mode's status in the window toolbar: timing source, mode, switcher, and Exit.
+struct LiveToolbarStatus: View {
+    let show: Show
     let cursor: LiveCursor
     @ObservedObject var model: WorkspaceModel
 
     var body: some View {
-        let now = show.liveNow(cursor)
-        let section = item?.sections.first { $0.id == now?.sectionID }
-        HStack(spacing: Space.l) {
-            HStack(spacing: Space.s) {
-                Circle().fill(Gallery.tally).frame(width: 8, height: 8)
-                Text("LIVE").font(.system(size: 11, weight: .heavy)).tracking(1).foregroundStyle(Gallery.tally)
-            }
-            VStack(alignment: .leading, spacing: 1) {
-                Text(item?.title ?? "No item").font(.ocHeading).foregroundStyle(Gallery.ink)
-                MetaLine(parts: [show.name, section?.name ?? (cursor.isStandingBy ? "Standing by" : "")])
-            }
-            Spacer(minLength: Space.m)
+        let item = show.item(cursor.itemID)
+        HStack(spacing: Space.s) {
             StatusChip(symbol: "hand.tap", label: "Timing", value: "Manual NEXT",
                        help: "Live Mode steps on NEXT. This item is planned for \(item?.syncMode.label ?? "manual") timing, which follows once the show engine is built.")
             StatusChip(symbol: "rectangle.on.rectangle", label: "Mode", value: "Display only",
                        help: "OnCue shows the calls; it does not cut the switcher yet.")
             StatusChip(symbol: "cable.connector.slash", label: "Switcher", value: "Not connected", warning: true,
                        help: "Switcher control comes with the show engine.")
-            Button { model.exitLive() } label: { Label("Exit", systemImage: "xmark") }
+            Button { model.exitLive() } label: { Label("Exit Live", systemImage: "xmark") }
                 .buttonStyle(QuietButtonStyle())
                 .help("Back to editing (Esc or ⌘L)")
         }
-        .padding(.horizontal, Space.xl)
-        .frame(height: 56)
-        .background(LivePalette.base)
     }
 }
 
@@ -106,7 +117,7 @@ struct StatusChip: View {
             }
         }
         .padding(.horizontal, Space.s + 2)
-        .frame(height: 34)
+        .frame(height: 30)
         .background(LivePalette.raised, in: RoundedRectangle(cornerRadius: Radius.m))
         .help(help)
     }

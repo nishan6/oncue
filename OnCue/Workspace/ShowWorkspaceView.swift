@@ -38,9 +38,18 @@ struct ShowWorkspaceView: View {
         }
         }
         .animation(.easeOut(duration: 0.18), value: model.live == nil)
-        .toolbar(model.live == nil ? .visible : .hidden, for: .windowToolbar)
+        .toolbarBackground(model.live == nil ? Gallery.panel : LivePalette.base, for: .windowToolbar)
+        .toolbarBackground(model.live == nil ? .automatic : .visible, for: .windowToolbar)
         .toolbar {
+            ToolbarItem(placement: .navigation) {
+                if let cursor = model.live {
+                    LiveToolbarContext(show: show, cursor: cursor)
+                }
+            }
             ToolbarItemGroup(placement: .primaryAction) {
+                if let cursor = model.live {
+                    LiveToolbarStatus(show: show, cursor: cursor, model: model)
+                } else {
                 Button { model.addSong() } label: { Label("New Song", systemImage: "music.note.list") }
                     .help("New song (⌥⌘N)")
                 Button { model.addSegment() } label: { Label("New Segment", systemImage: "rectangle.split.3x1") }
@@ -51,6 +60,7 @@ struct ShowWorkspaceView: View {
                     .help("Live Mode (⌘L)")
                 Button { model.showInspector.toggle() } label: { Label("Inspector", systemImage: "sidebar.right") }
                     .help("Show or hide the inspector (⌥⌘I)")
+                }
             }
         }
         .sheet(isPresented: $model.cameraManagerOpen) {
