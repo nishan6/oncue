@@ -25,7 +25,7 @@ enum ScreenshotRun {
         ("Live at the Arena (split).oncue", "workspace-split.png"),
         ("Live at the Arena (list).oncue", "workspace-list.png"),
         ("Live at the Arena (live).oncue", "live-mode.png"),
-        ("Live at the Arena (compact).oncue", "workspace-compact.png"),
+        ("Live at the Arena (compact).oncue", "workspace-1280x800.png"),
     ]
 
     private static func openShows() {
@@ -39,9 +39,11 @@ enum ScreenshotRun {
         WorkspaceModel.seedState(showID: timeline.id, itemID: song,
                                  shotIDs: [timeline.shotRows(forItem: song)[5].id], editor: .timeline)
 
-        // Timeline and list: the talk break, timed in seconds, nothing selected (item inspector).
-        let split = Show.sample()
-        WorkspaceModel.seedState(showID: split.id, itemID: split.items[2].id, shotIDs: [], editor: .split)
+        // Timeline and list (how every scene opens): the opener with shot 4 selected, its details
+        // in the inspector, and the Cues and Media Player Control tracks.
+        let split = decorated(Show.sample())
+        WorkspaceModel.seedState(showID: split.id, itemID: split.items[0].id,
+                                 shotIDs: [split.shotRows(forItem: split.items[0].id)[3].id], editor: .split)
 
         // List: the ballad, shot 3 selected.
         let list = Show.sample()
@@ -50,15 +52,15 @@ enum ScreenshotRun {
                                  shotIDs: [list.shotRows(forItem: ballad)[2].id], editor: .list)
 
         // Live Mode: the opener with shot 6 on air.
-        let live = Show.sample()
+        let live = decorated(Show.sample())
         WorkspaceModel.seedState(showID: live.id, itemID: live.items[0].id, shotIDs: [], editor: .timeline)
         WorkspaceModel.openLive[live.id] = 5
 
-        // A smaller window: the timeline on the segment, with a shot selected.
-        let compact = Show.sample()
-        let seg = compact.items[2].id
-        WorkspaceModel.seedState(showID: compact.id, itemID: seg,
-                                 shotIDs: [compact.shotRows(forItem: seg)[3].id], editor: .timeline)
+        // A 13-inch MacBook window (1280 × 800): the split view on the opener, a shot selected.
+        let compact = decorated(Show.sample())
+        let opener = compact.items[0].id
+        WorkspaceModel.seedState(showID: compact.id, itemID: opener,
+                                 shotIDs: [compact.shotRows(forItem: opener)[3].id], editor: .split)
 
         renderExports(Show.sample())
 
@@ -70,6 +72,7 @@ enum ScreenshotRun {
                 var project = Project(migrating: show)
                 project.artist = "Neon Skyline"
                 project.venue = "City Arena"
+                project.properties.shots.cast = sampleCast
                 try ProjectPackage.write(project, to: url)
             }
         } catch {
@@ -80,13 +83,56 @@ enum ScreenshotRun {
             open(urls[1]) {
                 open(urls[2]) {
                     open(urls[3]) {
-                        open(urls[4], size: NSSize(width: 1180, height: 760)) {
+                        open(urls[4], size: NSSize(width: 1280, height: 800)) {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 4) { capture() }
                         }
                     }
                 }
             }
         }
+    }
+
+    static let sampleCast: [ShotTerm] = ["Lead vocal", "Guitar", "Drums", "Keys", "Crowd"].map {
+        ShotTerm(key: "cast-\($0.lowercased().replacingOccurrences(of: " ", with: "-"))", label: $0)
+    }
+
+    /// The sample show with shot details: sizes, movement, framing, cast and statuses on the
+    /// opener (one shot marked Cut), and a few department cues and player cues.
+    static func decorated(_ input: Show) -> Show {
+        var show = input
+        guard let opener = show.items.first?.id else { return show }
+        let sizes = ["ws", "ms", "cu", "mcu", "ews", "cu", "ls"]
+        let moves = ["static", "push-in", "static", "orbit", "crane-up", "handheld", "static"]
+        for (k, row) in show.shotRows(forItem: opener).enumerated() {
+            show.updateCue(row.id, inItem: opener) { cue in
+                cue.shotSize = sizes[k % sizes.count]
+                cue.movement = moves[k % moves.count]
+                cue.framing = k % 3 == 0 ? "stage-wide" : "single"
+                cue.subjects = [sampleCast[k % sampleCast.count].key]
+                cue.shotStatus = k < 6 ? "confirmed" : "planned"
+                if k == 4 { cue.shotStatus = "cut" }
+                if cue.transition == .auto { cue.transitionStyle = k % 2 == 0 ? "mix" : "dip"; cue.transitionFrames = 12 }
+                if k == 3 {
+                    cue.reviews = [ShotNote(text: "Operator late on the push at rehearsal; give a 4-count standby",
+                                            author: "Nishan", date: Date(timeIntervalSince1970: 1_794_900_000))]
+                }
+            }
+        }
+        if let i = show.itemIndex(opener) {
+            show.items[i].tracks.append(Track(kind: .calls, name: "Cues"))
+            show.items[i].tracks.append(Track(kind: .player, name: "Media Player Control"))
+        }
+        if let c = show.addTrackCue(.calls, inItem: opener, at: 15, text: "LX 12 GO") {
+            show.updateCue(c, inItem: opener) { $0.callRole = "Lights" }
+        }
+        show.addTrackCue(.calls, inItem: opener, at: 46, text: "Pyro standby")
+        if let p = show.addTrackCue(.player, inItem: opener, at: 0) {
+            show.updateCue(p, inItem: opener) { $0.playerName = "MP1"; $0.playerAction = .load; $0.clip = "Intro loop" }
+        }
+        if let p = show.addTrackCue(.player, inItem: opener, at: 16) {
+            show.updateCue(p, inItem: opener) { $0.playerName = "MP1"; $0.playerAction = .play; $0.clip = "Intro loop" }
+        }
+        return show
     }
 
     private static func open(_ url: URL, size: NSSize = NSSize(width: 1440, height: 900), then next: @escaping () -> Void) {
@@ -142,6 +188,8 @@ enum ScreenshotRun {
         var project = Project(migrating: show)
         project.artist = "Neon Skyline"
         project.venue = "City Arena"
+        project.properties.shots.cast = sampleCast
+        project.properties.shots.transitions.append(.custom("Logo sting", base: .stinger, durationFrames: 25))
         project.showDate = Date(timeIntervalSince1970: 1_795_000_000)
         project.saveVersion(name: "After rehearsal")
         project.playlists[0].items[1].title += " "
@@ -159,7 +207,9 @@ enum ScreenshotRun {
             ("sheet-export.png", AnyView(ExportView(show: show, model: model)), NSSize(width: 480, height: 470)),
             ("sheet-tour.png", AnyView(TourView(show: show, model: model)), NSSize(width: 980, height: 640)),
             ("sheet-versions.png", AnyView(VersionsView(project: project, model: model)), NSSize(width: 580, height: 540)),
-            ("sheet-project-properties.png", AnyView(ProjectPropertiesView(project: project, model: model)), NSSize(width: 620, height: 760)),
+            ("sheet-project-properties.png", AnyView(ProjectPropertiesView(project: project, model: model)), NSSize(width: 680, height: 760)),
+            ("sheet-project-properties-shots.png", AnyView(ProjectPropertiesView(project: project, model: model, initialTab: 2)), NSSize(width: 680, height: 640)),
+            ("sheet-move-all.png", AnyView(MoveAllSheet(item: project.playlists[0].items[0], start: 32, model: model)), NSSize(width: 420, height: 200)),
             ("sheet-new-scene.png", AnyView(NewSceneSheet(kind: .song, project: project, show: project.show(playlist: project.playlists[0].id), model: model)), NSSize(width: 520, height: 420)),
             ("library.png", AnyView(LibraryView(library: library)), NSSize(width: 1100, height: 560)),
             ("sheet-settings.png", AnyView(MachineProfileView().environmentObject(MachineProfileModel())), NSSize(width: 540, height: 680)),

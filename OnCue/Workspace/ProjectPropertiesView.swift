@@ -9,6 +9,7 @@ struct ProjectPropertiesView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var draft = Project()
     @State private var loaded = false
+    var initialTab = 0
     @State private var tab = 0
     @State private var hasDate = false
 
@@ -80,6 +81,7 @@ struct ProjectPropertiesView: View {
         .onAppear {
             guard !loaded else { return }
             draft = project
+            tab = initialTab
             hasDate = project.showDate != nil
             loaded = true
         }
