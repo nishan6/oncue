@@ -146,7 +146,7 @@ enum ScreenshotRun {
             ("sheet-settings.png", AnyView(MachineProfileView().environmentObject(MachineProfileModel())), NSSize(width: 540, height: 680)),
         ]
         for (k, (_, view, size)) in sheets.enumerated() {
-            let w = NSWindow(contentRect: NSRect(x: 40 + k * 20, y: 40 + k * 20, width: size.width, height: size.height),
+            let w = NSWindow(contentRect: NSRect(x: CGFloat(40 + k * 20), y: CGFloat(40 + k * 20), width: size.width, height: size.height),
                              styleMask: [.titled], backing: .buffered, defer: false)
             w.isReleasedWhenClosed = false
             w.contentView = NSHostingView(rootView: view.frame(width: size.width, height: size.height))
