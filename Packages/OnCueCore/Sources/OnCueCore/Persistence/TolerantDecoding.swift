@@ -142,6 +142,14 @@ extension Cue {
         oscArgs = try c.value("oscArgs", "")
         ptzCameraID = try c.optional("ptzCameraID")
         ptzPreset = try c.value("ptzPreset", 1)
+        transitionStyle = try c.value("transitionStyle", "mix")
+        transitionFrames = try c.optional("transitionFrames")
+        shotSize = try c.value("shotSize", "")
+        movement = try c.value("movement", "")
+        framing = try c.value("framing", "")
+        subjects = try c.value("subjects", [])
+        shotStatus = try c.value("shotStatus", ShotVocabulary.defaultStatusKey)
+        reviews = try c.value("reviews", [])
     }
 }
 

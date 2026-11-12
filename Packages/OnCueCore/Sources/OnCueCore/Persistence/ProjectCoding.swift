@@ -112,6 +112,69 @@ extension ProjectProperties {
         self.init()
         sceneDefaults = try c.value("sceneDefaults", SceneDefaults())
         roles = try c.value("roles", ProjectRole.standard.map { ProjectRole(name: $0) })
+        shots = try c.value("shots", ShotVocabulary())
+        countdown = try c.value("countdown", CountdownSettings())
+    }
+}
+
+extension ShotVocabulary {
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: AnyCodingKey.self)
+        self.init()
+        sizes = try c.value("sizes", ShotVocabulary.standardSizes)
+        movements = try c.value("movements", ShotVocabulary.standardMovements)
+        framings = try c.value("framings", ShotVocabulary.standardFramings)
+        cast = try c.value("cast", [])
+        statuses = try c.value("statuses", ShotVocabulary.standardStatuses)
+        transitions = try c.value("transitions", ShotVocabulary.standardTransitions)
+        restoreBuiltIns()
+    }
+}
+
+extension ShotTerm {
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: AnyCodingKey.self)
+        let label: String = try c.value("label", "")
+        self.init(key: try c.value("key", UUID().uuidString), label: label,
+                  short: try c.value("short", label), builtIn: try c.value("builtIn", false))
+    }
+}
+
+extension ShotStatusTerm {
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: AnyCodingKey.self)
+        self.init(key: try c.value("key", UUID().uuidString), label: try c.value("label", ""),
+                  role: try c.enumValue("role", .active), builtIn: try c.value("builtIn", false))
+    }
+}
+
+extension TransitionTerm {
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: AnyCodingKey.self)
+        let label: String = try c.value("label", "")
+        self.init(key: try c.value("key", UUID().uuidString), label: label,
+                  short: try c.value("short", label.uppercased()), base: try c.enumValue("base", .mix),
+                  durationFrames: try c.optional("durationFrames"), builtIn: try c.value("builtIn", false))
+    }
+}
+
+extension ShotNote {
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: AnyCodingKey.self)
+        self.init(text: try c.value("text", ""), author: try c.value("author", ""), date: try c.value("date", Date()))
+        id = try c.value("id", UUID())
+        resolved = try c.value("resolved", false)
+    }
+}
+
+extension CountdownSettings {
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: AnyCodingKey.self)
+        self.init()
+        standbySeconds = try c.value("standbySeconds", 5.0)
+        showNextShot = try c.value("showNextShot", true)
+        showNextSection = try c.value("showNextSection", true)
+        showStandby = try c.value("showStandby", true)
     }
 }
 

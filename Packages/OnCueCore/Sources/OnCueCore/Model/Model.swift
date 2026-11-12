@@ -357,6 +357,20 @@ public struct Cue: Identifiable, Codable, Hashable {
     /// Framing note for the operator.
     public var note: String = ""
     public var transition: TransitionKind = .cut
+    // Shot details (keys into the project's ShotVocabulary)
+    /// Transition type the shot is scripted with ("mix", "dip", ... or a custom key). Used when
+    /// `transition` is .auto.
+    public var transitionStyle: String = "mix"
+    /// Transition length in frames; nil = the term's default or the switcher's rate.
+    public var transitionFrames: Int?
+    public var shotSize: String = ""
+    public var movement: String = ""
+    public var framing: String = ""
+    /// Cast keys: who or what is in the shot.
+    public var subjects: [String] = []
+    public var shotStatus: String = ShotVocabulary.defaultStatusKey
+    /// Rehearsal notes (Inspector › Reviews).
+    public var reviews: [ShotNote] = []
     // FX
     public var fxAction: FXAction?
     public var fxIndex: Int = 0

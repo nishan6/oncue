@@ -304,6 +304,9 @@ public struct ProjectRole: Identifiable, Codable, Hashable {
 public struct ProjectProperties: Codable, Hashable {
     public var sceneDefaults = SceneDefaults()
     public var roles: [ProjectRole] = ProjectRole.standard.map { ProjectRole(name: $0) }
+    /// Shot sizes, movements, framings, cast, statuses and transitions for this project.
+    public var shots = ShotVocabulary()
+    public var countdown = CountdownSettings()
     public init() {}
 }
 
