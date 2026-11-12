@@ -16,6 +16,7 @@ enum CrewPage {
 <style>
 :root{--well:#0F1012;--base:#141518;--panel:#1A1B1F;--raised:#212228;--key:#2A2C33;--ink:#F1F1F3;--dim:#B0B3BC;--faint:#80838E;--tally:#F0313A;--next:#2BD167;--amber:#FFB020;--sel:#5E9BFF}
 *{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
 html,body{background:var(--base);color:var(--ink);font:15px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;-webkit-text-size-adjust:100%}
 body{min-height:100vh;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
@@ -49,7 +50,7 @@ main{padding:16px}
 .state .sub{color:var(--dim);margin-top:4px}
 .count{font-size:56px;font-weight:700;margin-top:4px;line-height:1}
 .count.soon{color:var(--amber)}
-.where{display:flex;gap:16px;color:var(--dim);font-size:13.5px;margin:14px 2px 18px;flex-wrap:wrap}
+.where{display:flex;gap:6px 16px;color:var(--dim);font-size:13.5px;margin:14px 2px 18px;flex-wrap:wrap}
 .where b{color:var(--ink);font-weight:600}
 .banner{background:var(--amber);color:#0F1012;border-radius:10px;padding:10px 14px;font-weight:600;margin-bottom:12px}
 .label{color:var(--faint);font-size:12.5px;font-weight:600;margin:18px 2px 8px}
@@ -148,9 +149,14 @@ main{padding:16px}
     else if(state.freeMode) h+='<div class="banner">Free mode: the director is calling shots live.</div>';
     if(myCam){
       var word=onPgm?'ON AIR':(onPvw?'STAND BY':'CLEAR'), sub='', count='';
-      if(onPgm) sub='You are on program';
-      else if(onPvw) sub='You are on preview, next to air';
-      else if(mineNext){sub='Your next shot: '+esc(mineNext.text||('shot '+mineNext.number));var r=remaining(mineNext);if(r!=null)count='<div class="count num'+(r<5?' soon':'')+'" data-count="'+mineNext.id+'">'+clock(r)+'</div>'}
+      var counter=function(s){var r=remaining(s);return r==null?'':'<div class="count num'+(r<5?' soon':'')+'" data-count="'+s.id+'">'+clock(r)+'</div>'};
+      var nextShot=upcoming[0];
+      if(onPgm){
+        if(nextShot&&nextShot.camera!==myCam){sub='Clear when camera '+(nextShot.camera==null?'–':nextShot.camera)+' takes';count=counter(nextShot)}
+        else sub='You are on program';
+      }
+      else if(onPvw){sub='You are next to air'+(mineNext?': '+esc(mineNext.text||('shot '+mineNext.number)):'');if(mineNext)count=counter(mineNext)}
+      else if(mineNext){sub='Your next shot: '+esc(mineNext.text||('shot '+mineNext.number));count=counter(mineNext)}
       else sub='No more shots for you in this song';
       h+='<div class="tally'+(onPgm?' pgm':(onPvw?' pvw':''))+'" style="--c:'+esc(colour(myCam))+'"><div class="badge num">'+myCam+'</div><div class="state"><div class="word">'+word+'</div><div class="sub">'+sub+'</div>'+count+'</div></div>';
     }
