@@ -1,0 +1,385 @@
+Building for debugging...
+[0/8] /Users/runner/work/oncue/oncue/Packages/OnCueCore/.build/arm64-apple-macosx/debug/OnCueCorePackageTests.derived/runner.swift
+[0/8] Write sources
+[0/8] Copying Fixtures
+[4/8] Write sources
+[5/8] Write swift-version--79AA4F9932D1E87A.txt
+[7/23] Emitting module OnCueCore
+[8/29] Compiling OnCueCore SwitchLog.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/SwitchLog.swift:84:60: warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 82 |             let c = try decoder.singleValueContainer()
+ 83 |             let text = try c.decode(String.self)
+ 84 |             if let date = withFraction.date(from: text) ?? plain.date(from: text) { return date }
+    |                                                            `- warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 85 |             throw DecodingError.dataCorruptedError(in: c, debugDescription: "Not a date: \(text)")
+ 86 |         }
+
+/Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSISO8601DateFormatter.h:46:12: note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+44 | 
+45 | API_AVAILABLE(macosx(10.12), ios(10.0), watchos(3.0), tvos(10.0))
+46 | @interface NSISO8601DateFormatter : NSFormatter <NSSecureCoding> {
+   |            `- note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+47 | @private
+48 |     CFDateFormatterRef _formatter;
+[9/29] Compiling OnCueCore Timing.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/SwitchLog.swift:84:60: warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 82 |             let c = try decoder.singleValueContainer()
+ 83 |             let text = try c.decode(String.self)
+ 84 |             if let date = withFraction.date(from: text) ?? plain.date(from: text) { return date }
+    |                                                            `- warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 85 |             throw DecodingError.dataCorruptedError(in: c, debugDescription: "Not a date: \(text)")
+ 86 |         }
+
+/Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSISO8601DateFormatter.h:46:12: note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+44 | 
+45 | API_AVAILABLE(macosx(10.12), ios(10.0), watchos(3.0), tvos(10.0))
+46 | @interface NSISO8601DateFormatter : NSFormatter <NSSecureCoding> {
+   |            `- note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+47 | @private
+48 |     CFDateFormatterRef _formatter;
+[10/29] Compiling OnCueCore Model.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/SwitchLog.swift:84:60: warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 82 |             let c = try decoder.singleValueContainer()
+ 83 |             let text = try c.decode(String.self)
+ 84 |             if let date = withFraction.date(from: text) ?? plain.date(from: text) { return date }
+    |                                                            `- warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 85 |             throw DecodingError.dataCorruptedError(in: c, debugDescription: "Not a date: \(text)")
+ 86 |         }
+
+/Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSISO8601DateFormatter.h:46:12: note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+44 | 
+45 | API_AVAILABLE(macosx(10.12), ios(10.0), watchos(3.0), tvos(10.0))
+46 | @interface NSISO8601DateFormatter : NSFormatter <NSSecureCoding> {
+   |            `- note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+47 | @private
+48 |     CFDateFormatterRef _formatter;
+[11/29] Compiling OnCueCore MachineProfile.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/SwitchLog.swift:84:60: warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 82 |             let c = try decoder.singleValueContainer()
+ 83 |             let text = try c.decode(String.self)
+ 84 |             if let date = withFraction.date(from: text) ?? plain.date(from: text) { return date }
+    |                                                            `- warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 85 |             throw DecodingError.dataCorruptedError(in: c, debugDescription: "Not a date: \(text)")
+ 86 |         }
+
+/Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSISO8601DateFormatter.h:46:12: note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+44 | 
+45 | API_AVAILABLE(macosx(10.12), ios(10.0), watchos(3.0), tvos(10.0))
+46 | @interface NSISO8601DateFormatter : NSFormatter <NSSecureCoding> {
+   |            `- note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+47 | @private
+48 |     CFDateFormatterRef _formatter;
+[12/29] Compiling OnCueCore ShowCoding.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/SwitchLog.swift:84:60: warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 82 |             let c = try decoder.singleValueContainer()
+ 83 |             let text = try c.decode(String.self)
+ 84 |             if let date = withFraction.date(from: text) ?? plain.date(from: text) { return date }
+    |                                                            `- warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 85 |             throw DecodingError.dataCorruptedError(in: c, debugDescription: "Not a date: \(text)")
+ 86 |         }
+
+/Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSISO8601DateFormatter.h:46:12: note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+44 | 
+45 | API_AVAILABLE(macosx(10.12), ios(10.0), watchos(3.0), tvos(10.0))
+46 | @interface NSISO8601DateFormatter : NSFormatter <NSSecureCoding> {
+   |            `- note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+47 | @private
+48 |     CFDateFormatterRef _formatter;
+[13/29] Compiling OnCueCore TolerantDecoding.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/SwitchLog.swift:84:60: warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 82 |             let c = try decoder.singleValueContainer()
+ 83 |             let text = try c.decode(String.self)
+ 84 |             if let date = withFraction.date(from: text) ?? plain.date(from: text) { return date }
+    |                                                            `- warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 85 |             throw DecodingError.dataCorruptedError(in: c, debugDescription: "Not a date: \(text)")
+ 86 |         }
+
+/Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSISO8601DateFormatter.h:46:12: note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+44 | 
+45 | API_AVAILABLE(macosx(10.12), ios(10.0), watchos(3.0), tvos(10.0))
+46 | @interface NSISO8601DateFormatter : NSFormatter <NSSecureCoding> {
+   |            `- note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+47 | @private
+48 |     CFDateFormatterRef _formatter;
+[14/29] Compiling OnCueCore ATEMSwitcher.swift
+[15/29] Compiling OnCueCore CompanionClient.swift
+[16/29] Compiling OnCueCore MIDIManager.swift
+[17/29] Compiling OnCueCore OSC.swift
+[18/29] Compiling OnCueCore PTZService.swift
+[19/29] Compiling OnCueCore SwitcherDevice.swift
+[20/29] Compiling OnCueCore LiveCursor.swift
+[21/29] Compiling OnCueCore SampleShow.swift
+[22/29] Compiling OnCueCore ShowEditing.swift
+[23/29] Compiling OnCueCore SwitcherEditing.swift
+[24/29] Compiling OnCueCore TimelineEditing.swift
+[25/29] Compiling OnCueCore EngineController.swift
+[26/29] Compiling OnCueCore LTC.swift
+[27/29] Compiling OnCueCore ShowEngine.swift
+[28/36] Compiling OnCueCoreTests ModelTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PersistenceTests.swift:218:92: error: extra arguments at positions #2, #3 in call
+216 |         let swA = SwitcherConfig(id: UUID(), name: "A", kind: .atem, host: "10.0.0.2", me: 1, role: .main,
+217 |                                  parentID: nil, feedInput: 0,
+218 |                                  companion: CompanionMapping(inputs: [CompanionInputButtons(input: 3,
+    |                                                                                            `- error: extra arguments at positions #2, #3 in call
+219 |                                      preview: CompanionButton(page: 2, row: 3, column: 4, bank: 5, enabled: true),
+220 |                                      program: CompanionButton(page: 6, row: 7, column: 8, bank: 9, enabled: true))],
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:288:12: note: 'init(input:)' declared here
+286 | 
+287 | public struct CompanionInputButtons: Codable, Hashable, Identifiable {
+288 |     public init(input: Int) { self.input = input }
+    |            `- note: 'init(input:)' declared here
+289 |     public var id: Int { input }
+290 |     public var input: Int
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PersistenceTests.swift:219:62: error: argument passed to call that takes no arguments
+217 |                                  parentID: nil, feedInput: 0,
+218 |                                  companion: CompanionMapping(inputs: [CompanionInputButtons(input: 3,
+219 |                                      preview: CompanionButton(page: 2, row: 3, column: 4, bank: 5, enabled: true),
+    |                                                              `- error: argument passed to call that takes no arguments
+220 |                                      program: CompanionButton(page: 6, row: 7, column: 8, bank: 9, enabled: true))],
+221 |                                      cut: CompanionButton(page: 1, row: 1, column: 1, bank: 1, enabled: true),
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PersistenceTests.swift:220:62: error: argument passed to call that takes no arguments
+218 |                                  companion: CompanionMapping(inputs: [CompanionInputButtons(input: 3,
+219 |                                      preview: CompanionButton(page: 2, row: 3, column: 4, bank: 5, enabled: true),
+220 |                                      program: CompanionButton(page: 6, row: 7, column: 8, bank: 9, enabled: true))],
+    |                                                              `- error: argument passed to call that takes no arguments
+221 |                                      cut: CompanionButton(page: 1, row: 1, column: 1, bank: 1, enabled: true),
+222 |                                      auto: CompanionButton(page: 1, row: 1, column: 2, bank: 2, enabled: true)),
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PersistenceTests.swift:221:58: error: argument passed to call that takes no arguments
+219 |                                      preview: CompanionButton(page: 2, row: 3, column: 4, bank: 5, enabled: true),
+220 |                                      program: CompanionButton(page: 6, row: 7, column: 8, bank: 9, enabled: true))],
+221 |                                      cut: CompanionButton(page: 1, row: 1, column: 1, bank: 1, enabled: true),
+    |                                                          `- error: argument passed to call that takes no arguments
+222 |                                      auto: CompanionButton(page: 1, row: 1, column: 2, bank: 2, enabled: true)),
+223 |                                  inputCount: 40)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PersistenceTests.swift:222:59: error: argument passed to call that takes no arguments
+220 |                                      program: CompanionButton(page: 6, row: 7, column: 8, bank: 9, enabled: true))],
+221 |                                      cut: CompanionButton(page: 1, row: 1, column: 1, bank: 1, enabled: true),
+222 |                                      auto: CompanionButton(page: 1, row: 1, column: 2, bank: 2, enabled: true)),
+    |                                                           `- error: argument passed to call that takes no arguments
+223 |                                  inputCount: 40)
+224 |         let swB = SwitcherConfig(id: UUID(), name: "B", kind: .companion, host: "", me: 0, role: .sub,
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PersistenceTests.swift:230:80: error: argument passed to call that takes no arguments
+228 |         show.outputs = [out]
+229 |         let ptz = PTZCamera(id: UUID(), name: "PTZ", proto: .viscaTCP, host: "10.0.0.9", port: 5678, macroBase: 4,
+230 |                             switcherID: swA.id, companionStart: CompanionButton(page: 3, row: 1, column: 0, bank: 1, enabled: true))
+    |                                                                                `- error: argument passed to call that takes no arguments
+231 |         show.ptzCameras = [ptz]
+232 |         let cam = Camera(id: UUID(), number: 12, name: "Steadicam", operatorName: "Asha", switcherID: swB.id, input: 5, ptzID: ptz.id)
+[29/36] Compiling OnCueCoreTests PersistenceTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PersistenceTests.swift:218:92: error: extra arguments at positions #2, #3 in call
+216 |         let swA = SwitcherConfig(id: UUID(), name: "A", kind: .atem, host: "10.0.0.2", me: 1, role: .main,
+217 |                                  parentID: nil, feedInput: 0,
+218 |                                  companion: CompanionMapping(inputs: [CompanionInputButtons(input: 3,
+    |                                                                                            `- error: extra arguments at positions #2, #3 in call
+219 |                                      preview: CompanionButton(page: 2, row: 3, column: 4, bank: 5, enabled: true),
+220 |                                      program: CompanionButton(page: 6, row: 7, column: 8, bank: 9, enabled: true))],
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:288:12: note: 'init(input:)' declared here
+286 | 
+287 | public struct CompanionInputButtons: Codable, Hashable, Identifiable {
+288 |     public init(input: Int) { self.input = input }
+    |            `- note: 'init(input:)' declared here
+289 |     public var id: Int { input }
+290 |     public var input: Int
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PersistenceTests.swift:219:62: error: argument passed to call that takes no arguments
+217 |                                  parentID: nil, feedInput: 0,
+218 |                                  companion: CompanionMapping(inputs: [CompanionInputButtons(input: 3,
+219 |                                      preview: CompanionButton(page: 2, row: 3, column: 4, bank: 5, enabled: true),
+    |                                                              `- error: argument passed to call that takes no arguments
+220 |                                      program: CompanionButton(page: 6, row: 7, column: 8, bank: 9, enabled: true))],
+221 |                                      cut: CompanionButton(page: 1, row: 1, column: 1, bank: 1, enabled: true),
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PersistenceTests.swift:220:62: error: argument passed to call that takes no arguments
+218 |                                  companion: CompanionMapping(inputs: [CompanionInputButtons(input: 3,
+219 |                                      preview: CompanionButton(page: 2, row: 3, column: 4, bank: 5, enabled: true),
+220 |                                      program: CompanionButton(page: 6, row: 7, column: 8, bank: 9, enabled: true))],
+    |                                                              `- error: argument passed to call that takes no arguments
+221 |                                      cut: CompanionButton(page: 1, row: 1, column: 1, bank: 1, enabled: true),
+222 |                                      auto: CompanionButton(page: 1, row: 1, column: 2, bank: 2, enabled: true)),
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PersistenceTests.swift:221:58: error: argument passed to call that takes no arguments
+219 |                                      preview: CompanionButton(page: 2, row: 3, column: 4, bank: 5, enabled: true),
+220 |                                      program: CompanionButton(page: 6, row: 7, column: 8, bank: 9, enabled: true))],
+221 |                                      cut: CompanionButton(page: 1, row: 1, column: 1, bank: 1, enabled: true),
+    |                                                          `- error: argument passed to call that takes no arguments
+222 |                                      auto: CompanionButton(page: 1, row: 1, column: 2, bank: 2, enabled: true)),
+223 |                                  inputCount: 40)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PersistenceTests.swift:222:59: error: argument passed to call that takes no arguments
+220 |                                      program: CompanionButton(page: 6, row: 7, column: 8, bank: 9, enabled: true))],
+221 |                                      cut: CompanionButton(page: 1, row: 1, column: 1, bank: 1, enabled: true),
+222 |                                      auto: CompanionButton(page: 1, row: 1, column: 2, bank: 2, enabled: true)),
+    |                                                           `- error: argument passed to call that takes no arguments
+223 |                                  inputCount: 40)
+224 |         let swB = SwitcherConfig(id: UUID(), name: "B", kind: .companion, host: "", me: 0, role: .sub,
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PersistenceTests.swift:230:80: error: argument passed to call that takes no arguments
+228 |         show.outputs = [out]
+229 |         let ptz = PTZCamera(id: UUID(), name: "PTZ", proto: .viscaTCP, host: "10.0.0.9", port: 5678, macroBase: 4,
+230 |                             switcherID: swA.id, companionStart: CompanionButton(page: 3, row: 1, column: 0, bank: 1, enabled: true))
+    |                                                                                `- error: argument passed to call that takes no arguments
+231 |         show.ptzCameras = [ptz]
+232 |         let cam = Camera(id: UUID(), number: 12, name: "Steadicam", operatorName: "Asha", switcherID: swB.id, input: 5, ptzID: ptz.id)
+[30/36] Compiling OnCueCoreTests ShowControlTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PersistenceTests.swift:218:92: error: extra arguments at positions #2, #3 in call
+216 |         let swA = SwitcherConfig(id: UUID(), name: "A", kind: .atem, host: "10.0.0.2", me: 1, role: .main,
+217 |                                  parentID: nil, feedInput: 0,
+218 |                                  companion: CompanionMapping(inputs: [CompanionInputButtons(input: 3,
+    |                                                                                            `- error: extra arguments at positions #2, #3 in call
+219 |                                      preview: CompanionButton(page: 2, row: 3, column: 4, bank: 5, enabled: true),
+220 |                                      program: CompanionButton(page: 6, row: 7, column: 8, bank: 9, enabled: true))],
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:288:12: note: 'init(input:)' declared here
+286 | 
+287 | public struct CompanionInputButtons: Codable, Hashable, Identifiable {
+288 |     public init(input: Int) { self.input = input }
+    |            `- note: 'init(input:)' declared here
+289 |     public var id: Int { input }
+290 |     public var input: Int
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PersistenceTests.swift:219:62: error: argument passed to call that takes no arguments
+217 |                                  parentID: nil, feedInput: 0,
+218 |                                  companion: CompanionMapping(inputs: [CompanionInputButtons(input: 3,
+219 |                                      preview: CompanionButton(page: 2, row: 3, column: 4, bank: 5, enabled: true),
+    |                                                              `- error: argument passed to call that takes no arguments
+220 |                                      program: CompanionButton(page: 6, row: 7, column: 8, bank: 9, enabled: true))],
+221 |                                      cut: CompanionButton(page: 1, row: 1, column: 1, bank: 1, enabled: true),
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PersistenceTests.swift:220:62: error: argument passed to call that takes no arguments
+218 |                                  companion: CompanionMapping(inputs: [CompanionInputButtons(input: 3,
+219 |                                      preview: CompanionButton(page: 2, row: 3, column: 4, bank: 5, enabled: true),
+220 |                                      program: CompanionButton(page: 6, row: 7, column: 8, bank: 9, enabled: true))],
+    |                                                              `- error: argument passed to call that takes no arguments
+221 |                                      cut: CompanionButton(page: 1, row: 1, column: 1, bank: 1, enabled: true),
+222 |                                      auto: CompanionButton(page: 1, row: 1, column: 2, bank: 2, enabled: true)),
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PersistenceTests.swift:221:58: error: argument passed to call that takes no arguments
+219 |                                      preview: CompanionButton(page: 2, row: 3, column: 4, bank: 5, enabled: true),
+220 |                                      program: CompanionButton(page: 6, row: 7, column: 8, bank: 9, enabled: true))],
+221 |                                      cut: CompanionButton(page: 1, row: 1, column: 1, bank: 1, enabled: true),
+    |                                                          `- error: argument passed to call that takes no arguments
+222 |                                      auto: CompanionButton(page: 1, row: 1, column: 2, bank: 2, enabled: true)),
+223 |                                  inputCount: 40)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PersistenceTests.swift:222:59: error: argument passed to call that takes no arguments
+220 |                                      program: CompanionButton(page: 6, row: 7, column: 8, bank: 9, enabled: true))],
+221 |                                      cut: CompanionButton(page: 1, row: 1, column: 1, bank: 1, enabled: true),
+222 |                                      auto: CompanionButton(page: 1, row: 1, column: 2, bank: 2, enabled: true)),
+    |                                                           `- error: argument passed to call that takes no arguments
+223 |                                  inputCount: 40)
+224 |         let swB = SwitcherConfig(id: UUID(), name: "B", kind: .companion, host: "", me: 0, role: .sub,
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PersistenceTests.swift:230:80: error: argument passed to call that takes no arguments
+228 |         show.outputs = [out]
+229 |         let ptz = PTZCamera(id: UUID(), name: "PTZ", proto: .viscaTCP, host: "10.0.0.9", port: 5678, macroBase: 4,
+230 |                             switcherID: swA.id, companionStart: CompanionButton(page: 3, row: 1, column: 0, bank: 1, enabled: true))
+    |                                                                                `- error: argument passed to call that takes no arguments
+231 |         show.ptzCameras = [ptz]
+232 |         let cam = Camera(id: UUID(), number: 12, name: "Steadicam", operatorName: "Asha", switcherID: swB.id, input: 5, ptzID: ptz.id)
+[31/38] Compiling OnCueCoreTests EditingTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[32/38] Compiling OnCueCoreTests EngineTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[33/38] Compiling OnCueCoreTests MachineProfileTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[34/38] Emitting module OnCueCoreTests
+[35/38] Compiling OnCueCoreTests TimelineTests.swift
+[36/38] Compiling OnCueCoreTests resource_bundle_accessor.swift
+error: fatalError
