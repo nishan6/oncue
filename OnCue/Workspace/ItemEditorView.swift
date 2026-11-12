@@ -76,12 +76,12 @@ struct ItemHeaderView: View {
                         }
                         MetaItem(label: "Meter") {
                             HStack(spacing: 0) {
-                                CommitField(placeholder: "4", value: "\(item.beatsPerBar)", font: .readout(13), width: 26, alignment: .trailing) { text in
+                                CommitField(placeholder: "4", value: "\(item.beatsPerBar)", font: .readout(13), width: 16, alignment: .trailing) { text in
                                     guard let v = Int(text), (1...16).contains(v) else { return false }
                                     model.updateItem("Change Beats per Bar") { $0.beatsPerBar = v }
                                     return true
                                 }
-                                Text("/4").font(.readout(13)).foregroundStyle(Gallery.dim)
+                                Text("/4").font(.readout(13)).foregroundStyle(Gallery.dim).padding(.leading, -4)
                             }
                         }
                     }
@@ -164,33 +164,49 @@ struct Stat: View {
     }
 }
 
-/// Timing (time base) as a borderless menu.
+/// Timing (time base) as a borderless field that opens its three choices.
 struct TimingMenu: View {
     let item: RundownItem
     @ObservedObject var model: WorkspaceModel
+    @State private var open = false
 
     var body: some View {
-        Menu {
-            ForEach(TimeBase.allCases) { base in
-                Button {
-                    model.setTimeBase(base)
-                } label: {
-                    if base == item.timeBase { Label(base.label, systemImage: "checkmark") } else { Text(base.label) }
-                }
-            }
-        } label: {
+        Button { open = true } label: {
             HStack(spacing: 4) {
                 Text(item.timeBase.label).font(.ocBodyStrong).foregroundStyle(Gallery.ink)
                 Image(systemName: "chevron.down").font(.system(size: 8, weight: .bold)).foregroundStyle(Gallery.faint)
             }
             .padding(.horizontal, 5)
             .padding(.vertical, 3)
+            .contentShape(Rectangle())
             .interactive()
         }
-        .menuStyle(.borderlessButton)
-        .menuIndicator(.hidden)
-        .fixedSize()
+        .buttonStyle(.plain)
         .help("How shot positions are measured. Changing it converts every position.")
+        .popover(isPresented: $open, arrowEdge: .bottom) {
+            VStack(alignment: .leading, spacing: 1) {
+                ForEach(TimeBase.allCases) { base in
+                    Button {
+                        open = false
+                        model.setTimeBase(base)
+                    } label: {
+                        HStack {
+                            Text(base.label).font(.ocBodyStrong).foregroundStyle(Gallery.ink)
+                            Spacer()
+                            if base == item.timeBase {
+                                Image(systemName: "checkmark").font(.system(size: 10, weight: .bold)).foregroundStyle(Gallery.selection)
+                            }
+                        }
+                        .padding(.horizontal, Space.s)
+                        .frame(width: 180, height: 28)
+                        .contentShape(Rectangle())
+                        .interactive()
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(Space.s)
+        }
     }
 }
 
@@ -553,7 +569,7 @@ struct CameraPaletteView: View {
         HStack(alignment: .center, spacing: Space.m) {
             VStack(alignment: .leading, spacing: 2) {
                 Text("Cameras").font(.ocHeading).foregroundStyle(Gallery.ink)
-                Text(model.selectedShotIDs.isEmpty ? "Click to add a shot" : "Click sets · ⌥-click adds")
+                Text(model.selectedShotIDs.isEmpty ? "Click adds a shot" : "⌥-click adds a shot")
                     .font(.ocMeta)
                     .foregroundStyle(Gallery.faint)
                     .lineLimit(1)

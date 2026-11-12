@@ -16,7 +16,9 @@ The product requirements are in the OnCue PRD.
 - **Inspector** (right): the selected shot or shots, lyric, note or FX cue, or the song or segment.
 - **Cameras** (Production > Cameras): colour, number, name, the operator for this show, and the switcher input.
 
-FX cues are part of the script only; they run on the switcher once the show engine is built.
+- **Live Mode** (⌘L or the Live button): the script as a gallery display. NOW (PGM) and NEXT (PVW) with camera, operator, description and note; the shots after next; the camera grid with labelled tally; section jumps and song changes. NEXT (Space or →) takes the next shot and back (←) steps back; the clock shows how long the shot has been on air and, where the script has timing, how long until the next is planned. Esc leaves Live Mode and selects the shot that was on air.
+
+FX cues are part of the script only; they run on the switcher once the show engine is built. Live Mode is manual and display-only for the same reason: its status bar says so (timing: manual NEXT, switcher: not connected).
 
 | Action | Keys |
 | --- | --- |
@@ -33,6 +35,8 @@ FX cues are part of the script only; they run on the switcher once the show engi
 | Timeline / timeline and list / list | ⌘1 / ⌘2 / ⌘3 |
 | Zoom in / out / actual size | ⌘= / ⌘- / ⌘0 |
 | Previous / next shot (timeline) | ← / → |
+| Live Mode on / off | ⌘L (Esc leaves) |
+| Live: NEXT / back | Space or → / ← |
 | Undo / redo | ⌘Z / ⇧⌘Z |
 
 ## Project structure
@@ -48,7 +52,7 @@ oncue/
       SmokeTest.swift           `--smoke-test <folder>` launch check used by CI
       ScreenshotRun.swift       `--screenshots <folder>` window images used by CI
     Workspace/                  the scripting workspace (views + WorkspaceModel)
-    UI/                         gallery theme and shared components, This Mac settings
+    UI/                         design system (tokens, type scale, components), This Mac settings
     Resources/
       Info.plist                file type (.oncue), local network / microphone / ATS keys
       OnCue.entitlements        hardened-runtime audio input (LTC)
@@ -58,6 +62,7 @@ oncue/
       Editing/
         ShowEditing.swift       every edit the workspace makes (running order, sections, cameras, shots)
         TimelineEditing.swift   timeline spans, snapping, lyrics/notes/FX cues
+        LiveCursor.swift        Live Mode position: NEXT, back, section jumps, song changes
         SampleShow.swift        sample production used by tests and CI screenshots
       Persistence/
         ShowCoding.swift        encode/decode, schema version check, migration, file IO, errors

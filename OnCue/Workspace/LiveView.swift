@@ -85,7 +85,7 @@ struct LiveStatusBar: View {
         }
         .padding(.horizontal, Space.xl)
         .frame(height: 56)
-        .background(LivePalette.panel)
+        .background(LivePalette.base)
     }
 }
 

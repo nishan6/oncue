@@ -41,21 +41,17 @@ struct InspectorView: View {
     }
 }
 
-/// Camera picker shown as a field: the camera's chip, name and operator.
+/// Camera picker shown as a field: the camera's chip, name and operator. Opens a list of cameras.
 private struct CameraField: View {
     let show: Show
     let camera: Camera?
     let missing: Bool
     let choose: (UUID?) -> Void
+    @State private var open = false
+    @State private var hovering = false
 
     var body: some View {
-        Menu {
-            ForEach(show.sortedCameras) { cam in
-                Button("\(cam.number)  \(cam.label)") { choose(cam.id) }
-            }
-            Divider()
-            Button("No camera") { choose(nil) }
-        } label: {
+        Button { open = true } label: {
             HStack(spacing: Space.s) {
                 CameraChip(camera: camera, missing: missing, size: 22)
                 VStack(alignment: .leading, spacing: 0) {
@@ -73,12 +69,62 @@ private struct CameraField: View {
             }
             .padding(.horizontal, Space.s)
             .padding(.vertical, 6)
-            .background(Gallery.raised, in: RoundedRectangle(cornerRadius: Radius.m))
+            .background(hovering ? Gallery.key : Gallery.raised, in: RoundedRectangle(cornerRadius: Radius.m))
             .contentShape(Rectangle())
         }
-        .menuStyle(.borderlessButton)
-        .menuIndicator(.hidden)
+        .buttonStyle(.plain)
+        .onHover { hovering = $0 }
         .help("Or type the camera number with the timeline or shot list selected")
+        .popover(isPresented: $open, arrowEdge: .leading) {
+            CameraChoiceList(show: show, current: camera?.id) { id in
+                open = false
+                choose(id)
+            }
+        }
+    }
+}
+
+/// List of the production's cameras to pick from.
+struct CameraChoiceList: View {
+    let show: Show
+    let current: UUID?
+    let choose: (UUID?) -> Void
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 1) {
+                ForEach(show.sortedCameras) { cam in
+                    Button { choose(cam.id) } label: {
+                        HStack(spacing: Space.s) {
+                            CameraChip(camera: cam, size: 20)
+                            Text(cam.displayName).font(.ocBodyStrong).foregroundStyle(Gallery.ink)
+                            Text(cam.operatorName).font(.ocMeta).foregroundStyle(Gallery.faint)
+                            Spacer(minLength: Space.s)
+                            if cam.id == current {
+                                Image(systemName: "checkmark").font(.system(size: 10, weight: .bold)).foregroundStyle(Gallery.selection)
+                            }
+                        }
+                        .padding(.horizontal, Space.s)
+                        .frame(height: 30)
+                        .contentShape(Rectangle())
+                        .interactive()
+                    }
+                    .buttonStyle(.plain)
+                }
+                Rectangle().fill(Gallery.hairline).frame(height: 1).padding(.vertical, Space.xs)
+                Button { choose(nil) } label: {
+                    Text("No camera").font(.ocBody).foregroundStyle(Gallery.dim)
+                        .padding(.horizontal, Space.s)
+                        .frame(maxWidth: .infinity, minHeight: 26, alignment: .leading)
+                        .contentShape(Rectangle())
+                        .interactive()
+                }
+                .buttonStyle(.plain)
+            }
+            .padding(Space.s)
+        }
+        .frame(width: 260)
+        .frame(maxHeight: 360)
     }
 }
 
