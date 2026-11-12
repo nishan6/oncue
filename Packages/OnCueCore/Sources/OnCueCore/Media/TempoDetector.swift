@@ -38,6 +38,12 @@ public struct TempoEstimate: Equatable {
     public let firstBeat: Double
     /// 0...1: how clearly the beat stands out. Below about 0.3 the guess is weak.
     public let confidence: Double
+
+    public init(bpm: Double, firstBeat: Double, confidence: Double) {
+        self.bpm = bpm
+        self.firstBeat = firstBeat
+        self.confidence = confidence
+    }
 }
 
 public enum TempoDetector {
