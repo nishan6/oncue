@@ -91,6 +91,7 @@ extension Project {
         plot = try c.value("plot", CameraPlot())
         comments = try c.value("comments", [])
         playlists = try c.value("playlists", [])
+        media = try c.value("media", [])
         properties = try c.value("properties", ProjectProperties())
         versions = try c.value("versions", [])
     }
@@ -316,5 +317,17 @@ extension Project {
         self = old
         editedAt = date
         saveVersion(name: "Restored “\(v.name)”", automatic: false, reason: "Restore", author: author, date: date)
+    }
+}
+
+extension MediaAsset {
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: AnyCodingKey.self)
+        self.init(path: try c.value("path", ""), bookmark: try c.value("bookmark", Data?.none),
+                  kind: try c.enumValue("kind", .playerClip), name: try c.optional("name"),
+                  duration: try c.optional("duration"))
+        id = try c.value("id", UUID())
+        added = try c.value("added", Date())
+        notes = try c.value("notes", "")
     }
 }

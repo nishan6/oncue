@@ -375,6 +375,8 @@ public struct Project: Identifiable, Codable, Hashable {
     public var comments: [Comment] = []
 
     public var playlists: [Playlist] = []
+    /// Media Pool: every file the project uses, linked in place.
+    public var media: [MediaAsset] = []
     public var properties = ProjectProperties()
     public var versions: [ProjectVersion] = []
 
