@@ -1,6 +1,12 @@
 import SwiftUI
+import AppKit
 import Combine
 import OnCueCore
+
+/// Only one window at a time can be in Live Mode and control hardware.
+enum LiveLock {
+    static var holder: ObjectIdentifier?
+}
 
 /// How the centre panel shows a song or segment.
 enum EditorMode: String, Codable, CaseIterable, Identifiable {
@@ -132,24 +138,6 @@ final class WorkspaceModel: ObservableObject {
     @Published var draftSource: DraftSource?
     @Published var versionsOpen = false
     @Published var backupError: String?
-    private var backupWork: DispatchWorkItem?
-
-    /// Copies the show to this Mac's backup folder a few seconds after changes settle.
-    func scheduleBackup(_ show: Show) {
-        let folder = MachineProfileStore().profile.backupFolder
-        guard !folder.isEmpty else { return }
-        backupWork?.cancel()
-        let work = DispatchWorkItem { [weak self] in
-            do {
-                try ShowBackup.write(show, to: URL(fileURLWithPath: folder, isDirectory: true))
-                self?.backupError = nil
-            } catch {
-                self?.backupError = "Backup to \(folder) failed: \(error.localizedDescription)"
-            }
-        }
-        backupWork = work
-        DispatchQueue.main.asyncAfter(deadline: .now() + 8, execute: work)
-    }
     @Published var cameraDownOpen = false
     /// The log shown in the after-show report.
     @Published var reportLog: SwitchLog?
@@ -158,21 +146,56 @@ final class WorkspaceModel: ObservableObject {
     /// Shot list scrolls here when set (a shot or section id).
     @Published var scrollTarget: String?
 
-    private var read: () -> Show = { Show.starter() }
-    private var write: (Show) -> Void = { _ in }
+    private var readProject: () -> Project = { Project.starter(name: "New Project", frameRate: .r25) }
+    private var writeProject: (Project) -> Void = { _ in }
     private weak var undoManager: UndoManager?
     private var attachedShowID: UUID?
+    private var attachedProjectID: UUID?
+    private var fileURL: URL?
     private var restoring = false
     private var typedNumber = ""
     private var lastDigitTime = Date.distantPast
+    private var saveKeyMonitor: Any?
+    private var backupTimer: Timer?
+    private var lastFolderBackup = Date.distantPast
+
+    /// The playlist this window edits.
+    @Published var activePlaylistID: UUID? {
+        didSet {
+            guard oldValue != activePlaylistID, let pid = attachedProjectID, let id = activePlaylistID else { return }
+            UserDefaults.standard.set(id.uuidString, forKey: "workspace.playlist.\(pid.uuidString)")
+        }
+    }
+    /// An older single-file show that has to be brought into a project before it can be edited.
+    @Published var legacyShow: Show?
+    /// Shown once when a newer backup was restored on opening.
+    @Published var recoveredNotice: String?
+    @Published var projectPropertiesOpen = false
+    /// Drives the New Scene sheet.
+    @Published var newSceneKind: ItemKind?
+    /// Asks whether to renumber scenes after a move.
+    @Published var renumberPromptOpen = false
 
     // MARK: - Document
 
-    func attach(document: Binding<ShowDocument>, undoManager: UndoManager?) {
-        read = { document.wrappedValue.show }
-        write = { document.wrappedValue.show = $0 }
+    func attach(document: Binding<ProjectDocument>, fileURL: URL?, undoManager: UndoManager?) {
+        readProject = { document.wrappedValue.project }
+        writeProject = { document.wrappedValue.project = $0 }
         self.undoManager = undoManager
-        let show = read()
+        self.fileURL = fileURL
+        legacyShow = document.wrappedValue.legacy
+        let project = readProject()
+        if attachedProjectID != project.id {
+            attachedProjectID = project.id
+            let saved = UserDefaults.standard.string(forKey: "workspace.playlist.\(project.id.uuidString)").flatMap(UUID.init)
+            activePlaylistID = project.playlist(saved)?.id ?? project.playlists.first?.id
+            if legacyShow == nil { recoverIfNewerBackup() }
+            startBackups()
+            installSaveSnapshot()
+        } else if project.playlist(activePlaylistID) == nil {
+            activePlaylistID = project.playlists.first?.id
+        }
+        let show = self.show
         crew.onComment = { [weak self] itemID, cueID, author, text in
             self?.edit("Crew Comment") { $0.addComment(itemID: itemID, cueID: cueID, author: author, text: text) }
         }
@@ -188,24 +211,202 @@ final class WorkspaceModel: ObservableObject {
         }
     }
 
-    var show: Show { read() }
-
-    /// Applies an edit as one undoable step.
-    func edit(_ actionName: String, _ change: (inout Show) -> Void) {
-        let before = read()
-        var after = before
-        change(&after)
-        guard after != before else { return }
-        commit(after, replacing: before, actionName: actionName)
+    deinit {
+        if let m = saveKeyMonitor { NSEvent.removeMonitor(m) }
+        backupTimer?.invalidate()
+        if LiveLock.holder == ObjectIdentifier(self) { LiveLock.holder = nil }
     }
 
-    private func commit(_ new: Show, replacing old: Show, actionName: String) {
-        write(new)
+    var project: Project { readProject() }
+
+    /// The rig plus the active playlist's scenes: what the editor and Live engine work on.
+    var show: Show { project.show(playlist: activePlaylistID) }
+
+    /// Applies an edit to the active playlist (and rig) as one undoable step.
+    func edit(_ actionName: String, _ change: (inout Show) -> Void) {
+        let target = activePlaylistID
+        editProject(actionName) { p in
+            guard let pid = target ?? p.playlists.first?.id else { return }
+            var s = p.show(playlist: pid)
+            let original = s
+            change(&s)
+            guard s != original else { return }
+            p.apply(s, playlist: pid)
+        }
+    }
+
+    /// Applies an edit to the whole project as one undoable step. The first edit of each day
+    /// keeps a version of the project as it was.
+    func editProject(_ actionName: String, _ change: (inout Project) -> Void) {
+        let before = readProject()
+        var base = before
+        if needsDailyVersion(before) {
+            let day = Date().formatted(date: .abbreviated, time: .omitted)
+            base.saveVersion(name: "Start of \(day)", automatic: true, reason: "Daily")
+        }
+        var after = base
+        change(&after)
+        var compare = after
+        compare.editedAt = base.editedAt
+        guard compare != base else { return }
+        after.editedAt = Date()
+        commitProject(after, replacing: before, actionName: actionName)
+    }
+
+    private func needsDailyVersion(_ p: Project) -> Bool {
+        !p.versions.contains { $0.reason == "Daily" && Calendar.current.isDateInToday($0.date) }
+    }
+
+    private func commitProject(_ new: Project, replacing old: Project, actionName: String) {
+        writeProject(new)
         undoManager?.registerUndo(withTarget: self) { model in
-            model.commit(old, replacing: new, actionName: actionName)
+            model.commitProject(old, replacing: new, actionName: actionName)
             model.validateSelection()
         }
         undoManager?.setActionName(actionName)
+    }
+
+    /// Keeps a version of the project as it is now (skipped when nothing changed since the last).
+    /// Not an undo step: undoing an edit never removes a safety copy.
+    func snapshot(name: String, reason: String) {
+        var p = readProject()
+        if p.saveVersion(name: name, automatic: true, reason: reason) { writeProject(p) }
+    }
+
+    /// ⌘S keeps a version as well as saving (the save itself is the document's).
+    private func installSaveSnapshot() {
+        guard saveKeyMonitor == nil else { return }
+        saveKeyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            guard let self, event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command,
+                  event.charactersIgnoringModifiers == "s",
+                  NSDocumentController.shared.currentDocument?.fileURL == self.fileURL else { return event }
+            let stamp = Date().formatted(date: .abbreviated, time: .shortened)
+            self.snapshot(name: "Saved \(stamp)", reason: "Saved")
+            return event
+        }
+    }
+
+    // MARK: - Backups and recovery
+
+    /// Every 5 minutes while the project changes, a copy goes to the backup folder (kept forever).
+    private func startBackups() {
+        backupTimer?.invalidate()
+        backupTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { [weak self] _ in self?.backupNow() }
+    }
+
+    func backupNow() {
+        guard legacyShow == nil else { return }
+        let p = readProject()
+        guard p.editedAt > lastFolderBackup else { return }
+        let folder = MachineProfileStore().profile.backupFolder
+        let root = folder.isEmpty ? LibraryModel.backupRoot : URL(fileURLWithPath: folder, isDirectory: true)
+        do {
+            try ProjectBackupFolder.write(p, root: root)
+            lastFolderBackup = p.editedAt
+            backupError = nil
+        } catch {
+            backupError = "Backup to \(root.path) failed: \(error.localizedDescription)"
+        }
+    }
+
+    /// When the backup folder holds a newer copy than the file (OnCue quit before it could save),
+    /// that copy comes back automatically, and the window says so. Undo takes it back out.
+    private func recoverIfNewerBackup() {
+        let p = readProject()
+        let folder = MachineProfileStore().profile.backupFolder
+        let root = folder.isEmpty ? LibraryModel.backupRoot : URL(fileURLWithPath: folder, isDirectory: true)
+        guard let newest = ProjectBackupFolder.newest(for: p, root: root),
+              var recovered = try? ProjectBackupFolder.read(newest.url),
+              recovered.id == p.id, recovered.editedAt > p.editedAt.addingTimeInterval(1) else { return }
+        recovered.versions = p.versions
+        commitProject(recovered, replacing: p, actionName: "Recover Backup")
+        lastFolderBackup = recovered.editedAt
+        recoveredNotice = "Recovered changes from \(newest.date.formatted(date: .abbreviated, time: .standard)): this backup was newer than the saved file. Edit › Undo takes them back out."
+    }
+
+    // MARK: - Playlists
+
+    func selectPlaylist(_ id: UUID) {
+        guard project.playlist(id) != nil else { return }
+        activePlaylistID = id
+    }
+
+    func addPlaylist(named name: String) {
+        let playlist = Playlist(name: name.isEmpty ? "Playlist" : name)
+        editProject("New Playlist") { $0.playlists.append(playlist) }
+        activePlaylistID = playlist.id
+    }
+
+    func renamePlaylist(_ id: UUID, to name: String) {
+        let t = name.trimmingCharacters(in: .whitespaces)
+        guard !t.isEmpty else { return }
+        editProject("Rename Playlist") { p in
+            if let i = p.playlists.firstIndex(where: { $0.id == id }) { p.playlists[i].name = t }
+        }
+    }
+
+    func duplicatePlaylist(_ id: UUID) {
+        guard let original = project.playlist(id) else { return }
+        var copy = Playlist(name: "\(original.name) copy")
+        copy.notes = original.notes
+        copy.items = original.items.map { item in
+            var c = item
+            c.id = UUID()
+            for t in c.tracks.indices {
+                c.tracks[t].id = UUID()
+                for k in c.tracks[t].cues.indices { c.tracks[t].cues[k].id = UUID() }
+            }
+            for s in c.sections.indices { c.sections[s].id = UUID() }
+            return c
+        }
+        editProject("Duplicate Playlist") { p in
+            let at = (p.playlists.firstIndex { $0.id == id } ?? p.playlists.count - 1) + 1
+            p.playlists.insert(copy, at: at)
+        }
+        activePlaylistID = copy.id
+    }
+
+    func deletePlaylist(_ id: UUID) {
+        let p = project
+        guard p.playlists.count > 1, let index = p.playlists.firstIndex(where: { $0.id == id }) else {
+            errorMessage = "A project keeps at least one playlist."
+            return
+        }
+        snapshot(name: "Before deleting playlist “\(p.playlists[index].name)”", reason: "Before delete")
+        editProject("Delete Playlist") { $0.playlists.removeAll { $0.id == id } }
+        let remaining = project.playlists
+        activePlaylistID = remaining[min(index, remaining.count - 1)].id
+    }
+
+    // MARK: - Scenes
+
+    /// Adds a scene built from the project's scene defaults after the selection.
+    func addScene(kind: ItemKind, title: String, number: String, artist: String, status: SceneStatus, startTimecode: String?) {
+        let p = project
+        var scene = p.newScene(title: title.isEmpty ? (kind == .song ? "New Song" : "New Segment") : title,
+                               number: number, kind: kind, startTimecode: startTimecode)
+        scene.artist = artist
+        scene.status = status
+        let after = selectedItemID
+        edit(kind == .song ? "New Song" : "New Segment") { s in
+            let at = s.itemIndex(after).map { $0 + 1 } ?? s.items.count
+            s.items.insert(scene, at: at)
+        }
+        selectedItemID = scene.id
+    }
+
+    /// Where a new scene goes, and the number it would get.
+    func proposedNumber() -> String {
+        let s = show
+        let at = s.itemIndex(selectedItemID).map { $0 + 1 } ?? s.items.count
+        let d = project.properties.sceneDefaults
+        return SceneNumbering.numberForInsert(at: at, in: s.items, mode: d.numberingMode, from: d.numberingFrom)
+    }
+
+    func renumberScenes() {
+        let from = project.properties.sceneDefaults.numberingFrom
+        snapshot(name: "Before renumbering", reason: "Before renumbering")
+        edit("Renumber Scenes") { $0.items = SceneNumbering.renumbered($0.items, from: from) }
     }
 
     // MARK: - Selection
@@ -297,20 +498,13 @@ final class WorkspaceModel: ObservableObject {
     // MARK: - Production and running order
 
     func renameShow(_ name: String) {
-        edit("Rename Production") { $0.name = name }
+        editProject("Rename Project") { $0.name = name }
     }
 
-    func addSong() {
-        var newID: UUID?
-        edit("New Song") { newID = $0.addSong(after: selectedItemID) }
-        if let newID { selectedItemID = newID }
-    }
+    /// New songs and segments ask for their number and start timecode first.
+    func addSong() { newSceneKind = .song }
 
-    func addSegment() {
-        var newID: UUID?
-        edit("New Segment") { newID = $0.addSegment(after: selectedItemID) }
-        if let newID { selectedItemID = newID }
-    }
+    func addSegment() { newSceneKind = .segment }
 
     func renameItem(_ id: UUID, to title: String) {
         let t = title.trimmingCharacters(in: .whitespaces)
@@ -325,6 +519,7 @@ final class WorkspaceModel: ObservableObject {
     }
 
     func deleteItem(_ id: UUID) {
+        if let title = show.item(id)?.title { snapshot(name: "Before deleting “\(title)”", reason: "Before delete") }
         let items = show.items
         let index = items.firstIndex { $0.id == id }
         edit("Delete") { $0.deleteItems([id]) }
@@ -340,6 +535,15 @@ final class WorkspaceModel: ObservableObject {
 
     func moveItems(_ source: IndexSet, _ destination: Int) {
         edit("Reorder Running Order") { $0.moveItems(fromOffsets: source, toOffset: destination) }
+        let d = project.properties.sceneDefaults
+        if d.numberingMode == .automatic, !SceneNumbering.followsOrder(show.items, from: d.numberingFrom) {
+            renumberPromptOpen = true
+        }
+    }
+
+    /// Changes one scene's number, artist, status or frame rate.
+    func updateScene(_ id: UUID, _ actionName: String = "Edit Scene", _ change: @escaping (inout RundownItem) -> Void) {
+        edit(actionName) { $0.updateItem(id) { change(&$0) } }
     }
 
     func updateItem(_ actionName: String, _ change: @escaping (inout RundownItem) -> Void) {
@@ -620,10 +824,16 @@ final class WorkspaceModel: ObservableObject {
     func enterLive() {
         guard let id = selectedItemID ?? show.items.first?.id else { return }
         editingCueID = nil
-        // A version of the script as it went live, kept in the file (skipped when unchanged).
+        // Only one window at a time can be live or control hardware.
+        if let holder = LiveLock.holder, holder != ObjectIdentifier(self) {
+            errorMessage = "Another project window is in Live Mode. Leave Live Mode there first: only one window can control the hardware at a time."
+            return
+        }
+        LiveLock.holder = ObjectIdentifier(self)
+        // A version of the script as it went live, kept in the project (skipped when unchanged).
         let stamp = Date().formatted(date: .abbreviated, time: .shortened)
         let night = show.settings.nightLabel
-        edit("Version Before Live") { $0.saveVersion(name: "Before Live" + (night.isEmpty ? ", \(stamp)" : ", \(night)"), automatic: true) }
+        snapshot(name: "Before Live" + (night.isEmpty ? ", \(stamp)" : ", \(night)"), reason: "Before Live")
         let profile = MachineProfileStore().profile
         let controller = EngineController(show: show, itemID: id, profile: profile)
         controller.connectSwitcher()
@@ -641,6 +851,7 @@ final class WorkspaceModel: ObservableObject {
         controller.shutdown()
         let log = controller.log
         engine = nil
+        if LiveLock.holder == ObjectIdentifier(self) { LiveLock.holder = nil }
         // After a run with cuts or calls, show the report.
         if !log.entries.isEmpty { reportLog = log }
         if selectedItemID != cursor.itemID { selectedItemID = cursor.itemID }
@@ -688,8 +899,7 @@ final class WorkspaceModel: ObservableObject {
                     controller.follow(state)
                 case .show(let data):
                     guard let remote = try? ShowCoding.decode(data), remote.id == self.show.id else { return }
-                    var incoming = remote
-                    incoming.versions = self.show.versions
+                    let incoming = remote
                     if incoming != self.show { self.edit("Update from Main Mac") { $0 = incoming } }
                 case .hello:
                     break

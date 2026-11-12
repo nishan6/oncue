@@ -9,12 +9,13 @@ struct RunningOrderView: View {
     var body: some View {
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: Space.xs) {
-                CommitField(placeholder: "Production name", value: show.name, font: .system(size: 15, weight: .semibold)) { text in
+                CommitField(placeholder: "Project name", value: model.project.name, font: .system(size: 15, weight: .semibold)) { text in
                     let t = text.trimmingCharacters(in: .whitespaces)
                     guard !t.isEmpty else { return false }
-                    model.renameShow(t)
+                    model.editProject("Rename Project") { $0.name = t }
                     return true
                 }
+                PlaylistBar(model: model)
                 MetaLine(parts: [
                     "\(show.items.count) \(show.items.count == 1 ? "item" : "items")",
                     "\(show.cameraCount) \(show.cameraCount == 1 ? "camera" : "cameras")",
@@ -46,6 +47,12 @@ struct RunningOrderView: View {
                         .contextMenu {
                             Button("Rename") { model.renamingItemID = item.id }
                             Button("Duplicate") { model.duplicateItem(item.id) }
+                            Menu("Status") {
+                                ForEach(SceneStatus.allCases) { st in
+                                    Button(st.label) { model.updateScene(item.id) { $0.status = st } }
+                                }
+                            }
+                            Button("Renumber Scenes…") { model.renumberPromptOpen = true }
                             Divider()
                             Button("New Song After") { model.selectedItemID = item.id; model.addSong() }
                             Button("New Segment After") { model.selectedItemID = item.id; model.addSegment() }
@@ -132,10 +139,11 @@ struct RunningOrderRow: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: Space.s) {
-            Text(String(format: "%02d", index))
+            Text(item.number.isEmpty ? String(format: "%02d", index) : item.number)
                 .font(.readout(11, weight: .semibold))
                 .foregroundStyle(selected ? Gallery.ink : Gallery.faint)
-                .frame(width: 18, alignment: .trailing)
+                .lineLimit(1)
+                .frame(minWidth: 18, alignment: .trailing)
                 .padding(.top, 1)
 
             VStack(alignment: .leading, spacing: 4) {
@@ -155,6 +163,7 @@ struct RunningOrderRow: View {
                             .font(.ocBodyStrong)
                             .foregroundStyle(Gallery.ink)
                             .lineLimit(1)
+                        if item.status != .unset { SceneStatusTag(status: item.status) }
                     }
                 }
                 MetaLine(parts: meta, font: .ocMeta, color: Gallery.dim)
@@ -184,6 +193,7 @@ struct RunningOrderRow: View {
 
     private var meta: [String] {
         var parts: [String] = []
+        if !item.artist.isEmpty { parts.append(item.artist) }
         switch item.timeBase {
         case .bars: parts.append("\(Int(item.bpm.rounded())) BPM")
         case .seconds: parts.append(item.kind.label)
@@ -192,5 +202,98 @@ struct RunningOrderRow: View {
         if let runLength { parts.append(clockText(runLength)) }
         if !item.hardOut.isEmpty { parts.append("out \(item.hardOut)") }
         return parts
+    }
+}
+
+
+/// Draft / WIP / OK / NOK on a scene.
+struct SceneStatusTag: View {
+    let status: SceneStatus
+
+    var body: some View {
+        Text(status.label)
+            .font(.system(size: 9, weight: .bold))
+            .foregroundStyle(color)
+            .padding(.horizontal, 4)
+            .padding(.vertical, 1)
+            .overlay(RoundedRectangle(cornerRadius: 3).strokeBorder(color.opacity(0.6), lineWidth: 1))
+            .accessibilityLabel("Status \(status.label)")
+    }
+
+    private var color: Color {
+        switch status {
+        case .ok: return Gallery.next
+        case .nok: return Gallery.tally
+        case .wip: return Gallery.amber
+        case .draft, .unset: return Gallery.dim
+        }
+    }
+}
+
+/// The playlist this window edits, and the playlist operations.
+struct PlaylistBar: View {
+    @ObservedObject var model: WorkspaceModel
+    @State private var naming: Naming?
+    @State private var text = ""
+    @State private var confirmDelete = false
+
+    enum Naming: Identifiable {
+        case new, rename(UUID)
+        var id: String {
+            switch self {
+            case .new: return "new"
+            case .rename(let id): return id.uuidString
+            }
+        }
+    }
+
+    var body: some View {
+        let project = model.project
+        let active = project.playlist(model.activePlaylistID) ?? project.playlists.first
+        Menu {
+            ForEach(project.playlists) { list in
+                Button {
+                    model.selectPlaylist(list.id)
+                } label: {
+                    if list.id == active?.id { Label(list.name, systemImage: "checkmark") } else { Text(list.name) }
+                }
+            }
+            Divider()
+            Button("New Playlist…") { text = ""; naming = .new }
+            if let active {
+                Button("Rename Playlist…") { text = active.name; naming = .rename(active.id) }
+                Button("Duplicate Playlist") { model.duplicatePlaylist(active.id) }
+                Button("Delete Playlist…") { confirmDelete = true }
+                    .disabled(project.playlists.count < 2)
+            }
+        } label: {
+            HStack(spacing: 4) {
+                Image(systemName: "list.bullet.rectangle").font(.system(size: 10))
+                Text(active?.name ?? "Playlist").font(.ocLabel).lineLimit(1)
+                Text("· \(project.playlists.count)").font(.ocMeta).foregroundStyle(Gallery.faint)
+            }
+        }
+        .menuStyle(.borderlessButton)
+        .fixedSize()
+        .padding(.leading, 5)
+        .help("Playlists in this project")
+        .alert(naming.map { if case .new = $0 { return "New Playlist" } else { return "Rename Playlist" } } ?? "",
+               isPresented: Binding(get: { naming != nil }, set: { if !$0 { naming = nil } })) {
+            TextField("Name", text: $text)
+            Button("Cancel", role: .cancel) { naming = nil }
+            Button("OK") {
+                switch naming {
+                case .new: model.addPlaylist(named: text.trimmingCharacters(in: .whitespaces))
+                case .rename(let id): model.renamePlaylist(id, to: text)
+                case nil: break
+                }
+                naming = nil
+            }
+        }
+        .confirmationDialog("Delete “\(active?.name ?? "")”?", isPresented: $confirmDelete) {
+            Button("Delete Playlist", role: .destructive) { if let active { model.deletePlaylist(active.id) } }
+        } message: {
+            Text("Its scenes are removed from the project. A version is kept first, so it can be restored from Versions, and Edit › Undo also brings it back.")
+        }
     }
 }

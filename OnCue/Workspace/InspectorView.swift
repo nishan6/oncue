@@ -319,6 +319,42 @@ private struct ItemInspector: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
+            InspectorGroup(title: "Scene") {
+                SceneFieldRow(label: "Number") {
+                    CommitField(placeholder: "–", value: item.number, width: 90) { text in
+                        model.updateScene(item.id, "Scene Number") { $0.number = text.trimmingCharacters(in: .whitespaces) }
+                        return true
+                    }
+                }
+                SceneFieldRow(label: "Artist") {
+                    CommitField(placeholder: "–", value: item.artist, font: .ocBody) { text in
+                        model.updateScene(item.id, "Scene Artist") { $0.artist = text.trimmingCharacters(in: .whitespaces) }
+                        return true
+                    }
+                }
+                SceneFieldRow(label: "Status") {
+                    Picker("", selection: Binding(get: { item.status },
+                                                  set: { st in model.updateScene(item.id, "Scene Status") { $0.status = st } })) {
+                        ForEach(SceneStatus.allCases) { Text($0.label).tag($0) }
+                    }
+                    .labelsHidden()
+                    .frame(width: 110)
+                }
+                SceneFieldRow(label: "Frame rate") {
+                    Picker("", selection: Binding(get: { item.frameRate?.key ?? "" },
+                                                  set: { key in
+                                                      let rate = key.isEmpty ? nil : FrameRate(key: key)
+                                                      model.updateScene(item.id, "Scene Frame Rate") { $0.frameRate = rate }
+                                                  })) {
+                        Text("Project (\(model.project.frameRate.label))").tag("")
+                        ForEach(FrameRate.presets) { Text($0.label).tag($0.key) }
+                        if let own = item.frameRate, !FrameRate.presets.contains(own) { Text(own.label).tag(own.key) }
+                    }
+                    .labelsHidden()
+                    .frame(width: 150)
+                }
+            }
+
             InspectorGroup(title: "Sections") {
                 if item.sections.isEmpty {
                     Text("None yet").font(.ocMeta).foregroundStyle(Gallery.faint)
@@ -476,5 +512,19 @@ struct CommentRow: View {
         }
         .padding(Space.s)
         .background(Gallery.raised, in: RoundedRectangle(cornerRadius: Radius.s))
+    }
+}
+
+/// A label and its control, in a row.
+private struct SceneFieldRow<Content: View>: View {
+    let label: String
+    @ViewBuilder var content: Content
+
+    var body: some View {
+        HStack(spacing: Space.s) {
+            Text(label).font(.ocMeta).foregroundStyle(Gallery.dim).frame(width: 74, alignment: .leading)
+            content
+            Spacer(minLength: 0)
+        }
     }
 }

@@ -63,9 +63,16 @@ enum ScreenshotRun {
 
         let urls = shots.map { folder.appendingPathComponent($0.file) }
         do {
-            for (show, url) in zip([timeline, split, list, live, compact], urls) { try ShowFileIO.write(show, to: url) }
+            for (show, url) in zip([timeline, split, list, live, compact], urls) {
+                // Each sample show becomes a project whose one playlist keeps the show's id, so the
+                // seeded selections above still apply.
+                var project = Project(migrating: show)
+                project.artist = "Neon Skyline"
+                project.venue = "City Arena"
+                try ProjectPackage.write(project, to: url)
+            }
         } catch {
-            return finish("could not write sample shows: \(error.localizedDescription)", ok: false)
+            return finish("could not write sample projects: \(error.localizedDescription)", ok: false)
         }
 
         open(urls[0]) {
@@ -131,18 +138,29 @@ enum ScreenshotRun {
         let firstThree = show.sortedCameras.prefix(3).map(\.id)
         show.updateMonitor(riser) { $0.cameraIDs = firstThree }
         show.settings.nightLabel = "Night 2, Pune"
-        show.saveVersion(name: "After rehearsal")
-        show.renameItem(show.items[1].id, to: show.items[1].title + " ")
-        show.saveVersion(name: "Before Live, Night 1", automatic: true)
+        var project = Project(migrating: show)
+        project.artist = "Neon Skyline"
+        project.venue = "City Arena"
+        project.showDate = Date(timeIntervalSince1970: 1_795_000_000)
+        project.saveVersion(name: "After rehearsal")
+        project.playlists[0].items[1].title += " "
+        project.saveVersion(name: "Before Live, Night 1", automatic: true, reason: "Before Live")
+        project.playlists[0].items[0].status = .ok
+        project.playlists[0].items[1].status = .wip
+        project.playlists.append(Playlist(name: "Festival cut"))
         let model = WorkspaceModel()
-        model.attach(document: .constant(ShowDocument(show: show)), undoManager: nil)
+        model.attach(document: .constant(ProjectDocument(project: project)), fileURL: nil, undoManager: nil)
         sheetModel = model
+        let library = makeSampleLibrary()
         let sheets: [(String, AnyView, NSSize)] = [
             ("sheet-show-setup.png", AnyView(ShowSetupView(show: show, model: model, tab: .monitors)), NSSize(width: 860, height: 640)),
             ("sheet-preshow-check.png", AnyView(PreShowCheckView(show: show, model: model)), NSSize(width: 640, height: 620)),
             ("sheet-export.png", AnyView(ExportView(show: show, model: model)), NSSize(width: 480, height: 470)),
             ("sheet-tour.png", AnyView(TourView(show: show, model: model)), NSSize(width: 980, height: 640)),
-            ("sheet-versions.png", AnyView(VersionsView(show: show, model: model)), NSSize(width: 560, height: 520)),
+            ("sheet-versions.png", AnyView(VersionsView(project: project, model: model)), NSSize(width: 580, height: 540)),
+            ("sheet-project-properties.png", AnyView(ProjectPropertiesView(project: project, model: model)), NSSize(width: 620, height: 760)),
+            ("sheet-new-scene.png", AnyView(NewSceneSheet(kind: .song, project: project, show: project.show(playlist: project.playlists[0].id), model: model)), NSSize(width: 520, height: 420)),
+            ("library.png", AnyView(LibraryView(library: library)), NSSize(width: 1100, height: 560)),
             ("sheet-settings.png", AnyView(MachineProfileView().environmentObject(MachineProfileModel())), NSSize(width: 540, height: 680)),
         ]
         for (k, (_, view, size)) in sheets.enumerated() {
@@ -169,6 +187,35 @@ enum ScreenshotRun {
             }
             done(saved)
         }
+    }
+
+    /// A projects folder with a few projects (one pinned, one archived) and an older show file.
+    private static func makeSampleLibrary() -> LibraryModel {
+        let dir = folder.appendingPathComponent("library", isDirectory: true)
+        try? FileManager.default.removeItem(at: dir)
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        func add(_ name: String, artist: String, venue: String, rate: FrameRate, days: Double, scenes: Int) -> URL? {
+            var p = Project.starter(name: name, frameRate: rate)
+            p.artist = artist
+            p.venue = venue
+            p.showDate = Date().addingTimeInterval(days * 86_400)
+            p.editedAt = Date().addingTimeInterval(-days.magnitude * 3_600)
+            for k in 1..<max(scenes, 1) {
+                p.playlists[0].items.append(p.newScene(title: "Scene \(k + 1)", number: "\(k + 1)", kind: .song))
+            }
+            return try? ProjectLibrary.create(p, in: dir)
+        }
+        let arena = add("Live at the Arena", artist: "Neon Skyline", venue: "City Arena", rate: .r25, days: 3, scenes: 14)
+        _ = add("Club Tour 2026", artist: "Rito Riba & Band", venue: "Various", rate: .r50, days: 12, scenes: 18)
+        _ = add("Awards Night", artist: "Corporate", venue: "Grand Ballroom", rate: .r2997DF, days: 30, scenes: 9)
+        let old = add("Spring Showcase", artist: "Various", venue: "Open Air", rate: .r25, days: -120, scenes: 6)
+        var legacy = Show.sample()
+        legacy.name = "Rehearsal script (older file)"
+        try? ShowFileIO.write(legacy, to: dir.appendingPathComponent("Rehearsal script.oncue"))
+        if let arena { try? ProjectLibrary.setPinned(true, arena, in: dir) }
+        if let old { try? ProjectLibrary.setArchived(true, old, in: dir) }
+        UserDefaults.standard.set(dir.path, forKey: LibraryModel.folderKey)
+        return LibraryModel()
     }
 
     private static func finish(_ message: String, ok: Bool) {

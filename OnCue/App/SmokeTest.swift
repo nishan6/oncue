@@ -6,8 +6,8 @@ import OnCueCore
 /// Runs inside the real app, after launch, through NSDocumentController (the same document system
 /// SwiftUI's DocumentGroup uses for File > New, Save and Open):
 ///   1. the machine profile is created in <folder>/profile,
-///   2. a new untitled show window opens,
-///   3. the show is saved to <folder>/smoke.oncue,
+///   2. a new untitled project window opens,
+///   3. the project is saved to <folder>/smoke.oncue (a package with project.json and Backups/),
 ///   4. the window is closed,
 ///   5. the file is reopened in a window, and its contents are checked.
 /// Results go to stdout and <folder>/smoke-result.txt. Exit code 0 = pass.
@@ -41,10 +41,10 @@ enum SmokeTest {
         do {
             doc = try dc.openUntitledDocumentAndDisplay(true)
         } catch {
-            return finish(false, "could not create a new show: \(error.localizedDescription)")
+            return finish(false, "could not create a new project: \(error.localizedDescription)")
         }
         let typeName = doc.fileType ?? dc.defaultType ?? "com.nishanpani.oncue.show"
-        log("new show opened (type \(typeName), windows: \(doc.windowControllers.count))")
+        log("new project opened (type \(typeName), windows: \(doc.windowControllers.count))")
 
         let url = folder.appendingPathComponent("smoke.oncue")
         try? FileManager.default.removeItem(at: url)
@@ -58,16 +58,23 @@ enum SmokeTest {
     }
 
     private static func step2(_ url: URL) {
-        let saved: Show
+        let saved: Project
         do {
-            saved = try ShowFileIO.read(url)
+            guard case .project(let p) = try ProjectPackage.read(at: url) else {
+                return finish(false, "saved file is not a project")
+            }
+            saved = p
         } catch {
             return finish(false, "saved file could not be read back: \(error.localizedDescription)")
         }
-        guard saved.schemaVersion == Show.currentSchemaVersion, saved.itemCount >= 1, saved.cameraCount >= 1 else {
-            return finish(false, "saved file has unexpected contents (format \(saved.schemaVersion), items \(saved.itemCount), cameras \(saved.cameraCount))")
+        var isDir: ObjCBool = false
+        FileManager.default.fileExists(atPath: url.path, isDirectory: &isDir)
+        let backups = (try? FileManager.default.contentsOfDirectory(atPath: url.appendingPathComponent("Backups").path))?.count ?? 0
+        guard isDir.boolValue, saved.schemaVersion == Project.currentSchemaVersion, saved.sceneCount >= 1,
+              saved.cameras.count >= 1, backups >= 1 else {
+            return finish(false, "saved project has unexpected contents (package \(isDir.boolValue), format \(saved.schemaVersion), scenes \(saved.sceneCount), cameras \(saved.cameras.count), backups \(backups))")
         }
-        log("saved file verified: format \(saved.schemaVersion), \(saved.itemCount) item(s), \(saved.cameraCount) camera(s)")
+        log("saved project verified: package, format \(saved.schemaVersion), \(saved.playlists.count) playlist(s), \(saved.sceneCount) scene(s), \(saved.cameras.count) camera(s), \(backups) backup(s) inside, \(saved.frameRate.label) fps")
 
         NSDocumentController.shared.openDocument(withContentsOf: url, display: true) { doc, _, error in
             if let error { return finish(false, "reopen failed: \(error.localizedDescription)") }

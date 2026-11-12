@@ -6,14 +6,25 @@ import OnCueCore
 struct OnCueApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var machine = MachineProfileModel()
+    @StateObject private var library = LibraryModel()
 
     var body: some Scene {
-        DocumentGroup(newDocument: ShowDocument()) { file in
+        // The Project Library is the first window: OnCue opens on it.
+        Window("Projects", id: LibraryModel.windowID) {
+            LibraryView(library: library)
+        }
+        .defaultSize(width: 1040, height: 640)
+
+        DocumentGroup(newDocument: ProjectDocument()) { file in
             ShowWorkspaceView(document: file.$document, fileURL: file.fileURL)
                 .environmentObject(machine)
+                .environmentObject(library)
         }
         .defaultSize(width: 1440, height: 900)
-        .commands { WorkspaceCommands() }
+        .commands {
+            WorkspaceCommands()
+            LibraryCommands()
+        }
 
         Settings {
             MachineProfileView()
@@ -23,6 +34,14 @@ struct OnCueApp: App {
 }
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        // Open on the Project Library, not the system's document Open panel.
+        UserDefaults.standard.register(defaults: ["NSShowAppCentricOpenPanelInsteadOfUntitledFile": false])
+    }
+
+    /// No untitled project at launch or when the last window closes: the Library is the way in.
+    func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool { false }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         // `OnCue --smoke-test <folder>` is used by CI to prove the app launches and that a show can
         // be created, saved, closed and reopened through the real document system.
@@ -56,5 +75,28 @@ final class MachineProfileModel: ObservableObject {
             saveError = "This Mac's settings could not be saved: \(error.localizedDescription)"
         }
         profile = store.profile
+    }
+}
+
+
+/// Window › Project Library (⇧⌘L) and File › Project Properties (⌥⌘,).
+struct LibraryCommands: Commands {
+    @Environment(\.openWindow) private var openWindow
+    @FocusedObject private var workspace: WorkspaceModel?
+
+    var body: some Commands {
+        CommandGroup(before: .windowList) {
+            Button("Project Library") { openWindow(id: LibraryModel.windowID) }
+                .keyboardShortcut("l", modifiers: [.command, .shift])
+            Divider()
+        }
+        CommandGroup(after: .saveItem) {
+            Divider()
+            Button("Project Properties…") { workspace?.projectPropertiesOpen = true }
+                .keyboardShortcut(",", modifiers: [.command, .option])
+                .disabled(workspace == nil)
+            Button("Versions…") { workspace?.versionsOpen = true }
+                .disabled(workspace == nil)
+        }
     }
 }
