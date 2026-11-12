@@ -427,3 +427,27 @@ final class MTCTests: XCTestCase {
         XCTAssertNil(d.fullFrame([0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7]))
     }
 }
+
+final class LTCOutputTests: XCTestCase {
+    func testGeneratorStreamDecodes() {
+        var gen = LTCGenerator(sampleRate: 48_000, fps: 25)
+        var t = 3600.0 + 59 * 60 + 59 + 20.0 / 25   // 01:59:59:20, so the hour rolls over
+        // Rendered in odd-sized chunks, as an audio callback would.
+        var samples: [Float] = []
+        for size in [512, 333, 1024, 4096, 17, 9000, 20000, 30000] {
+            samples += gen.render(count: size) { defer { t += 1.0 / 25 }; return t }
+        }
+        var decoder = LTCDecoder(sampleRate: 48_000, fps: 25)
+        let frames = decoder.process(samples)
+        XCTAssertGreaterThan(frames.count, 10)
+        for (a, b) in zip(frames, frames.dropFirst()) {
+            XCTAssertEqual(b.seconds(fps: 25) - a.seconds(fps: 25), 1.0 / 25, accuracy: 1e-6, "consecutive frames")
+        }
+        XCTAssertTrue(frames.contains { $0.hours == 2 && $0.minutes == 0 && $0.seconds == 0 && $0.frames == 0 })
+    }
+
+    func testFrameForTime() {
+        let f = LTCGenerator.frame(at: 86_400 + 61.5, fps: 30)
+        XCTAssertEqual([f.hours, f.minutes, f.seconds, f.frames], [0, 1, 1, 15], "wraps at midnight")
+    }
+}

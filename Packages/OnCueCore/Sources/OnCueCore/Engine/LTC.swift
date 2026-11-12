@@ -263,7 +263,12 @@ public struct AudioInputDevice: Identifiable, Hashable {
     public let channels: Int
 
     /// Audio devices with at least one input channel.
-    public static func all() -> [AudioInputDevice] {
+    public static func all() -> [AudioInputDevice] { devices(scope: kAudioObjectPropertyScopeInput) }
+
+    /// Audio devices with at least one output channel (for LTC out).
+    public static func allOutputs() -> [AudioInputDevice] { devices(scope: kAudioObjectPropertyScopeOutput) }
+
+    private static func devices(scope: AudioObjectPropertyScope) -> [AudioInputDevice] {
         var address = AudioObjectPropertyAddress(mSelector: kAudioHardwarePropertyDevices,
                                                  mScope: kAudioObjectPropertyScopeGlobal,
                                                  mElement: kAudioObjectPropertyElementMain)
@@ -272,7 +277,7 @@ public struct AudioInputDevice: Identifiable, Hashable {
         var ids = [AudioDeviceID](repeating: 0, count: Int(size) / MemoryLayout<AudioDeviceID>.size)
         guard AudioObjectGetPropertyData(AudioObjectID(kAudioObjectSystemObject), &address, 0, nil, &size, &ids) == noErr else { return [] }
         return ids.compactMap { id in
-            let channels = inputChannels(id)
+            let channels = channelCount(id, scope: scope)
             guard channels > 0, let uid = string(id, kAudioDevicePropertyDeviceUID),
                   let name = string(id, kAudioObjectPropertyName) else { return nil }
             return AudioInputDevice(uid: uid, name: name, channels: channels)
@@ -288,9 +293,9 @@ public struct AudioInputDevice: Identifiable, Hashable {
         return value as String
     }
 
-    private static func inputChannels(_ id: AudioDeviceID) -> Int {
+    private static func channelCount(_ id: AudioDeviceID, scope: AudioObjectPropertyScope) -> Int {
         var address = AudioObjectPropertyAddress(mSelector: kAudioDevicePropertyStreamConfiguration,
-                                                 mScope: kAudioObjectPropertyScopeInput,
+                                                 mScope: scope,
                                                  mElement: kAudioObjectPropertyElementMain)
         var size: UInt32 = 0
         guard AudioObjectGetPropertyDataSize(id, &address, 0, nil, &size) == noErr, size > 0 else { return 0 }

@@ -19,6 +19,9 @@ public struct MachineProfile: Codable, Equatable {
     // LTC
     public var ltcDeviceUID: String = ""
     public var ltcChannel: Int = 0
+    /// LTC output (master timecode): "off", "timeOfDay" or "song" (see LTCOutputMode), and the device.
+    public var ltcOutputMode: String = "off"
+    public var ltcOutputDevice: String = ""
 
     // Network
     public var crewPort: Int = 8080
@@ -65,6 +68,8 @@ public struct MachineProfile: Codable, Equatable {
         primaryHost = try c.value("primaryHost", "")
         logFolder = try c.value("logFolder", "")
         backupFolder = try c.value("backupFolder", "")
+        ltcOutputMode = try c.value("ltcOutputMode", "off")
+        ltcOutputDevice = try c.value("ltcOutputDevice", "")
     }
 }
 

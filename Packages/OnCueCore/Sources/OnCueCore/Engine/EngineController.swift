@@ -110,6 +110,7 @@ public final class EngineController: ObservableObject {
     private var logDirty = false
     private var lastLogSave: Double = 0
     private let oscControl = OSCControlListener()
+    private var ltcOut: LTCOutput?
     private var tapTempo = TapTempo()
     /// Tempo from tap tempo, overriding the item's tempo for the internal clock until the item changes.
     public private(set) var tempoOverride: Double?
@@ -140,6 +141,11 @@ public final class EngineController: ObservableObject {
         }
         prepareTiming()
         setupControls()
+        if let mode = LTCOutputMode(rawValue: profile.ltcOutputMode), mode != .off {
+            let out = LTCOutput(mode: mode)
+            out.start(deviceUID: profile.ltcOutputDevice, fps: show.settings.ltcFPS)
+            ltcOut = out
+        }
         startTimer()
         publish()
     }
@@ -148,6 +154,7 @@ public final class EngineController: ObservableObject {
         timer?.invalidate()
         devices.values.forEach { $0.disconnect() }
         ltcInput?.stop()
+        ltcOut?.stop()
     }
 
     /// Where switch logs go: the folder set in This Mac's settings, or Documents/OnCue Logs.
@@ -172,6 +179,8 @@ public final class EngineController: ObservableObject {
         midi?.onControl = nil
         midi = nil
         oscControl.stop()
+        ltcOut?.stop()
+        ltcOut = nil
         ltcInput?.stop()
         ltcInput = nil
     }
@@ -657,6 +666,11 @@ public final class EngineController: ObservableObject {
             timecode: timecode, switchers: switchers, hints: hints,
             logFile: logURL?.lastPathComponent, cutCount: log.cuts.count,
             following: following, mainLinked: mainLinked)
+        if let ltcOut, let item = engine.item {
+            let start = TimeFormat.parseTimecode(item.ltcStart, fps: show.settings.ltcFPS) ?? 3600
+            ltcOut.set(seconds: start + item.seconds(for: engine.position - (item.timeBase == .order ? 1 : 0)),
+                       running: engine.transport == .running && signal && !engine.freeMode)
+        }
         if new != status { status = new }
         updateLEDs()
         pushCompanionVariables(now: now)

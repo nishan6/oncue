@@ -8,6 +8,7 @@ struct MachineProfileView: View {
     @State private var midiSources: [String] = MIDISources.names()
     @State private var midiDestinations: [String] = MIDIDestinations.names()
     @State private var audioInputs: [AudioInputDevice] = AudioInputDevice.all()
+    @State private var audioOutputs: [AudioInputDevice] = AudioInputDevice.allOutputs()
 
     var body: some View {
         Form {
@@ -50,6 +51,19 @@ struct MachineProfileView: View {
                 }
                 Stepper("Channel \(machine.profile.ltcChannel + 1)", value: Binding(get: { machine.profile.ltcChannel },
                                                                                 set: { v in machine.update { $0.ltcChannel = max(0, v) } }), in: 0...63)
+                Picker("LTC output", selection: Binding(get: { machine.profile.ltcOutputMode },
+                                                        set: { v in machine.update { $0.ltcOutputMode = v } })) {
+                    ForEach(LTCOutputMode.allCases) { Text($0.label).tag($0.rawValue) }
+                }
+                if machine.profile.ltcOutputMode != "off" {
+                    Picker("Output device", selection: Binding(get: { machine.profile.ltcOutputDevice },
+                                                               set: { v in machine.update { $0.ltcOutputDevice = v } })) {
+                        Text("Default output").tag("")
+                        ForEach(audioOutputs) { Text($0.name).tag($0.uid) }
+                    }
+                    Text("Master timecode on both channels of the device while Live Mode is on, at the show's frame rate. Use a spare output: it is loud.")
+                        .font(.footnote).foregroundStyle(.secondary)
+                }
             }
             Section("Companion and Stream Deck") {
                 field("Companion host", \.companionHost, prompt: "127.0.0.1")
