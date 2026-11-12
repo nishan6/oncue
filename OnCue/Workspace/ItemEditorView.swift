@@ -19,13 +19,13 @@ struct ItemEditorView: View {
             switch model.editorMode {
             case .timeline:
                 GeometryReader { geo in
-                    let chrome = TimelineLayout.chromeHeight(for: item, hidden: model.hiddenLanes)
+                    let chrome = TimelineLayout.chromeHeight(for: item, show: show, hidden: model.hiddenLanes)
                     TimelineEditorView(show: show, item: item, model: model,
                                        shotHeight: min(max(geo.size.height - chrome - 8, 84), 300))
                 }
             case .split:
                 TimelineEditorView(show: show, item: item, model: model, shotHeight: Self.splitShotHeight)
-                    .frame(height: TimelineLayout.chromeHeight(for: item, hidden: model.hiddenLanes) + Self.splitShotHeight + 6)
+                    .frame(height: TimelineLayout.chromeHeight(for: item, show: show, hidden: model.hiddenLanes) + Self.splitShotHeight + 6)
                 Rectangle().fill(Gallery.hairline).frame(height: 1)
                 ShotListView(show: show, item: item, groups: groups, rows: rows, model: model)
             case .list:

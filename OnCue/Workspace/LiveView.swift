@@ -257,7 +257,7 @@ struct SwitcherPopover: View {
                     Button("Connect") { engine.connectSwitcher() }.buttonStyle(QuietButtonStyle(prominent: true))
                 }
                 Spacer()
-                Button("Switcher Settings…") { model.exitLive(); model.switcherSetupOpen = true }
+                Button("Show Setup…") { model.exitLive(); model.switcherSetupOpen = true }
                     .buttonStyle(QuietButtonStyle())
             }
         }

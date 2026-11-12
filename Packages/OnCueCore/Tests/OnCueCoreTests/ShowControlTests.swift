@@ -271,3 +271,34 @@ final class ShowControlTests: XCTestCase {
         XCTAssertEqual(show.shotRows(forItem: next).map(\.cue.cameraID), [cam4, cam1], "only two moved")
     }
 }
+
+final class SetupEditingTests: XCTestCase {
+    func testOutputsSwitchersAndTheirTracks() {
+        var show = Show.starter()
+        let song = show.items[0].id
+        let led = show.addSwitcher(name: "LED", kind: .atem, role: .output)
+        let ledOutput = show.outputs.last!.id
+        XCTAssertNotNil(show.item(song)?.shotsTrack(for: ledOutput), "a separate output gets a shots track")
+        let shot = show.addShot(inItem: song, outputID: ledOutput, cameraID: show.cameras[0].id, at: 4)!
+        XCTAssertEqual(show.shotSpans(forItem: song, outputID: ledOutput).map(\.row.cue.id), [shot])
+        XCTAssertEqual(show.outputID(ofCue: shot, inItem: song), ledOutput)
+        XCTAssertTrue(show.shotRows(forItem: song).isEmpty, "not on the main track")
+
+        show.setExtraInput(camera: show.cameras[0].id, switcherID: led, input: 9)
+        XCTAssertEqual(show.cameras[0].extraInputs, [CameraInput(switcherID: led, input: 9)])
+        show.setExtraInput(camera: show.cameras[0].id, switcherID: led, input: 0)
+        XCTAssertTrue(show.cameras[0].extraInputs.isEmpty)
+
+        let sub = show.addSwitcher(name: "Sub", kind: .simulator, role: .sub)
+        XCTAssertEqual(show.switcher(sub)?.parentID, show.mainOutput?.switcherID)
+        show.updateCamera(show.cameras[1].id) { $0.switcherID = sub }
+        show.deleteSwitcher(sub)
+        XCTAssertEqual(show.cameras[1].switcherID, show.mainOutput?.switcherID, "cameras move back to the main switcher")
+
+        show.deleteSwitcher(led)
+        XCTAssertEqual(show.outputs.count, 1)
+        XCTAssertNil(show.item(song)?.shotsTrack(for: ledOutput))
+        show.deleteSwitcher(show.mainOutput!.switcherID!)
+        XCTAssertEqual(show.switchers.count, 1, "the main switcher cannot be deleted")
+    }
+}

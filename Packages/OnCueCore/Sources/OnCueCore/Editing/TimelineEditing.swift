@@ -100,6 +100,9 @@ extension Show {
         case .lyrics: name = "Lyrics"
         case .notes: name = "Notes"
         case .fx: name = "FX"
+        case .control: name = "Control"
+        case .osc: name = "OSC"
+        case .ptz: name = "PTZ"
         default: name = kind.label
         }
         let track = Track(kind: kind, name: name, switcherID: kind == .fx ? mainOutput?.switcherID : nil)
@@ -122,7 +125,13 @@ extension Show {
               let t = items[i].tracks.firstIndex(where: { $0.id == trackID }) else { return nil }
         var cue = Cue(at: max(0, position))
         cue.text = text
-        if kind == .fx { cue.fxAction = .macro }
+        switch kind {
+        case .fx: cue.fxAction = .macro
+        case .control: cue.controlAction = .loadNext
+        case .osc: cue.oscTargetID = oscTargets.first?.id
+        case .ptz: cue.ptzCameraID = ptzCameras.first?.id
+        default: break
+        }
         items[i].tracks[t].cues.append(cue)
         items[i].tracks[t].sortCues()
         if items[i].timeBase == .order { normalizeOrder(itemIndex: i) }
@@ -150,5 +159,101 @@ extension Show {
         guard let item = item(id), item.timeBase != .order else { return nil }
         let end = itemEnd(forItem: id)
         return end > 0 ? item.seconds(for: end) : nil
+    }
+}
+
+// MARK: - Other outputs' shots tracks
+
+extension Show {
+    /// Shots of a separate output (its own track) as timeline blocks.
+    public func shotSpans(forItem id: UUID, outputID: UUID) -> [ShotSpan] {
+        guard let item = item(id), let track = item.shotsTrack(for: outputID) else { return [] }
+        let cues = track.cues.sorted { $0.at < $1.at }
+        let end = itemEnd(forItem: id)
+        let timed = item.timeBase != .order
+        return cues.enumerated().map { k, cue in
+            let next = k + 1 < cues.count ? cues[k + 1].at : end
+            let row = ShotRow(cue: cue, number: k + 1, sectionID: item.section(at: cue.at)?.id,
+                              lengthSeconds: timed && k + 1 < cues.count ? item.seconds(for: next - cue.at) : nil, issues: [])
+            return ShotSpan(row: row, start: cue.at, end: max(next, cue.at))
+        }
+    }
+
+    /// Adds a shot to a separate output's own track.
+    @discardableResult
+    public mutating func addShot(inItem id: UUID, outputID: UUID, cameraID: UUID?, at position: Double) -> UUID? {
+        ensureShotTracks()
+        guard let i = itemIndex(id), let t = items[i].tracks.firstIndex(where: { $0.kind == .shots && $0.outputID == outputID }) else { return nil }
+        let cue = Cue(at: max(0, position), cameraID: cameraID)
+        items[i].tracks[t].cues.append(cue)
+        items[i].tracks[t].sortCues()
+        if items[i].timeBase == .order { normalizeOrder(itemIndex: i) }
+        return cue.id
+    }
+
+    /// The output a shots-track cue belongs to (nil for other tracks).
+    public func outputID(ofCue cueID: UUID, inItem id: UUID) -> UUID? {
+        item(id)?.tracks.first { $0.kind == .shots && $0.cues.contains { $0.id == cueID } }?.outputID
+    }
+}
+
+// MARK: - Switchers and outputs
+
+extension Show {
+    @discardableResult
+    public mutating func addSwitcher(name: String, kind: SwitcherKind, role: SwitcherRole) -> UUID {
+        var config = SwitcherConfig(name: name, kind: kind, role: role)
+        if role == .sub { config.parentID = mainOutput?.switcherID }
+        switchers.append(config)
+        if role == .output {
+            outputs.append(OutputConfig(name: name, switcherID: config.id))
+            ensureShotTracks()
+        }
+        return config.id
+    }
+
+    /// Deletes a switcher. Outputs on it are removed with their tracks; cameras on it move to the
+    /// main switcher; sub-switchers fed into it lose their parent.
+    public mutating func deleteSwitcher(_ id: UUID) {
+        guard id != mainOutput?.switcherID else { return }
+        let removedOutputs = Set(outputs.filter { $0.switcherID == id }.map(\.id))
+        outputs.removeAll { removedOutputs.contains($0.id) }
+        for i in items.indices {
+            items[i].tracks.removeAll { $0.kind == .shots && removedOutputs.contains($0.outputID ?? UUID()) }
+        }
+        for c in cameras.indices {
+            if cameras[c].switcherID == id { cameras[c].switcherID = mainOutput?.switcherID }
+            cameras[c].extraInputs.removeAll { $0.switcherID == id }
+        }
+        for s in switchers.indices where switchers[s].parentID == id { switchers[s].parentID = nil }
+        switchers.removeAll { $0.id == id }
+    }
+
+    @discardableResult
+    public mutating func addOutput(name: String, switcherID: UUID?) -> UUID {
+        let output = OutputConfig(name: name, switcherID: switcherID ?? mainOutput?.switcherID)
+        outputs.append(output)
+        ensureShotTracks()
+        return output.id
+    }
+
+    public mutating func updateOutput(_ id: UUID, _ change: (inout OutputConfig) -> Void) {
+        guard let i = outputs.firstIndex(where: { $0.id == id }) else { return }
+        change(&outputs[i])
+    }
+
+    /// Deletes a separate output and its shots tracks (the main output stays).
+    public mutating func deleteOutput(_ id: UUID) {
+        guard id != mainOutput?.id else { return }
+        outputs.removeAll { $0.id == id }
+        for i in items.indices { items[i].tracks.removeAll { $0.kind == .shots && $0.outputID == id } }
+    }
+
+    /// Sets (or clears, with input 0) a camera's input on an additional switcher.
+    public mutating func setExtraInput(camera: UUID, switcherID: UUID, input: Int) {
+        updateCamera(camera) { cam in
+            cam.extraInputs.removeAll { $0.switcherID == switcherID }
+            if input > 0 { cam.extraInputs.append(CameraInput(switcherID: switcherID, input: input)) }
+        }
     }
 }

@@ -53,22 +53,33 @@ enum TimelineLayout {
     static let hiddenLane: CGFloat = 16
     static let tail: CGFloat = 260
 
-    static func lanes(for item: RundownItem) -> [TimelineLane] {
+    static let outputLane: CGFloat = 60
+
+    /// The tracks shown for an item: separate outputs with their own track, then the script tracks.
+    /// OSC and PTZ appear once the show has targets or cameras for them (or cues on them).
+    static func lanes(for item: RundownItem, show: Show) -> [TimelineLane] {
         var all: [TimelineLane] = [.sections, .shots]
+        for output in show.outputs.dropFirst() where !output.mirrorMain {
+            all.append(.output(output.id))
+        }
         if item.kind == .song { all.append(.lyrics) }
-        all += [.notes, .fx]
+        all += [.notes, .fx, .control]
+        let has: (TrackKind) -> Bool = { kind in item.tracks.contains { $0.kind == kind && !$0.cues.isEmpty } }
+        if !show.oscTargets.isEmpty || has(.osc) { all.append(.osc) }
+        if !show.ptzCameras.isEmpty || has(.ptz) { all.append(.ptz) }
         return all
     }
 
     static func height(of lane: TimelineLane, hidden: Bool, shotHeight: CGFloat) -> CGFloat {
         if lane == .shots { return shotHeight }
         if hidden { return hiddenLane }
+        if case .output = lane { return outputLane }
         return lane == .sections ? sections : cueLane
     }
 
     /// Height of everything except the vision track.
-    static func chromeHeight(for item: RundownItem, hidden: Set<TimelineLane>) -> CGFloat {
-        let lanes = lanes(for: item).filter { $0 != .shots }
+    static func chromeHeight(for item: RundownItem, show: Show, hidden: Set<TimelineLane>) -> CGFloat {
+        let lanes = lanes(for: item, show: show).filter { $0 != .shots }
         let others = lanes.reduce(0) { $0 + height(of: $1, hidden: hidden.contains($1), shotHeight: 0) + 1 }
         return toolbar + ruler + 1 + others + 1
     }
@@ -79,19 +90,26 @@ extension TimelineLane {
         switch self {
         case .sections: return "square.split.diagonal"
         case .shots: return "video.fill"
+        case .output: return "rectangle.on.rectangle"
         case .lyrics: return "quote.opening"
         case .notes: return "note.text"
         case .fx: return "sparkles"
+        case .control: return "forward.end.alt"
+        case .osc: return "antenna.radiowaves.left.and.right"
+        case .ptz: return "camera.metering.center.weighted"
         }
     }
 
     var tone: Color {
         switch self {
         case .sections: return Gallery.dim
-        case .shots: return Gallery.ink
+        case .shots, .output: return Gallery.ink
         case .lyrics: return Gallery.lyric
         case .notes: return Gallery.note
         case .fx: return Gallery.fx
+        case .control: return Color(hex: "#C7A3F0")
+        case .osc: return Color(hex: "#F0A3C4")
+        case .ptz: return Color(hex: "#A3E0B5")
         }
     }
 }
@@ -165,7 +183,7 @@ struct TimelineEditorView: View {
         let metrics = TimelineMetrics(item: item, unit: TimelineMetrics.baseUnit(for: item) * CGFloat(model.zoom))
         let end = show.itemEnd(forItem: item.id)
         let width = metrics.x(end) + TimelineLayout.tail
-        let lanes = TimelineLayout.lanes(for: item)
+        let lanes = TimelineLayout.lanes(for: item, show: show)
         GeometryReader { geo in
             VStack(spacing: 0) {
                 TimelineToolbar(item: item, model: model) {
@@ -345,7 +363,7 @@ struct TrackHeaderColumn: View {
         VStack(alignment: .leading, spacing: 1) {
             Color.clear.frame(height: TimelineLayout.ruler)
             ForEach(lanes) { lane in
-                TrackHeaderCell(lane: lane, subtitle: lane == .shots ? (show.mainOutput?.name ?? "Program") : nil,
+                TrackHeaderCell(lane: lane, title: title(lane), subtitle: subtitle(lane),
                                 details: lane == .shots ? visionDetails : [],
                                 hidden: model.hiddenLanes.contains(lane), locked: model.lockedLanes.contains(lane),
                                 height: TimelineLayout.height(of: lane, hidden: model.hiddenLanes.contains(lane), shotHeight: shotHeight),
@@ -355,6 +373,22 @@ struct TrackHeaderColumn: View {
         .frame(width: TimelineLayout.headerWidth, alignment: .topLeading)
         .background(Gallery.hairline)
         .background(Gallery.panel)
+    }
+
+    private func title(_ lane: TimelineLane) -> String {
+        if case .output(let id) = lane { return show.output(id)?.name ?? "Output" }
+        return lane.label
+    }
+
+    private func subtitle(_ lane: TimelineLane) -> String? {
+        switch lane {
+        case .shots: return show.mainOutput?.name ?? "Program"
+        case .output(let id):
+            guard let output = show.output(id) else { return nil }
+            let switcher = show.switcher(output.switcherID)?.name ?? "No switcher"
+            return output.bus == .aux ? "\(switcher) · Aux \(output.auxIndex + 1)" : switcher
+        default: return nil
+        }
     }
 
     /// Script facts for the vision track header: shots, cameras used, average shot length.
@@ -376,6 +410,7 @@ struct TrackHeaderColumn: View {
 
 struct TrackHeaderCell: View {
     let lane: TimelineLane
+    var title: String? = nil
     let subtitle: String?
     var details: [String] = []
     let hidden: Bool
@@ -413,7 +448,7 @@ struct TrackHeaderCell: View {
                     .font(.system(size: 11, weight: .medium))
                     .foregroundStyle(Gallery.dim)
                     .frame(width: 14)
-                Text(lane.label).font(.system(size: 12.5, weight: .semibold)).foregroundStyle(Gallery.ink)
+                Text(title ?? lane.label).font(.system(size: 12.5, weight: .semibold)).foregroundStyle(Gallery.ink).lineLimit(1)
                 Spacer(minLength: 0)
                 controls
             }
@@ -446,11 +481,11 @@ struct TrackHeaderCell: View {
                     .frame(width: 14)
             }
             VStack(alignment: .leading, spacing: 0) {
-                Text(lane.label)
+                Text(title ?? lane.label)
                     .font(hidden ? .ocMeta : .ocLabel)
                     .foregroundStyle(hidden ? Gallery.faint : Gallery.ink)
                     .lineLimit(1)
-                    .fixedSize()
+                    .layoutPriority(1)
                 if let subtitle, !hidden {
                     Text(subtitle).font(.ocMeta).foregroundStyle(Gallery.faint).lineLimit(1)
                 }
@@ -535,7 +570,11 @@ struct TimelineCanvas: View {
             case .shots:
                 ShotLane(show: show, item: item, spans: spans, metrics: metrics, width: width, height: shotHeight,
                          locked: locked, model: model, focus: focus)
-            case .lyrics, .notes, .fx:
+            case .output(let outputID):
+                ShotLane(show: show, item: item, spans: show.shotSpans(forItem: item.id, outputID: outputID), metrics: metrics,
+                         width: width, height: TimelineLayout.outputLane, locked: locked, model: model, focus: focus,
+                         outputID: outputID)
+            case .lyrics, .notes, .fx, .control, .osc, .ptz:
                 CueLane(kind: lane.trackKind ?? .notes, lane: lane, show: show, item: item, metrics: metrics, width: width,
                         locked: locked, model: model, focus: focus)
             }
@@ -669,16 +708,29 @@ struct ShotLane: View {
     let locked: Bool
     @ObservedObject var model: WorkspaceModel
     let focus: () -> Void
+    /// A separate output's own track (nil: the main output).
+    var outputID: UUID? = nil
     @State private var drag: TimelineDrag?
 
+    private var isMain: Bool { outputID == nil }
+
+    private func isSelected(_ id: UUID) -> Bool {
+        isMain ? model.selectedShotIDs.contains(id) : model.selectedCueID == id
+    }
+
+    private func select(_ id: UUID, extending: Bool = false) {
+        if isMain { model.selectShot(id, extending: extending) } else { model.selectedCueID = id }
+    }
+
     var body: some View {
-        let nextID = nextShotID
+        let nextID = isMain ? nextShotID : nil
         ZStack(alignment: .topLeading) {
             LaneBackground(item: item, metrics: metrics, width: width)
                 .gesture(SpatialTapGesture(count: 2).onEnded { value in
                     focus()
                     guard !locked else { return }
-                    model.addShot(at: Show.snap(metrics.position(value.location.x), for: item))
+                    let position = Show.snap(metrics.position(value.location.x), for: item)
+                    if let outputID { model.addOutputShot(outputID, at: position) } else { model.addShot(at: position) }
                 })
                 .onTapGesture {
                     model.clearSelection()
@@ -713,7 +765,7 @@ struct ShotLane: View {
         let editing = Binding(get: { model.editingCueID == span.id },
                               set: { if !$0, model.editingCueID == span.id { model.editingCueID = nil } })
         return ShotBlock(span: span, item: item, camera: show.camera(span.row.cue.cameraID), width: w, height: height - 8,
-                         selected: model.selectedShotIDs.contains(span.id), isNext: isNext)
+                         selected: isSelected(span.id), isNext: isNext)
             .overlay(alignment: .trailing) {
                 if let next, !locked { trimHandle(span: span, next: next, afterNext: afterNext) }
             }
@@ -724,17 +776,17 @@ struct ShotLane: View {
             .offset(x: x + dx, y: 4)
             .zIndex(drag?.id == span.id ? 1 : 0)
             .onTapGesture(count: 2) {
-                model.selectShot(span.id, extending: false)
+                select(span.id)
                 if !locked { model.editingCueID = span.id }
             }
             .onTapGesture {
-                model.selectShot(span.id, extending: extendSelectionModifiers)
+                select(span.id, extending: extendSelectionModifiers)
                 focus()
             }
             .gesture(DragGesture(minimumDistance: 4)
                 .onChanged { value in
                     if drag == nil {
-                        if !model.selectedShotIDs.contains(span.id) { model.selectShot(span.id, extending: false) }
+                        if !isSelected(span.id) { select(span.id) }
                         focus()
                     }
                     drag = TimelineDrag(id: span.id, kind: .move, dx: value.translation.width)
@@ -771,21 +823,25 @@ struct ShotLane: View {
         Menu("Camera") {
             ForEach(show.sortedCameras) { cam in
                 Button("\(cam.number)  \(cam.displayName)") {
-                    model.selectShot(span.id, extending: false)
-                    model.useCamera(cam.id, newShot: false)
+                    model.updateCue(span.id, "Set Camera") { $0.cameraID = cam.id }
                 }
             }
         }
         Button(span.row.cue.transition == .cut ? "Make It a Mix" : "Make It a Cut") {
-            model.setTransition(span.row.cue.transition == .cut ? .auto : .cut, for: [span.id])
+            let t: TransitionKind = span.row.cue.transition == .cut ? .auto : .cut
+            model.updateCue(span.id, "Change Transition") { $0.transition = t }
         }
         Button("Edit…") {
-            model.selectShot(span.id, extending: false)
+            select(span.id)
             model.editingCueID = span.id
         }
         Divider()
-        Button("Duplicate") { model.selectShot(span.id, extending: false); model.duplicateSelectedShots() }
-        Button("Delete", role: .destructive) { model.selectShot(span.id, extending: false); model.deleteSelectedShots() }
+        if isMain {
+            Button("Duplicate") { model.selectShot(span.id, extending: false); model.duplicateSelectedShots() }
+            Button("Delete", role: .destructive) { model.selectShot(span.id, extending: false); model.deleteSelectedShots() }
+        } else {
+            Button("Delete", role: .destructive) { model.selectedCueID = span.id; model.deleteSelectedCue() }
+        }
     }
 }
 
@@ -979,15 +1035,14 @@ struct ShotQuickEditor: View {
                 Menu(show.camera(cue.cameraID).map { "\($0.number)  \($0.displayName)" } ?? "Choose a camera") {
                     ForEach(show.sortedCameras) { cam in
                         Button("\(cam.number)  \(cam.label)") {
-                            model.selectShot(cue.id, extending: false)
-                            model.useCamera(cam.id, newShot: false)
+                            model.updateCue(cue.id, "Set Camera") { $0.cameraID = cam.id }
                         }
                     }
                 }
                 .fixedSize()
                 Spacer()
                 Picker("Transition", selection: Binding(get: { show.cue(cue.id, inItem: model.selectedItemID ?? UUID())?.transition ?? cue.transition },
-                                                         set: { model.setTransition($0, for: [cue.id]) })) {
+                                                         set: { t in model.updateCue(cue.id, "Change Transition") { $0.transition = t } })) {
                     Text("Cut").tag(TransitionKind.cut)
                     Text("Mix").tag(TransitionKind.auto)
                 }
@@ -1155,7 +1210,7 @@ struct CueLane: View {
         return HStack(spacing: 4) {
             Text(label(cue))
                 .font(.system(size: 11, weight: .medium))
-                .foregroundStyle(cue.text.isEmpty && kind != .fx ? Gallery.faint : Gallery.ink)
+                .foregroundStyle(cue.text.isEmpty && (kind == .lyrics || kind == .notes) ? Gallery.faint : Gallery.ink)
                 .lineLimit(1)
             Spacer(minLength: 0)
         }
@@ -1168,7 +1223,7 @@ struct CueLane: View {
         .overlay(RoundedRectangle(cornerRadius: 3).strokeBorder(Color.white, lineWidth: selected ? 1.5 : 0))
         .overlay(RoundedRectangle(cornerRadius: 5).inset(by: -2).stroke(Gallery.selection, lineWidth: selected ? 2 : 0))
         .popover(isPresented: editing, arrowEdge: .bottom) {
-            CueQuickEditor(kind: kind, cue: cue, model: model)
+            CueQuickEditor(kind: kind, cue: cue, show: show, model: model)
         }
         .contextMenu {
             Button("Edit…") { model.selectedCueID = cue.id; model.editingCueID = cue.id }
@@ -1198,15 +1253,7 @@ struct CueLane: View {
     }
 
     private func label(_ cue: Cue) -> String {
-        switch kind {
-        case .fx:
-            let action = cue.fxAction?.label ?? "FX"
-            return cue.text.isEmpty ? action : "\(action): \(cue.text)"
-        case .lyrics:
-            return cue.text.isEmpty ? "Lyric" : cue.text
-        default:
-            return cue.text.isEmpty ? "Note" : cue.text
-        }
+        show.cueLabel(cue, kind: kind)
     }
 
     private func help(_ cue: Cue) -> String {
@@ -1214,63 +1261,19 @@ struct CueLane: View {
     }
 }
 
-/// Double-click a lyric, note or FX cue: edit it in place.
+/// Double-click a lyric, note, FX, control, OSC or PTZ cue: edit it in place.
 struct CueQuickEditor: View {
     let kind: TrackKind
     let cue: Cue
+    let show: Show
     @ObservedObject var model: WorkspaceModel
-    @State private var text = ""
-    @State private var action: FXAction = .macro
-    @FocusState private var focused: Bool
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title).font(.umd(11)).foregroundStyle(Gallery.dim)
-            if kind == .fx {
-                Picker("Action", selection: $action) {
-                    ForEach(FXAction.allCases) { Text($0.label).tag($0) }
-                }
-                .labelsHidden()
-                Text("FX cues are part of the script. They run on the switcher once the show engine is built.")
-                    .font(.system(size: 11))
-                    .foregroundStyle(Gallery.faint)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            TextField(placeholder, text: $text)
-                .textFieldStyle(.roundedBorder)
-                .focused($focused)
-                .onSubmit { model.editingCueID = nil }
+        VStack(alignment: .leading, spacing: Space.s) {
+            Text(kind.cueTitle).sectionLabel()
+            CueFields(kind: kind, cue: cue, show: show, model: model)
         }
-        .padding(14)
-        .frame(width: 300)
-        .onAppear {
-            text = cue.text
-            action = cue.fxAction ?? .macro
-            DispatchQueue.main.async { focused = true }
-        }
-        .onDisappear {
-            let t = text, a = action, isFX = kind == .fx
-            guard t != cue.text || (isFX && a != cue.fxAction) else { return }
-            model.updateCue(cue.id, "Edit \(title)") { c in
-                c.text = t
-                if isFX { c.fxAction = a }
-            }
-        }
-    }
-
-    private var title: String {
-        switch kind {
-        case .lyrics: return "Lyric"
-        case .fx: return "FX cue"
-        default: return "Note"
-        }
-    }
-
-    private var placeholder: String {
-        switch kind {
-        case .lyrics: return "Lyric line"
-        case .fx: return "Label, e.g. band name lower third"
-        default: return "Note for the gallery"
-        }
+        .padding(Space.l)
+        .frame(width: 360)
     }
 }

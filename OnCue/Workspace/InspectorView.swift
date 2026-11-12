@@ -15,7 +15,7 @@ struct InspectorView: View {
                     let selected = rows.filter { model.selectedShotIDs.contains($0.id) }
                     if let cueID = model.selectedCueID, let cue = show.cue(cueID, inItem: item.id),
                        let kind = show.trackKind(ofCue: cueID, inItem: item.id) {
-                        CueInspector(item: item, cue: cue, kind: kind, model: model)
+                        CueInspector(show: show, item: item, cue: cue, kind: kind, model: model)
                     } else if selected.count == 1, let row = selected.first {
                         ShotInspector(show: show, item: item, row: row, next: next(after: row, in: rows), model: model)
                     } else if selected.count > 1 {
@@ -364,21 +364,24 @@ private struct FlowChips: View {
     }
 }
 
-/// A lyric line, note or FX cue selected on the timeline.
+/// A lyric, note, FX, control, OSC or PTZ cue, or a shot on a separate output, selected on the timeline.
 private struct CueInspector: View {
+    let show: Show
     let item: RundownItem
     let cue: Cue
     let kind: TrackKind
     @ObservedObject var model: WorkspaceModel
 
     var body: some View {
+        let outputID = kind == .shots ? show.outputID(ofCue: cue.id, inItem: item.id) : nil
+        let lane: TimelineLane = outputID.map { .output($0) } ?? .forKind(kind)
         VStack(alignment: .leading, spacing: 0) {
             InspectorGroup(title: nil) {
                 HStack(spacing: Space.s) {
                     Image(systemName: lane.symbol).font(.system(size: 14, weight: .medium)).foregroundStyle(lane.tone)
-                    Text(title).font(.ocTitle).foregroundStyle(Gallery.ink)
+                    Text(kind.cueTitle).font(.ocTitle).foregroundStyle(Gallery.ink)
                 }
-                MetaLine(parts: [lane.label + " track", item.format(cue.at)])
+                MetaLine(parts: [outputID.flatMap { show.output($0)?.name } ?? lane.label + " track", item.format(cue.at)])
             }
             .overlay(alignment: .top) { Rectangle().fill(lane.tone).frame(height: 3) }
 
@@ -391,46 +394,39 @@ private struct CueInspector: View {
                     }
                 }
             }
-            if kind == .fx {
-                InspectorGroup(title: "Action") {
-                    Picker("Action", selection: Binding(get: { cue.fxAction ?? .macro },
-                                                         set: { a in model.updateCue(cue.id, "Change FX Action") { $0.fxAction = a } })) {
-                        ForEach(FXAction.allCases) { Text($0.label).tag($0) }
+            if kind == .shots {
+                InspectorGroup(title: "Camera") {
+                    Picker("Camera", selection: Binding(get: { cue.cameraID },
+                                                        set: { id in model.updateCue(cue.id, "Set Camera") { $0.cameraID = id } })) {
+                        Text("No camera").tag(UUID?.none)
+                        ForEach(show.sortedCameras) { Text("\($0.number)  \($0.label)").tag(UUID?.some($0.id)) }
                     }
                     .labelsHidden()
-                    Text("Stored in the script. FX cues run on the switcher once the show engine is built.")
-                        .font(.ocMeta)
-                        .foregroundStyle(Gallery.faint)
-                        .fixedSize(horizontal: false, vertical: true)
+                    PropertyRow(label: "Transition") {
+                        Picker("Transition", selection: Binding(get: { cue.transition },
+                                                                 set: { t in model.updateCue(cue.id, "Change Transition") { $0.transition = t } })) {
+                            Text("Cut").tag(TransitionKind.cut)
+                            Text("Mix").tag(TransitionKind.auto)
+                        }
+                        .labelsHidden()
+                        .pickerStyle(.segmented)
+                        .frame(maxWidth: 150)
+                    }
+                    CommitTextArea(placeholder: "Description", value: cue.text) { text in
+                        model.updateCue(cue.id, "Edit Shot") { $0.text = text }
+                    }
                 }
-            }
-            InspectorGroup(title: kind == .lyrics ? "Lyric line" : (kind == .fx ? "Label" : "Note")) {
-                CommitTextArea(placeholder: kind == .lyrics ? "Lyric line" : "Text", value: cue.text) { text in
-                    model.updateCue(cue.id, "Edit \(title)") { $0.text = text }
+            } else {
+                InspectorGroup(title: "Cue") {
+                    CueFields(kind: kind, cue: cue, show: show, model: model)
                 }
             }
             HStack {
                 Spacer()
-                Button(role: .destructive) { model.deleteSelectedCue() } label: { Label("Delete \(title)", systemImage: "trash") }
+                Button(role: .destructive) { model.deleteSelectedCue() } label: { Label("Delete \(kind.cueTitle)", systemImage: "trash") }
                     .buttonStyle(QuietButtonStyle(destructive: true))
             }
             .padding(Space.l)
-        }
-    }
-
-    private var lane: TimelineLane {
-        switch kind {
-        case .lyrics: return .lyrics
-        case .fx: return .fx
-        default: return .notes
-        }
-    }
-
-    private var title: String {
-        switch kind {
-        case .lyrics: return "Lyric"
-        case .fx: return "FX cue"
-        default: return "Note"
         }
     }
 }

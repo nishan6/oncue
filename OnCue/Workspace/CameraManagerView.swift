@@ -88,15 +88,27 @@ struct CameraManagerView: View {
                         return true
                     }
                 }
-                TableColumn("Switcher input") { cam in
+                TableColumn("Switcher") { cam in
+                    Picker("Switcher", selection: Binding(get: { cam.switcherID ?? show.mainOutput?.switcherID },
+                                                          set: { id in model.updateCamera(cam.id, "Change Camera Switcher") { $0.switcherID = id } })) {
+                        ForEach(show.switchers) { Text($0.name).tag(UUID?.some($0.id)) }
+                    }
+                    .labelsHidden()
+                }
+                .width(140)
+                TableColumn("Input") { cam in
                     CommitField(placeholder: "Input", value: "\(cam.input)", font: .readout(13), width: 50) { text in
                         guard let v = Int(text), v > 0 else { return false }
                         model.updateCamera(cam.id, "Change Switcher Input") { $0.input = v }
                         return true
                     }
-                    .help("The switcher input this camera arrives on. Used later when OnCue drives the switcher.")
+                    .help("The input this camera arrives on, on its switcher.")
                 }
-                .width(110)
+                .width(56)
+                TableColumn("Also on") { cam in
+                    ExtraInputsButton(show: show, camera: cam, model: model)
+                }
+                .width(120)
                 TableColumn("Shots") { cam in
                     Text("\(show.shotCount(forCamera: cam.id))")
                         .font(.readout(12))
@@ -131,5 +143,49 @@ struct CameraManagerView: View {
     private func deleteSelection() {
         for id in selection { model.deleteCamera(id) }
         selection = []
+    }
+}
+
+
+/// The same camera on other switchers (split or DA'd to separate outputs).
+struct ExtraInputsButton: View {
+    let show: Show
+    let camera: Camera
+    @ObservedObject var model: WorkspaceModel
+    @State private var open = false
+
+    var body: some View {
+        let others = show.switchers.filter { $0.id != (camera.switcherID ?? show.mainOutput?.switcherID) }
+        Button {
+            open = true
+        } label: {
+            Text(camera.extraInputs.isEmpty ? (others.isEmpty ? "–" : "Add…")
+                 : camera.extraInputs.compactMap { e in show.switcher(e.switcherID).map { "\($0.name) \(e.input)" } }.joined(separator: ", "))
+                .font(.ocMeta)
+                .foregroundStyle(camera.extraInputs.isEmpty ? Gallery.faint : Gallery.ink)
+                .lineLimit(1)
+        }
+        .buttonStyle(.plain)
+        .disabled(others.isEmpty)
+        .popover(isPresented: $open, arrowEdge: .bottom) {
+            VStack(alignment: .leading, spacing: Space.s) {
+                Text("Camera \(camera.number) on other switchers").sectionLabel()
+                ForEach(others) { sw in
+                    HStack {
+                        Text(sw.name).font(.ocBody).frame(width: 160, alignment: .leading)
+                        CommitField(placeholder: "Input", value: camera.extraInputs.first { $0.switcherID == sw.id }.map { "\($0.input)" } ?? "",
+                                    font: .readout(13), width: 60) { text in
+                            let t = text.trimmingCharacters(in: .whitespaces)
+                            let v = t.isEmpty ? 0 : (Int(t) ?? -1)
+                            guard v >= 0 else { return false }
+                            model.edit("Change Camera Input") { $0.setExtraInput(camera: camera.id, switcherID: sw.id, input: v) }
+                            return true
+                        }
+                    }
+                }
+                Text("Leave empty if the camera does not reach that switcher.").font(.ocMeta).foregroundStyle(Gallery.faint)
+            }
+            .padding(Space.l)
+        }
     }
 }

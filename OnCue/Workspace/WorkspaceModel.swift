@@ -21,26 +21,59 @@ enum EditorMode: String, Codable, CaseIterable, Identifiable {
     }
 }
 
-/// Timeline tracks below the shots. Each can be hidden (its cues are kept) or locked.
-enum TimelineLane: String, Codable, CaseIterable, Identifiable, Hashable {
-    case sections, shots, lyrics, notes, fx
-    var id: String { rawValue }
+/// Timeline tracks: sections, the main output's shots, each separate output's shots, and the
+/// lyrics, notes, FX, control, OSC and PTZ tracks. Each can be hidden (cues are kept) or locked.
+enum TimelineLane: Codable, Identifiable, Hashable {
+    case sections, shots, output(UUID), lyrics, notes, fx, control, osc, ptz
+
+    var id: String {
+        if case .output(let id) = self { return "output-\(id.uuidString)" }
+        return "\(self)"
+    }
+
     var label: String {
         switch self {
         case .sections: return "Sections"
         case .shots: return "Vision"
+        case .output: return "Output"
         case .lyrics: return "Lyrics"
         case .notes: return "Notes"
         case .fx: return "FX"
+        case .control: return "Control"
+        case .osc: return "OSC"
+        case .ptz: return "PTZ"
         }
     }
+
     var trackKind: TrackKind? {
         switch self {
         case .sections: return nil
-        case .shots: return .shots
+        case .shots, .output: return .shots
         case .lyrics: return .lyrics
         case .notes: return .notes
         case .fx: return .fx
+        case .control: return .control
+        case .osc: return .osc
+        case .ptz: return .ptz
+        }
+    }
+
+    var isShots: Bool {
+        switch self {
+        case .shots, .output: return true
+        default: return false
+        }
+    }
+
+    static func forKind(_ kind: TrackKind) -> TimelineLane {
+        switch kind {
+        case .lyrics: return .lyrics
+        case .fx: return .fx
+        case .control: return .control
+        case .osc: return .osc
+        case .ptz: return .ptz
+        case .shots: return .shots
+        case .notes: return .notes
         }
     }
 }
@@ -364,9 +397,23 @@ final class WorkspaceModel: ObservableObject {
         switch kind {
         case .lyrics: name = "New Lyric"
         case .fx: name = "New FX Cue"
+        case .control: name = "New Control Cue"
+        case .osc: name = "New OSC Cue"
+        case .ptz: name = "New PTZ Cue"
         default: name = "New Note"
         }
         edit(name) { newID = $0.addTrackCue(kind, inItem: id, at: position) }
+        if let newID {
+            selectedCueID = newID
+            editingCueID = newID
+        }
+    }
+
+    /// New shot on a separate output's own track, selected with its editor open.
+    func addOutputShot(_ outputID: UUID, at position: Double) {
+        guard let id = selectedItemID else { return }
+        var newID: UUID?
+        edit("New Shot") { newID = $0.addShot(inItem: id, outputID: outputID, cameraID: nil, at: position) }
         if let newID {
             selectedCueID = newID
             editingCueID = newID

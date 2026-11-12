@@ -31,7 +31,7 @@ struct WorkspaceCommands: Commands {
                 SwitchLogPicker.choose { workspace?.reportLog = $0 } failure: { workspace?.errorMessage = $0 }
             }
             Divider()
-            Button("Switcher…") { workspace?.switcherSetupOpen = true }
+            Button("Show Setup…") { workspace?.switcherSetupOpen = true }
                 .keyboardShortcut("s", modifiers: [.command, .option])
             Button("Cameras…") { workspace?.cameraManagerOpen = true }
                 .keyboardShortcut("c", modifiers: [.command, .option])
