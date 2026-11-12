@@ -1,8 +1,8 @@
-# CI results for 8315866
+# CI results for 17656b5
 
-- Commit: 83158665564c8c58418086d5803332aeb644950b
-- Run: https://github.com/nishan6/oncue/actions/runs/43221930510
-- Date (UTC): 2026-11-12T12:54:08Z
+- Commit: 17656b57523c38ce2a1977b12d32cc0eb3353ca9
+- Run: https://github.com/nishan6/oncue/actions/runs/43222280811
+- Date (UTC): 2026-11-12T12:57:29Z
 
 | Step | Result |
 | --- | --- |
@@ -27,38 +27,54 @@ Version: 2.46.0
 ```
 ## Test summary
 ```
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:424:65: error: cannot convert value of type 'Int' to expected element type 'Array<UInt8>.ArrayLiteralElement' (aka 'UInt8')
+    |                                                                 `- error: cannot convert value of type 'Int' to expected element type 'Array<UInt8>.ArrayLiteralElement' (aka 'UInt8')
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:426:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+    |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:434:13: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+    |             `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:424:65: error: cannot convert value of type 'Int' to expected element type 'Array<UInt8>.ArrayLiteralElement' (aka 'UInt8')
+    |                                                                 `- error: cannot convert value of type 'Int' to expected element type 'Array<UInt8>.ArrayLiteralElement' (aka 'UInt8')
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:426:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+    |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:434:13: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+    |             `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:424:65: error: cannot convert value of type 'Int' to expected element type 'Array<UInt8>.ArrayLiteralElement' (aka 'UInt8')
+    |                                                                 `- error: cannot convert value of type 'Int' to expected element type 'Array<UInt8>.ArrayLiteralElement' (aka 'UInt8')
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:426:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+    |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:434:13: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+    |             `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:424:65: error: cannot convert value of type 'Int' to expected element type 'Array<UInt8>.ArrayLiteralElement' (aka 'UInt8')
+    |                                                                 `- error: cannot convert value of type 'Int' to expected element type 'Array<UInt8>.ArrayLiteralElement' (aka 'UInt8')
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:426:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+    |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:434:13: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+    |             `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:424:65: error: cannot convert value of type 'Int' to expected element type 'Array<UInt8>.ArrayLiteralElement' (aka 'UInt8')
+    |                                                                 `- error: cannot convert value of type 'Int' to expected element type 'Array<UInt8>.ArrayLiteralElement' (aka 'UInt8')
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:426:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+    |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:434:13: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+    |             `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:424:65: error: cannot convert value of type 'Int' to expected element type 'Array<UInt8>.ArrayLiteralElement' (aka 'UInt8')
+    |                                                                 `- error: cannot convert value of type 'Int' to expected element type 'Array<UInt8>.ArrayLiteralElement' (aka 'UInt8')
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:426:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+    |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:434:13: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+    |             `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:424:65: error: cannot convert value of type 'Int' to expected element type 'Array<UInt8>.ArrayLiteralElement' (aka 'UInt8')
+    |                                                                 `- error: cannot convert value of type 'Int' to expected element type 'Array<UInt8>.ArrayLiteralElement' (aka 'UInt8')
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:426:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+    |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:434:13: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+    |             `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
 error: fatalError
 ```
 ## Build result
 ```
 ** BUILD FAILED **
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/OnCue/Workspace/MediaPlayer.swift:263:47: error: 'TempoEstimate' initializer is inaccessible due to 'internal' protection level
 ```
 ## Warnings (0)
 ```
