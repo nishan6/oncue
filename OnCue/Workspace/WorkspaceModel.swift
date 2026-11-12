@@ -110,7 +110,9 @@ final class WorkspaceModel: ObservableObject {
     @Published var zoom: Double = 1 { didSet { persistState() } }
     @Published var hiddenLanes: Set<TimelineLane> = [] { didSet { persistState() } }
     /// The show engine while in Live Mode, nil in Edit Mode.
-    @Published var engine: EngineController?
+    @Published var engine: EngineController? { didSet { crew.follow(engine) } }
+    /// The crew page for this window.
+    let crew = CrewController()
     var isLive: Bool { engine != nil }
     /// Used by the screenshot run: shows that open straight into Live Mode at a shot index.
     static var openLive: [UUID: Int] = [:]
@@ -140,6 +142,10 @@ final class WorkspaceModel: ObservableObject {
         write = { document.wrappedValue.show = $0 }
         self.undoManager = undoManager
         let show = read()
+        crew.onComment = { [weak self] itemID, cueID, author, text in
+            self?.edit("Crew Comment") { $0.addComment(itemID: itemID, cueID: cueID, author: author, text: text) }
+        }
+        crew.showChanged(show)
         if attachedShowID != show.id {
             attachedShowID = show.id
             restoreState(for: show)

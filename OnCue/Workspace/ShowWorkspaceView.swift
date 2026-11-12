@@ -47,6 +47,7 @@ struct ShowWorkspaceView: View {
                 }
             }
             ToolbarItemGroup(placement: .primaryAction) {
+                CrewPageButton(crew: model.crew)
                 if let engine = model.engine {
                     LiveToolbarStatus(show: show, engine: engine, model: model)
                 } else {
@@ -87,7 +88,9 @@ struct ShowWorkspaceView: View {
         .onChange(of: show) { _, newShow in
             model.validateSelection()
             model.engine?.update(show: newShow)
+            model.crew.showChanged(newShow)
         }
+        .onDisappear { model.crew.stop() }
     }
 }
 

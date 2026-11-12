@@ -219,6 +219,15 @@ private struct ShotInspector: View {
                 }
             }
 
+            let shotComments = show.comments.filter { $0.cueID == row.id }
+            if !shotComments.isEmpty {
+                InspectorGroup(title: "Crew comments") {
+                    ForEach(shotComments) { comment in
+                        CommentRow(comment: comment, model: model)
+                    }
+                }
+            }
+
             if !row.issues.isEmpty {
                 InspectorGroup(title: "Check") {
                     ForEach(row.issues, id: \.self) { issue in
@@ -428,5 +437,44 @@ private struct CueInspector: View {
             }
             .padding(Space.l)
         }
+    }
+}
+
+/// A comment from the crew page or script review: resolve it or delete it.
+struct CommentRow: View {
+    let comment: Comment
+    @ObservedObject var model: WorkspaceModel
+
+    var body: some View {
+        HStack(alignment: .top, spacing: Space.s) {
+            Button {
+                model.edit(comment.resolved ? "Reopen Comment" : "Resolve Comment") {
+                    $0.setCommentResolved(comment.id, !comment.resolved)
+                }
+            } label: {
+                Image(systemName: comment.resolved ? "checkmark.circle.fill" : "circle")
+                    .foregroundStyle(comment.resolved ? Gallery.next : Gallery.faint)
+            }
+            .buttonStyle(.plain)
+            .help(comment.resolved ? "Reopen" : "Mark as resolved")
+            VStack(alignment: .leading, spacing: 2) {
+                Text(comment.text)
+                    .font(.ocBody)
+                    .foregroundStyle(comment.resolved ? Gallery.faint : Gallery.ink)
+                    .strikethrough(comment.resolved, color: Gallery.faint)
+                    .fixedSize(horizontal: false, vertical: true)
+                MetaLine(parts: [comment.author, comment.date.formatted(date: .abbreviated, time: .shortened)])
+            }
+            Spacer(minLength: 0)
+            Button {
+                model.edit("Delete Comment") { $0.deleteComment(comment.id) }
+            } label: {
+                Image(systemName: "xmark").font(.system(size: 10, weight: .semibold)).foregroundStyle(Gallery.faint)
+            }
+            .buttonStyle(.plain)
+            .help("Delete comment")
+        }
+        .padding(Space.s)
+        .background(Gallery.raised, in: RoundedRectangle(cornerRadius: Radius.s))
     }
 }
