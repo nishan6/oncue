@@ -12,7 +12,10 @@ struct InspectorView: View {
                 if let item = show.item(model.selectedItemID) {
                     let rows = show.shotRows(forItem: item.id)
                     let selected = rows.filter { model.selectedShotIDs.contains($0.id) }
-                    if selected.count == 1, let row = selected.first {
+                    if let cueID = model.selectedCueID, let cue = show.cue(cueID, inItem: item.id),
+                       let kind = show.trackKind(ofCue: cueID, inItem: item.id) {
+                        CueInspector(item: item, cue: cue, kind: kind, model: model)
+                    } else if selected.count == 1, let row = selected.first {
                         ShotInspector(show: show, item: item, row: row, next: next(after: row, in: rows), model: model)
                     } else if selected.count > 1 {
                         MultiShotInspector(show: show, rows: selected, model: model)
@@ -58,8 +61,7 @@ private struct ShotInspector: View {
         let camera = show.camera(row.cue.cameraID)
         VStack(alignment: .leading, spacing: 16) {
             HStack(alignment: .center, spacing: 12) {
-                CameraTile(number: camera?.number, name: camera?.displayName ?? "No camera",
-                           operatorName: camera?.operatorName ?? "", tally: .current, size: 76)
+                CameraTile(camera: camera, missing: row.cue.cameraID != nil && camera == nil, tally: .current, size: 76)
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Shot \(row.number)")
                         .font(.title(20))
@@ -206,7 +208,7 @@ private struct ItemInspector: View {
             Text(item.title)
                 .font(.title(18))
                 .foregroundStyle(Gallery.ink)
-            Text("Select a shot to edit it. With the shot list selected, press Return for a new shot and type a camera number to set it.")
+            Text("Select a shot to edit it. Double-click a track on the timeline to add a shot, lyric, note or FX cue. Return adds a shot, and typing a number sets its camera.")
                 .font(.system(size: 12))
                 .foregroundStyle(Gallery.dim)
                 .fixedSize(horizontal: false, vertical: true)
@@ -251,6 +253,69 @@ private struct ItemInspector: View {
     }
 }
 
+/// A lyric line, note or FX cue selected on the timeline.
+private struct CueInspector: View {
+    let item: RundownItem
+    let cue: Cue
+    let kind: TrackKind
+    @ObservedObject var model: WorkspaceModel
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(spacing: 8) {
+                RoundedRectangle(cornerRadius: 1).fill(lane.tone).frame(width: 4, height: 22)
+                Text(title).font(.title(20)).foregroundStyle(Gallery.ink)
+            }
+            InspectorSection(title: "Position") {
+                CommitField(placeholder: "Position", value: item.format(cue.at), font: .readout(14, weight: .semibold), width: 90) { text in
+                    guard let pos = item.parse(text), pos >= 0 else { return false }
+                    model.moveCue(cue.id, to: pos)
+                    return true
+                }
+            }
+            if kind == .fx {
+                InspectorSection(title: "Action") {
+                    Picker("Action", selection: Binding(get: { cue.fxAction ?? .macro },
+                                                         set: { a in model.updateCue(cue.id, "Change FX Action") { $0.fxAction = a } })) {
+                        ForEach(FXAction.allCases) { Text($0.label).tag($0) }
+                    }
+                    .labelsHidden()
+                    Text("Stored in the script. FX cues run on the switcher once the show engine is built.")
+                        .font(.system(size: 11))
+                        .foregroundStyle(Gallery.faint)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            InspectorSection(title: kind == .lyrics ? "Lyric line" : (kind == .fx ? "Label" : "Note")) {
+                CommitTextArea(placeholder: kind == .lyrics ? "Lyric line" : "Text", value: cue.text) { text in
+                    model.updateCue(cue.id, "Edit \(title)") { $0.text = text }
+                }
+            }
+            HStack {
+                Spacer()
+                Button("Delete \(title)", role: .destructive) { model.deleteSelectedCue() }
+            }
+            .controlSize(.small)
+        }
+    }
+
+    private var lane: TimelineLane {
+        switch kind {
+        case .lyrics: return .lyrics
+        case .fx: return .fx
+        default: return .notes
+        }
+    }
+
+    private var title: String {
+        switch kind {
+        case .lyrics: return "Lyric"
+        case .fx: return "FX cue"
+        default: return "Note"
+        }
+    }
+}
+
 /// Multi-line text that commits when editing ends (one undo step per edit, not per keystroke).
 struct CommitTextArea: View {
     let placeholder: String
@@ -267,8 +332,8 @@ struct CommitTextArea: View {
             .lineLimit(2...8)
             .focused($focused)
             .padding(8)
-            .background(Gallery.raised, in: RoundedRectangle(cornerRadius: 4))
-            .overlay(RoundedRectangle(cornerRadius: 4).strokeBorder(focused ? Gallery.steel : Gallery.hairline, lineWidth: 1))
+            .background(Gallery.raised, in: RoundedRectangle(cornerRadius: 5))
+            .overlay(RoundedRectangle(cornerRadius: 5).strokeBorder(focused ? Gallery.steel : Gallery.hairline, lineWidth: 1))
             .onAppear { draft = value }
             .onChange(of: value) { _, new in if !focused { draft = new } }
             .onChange(of: focused) { _, f in if !f && draft != value { commit(draft) } }

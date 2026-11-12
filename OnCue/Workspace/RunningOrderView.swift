@@ -37,6 +37,7 @@ struct RunningOrderView: View {
                 ForEach(Array(show.items.enumerated()), id: \.element.id) { index, item in
                     RunningOrderRow(index: index + 1, item: item,
                                     shotCount: show.shotRows(forItem: item.id).count,
+                                    strip: ShotStrip.segments(show: show, item: item),
                                     selected: model.selectedItemID == item.id,
                                     renaming: model.renamingItemID == item.id,
                                     model: model)
@@ -89,10 +90,44 @@ struct RunningOrderView: View {
     }
 }
 
+/// The item's shots as a thin bar of camera colours, proportional to their length.
+struct ShotStrip: View {
+    struct Segment: Hashable {
+        let start: Double
+        let length: Double
+        let color: String?
+    }
+    let segments: [Segment]
+
+    static func segments(show: Show, item: RundownItem) -> [Segment] {
+        let spans = show.shotSpans(forItem: item.id)
+        guard let last = spans.last else { return [] }
+        let origin = item.timeBase == .order ? 1.0 : 0.0
+        let total = max(last.end - origin, 0.0001)
+        return spans.map { span in
+            Segment(start: (span.start - origin) / total, length: (span.end - span.start) / total,
+                    color: show.camera(span.row.cue.cameraID)?.resolvedColor)
+        }
+    }
+
+    var body: some View {
+        Canvas { context, size in
+            context.fill(Path(roundedRect: CGRect(origin: .zero, size: size), cornerRadius: 1.5), with: .color(Gallery.well))
+            for seg in segments {
+                let rect = CGRect(x: seg.start * size.width, y: 0, width: max(seg.length * size.width - 0.5, 0.5), height: size.height)
+                context.fill(Path(rect), with: .color(seg.color.map { Color(hex: $0) } ?? Gallery.key))
+            }
+        }
+        .frame(height: 4)
+        .clipShape(RoundedRectangle(cornerRadius: 1.5))
+    }
+}
+
 struct RunningOrderRow: View {
     let index: Int
     let item: RundownItem
     let shotCount: Int
+    let strip: [ShotStrip.Segment]
     let selected: Bool
     let renaming: Bool
     @ObservedObject var model: WorkspaceModel
@@ -107,8 +142,8 @@ struct RunningOrderRow: View {
                 .frame(width: 22, alignment: .trailing)
 
             Rectangle()
-                .fill(item.kind == .song ? Gallery.steel : Gallery.amber)
-                .frame(width: 3, height: 30)
+                .fill(item.kind == .song ? Gallery.dim : Gallery.amber)
+                .frame(width: 3, height: 34)
                 .clipShape(Capsule())
 
             VStack(alignment: .leading, spacing: 3) {
@@ -134,6 +169,9 @@ struct RunningOrderRow: View {
                 .font(.umd(10))
                 .foregroundStyle(Gallery.dim)
                 .lineLimit(1)
+                if !strip.isEmpty {
+                    ShotStrip(segments: strip).padding(.top, 2)
+                }
             }
             Spacer(minLength: 4)
             VStack(alignment: .trailing, spacing: 0) {

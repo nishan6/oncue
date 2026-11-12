@@ -221,9 +221,45 @@ public struct Camera: Identifiable, Codable, Hashable {
     /// Switcher input (source) number this camera arrives on.
     public var input: Int = 0
     public var ptzID: UUID?
+    /// Colour of this camera's shots, as "#RRGGBB". Empty means the default colour for its number.
+    public var color: String = ""
+
+    /// The colour actually used: the chosen one, or the palette colour for the camera number.
+    public var resolvedColor: String {
+        let c = color.trimmingCharacters(in: .whitespaces)
+        return CameraPalette.isValid(c) ? c.uppercased() : CameraPalette.color(forNumber: number)
+    }
 
     public var displayName: String { name.trimmingCharacters(in: .whitespaces).isEmpty ? "Cam \(number)" : name }
     public var label: String { operatorName.isEmpty ? displayName : "\(displayName) (\(operatorName))" }
+}
+
+/// Default camera colours: twelve hues that stay distinct from each other on a mid-grey
+/// background. Red and green are left out so they never read as tally.
+public enum CameraPalette {
+    public static let colors: [String] = [
+        "#4C8DF6", // blue
+        "#F5A524", // amber
+        "#2EC4B6", // teal
+        "#E85D9E", // pink
+        "#9B6CF2", // violet
+        "#A8C93A", // lime
+        "#F2774F", // coral
+        "#43B9E8", // sky
+        "#D9B93A", // mustard
+        "#B98557", // tan
+        "#6F7FE0", // indigo
+        "#5FD1A0", // mint
+    ]
+
+    public static func color(forNumber number: Int) -> String {
+        colors[((max(number, 1) - 1) % colors.count)]
+    }
+
+    public static func isValid(_ hex: String) -> Bool {
+        guard hex.count == 7, hex.first == "#" else { return false }
+        return hex.dropFirst().allSatisfy { $0.isHexDigit }
+    }
 }
 
 public struct CompanionButton: Codable, Hashable {

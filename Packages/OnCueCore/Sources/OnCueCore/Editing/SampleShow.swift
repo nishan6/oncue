@@ -40,6 +40,24 @@ extension Show {
             (80, 2, "Vocals, close, final line", "", .cut), (84, 1, "Wide, blackout", "Hold to black", .auto)
         ]
         for s in openerShots { addSampleShot(&show, opener, bars: s.0, cam: cams[s.1 - 1], text: s.2, note: s.3, transition: s.4) }
+        let openerLyrics: [(Int, String)] = [
+            (8, "City lights are calling out my name"), (12, "Running through the static of the rain"),
+            (24, "Hold on, hold on"), (32, "We are the neon skyline"), (36, "Burning till the morning light"),
+            (40, "Every window tells a story"), (56, "We are the neon skyline"), (60, "Burning till the morning light")
+        ]
+        for l in openerLyrics { show.addTrackCue(.lyrics, inItem: opener, at: Double(l.0 * 4), text: l.1) }
+        for n in [(32, "Pyro on the chorus hit"), (48, "Solo: stay on guitar until the chorus")] {
+            show.addTrackCue(.notes, inItem: opener, at: Double(n.0 * 4), text: n.1)
+        }
+        if let id = show.addTrackCue(.fx, inItem: opener, at: 0, text: "Band name lower third") {
+            show.updateCue(id, inItem: opener) { $0.fxAction = .dskOn }
+        }
+        if let id = show.addTrackCue(.fx, inItem: opener, at: 8 * 4, text: "Lower third off") {
+            show.updateCue(id, inItem: opener) { $0.fxAction = .dskOff }
+        }
+        if let id = show.addTrackCue(.fx, inItem: opener, at: 86 * 4, text: "Fade to black") {
+            show.updateCue(id, inItem: opener) { $0.fxAction = .fadeToBlack }
+        }
 
         // Song 2: slow ballad, long shots.
         let ballad = show.addSong(title: "Monsoon Letters")
@@ -55,6 +73,9 @@ extension Show {
         for s in balladShots {
             addSampleShot(&show, ballad, bars: s.0, beatsPerBar: 3, cam: cams[s.1 - 1], text: s.2, note: s.3, transition: .auto)
         }
+        for l in [(8, "Paper boats along the window"), (16, "Every drop a word you left me"), (24, "Somewhere past the rain")] {
+            show.addTrackCue(.lyrics, inItem: ballad, at: Double(l.0 * 3), text: l.1)
+        }
 
         // Segment: talk break, timed in seconds.
         let talk = show.addSegment(title: "Crowd talk break")
@@ -68,6 +89,9 @@ extension Show {
             if let id = show.addShot(inItem: talk, cameraID: cams[s.1 - 1], at: s.0) {
                 show.updateCue(id, inItem: talk) { $0.text = s.2 }
             }
+        }
+        for n in [(0.0, "Host walks to centre"), (60.0, "Intros follow the host's order"), (150.0, "30 s warning to the host")] {
+            show.addTrackCue(.notes, inItem: talk, at: n.0, text: n.1)
         }
 
         // Encore: no click, NEXT per shot.

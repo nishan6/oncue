@@ -2,8 +2,10 @@ import SwiftUI
 import AppKit
 import OnCueCore
 
-/// Centre panel for one song or segment: header, section strip, shot list, camera bank.
+/// Centre panel for one song or segment: header, then the timeline, the shot list or both, and the
+/// camera bank.
 struct ItemEditorView: View {
+    static let splitShotHeight: CGFloat = 92
     let show: Show
     let item: RundownItem
     @ObservedObject var model: WorkspaceModel
@@ -13,9 +15,24 @@ struct ItemEditorView: View {
         let rows = groups.flatMap(\.rows)
         VStack(spacing: 0) {
             ItemHeaderView(item: item, rows: rows, model: model)
-            SectionStripView(item: item, rows: rows, model: model)
             Rectangle().fill(Gallery.hairline).frame(height: 1)
-            ShotListView(show: show, item: item, groups: groups, rows: rows, model: model)
+            switch model.editorMode {
+            case .timeline:
+                GeometryReader { geo in
+                    let chrome = TimelineLayout.chromeHeight(for: item, hidden: model.hiddenLanes)
+                    TimelineEditorView(show: show, item: item, model: model,
+                                       shotHeight: min(max(geo.size.height - chrome - 8, 84), 320))
+                }
+            case .split:
+                TimelineEditorView(show: show, item: item, model: model, shotHeight: Self.splitShotHeight)
+                    .frame(height: TimelineLayout.chromeHeight(for: item, hidden: model.hiddenLanes) + Self.splitShotHeight + 6)
+                Rectangle().fill(Gallery.hairline).frame(height: 1)
+                ShotListView(show: show, item: item, groups: groups, rows: rows, model: model)
+            case .list:
+                SectionStripView(item: item, rows: rows, model: model)
+                Rectangle().fill(Gallery.hairline).frame(height: 1)
+                ShotListView(show: show, item: item, groups: groups, rows: rows, model: model)
+            }
             Rectangle().fill(Gallery.hairline).frame(height: 1)
             CameraBankView(show: show, model: model)
         }
@@ -31,16 +48,26 @@ struct ItemHeaderView: View {
     @ObservedObject var model: WorkspaceModel
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack(alignment: .firstTextBaseline, spacing: 10) {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .center, spacing: 10) {
                 Pill(text: item.kind == .song ? "Song" : "Segment",
-                     color: item.kind == .song ? Gallery.steel : Gallery.amber)
-                CommitField(placeholder: "Title", value: item.title, font: .title(26)) { text in
+                     color: item.kind == .song ? Gallery.ink : Gallery.amber)
+                CommitField(placeholder: "Title", value: item.title, font: .title(22)) { text in
                     let t = text.trimmingCharacters(in: .whitespaces)
                     guard !t.isEmpty else { return false }
                     model.renameItem(item.id, to: t)
                     return true
                 }
+                Spacer(minLength: 12)
+                Picker("View", selection: $model.editorMode) {
+                    ForEach(EditorMode.allCases) { mode in
+                        Image(systemName: mode.symbol).help(mode.label).tag(mode)
+                    }
+                }
+                .labelsHidden()
+                .pickerStyle(.segmented)
+                .fixedSize()
+                .help("Timeline, timeline and list, or list (⌘1, ⌘2, ⌘3)")
             }
             HStack(spacing: 8) {
                 ReadoutField(label: "Timing") {
@@ -102,9 +129,9 @@ struct ItemHeaderView: View {
                 }
             }
         }
-        .padding(.horizontal, 18)
-        .padding(.top, 14)
-        .padding(.bottom, 12)
+        .padding(.horizontal, 16)
+        .padding(.top, 10)
+        .padding(.bottom, 10)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Gallery.panel)
     }
@@ -418,7 +445,7 @@ struct ShotRowView: View {
                 .foregroundStyle(Gallery.ink)
                 .frame(width: 58, alignment: .leading)
 
-            CameraTile(number: camera?.number, name: camera?.displayName ?? "", operatorName: camera?.operatorName ?? "",
+            CameraTile(camera: camera, missing: row.cue.cameraID != nil && camera == nil,
                        tally: tally, size: 38, compact: true)
 
             VStack(alignment: .leading, spacing: 0) {
@@ -470,6 +497,8 @@ struct ShotRowView: View {
             .help("Click to switch between cut and mix (⌥⌘T)")
         }
         .padding(.vertical, 3)
+        .padding(.trailing, 4)
+        .background((camera?.swiftUIColor ?? Color.clear).opacity(0.10), in: RoundedRectangle(cornerRadius: 4))
     }
 }
 
@@ -484,7 +513,7 @@ struct CameraBankView: View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 10) {
                 Text("Cameras").font(.umd(12)).foregroundStyle(Gallery.dim)
-                Text(model.selectedShotIDs.isEmpty ? "Click to add a shot" : "Click to set the camera on the selected shot. Option-click adds a new shot.")
+                Text(model.selectedShotIDs.isEmpty ? "Click a camera to add a shot with it" : "Click to set the camera on the selected shot. Option-click adds a new shot.")
                     .font(.system(size: 11))
                     .foregroundStyle(Gallery.faint)
                 Spacer()
@@ -498,13 +527,12 @@ struct CameraBankView: View {
                             model.useCamera(cam.id, newShot: NSEvent.modifierFlags.contains(.option))
                         } label: {
                             VStack(spacing: 3) {
-                                CameraTile(number: cam.number, name: cam.displayName, operatorName: cam.operatorName,
-                                           tally: model.tally(forCamera: cam.id), size: 62)
+                                CameraTile(camera: cam, tally: model.tally(forCamera: cam.id), size: 58)
                                 Text(cam.operatorName.isEmpty ? " " : cam.operatorName)
                                     .font(.umd(10))
                                     .foregroundStyle(Gallery.dim)
                                     .lineLimit(1)
-                                    .frame(width: 62)
+                                    .frame(width: 58)
                             }
                         }
                         .buttonStyle(.plain)
@@ -516,10 +544,10 @@ struct CameraBankView: View {
                 .padding(.vertical, 4)
                 .padding(.horizontal, 2)
             }
-            .frame(height: 92)
+            .frame(height: 86)
         }
-        .padding(.horizontal, 18)
-        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
         .background(Gallery.panel)
     }
 }

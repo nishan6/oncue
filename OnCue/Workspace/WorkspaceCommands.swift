@@ -41,8 +41,27 @@ struct WorkspaceCommands: Commands {
             Button("Switch Cut or Mix") { workspace?.toggleTransitionOfSelection() }
                 .keyboardShortcut("t", modifiers: [.command, .option])
             Divider()
-            Button("Delete Shot") { workspace?.deleteSelectedShots() }
+            Button("Delete") { workspace?.deleteSelection() }
                 .keyboardShortcut(.delete, modifiers: .command)
+            }
+            .disabled(workspace == nil)
+        }
+
+        CommandGroup(after: .toolbar) {
+            Group {
+            Button("Timeline") { workspace?.editorMode = .timeline }
+                .keyboardShortcut("1", modifiers: .command)
+            Button("Timeline and List") { workspace?.editorMode = .split }
+                .keyboardShortcut("2", modifiers: .command)
+            Button("List") { workspace?.editorMode = .list }
+                .keyboardShortcut("3", modifiers: .command)
+            Divider()
+            Button("Zoom In") { workspace?.changeZoom(by: 1.4) }
+                .keyboardShortcut("=", modifiers: .command)
+            Button("Zoom Out") { workspace?.changeZoom(by: 1 / 1.4) }
+                .keyboardShortcut("-", modifiers: .command)
+            Button("Actual Size") { workspace?.zoom = 1 }
+                .keyboardShortcut("0", modifiers: .command)
             }
             .disabled(workspace == nil)
         }

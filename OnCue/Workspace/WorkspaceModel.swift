@@ -1,6 +1,50 @@
 import SwiftUI
 import OnCueCore
 
+/// How the centre panel shows a song or segment.
+enum EditorMode: String, Codable, CaseIterable, Identifiable {
+    case timeline, split, list
+    var id: String { rawValue }
+    var label: String {
+        switch self {
+        case .timeline: return "Timeline"
+        case .split: return "Timeline and list"
+        case .list: return "List"
+        }
+    }
+    var symbol: String {
+        switch self {
+        case .timeline: return "rectangle.split.3x1"
+        case .split: return "rectangle.split.1x2"
+        case .list: return "list.bullet"
+        }
+    }
+}
+
+/// Timeline tracks below the shots. Each can be hidden (its cues are kept) or locked.
+enum TimelineLane: String, Codable, CaseIterable, Identifiable, Hashable {
+    case sections, shots, lyrics, notes, fx
+    var id: String { rawValue }
+    var label: String {
+        switch self {
+        case .sections: return "Sections"
+        case .shots: return "Vision"
+        case .lyrics: return "Lyrics"
+        case .notes: return "Notes"
+        case .fx: return "FX"
+        }
+    }
+    var trackKind: TrackKind? {
+        switch self {
+        case .sections: return nil
+        case .shots: return .shots
+        case .lyrics: return .lyrics
+        case .notes: return .notes
+        case .fx: return .fx
+        }
+    }
+}
+
 /// Per-window state of the scripting workspace: what is selected, which panels are open, and the
 /// single entry point for edits. Every change to the show goes through `edit`, which applies an
 /// OnCueCore editing operation to the document and registers it with Undo. Views never change
@@ -9,12 +53,30 @@ final class WorkspaceModel: ObservableObject {
     @Published var selectedItemID: UUID? {
         didSet {
             guard oldValue != selectedItemID else { return }
-            if !restoring { selectedShotIDs = [] }
+            if !restoring { selectedShotIDs = []; selectedCueID = nil; editingCueID = nil }
             persistState()
         }
     }
-    @Published var selectedShotIDs: Set<UUID> = [] { didSet { persistState() } }
+    @Published var selectedShotIDs: Set<UUID> = [] {
+        didSet {
+            if !selectedShotIDs.isEmpty, selectedCueID != nil { selectedCueID = nil }
+            persistState()
+        }
+    }
+    /// A selected lyric, note or FX cue (shots use `selectedShotIDs`).
+    @Published var selectedCueID: UUID? {
+        didSet { if selectedCueID != nil, !selectedShotIDs.isEmpty { selectedShotIDs = [] } }
+    }
+    /// Cue whose quick editor is open on the timeline.
+    @Published var editingCueID: UUID?
+    /// Section whose rename editor is open on the timeline.
+    @Published var editingSectionID: UUID?
     @Published var showInspector = true { didSet { persistState() } }
+    @Published var editorMode: EditorMode = .timeline { didSet { persistState() } }
+    /// Timeline zoom, 1 = default scale.
+    @Published var zoom: Double = 1 { didSet { persistState() } }
+    @Published var hiddenLanes: Set<TimelineLane> = [] { didSet { persistState() } }
+    @Published var lockedLanes: Set<TimelineLane> = [] { didSet { persistState() } }
     @Published var cameraManagerOpen = false
     @Published var renamingItemID: UUID?
     @Published var errorMessage: String?
@@ -86,7 +148,48 @@ final class WorkspaceModel: ObservableObject {
             let valid = Set(s.shotRows(forItem: id).map(\.id))
             let kept = selectedShotIDs.intersection(valid)
             if kept != selectedShotIDs { selectedShotIDs = kept }
+            if let cue = selectedCueID, s.cue(cue, inItem: id) == nil { selectedCueID = nil }
+        } else {
+            selectedCueID = nil
         }
+    }
+
+    func clearSelection() {
+        if !selectedShotIDs.isEmpty { selectedShotIDs = [] }
+        selectedCueID = nil
+    }
+
+    /// Click on a shot: select it, or add/remove it with Command or Shift.
+    func selectShot(_ id: UUID, extending: Bool) {
+        if extending {
+            if selectedShotIDs.contains(id) { selectedShotIDs.remove(id) } else { selectedShotIDs.insert(id) }
+        } else if selectedShotIDs != [id] {
+            selectedShotIDs = [id]
+        }
+    }
+
+    /// Left and right arrows on the timeline: previous or next shot.
+    func selectAdjacentShot(_ delta: Int) {
+        guard let id = selectedItemID else { return }
+        let rows = show.shotRows(forItem: id)
+        guard !rows.isEmpty else { return }
+        let current = rows.lastIndex { selectedShotIDs.contains($0.id) }
+        let target: Int
+        if let current { target = min(max(current + delta, 0), rows.count - 1) } else { target = delta > 0 ? 0 : rows.count - 1 }
+        selectedShotIDs = [rows[target].id]
+        scrollTarget = rows[target].id.uuidString
+    }
+
+    func changeZoom(by factor: Double) {
+        zoom = min(max(zoom * factor, 0.15), 6)
+    }
+
+    func toggleLaneHidden(_ lane: TimelineLane) {
+        if hiddenLanes.contains(lane) { hiddenLanes.remove(lane) } else { hiddenLanes.insert(lane) }
+    }
+
+    func toggleLaneLocked(_ lane: TimelineLane) {
+        if lockedLanes.contains(lane) { lockedLanes.remove(lane) } else { lockedLanes.insert(lane) }
     }
 
     /// Tally for the camera tiles: red = camera of the selected shot, green = camera of the next shot.
@@ -231,6 +334,67 @@ final class WorkspaceModel: ObservableObject {
         }
     }
 
+    /// New shot at a timeline position; its quick editor opens so the camera can be typed.
+    func addShot(at position: Double, cameraID: UUID? = nil) {
+        guard let id = selectedItemID else { return }
+        var newID: UUID?
+        edit("New Shot") { newID = $0.addShot(inItem: id, cameraID: cameraID, at: position) }
+        if let newID { selectedShotIDs = [newID] }
+    }
+
+    /// New lyric line, note or FX cue at a timeline position, with its editor open.
+    func addTrackCue(_ kind: TrackKind, at position: Double) {
+        guard let id = selectedItemID else { return }
+        var newID: UUID?
+        let name: String
+        switch kind {
+        case .lyrics: name = "New Lyric"
+        case .fx: name = "New FX Cue"
+        default: name = "New Note"
+        }
+        edit(name) { newID = $0.addTrackCue(kind, inItem: id, at: position) }
+        if let newID {
+            selectedCueID = newID
+            editingCueID = newID
+        }
+    }
+
+    /// Drag on the timeline: a shot or cue to a new position.
+    func moveCue(_ cueID: UUID, to position: Double) {
+        guard let id = selectedItemID, let current = show.cue(cueID, inItem: id), current.at != position else { return }
+        let kind = show.trackKind(ofCue: cueID, inItem: id)
+        edit(kind == .shots ? "Move Shot" : "Move Cue") { $0.moveCue(cueID, inItem: id, to: position) }
+    }
+
+    /// Edits a lyric, note or FX cue.
+    func updateCue(_ cueID: UUID, _ actionName: String, _ change: @escaping (inout Cue) -> Void) {
+        guard let id = selectedItemID else { return }
+        edit(actionName) { $0.updateCue(cueID, inItem: id) { change(&$0) } }
+    }
+
+    func deleteSelectedCue() {
+        guard let id = selectedItemID, let cue = selectedCueID else { return }
+        edit("Delete Cue") { $0.deleteCues([cue], inItem: id) }
+        selectedCueID = nil
+    }
+
+    /// Delete on the timeline: the selected shots, or the selected lyric, note or FX cue.
+    func deleteSelection() {
+        if selectedCueID != nil { deleteSelectedCue() } else { deleteSelectedShots() }
+    }
+
+    func setSectionPosition(_ sectionID: UUID, position: Double) {
+        guard let id = selectedItemID else { return }
+        edit("Move Section") { $0.setSectionPosition(sectionID, inItem: id, to: position) }
+    }
+
+    func addSection(at position: Double) {
+        guard let id = selectedItemID else { return }
+        var newID: UUID?
+        edit("New Section") { newID = $0.addSection(toItem: id, at: position) }
+        if let newID { editingSectionID = newID }
+    }
+
     func deleteSelectedShots() {
         guard let id = selectedItemID, !selectedShotIDs.isEmpty else { return }
         let rows = show.shotRows(forItem: id)
@@ -343,13 +507,19 @@ final class WorkspaceModel: ObservableObject {
         var itemID: UUID?
         var shotIDs: [UUID]
         var inspector: Bool
+        var editor: EditorMode?
+        var zoom: Double?
+        var hiddenLanes: [TimelineLane]?
+        var lockedLanes: [TimelineLane]?
     }
 
     private static func key(_ showID: UUID) -> String { "workspace.\(showID.uuidString)" }
 
     private func persistState() {
         guard !restoring, let showID = attachedShowID else { return }
-        let state = SavedState(itemID: selectedItemID, shotIDs: Array(selectedShotIDs), inspector: showInspector)
+        let state = SavedState(itemID: selectedItemID, shotIDs: Array(selectedShotIDs), inspector: showInspector,
+                               editor: editorMode, zoom: zoom,
+                               hiddenLanes: Array(hiddenLanes), lockedLanes: Array(lockedLanes))
         if let data = try? JSONEncoder().encode(state) {
             UserDefaults.standard.set(data, forKey: Self.key(showID))
         }
@@ -362,6 +532,10 @@ final class WorkspaceModel: ObservableObject {
            let state = try? JSONDecoder().decode(SavedState.self, from: data) {
             selectedItemID = show.item(state.itemID) != nil ? state.itemID : show.items.first?.id
             showInspector = state.inspector
+            editorMode = state.editor ?? .timeline
+            zoom = state.zoom ?? 1
+            hiddenLanes = Set(state.hiddenLanes ?? [])
+            lockedLanes = Set(state.lockedLanes ?? [])
             let valid = Set(selectedItemID.map { show.shotRows(forItem: $0).map(\.id) } ?? [])
             selectedShotIDs = Set(state.shotIDs).intersection(valid)
             if let first = state.shotIDs.first(where: valid.contains) { scrollTarget = first.uuidString }
@@ -372,8 +546,9 @@ final class WorkspaceModel: ObservableObject {
     }
 
     /// Used by the screenshot run to pre-select a workspace before a show opens.
-    static func seedState(showID: UUID, itemID: UUID?, shotIDs: [UUID]) {
-        let state = SavedState(itemID: itemID, shotIDs: shotIDs, inspector: true)
+    static func seedState(showID: UUID, itemID: UUID?, shotIDs: [UUID], editor: EditorMode = .timeline) {
+        let state = SavedState(itemID: itemID, shotIDs: shotIDs, inspector: true, editor: editor,
+                               zoom: nil, hiddenLanes: nil, lockedLanes: nil)
         if let data = try? JSONEncoder().encode(state) {
             UserDefaults.standard.set(data, forKey: key(showID))
         }

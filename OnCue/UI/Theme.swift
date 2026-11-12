@@ -1,40 +1,76 @@
 import SwiftUI
 
-/// OnCue's gallery palette. Red and green carry tally meaning only:
-/// red = the selected shot's camera ("this shot"), green = the following shot's camera ("next").
-/// Selection and focus use a cool steel tone so they are never confused with tally.
+import AppKit
+import OnCueCore
+
+/// OnCue's palette: layered graphite, so the camera colours read clearly, like a timeline in a
+/// broadcast control or edit suite. Each camera has its own colour. Red and green carry tally
+/// meaning only (red = the selected shot's camera, green = the next shot's camera), and a
+/// restrained blue ring marks the selection.
 enum Gallery {
-    static let canvas = Color(red: 0.067, green: 0.078, blue: 0.094)      // #111418 deep slate
-    static let panel = Color(red: 0.094, green: 0.106, blue: 0.129)       // #181B21
-    static let raised = Color(red: 0.125, green: 0.141, blue: 0.169)      // #20242B
-    static let key = Color(red: 0.165, green: 0.184, blue: 0.220)         // #2A2F38 unlit switcher key
-    static let hairline = Color.white.opacity(0.07)
-    static let ink = Color(red: 0.914, green: 0.902, blue: 0.875)         // #E9E6DF warm white
-    static let dim = Color(red: 0.541, green: 0.576, blue: 0.627)         // #8A93A0
-    static let faint = Color(red: 0.36, green: 0.39, blue: 0.43)
-    static let tally = Color(red: 0.910, green: 0.125, blue: 0.165)       // #E8202A program red
-    static let next = Color(red: 0.122, green: 0.796, blue: 0.357)        // #1FCB5B preview green
-    static let amber = Color(red: 1.0, green: 0.69, blue: 0.0)            // #FFB000 warnings
-    static let steel = Color(red: 0.42, green: 0.60, blue: 0.82)          // selection / focus
-    static let steelFill = Color(red: 0.42, green: 0.60, blue: 0.82).opacity(0.16)
+    static let well = Color(hex: "#161719")      // track lanes, behind the blocks
+    static let canvas = Color(hex: "#1D1E22")    // editor background
+    static let panel = Color(hex: "#25262B")     // header, sidebars, track headers
+    static let raised = Color(hex: "#2F3036")    // fields, section blocks
+    static let key = Color(hex: "#3A3B42")       // buttons
+    static let hairline = Color.white.opacity(0.08)
+    static let ink = Color(hex: "#ECECEE")
+    static let dim = Color(hex: "#9C9EA7")
+    static let faint = Color(hex: "#676973")
+    static let tally = Color(hex: "#E8202A")     // program red
+    static let next = Color(hex: "#2ED15F")      // preview green
+    static let amber = Color(hex: "#FFB000")     // warnings
+    static let selection = Color(hex: "#5B9BFF") // selection ring and focus
+    static let steel = selection
+    static let steelFill = Color(hex: "#5B9BFF").opacity(0.16)
+    static let lyric = Color(hex: "#B9AEE6")
+    static let note = Color(hex: "#E6CF8F")
+    static let fx = Color(hex: "#8CCFE0")
+}
+
+extension Color {
+    /// "#RRGGBB" (falls back to grey for anything else).
+    init(hex: String) {
+        let digits = hex.trimmingCharacters(in: .whitespaces).replacingOccurrences(of: "#", with: "")
+        let value = UInt32(digits, radix: 16) ?? 0x808080
+        self.init(.sRGB,
+                  red: Double((value >> 16) & 0xFF) / 255,
+                  green: Double((value >> 8) & 0xFF) / 255,
+                  blue: Double(value & 0xFF) / 255,
+                  opacity: 1)
+    }
+
+    /// Readable text colour on top of a camera colour.
+    static func ink(onHex hex: String) -> Color {
+        let digits = hex.replacingOccurrences(of: "#", with: "")
+        let v = UInt32(digits, radix: 16) ?? 0x808080
+        let r = Double((v >> 16) & 0xFF) / 255, g = Double((v >> 8) & 0xFF) / 255, b = Double(v & 0xFF) / 255
+        let luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b
+        return luminance > 0.55 ? Color(hex: "#141518") : Color.white
+    }
+}
+
+extension Camera {
+    var swiftUIColor: Color { Color(hex: resolvedColor) }
+    var inkColor: Color { Color.ink(onHex: resolvedColor) }
 }
 
 extension Font {
-    /// Big camera numerals: expanded, heavy, like the legend on a switcher key.
+    /// Big camera numerals: heavy, like the legend on a switcher key.
     static func cameraNumeral(_ size: CGFloat) -> Font {
         .system(size: size, weight: .heavy).width(.expanded)
     }
-    /// Under-monitor-display labels: condensed and bold.
+    /// Labels: condensed and semibold.
     static func umd(_ size: CGFloat = 11) -> Font {
         .system(size: size, weight: .semibold).width(.condensed)
     }
     /// Positions, durations and shot numbers.
     static func readout(_ size: CGFloat = 12, weight: Font.Weight = .medium) -> Font {
-        .system(size: size, weight: weight, design: .monospaced)
+        .system(size: size, weight: weight).monospacedDigit()
     }
     /// Production and song titles.
     static func title(_ size: CGFloat) -> Font {
-        .system(size: size, weight: .bold).width(.expanded)
+        .system(size: size, weight: .bold)
     }
 }
 
@@ -43,18 +79,17 @@ enum TallyState {
     case off, current, next
     var color: Color {
         switch self {
-        case .off: return Gallery.hairline
+        case .off: return Color.black.opacity(0.35)
         case .current: return Gallery.tally
         case .next: return Gallery.next
         }
     }
 }
 
-/// A camera drawn as a multiviewer tile: number, label strip underneath, tally border.
+/// A camera as a switcher key: its colour, its number, a name strip and a tally border.
 struct CameraTile: View {
-    let number: Int?
-    let name: String
-    let operatorName: String
+    let camera: Camera?
+    var missing = false
     var tally: TallyState = .off
     var size: CGFloat = 64
     var compact = false
@@ -62,36 +97,42 @@ struct CameraTile: View {
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
-                Gallery.key
-                if let number {
-                    Text("\(number)")
-                        .font(.cameraNumeral(size * (compact ? 0.42 : 0.40)))
-                        .foregroundStyle(tally == .off ? Gallery.ink : Color.white)
+                if let camera {
+                    camera.swiftUIColor
+                    Text("\(camera.number)")
+                        .font(.cameraNumeral(size * (compact ? 0.40 : 0.38)))
+                        .foregroundStyle(camera.inkColor)
                         .minimumScaleFactor(0.5)
                 } else {
+                    Gallery.key
                     Image(systemName: "questionmark")
-                        .font(.system(size: size * 0.28, weight: .bold))
+                        .font(.system(size: size * 0.26, weight: .bold))
                         .foregroundStyle(Gallery.amber)
                 }
             }
             if !compact {
-                Text(name.isEmpty ? " " : name)
+                Text(camera?.displayName ?? (missing ? "Deleted" : "No camera"))
                     .font(.umd(10))
                     .lineLimit(1)
                     .foregroundStyle(Gallery.ink)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 2)
-                    .background(Color.black.opacity(0.55))
+                    .padding(.vertical, 3)
+                    .background(Color.black.opacity(0.45))
             }
         }
         .frame(width: size, height: compact ? size * 0.72 : size)
-        .clipShape(RoundedRectangle(cornerRadius: 3))
+        .clipShape(RoundedRectangle(cornerRadius: 5))
         .overlay(
-            RoundedRectangle(cornerRadius: 3)
-                .strokeBorder(tally.color, lineWidth: tally == .off ? 1 : 2.5)
+            RoundedRectangle(cornerRadius: 5)
+                .strokeBorder(tally.color, lineWidth: tally == .off ? 1 : 3)
         )
-        .shadow(color: tally == .off ? .clear : tally.color.opacity(0.45), radius: 6)
-        .help(operatorName.isEmpty ? name : "\(name), operated by \(operatorName)")
+        .shadow(color: tally == .off ? .clear : tally.color.opacity(0.5), radius: 6)
+        .help(help)
+    }
+
+    private var help: String {
+        guard let camera else { return missing ? "This camera was deleted" : "No camera chosen" }
+        return camera.operatorName.isEmpty ? camera.displayName : "\(camera.displayName), operated by \(camera.operatorName)"
     }
 }
 
@@ -109,7 +150,7 @@ struct ReadoutField<Content: View>: View {
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 6)
-        .background(Gallery.raised, in: RoundedRectangle(cornerRadius: 4))
+        .background(Gallery.raised, in: RoundedRectangle(cornerRadius: 6))
     }
 }
 
@@ -232,7 +273,7 @@ struct IconButton: View {
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(Gallery.ink)
                 .frame(width: 24, height: 22)
-                .background(Gallery.key, in: RoundedRectangle(cornerRadius: 4))
+                .background(Gallery.key, in: RoundedRectangle(cornerRadius: 5))
         }
         .buttonStyle(.plain)
         .help(help)

@@ -51,6 +51,7 @@ extension Camera {
         switcherID = try c.optional("switcherID")
         input = try c.value("input", 0)
         ptzID = try c.optional("ptzID")
+        color = try c.value("color", "")
     }
 }
 

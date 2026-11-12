@@ -1,7 +1,51 @@
 import SwiftUI
 import OnCueCore
 
-/// Sheet for the production's cameras: number, name, operator for this show, switcher input.
+/// Swatch that opens the camera colour choices.
+struct CameraColorButton: View {
+    let camera: Camera
+    @ObservedObject var model: WorkspaceModel
+    @State private var open = false
+
+    var body: some View {
+        Button { open = true } label: {
+            RoundedRectangle(cornerRadius: 4)
+                .fill(camera.swiftUIColor)
+                .frame(width: 34, height: 18)
+                .overlay(RoundedRectangle(cornerRadius: 4).strokeBorder(Color.white.opacity(0.25), lineWidth: 1))
+        }
+        .buttonStyle(.plain)
+        .help("Colour of camera \(camera.number)'s shots")
+        .popover(isPresented: $open, arrowEdge: .bottom) {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Camera \(camera.number) colour").font(.umd(12)).foregroundStyle(Gallery.dim)
+                LazyVGrid(columns: Array(repeating: GridItem(.fixed(28), spacing: 6), count: 6), spacing: 6) {
+                    ForEach(CameraPalette.colors, id: \.self) { hex in
+                        Button {
+                            model.updateCamera(camera.id, "Change Camera Colour") { $0.color = hex }
+                            open = false
+                        } label: {
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(Color(hex: hex))
+                                .frame(width: 28, height: 22)
+                                .overlay(RoundedRectangle(cornerRadius: 4)
+                                    .strokeBorder(Color.white, lineWidth: camera.resolvedColor == hex ? 2 : 0))
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                Button("Use the default for camera \(camera.number)") {
+                    model.updateCamera(camera.id, "Change Camera Colour") { $0.color = "" }
+                    open = false
+                }
+                .disabled(camera.color.isEmpty)
+            }
+            .padding(14)
+        }
+    }
+}
+
+/// Sheet for the production's cameras: colour, number, name, operator for this show, switcher input.
 struct CameraManagerView: View {
     let show: Show
     @ObservedObject var model: WorkspaceModel
@@ -22,6 +66,10 @@ struct CameraManagerView: View {
             .padding(18)
 
             Table(show.sortedCameras, selection: $selection) {
+                TableColumn("Colour") { cam in
+                    CameraColorButton(camera: cam, model: model)
+                }
+                .width(60)
                 TableColumn("No.") { cam in
                     CommitField(placeholder: "No.", value: "\(cam.number)", font: .readout(13, weight: .semibold), width: 44) { text in
                         model.renumberCamera(cam.id, text: text)
@@ -71,7 +119,7 @@ struct CameraManagerView: View {
             }
             .padding(14)
         }
-        .frame(minWidth: 720, minHeight: 460)
+        .frame(minWidth: 780, minHeight: 460)
         .background(Gallery.panel)
         .preferredColorScheme(.dark)
     }

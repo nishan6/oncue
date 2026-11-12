@@ -16,30 +16,42 @@ enum ScreenshotRun {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { openShows() }
     }
 
+    /// Window file names and the images they produce.
+    private static let shots: [(file: String, image: String)] = [
+        ("Live at the Arena.oncue", "workspace-timeline.png"),
+        ("Live at the Arena (split).oncue", "workspace-split.png"),
+        ("Live at the Arena (list).oncue", "workspace-list.png"),
+    ]
+
     private static func openShows() {
-        // Song view: the opener, with shot 6 selected (red = this shot, green = next).
-        let songShow = Show.sample()
-        let song = songShow.items[0].id
-        let songRows = songShow.shotRows(forItem: song)
-        WorkspaceModel.seedState(showID: songShow.id, itemID: song, shotIDs: [songRows[5].id])
+        // Timeline: the opener, shot 6 selected (blue ring; the next shot carries a green bar).
+        let timeline = Show.sample()
+        let song = timeline.items[0].id
+        WorkspaceModel.seedState(showID: timeline.id, itemID: song,
+                                 shotIDs: [timeline.shotRows(forItem: song)[5].id], editor: .timeline)
 
-        // Segment view: the talk break, nothing selected (shows the item inspector).
-        let segShow = Show.sample()
-        let seg = segShow.items[2].id
-        WorkspaceModel.seedState(showID: segShow.id, itemID: seg, shotIDs: [])
+        // Timeline and list: the talk break, timed in seconds, nothing selected (item inspector).
+        let split = Show.sample()
+        WorkspaceModel.seedState(showID: split.id, itemID: split.items[2].id, shotIDs: [], editor: .split)
 
-        let songURL = folder.appendingPathComponent("Live at the Arena.oncue")
-        let segURL = folder.appendingPathComponent("Live at the Arena (segment).oncue")
+        // List: the ballad, shot 3 selected.
+        let list = Show.sample()
+        let ballad = list.items[1].id
+        WorkspaceModel.seedState(showID: list.id, itemID: ballad,
+                                 shotIDs: [list.shotRows(forItem: ballad)[2].id], editor: .list)
+
+        let urls = shots.map { folder.appendingPathComponent($0.file) }
         do {
-            try ShowFileIO.write(songShow, to: songURL)
-            try ShowFileIO.write(segShow, to: segURL)
+            for (show, url) in zip([timeline, split, list], urls) { try ShowFileIO.write(show, to: url) }
         } catch {
             return finish("could not write sample shows: \(error.localizedDescription)", ok: false)
         }
 
-        open(songURL) {
-            open(segURL) {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 4) { capture() }
+        open(urls[0]) {
+            open(urls[1]) {
+                open(urls[2]) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 4) { capture() }
+                }
             }
         }
     }
@@ -66,8 +78,8 @@ enum ScreenshotRun {
             guard let rep = view.bitmapImageRepForCachingDisplay(in: view.bounds) else { continue }
             view.cacheDisplay(in: view.bounds, to: rep)
             guard let png = rep.representation(using: .png, properties: [:]) else { continue }
-            let isSegment = doc.fileURL?.lastPathComponent.contains("(segment)") ?? false
-            let name = isSegment ? "workspace-segment.png" : "workspace-song.png"
+            let file = doc.fileURL?.lastPathComponent ?? ""
+            let name = shots.first { $0.file == file }?.image ?? "workspace-\(saved).png"
             do {
                 try png.write(to: folder.appendingPathComponent(name))
                 saved += 1
