@@ -31,6 +31,11 @@ struct LiveView: View {
                 if status.freeMode {
                     FreeModeBanner(show: show, hints: status.hints) { engine.setFreeMode(false) }
                 }
+                if RundownTiming.applies(to: show) {
+                    TimelineView(.periodic(from: .now, by: 1)) { context in
+                        LiveRundownStrip(timing: RundownTiming(show: show, log: engine.log, itemID: cursor.itemID, now: context.date))
+                    }
+                }
                 TimelineView(.periodic(from: .now, by: 0.1)) { context in
                     NowNextPanels(show: show, item: item, cursor: cursor, takenAt: status.takenAt,
                                   secondsToNext: status.secondsToNext, now: context.date)
@@ -877,5 +882,55 @@ struct CameraDownSheet: View {
         }
         .labelsHidden()
         .frame(maxWidth: 260)
+    }
+}
+
+
+/// Rundown timing for timed segments: planned against elapsed, the hard out, the show over or under.
+struct LiveRundownStrip: View {
+    let timing: RundownTiming
+
+    var body: some View {
+        HStack(spacing: Space.xl) {
+            if let planned = timing.planned {
+                metric("Planned", clockText(planned), Gallery.dim)
+                metric("Elapsed", timing.elapsed.map(clockText) ?? "–", Gallery.ink)
+                if let left = timing.remaining {
+                    if left >= 0 {
+                        metric("Left", clockText(left), left < 30 ? Gallery.amber : Gallery.ink)
+                    } else {
+                        metric("Over", clockText(-left), Gallery.tally)
+                    }
+                }
+            }
+            if let out = timing.hardOutIn {
+                metric("Hard out", out >= 0 ? "in " + clockText(out) : clockText(-out) + " past", out < 60 ? Gallery.tally : (out < 300 ? Gallery.amber : Gallery.ink))
+            }
+            Spacer(minLength: 0)
+            if timing.finishedPlanned > 0 {
+                let off = timing.showOffset
+                metric("Show", abs(off) < 1 ? "On time" : (off > 0 ? "+" + clockText(off) + " over" : "−" + clockText(-off) + " under"),
+                       off > 30 ? Gallery.amber : Gallery.ink)
+            }
+            if let next = timing.nextHardOut {
+                let time = next.deadline.formatted(date: .omitted, time: .shortened)
+                metric("\(next.title) out \(time)",
+                       next.margin >= 0 ? clockText(next.margin) + " spare" : clockText(-next.margin) + " late",
+                       next.margin < 0 ? Gallery.tally : (next.margin < 120 ? Gallery.amber : Gallery.next))
+            } else if let end = timing.forecastEnd {
+                metric("Ends about", end.formatted(date: .omitted, time: .shortened), Gallery.dim)
+            }
+        }
+        .padding(.horizontal, Space.l)
+        .padding(.vertical, Space.s)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(LivePalette.panel, in: RoundedRectangle(cornerRadius: Radius.l))
+    }
+
+    private func metric(_ label: String, _ value: String, _ color: Color) -> some View {
+        VStack(alignment: .leading, spacing: 1) {
+            Text(label).font(.ocMeta).foregroundStyle(Gallery.faint).lineLimit(1)
+            Text(value).font(.readout(20, weight: .semibold)).foregroundStyle(color).lineLimit(1)
+        }
     }
 }
