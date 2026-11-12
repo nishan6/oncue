@@ -331,10 +331,10 @@ struct LiveCameraGrid: View {
                 Spacer()
                 Text("Tally follows the script position").font(.ocMeta).foregroundStyle(Gallery.faint)
             }
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 128), spacing: Space.s)], alignment: .leading, spacing: Space.s) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: Space.s)], alignment: .leading, spacing: Space.s) {
                 ForEach(show.sortedCameras) { cam in
                     SourceButton(camera: cam, tally: cam.id == pgm ? .current : (cam.id == pvw ? .next : .off),
-                                 live: true, width: 128, height: 66, numeral: 24)
+                                 live: true, width: 150, height: 62, numeral: 28)
                 }
             }
         }

@@ -602,7 +602,7 @@ struct CameraPaletteView: View {
         }
         .padding(.horizontal, Space.l)
         .padding(.vertical, Space.s)
-        .frame(height: 82)
+        .frame(height: 74)
         .background(Gallery.panel)
     }
 }
@@ -613,9 +613,9 @@ struct SourceButton: View {
     let camera: Camera
     let tally: TallyState
     var live = false
-    var width: CGFloat = 116
-    var height: CGFloat = 58
-    var numeral: CGFloat = 20
+    var width: CGFloat = 132
+    var height: CGFloat = 50
+    var numeral: CGFloat = 22
     var action: (() -> Void)? = nil
     @State private var hovering = false
     @State private var pressed = false
@@ -637,28 +637,31 @@ struct SourceButton: View {
     }
 
     private var face: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            HStack(alignment: .firstTextBaseline, spacing: 4) {
-                Text("\(camera.number)")
-                    .font(.cameraNumeral(numeral))
-                    .foregroundStyle(camera.swiftUIColor)
-                Spacer(minLength: 0)
-                TallyTag(state: tally, live: live)
+        HStack(alignment: .center, spacing: 8) {
+            Text("\(camera.number)")
+                .font(.cameraNumeral(numeral))
+                .foregroundStyle(camera.swiftUIColor)
+                .minimumScaleFactor(0.6)
+                .frame(minWidth: numeral * 0.9, alignment: .leading)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(camera.displayName)
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(Gallery.ink)
+                    .lineLimit(1)
+                Text(camera.operatorName.isEmpty ? " " : camera.operatorName)
+                    .font(.system(size: 10.5))
+                    .foregroundStyle(Gallery.faint)
+                    .lineLimit(1)
             }
             Spacer(minLength: 0)
-            Text(camera.displayName)
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(Gallery.ink)
-                .lineLimit(1)
-            Text(camera.operatorName.isEmpty ? " " : camera.operatorName)
-                .font(.system(size: 10.5))
-                .foregroundStyle(Gallery.faint)
-                .lineLimit(1)
         }
-        .padding(.horizontal, 9)
-        .padding(.top, 6)
-        .padding(.bottom, 8)
-        .frame(width: width, height: height, alignment: .topLeading)
+        .padding(.leading, 10)
+        .padding(.trailing, 6)
+        .padding(.bottom, 2)
+        .frame(width: width, height: height)
+        .overlay(alignment: .topTrailing) {
+            TallyTag(state: tally, live: live).padding(.top, 5).padding(.trailing, 5)
+        }
         .background(background, in: RoundedRectangle(cornerRadius: Radius.m))
         .overlay(alignment: .bottom) {
             Rectangle().fill(camera.swiftUIColor).frame(height: 3)
