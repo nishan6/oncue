@@ -1,0 +1,222 @@
+Building for debugging...
+[0/8] /Users/runner/work/oncue/oncue/Packages/OnCueCore/.build/arm64-apple-macosx/debug/OnCueCorePackageTests.derived/runner.swift
+[1/8] Write sources
+[4/8] Copying Fixtures
+[5/8] Write swift-version--79AA4F9932D1E87A.txt
+[7/23] Emitting module OnCueCore
+[8/29] Compiling OnCueCore ATEMSwitcher.swift
+[9/29] Compiling OnCueCore CompanionClient.swift
+[10/29] Compiling OnCueCore MIDIManager.swift
+[11/29] Compiling OnCueCore OSC.swift
+[12/29] Compiling OnCueCore PTZService.swift
+[13/29] Compiling OnCueCore SwitcherDevice.swift
+[14/29] Compiling OnCueCore LiveCursor.swift
+[15/29] Compiling OnCueCore SwitchLog.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/SwitchLog.swift:84:60: warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 82 |             let c = try decoder.singleValueContainer()
+ 83 |             let text = try c.decode(String.self)
+ 84 |             if let date = withFraction.date(from: text) ?? plain.date(from: text) { return date }
+    |                                                            `- warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 85 |             throw DecodingError.dataCorruptedError(in: c, debugDescription: "Not a date: \(text)")
+ 86 |         }
+
+/Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSISO8601DateFormatter.h:46:12: note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+44 | 
+45 | API_AVAILABLE(macosx(10.12), ios(10.0), watchos(3.0), tvos(10.0))
+46 | @interface NSISO8601DateFormatter : NSFormatter <NSSecureCoding> {
+   |            `- note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+47 | @private
+48 |     CFDateFormatterRef _formatter;
+[16/29] Compiling OnCueCore Timing.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/SwitchLog.swift:84:60: warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 82 |             let c = try decoder.singleValueContainer()
+ 83 |             let text = try c.decode(String.self)
+ 84 |             if let date = withFraction.date(from: text) ?? plain.date(from: text) { return date }
+    |                                                            `- warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 85 |             throw DecodingError.dataCorruptedError(in: c, debugDescription: "Not a date: \(text)")
+ 86 |         }
+
+/Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSISO8601DateFormatter.h:46:12: note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+44 | 
+45 | API_AVAILABLE(macosx(10.12), ios(10.0), watchos(3.0), tvos(10.0))
+46 | @interface NSISO8601DateFormatter : NSFormatter <NSSecureCoding> {
+   |            `- note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+47 | @private
+48 |     CFDateFormatterRef _formatter;
+[17/29] Compiling OnCueCore Model.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/SwitchLog.swift:84:60: warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 82 |             let c = try decoder.singleValueContainer()
+ 83 |             let text = try c.decode(String.self)
+ 84 |             if let date = withFraction.date(from: text) ?? plain.date(from: text) { return date }
+    |                                                            `- warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 85 |             throw DecodingError.dataCorruptedError(in: c, debugDescription: "Not a date: \(text)")
+ 86 |         }
+
+/Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSISO8601DateFormatter.h:46:12: note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+44 | 
+45 | API_AVAILABLE(macosx(10.12), ios(10.0), watchos(3.0), tvos(10.0))
+46 | @interface NSISO8601DateFormatter : NSFormatter <NSSecureCoding> {
+   |            `- note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+47 | @private
+48 |     CFDateFormatterRef _formatter;
+[18/29] Compiling OnCueCore MachineProfile.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/SwitchLog.swift:84:60: warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 82 |             let c = try decoder.singleValueContainer()
+ 83 |             let text = try c.decode(String.self)
+ 84 |             if let date = withFraction.date(from: text) ?? plain.date(from: text) { return date }
+    |                                                            `- warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 85 |             throw DecodingError.dataCorruptedError(in: c, debugDescription: "Not a date: \(text)")
+ 86 |         }
+
+/Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSISO8601DateFormatter.h:46:12: note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+44 | 
+45 | API_AVAILABLE(macosx(10.12), ios(10.0), watchos(3.0), tvos(10.0))
+46 | @interface NSISO8601DateFormatter : NSFormatter <NSSecureCoding> {
+   |            `- note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+47 | @private
+48 |     CFDateFormatterRef _formatter;
+[19/29] Compiling OnCueCore ShowCoding.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/SwitchLog.swift:84:60: warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 82 |             let c = try decoder.singleValueContainer()
+ 83 |             let text = try c.decode(String.self)
+ 84 |             if let date = withFraction.date(from: text) ?? plain.date(from: text) { return date }
+    |                                                            `- warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 85 |             throw DecodingError.dataCorruptedError(in: c, debugDescription: "Not a date: \(text)")
+ 86 |         }
+
+/Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSISO8601DateFormatter.h:46:12: note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+44 | 
+45 | API_AVAILABLE(macosx(10.12), ios(10.0), watchos(3.0), tvos(10.0))
+46 | @interface NSISO8601DateFormatter : NSFormatter <NSSecureCoding> {
+   |            `- note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+47 | @private
+48 |     CFDateFormatterRef _formatter;
+[20/29] Compiling OnCueCore TolerantDecoding.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/SwitchLog.swift:84:60: warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 82 |             let c = try decoder.singleValueContainer()
+ 83 |             let text = try c.decode(String.self)
+ 84 |             if let date = withFraction.date(from: text) ?? plain.date(from: text) { return date }
+    |                                                            `- warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+ 85 |             throw DecodingError.dataCorruptedError(in: c, debugDescription: "Not a date: \(text)")
+ 86 |         }
+
+/Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSISO8601DateFormatter.h:46:12: note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+44 | 
+45 | API_AVAILABLE(macosx(10.12), ios(10.0), watchos(3.0), tvos(10.0))
+46 | @interface NSISO8601DateFormatter : NSFormatter <NSSecureCoding> {
+   |            `- note: class 'ISO8601DateFormatter' does not conform to the 'Sendable' protocol
+47 | @private
+48 |     CFDateFormatterRef _formatter;
+[21/29] Compiling OnCueCore SampleShow.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/ShowEngine.swift:498:26: error: cannot call value of non-function type 'ShowEngine.Route'
+496 |     private func previewCommands(for row: ShotRow?, on switcherID: UUID, after current: ShotRow?) -> [EngineCommand] {
+497 |         guard let row, let route = route(row.cue.cameraID, to: switcherID) else { return [] }
+498 |         let onAirRoute = route(current?.cue.cameraID, to: switcherID)
+    |                          `- error: cannot call value of non-function type 'ShowEngine.Route'
+499 |         if let lowest = route.feeds.first, onAirRoute?.input == route.input {
+500 |             // Same sub-switcher feed is on air: prepare the camera on the sub-switcher's own preview.
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/ShowEngine.swift:531:13: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+529 |         var commands: [EngineCommand] = []
+530 |         let automation = automationOn && mode != .display
+531 |         let cues = item.tracks.filter { !$0.muted && $0.kind != .shots }
+    |             `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+532 |             .flatMap { track in track.cues.map { (track, $0) } }
+533 |             .filter { $0.1.at > from + 1e-9 && $0.1.at <= to + 1e-9 }
+[22/29] Compiling OnCueCore ShowEditing.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/ShowEngine.swift:498:26: error: cannot call value of non-function type 'ShowEngine.Route'
+496 |     private func previewCommands(for row: ShotRow?, on switcherID: UUID, after current: ShotRow?) -> [EngineCommand] {
+497 |         guard let row, let route = route(row.cue.cameraID, to: switcherID) else { return [] }
+498 |         let onAirRoute = route(current?.cue.cameraID, to: switcherID)
+    |                          `- error: cannot call value of non-function type 'ShowEngine.Route'
+499 |         if let lowest = route.feeds.first, onAirRoute?.input == route.input {
+500 |             // Same sub-switcher feed is on air: prepare the camera on the sub-switcher's own preview.
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/ShowEngine.swift:531:13: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+529 |         var commands: [EngineCommand] = []
+530 |         let automation = automationOn && mode != .display
+531 |         let cues = item.tracks.filter { !$0.muted && $0.kind != .shots }
+    |             `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+532 |             .flatMap { track in track.cues.map { (track, $0) } }
+533 |             .filter { $0.1.at > from + 1e-9 && $0.1.at <= to + 1e-9 }
+[23/29] Compiling OnCueCore SwitcherEditing.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/ShowEngine.swift:498:26: error: cannot call value of non-function type 'ShowEngine.Route'
+496 |     private func previewCommands(for row: ShotRow?, on switcherID: UUID, after current: ShotRow?) -> [EngineCommand] {
+497 |         guard let row, let route = route(row.cue.cameraID, to: switcherID) else { return [] }
+498 |         let onAirRoute = route(current?.cue.cameraID, to: switcherID)
+    |                          `- error: cannot call value of non-function type 'ShowEngine.Route'
+499 |         if let lowest = route.feeds.first, onAirRoute?.input == route.input {
+500 |             // Same sub-switcher feed is on air: prepare the camera on the sub-switcher's own preview.
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/ShowEngine.swift:531:13: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+529 |         var commands: [EngineCommand] = []
+530 |         let automation = automationOn && mode != .display
+531 |         let cues = item.tracks.filter { !$0.muted && $0.kind != .shots }
+    |             `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+532 |             .flatMap { track in track.cues.map { (track, $0) } }
+533 |             .filter { $0.1.at > from + 1e-9 && $0.1.at <= to + 1e-9 }
+[24/29] Compiling OnCueCore TimelineEditing.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/ShowEngine.swift:498:26: error: cannot call value of non-function type 'ShowEngine.Route'
+496 |     private func previewCommands(for row: ShotRow?, on switcherID: UUID, after current: ShotRow?) -> [EngineCommand] {
+497 |         guard let row, let route = route(row.cue.cameraID, to: switcherID) else { return [] }
+498 |         let onAirRoute = route(current?.cue.cameraID, to: switcherID)
+    |                          `- error: cannot call value of non-function type 'ShowEngine.Route'
+499 |         if let lowest = route.feeds.first, onAirRoute?.input == route.input {
+500 |             // Same sub-switcher feed is on air: prepare the camera on the sub-switcher's own preview.
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/ShowEngine.swift:531:13: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+529 |         var commands: [EngineCommand] = []
+530 |         let automation = automationOn && mode != .display
+531 |         let cues = item.tracks.filter { !$0.muted && $0.kind != .shots }
+    |             `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+532 |             .flatMap { track in track.cues.map { (track, $0) } }
+533 |             .filter { $0.1.at > from + 1e-9 && $0.1.at <= to + 1e-9 }
+[25/29] Compiling OnCueCore EngineController.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/ShowEngine.swift:498:26: error: cannot call value of non-function type 'ShowEngine.Route'
+496 |     private func previewCommands(for row: ShotRow?, on switcherID: UUID, after current: ShotRow?) -> [EngineCommand] {
+497 |         guard let row, let route = route(row.cue.cameraID, to: switcherID) else { return [] }
+498 |         let onAirRoute = route(current?.cue.cameraID, to: switcherID)
+    |                          `- error: cannot call value of non-function type 'ShowEngine.Route'
+499 |         if let lowest = route.feeds.first, onAirRoute?.input == route.input {
+500 |             // Same sub-switcher feed is on air: prepare the camera on the sub-switcher's own preview.
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/ShowEngine.swift:531:13: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+529 |         var commands: [EngineCommand] = []
+530 |         let automation = automationOn && mode != .display
+531 |         let cues = item.tracks.filter { !$0.muted && $0.kind != .shots }
+    |             `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+532 |             .flatMap { track in track.cues.map { (track, $0) } }
+533 |             .filter { $0.1.at > from + 1e-9 && $0.1.at <= to + 1e-9 }
+[26/29] Compiling OnCueCore LTC.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/ShowEngine.swift:498:26: error: cannot call value of non-function type 'ShowEngine.Route'
+496 |     private func previewCommands(for row: ShotRow?, on switcherID: UUID, after current: ShotRow?) -> [EngineCommand] {
+497 |         guard let row, let route = route(row.cue.cameraID, to: switcherID) else { return [] }
+498 |         let onAirRoute = route(current?.cue.cameraID, to: switcherID)
+    |                          `- error: cannot call value of non-function type 'ShowEngine.Route'
+499 |         if let lowest = route.feeds.first, onAirRoute?.input == route.input {
+500 |             // Same sub-switcher feed is on air: prepare the camera on the sub-switcher's own preview.
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/ShowEngine.swift:531:13: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+529 |         var commands: [EngineCommand] = []
+530 |         let automation = automationOn && mode != .display
+531 |         let cues = item.tracks.filter { !$0.muted && $0.kind != .shots }
+    |             `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+532 |             .flatMap { track in track.cues.map { (track, $0) } }
+533 |             .filter { $0.1.at > from + 1e-9 && $0.1.at <= to + 1e-9 }
+[27/29] Compiling OnCueCore ShowEngine.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/ShowEngine.swift:498:26: error: cannot call value of non-function type 'ShowEngine.Route'
+496 |     private func previewCommands(for row: ShotRow?, on switcherID: UUID, after current: ShotRow?) -> [EngineCommand] {
+497 |         guard let row, let route = route(row.cue.cameraID, to: switcherID) else { return [] }
+498 |         let onAirRoute = route(current?.cue.cameraID, to: switcherID)
+    |                          `- error: cannot call value of non-function type 'ShowEngine.Route'
+499 |         if let lowest = route.feeds.first, onAirRoute?.input == route.input {
+500 |             // Same sub-switcher feed is on air: prepare the camera on the sub-switcher's own preview.
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/ShowEngine.swift:531:13: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+529 |         var commands: [EngineCommand] = []
+530 |         let automation = automationOn && mode != .display
+531 |         let cues = item.tracks.filter { !$0.muted && $0.kind != .shots }
+    |             `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+532 |             .flatMap { track in track.cues.map { (track, $0) } }
+533 |             .filter { $0.1.at > from + 1e-9 && $0.1.at <= to + 1e-9 }
+error: fatalError
