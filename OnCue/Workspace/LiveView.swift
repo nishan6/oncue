@@ -94,6 +94,7 @@ struct LiveToolbarStatus: View {
             StatusChip(symbol: "cable.connector.slash", label: "Switcher", value: "Not connected", warning: true,
                        help: "Switcher control comes with the show engine.")
             Button { model.exitLive() } label: { Label("Exit Live", systemImage: "xmark") }
+                .labelStyle(.titleAndIcon)
                 .buttonStyle(QuietButtonStyle())
                 .help("Back to editing (Esc or ⌘L)")
         }
