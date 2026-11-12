@@ -1,0 +1,89 @@
+Building for debugging...
+[0/8] Copying Fixtures
+[0/8] /Users/runner/work/oncue/oncue/Packages/OnCueCore/.build/arm64-apple-macosx/debug/OnCueCorePackageTests.derived/runner.swift
+[2/8] Write sources
+[5/8] Write swift-version--79AA4F9932D1E87A.txt
+[7/27] Emitting module OnCueCore
+[8/35] Compiling OnCueCore CrewPage.swift
+[9/35] Compiling OnCueCore CrewServer.swift
+[10/35] Compiling OnCueCore CrewSnapshot.swift
+[11/35] Compiling OnCueCore ATEMSwitcher.swift
+[12/35] Compiling OnCueCore CompanionClient.swift
+[13/35] Compiling OnCueCore MIDIManager.swift
+[14/35] Compiling OnCueCore OSC.swift
+[15/35] Compiling OnCueCore PTZService.swift
+[16/35] Compiling OnCueCore SwitcherDevice.swift
+[17/35] Compiling OnCueCore LiveCursor.swift
+[18/35] Compiling OnCueCore SampleShow.swift
+[19/35] Compiling OnCueCore ShowEditing.swift
+[20/35] Compiling OnCueCore SwitcherEditing.swift
+[21/35] Compiling OnCueCore TimelineEditing.swift
+[22/35] Compiling OnCueCore Controls.swift
+[23/35] Compiling OnCueCore EngineController.swift
+[24/35] Compiling OnCueCore LTC.swift
+[25/35] Compiling OnCueCore ShowEngine.swift
+[26/35] Compiling OnCueCore SwitchLog.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Export/TextExports.swift:115:17: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+113 |             if useLTC, let tc = entry.timecode, let f = EDLTimecode.parse(tc, fps: fps) { return f }
+114 |             let c = calendar.dateComponents([.hour, .minute, .second, .nanosecond], from: entry.date)
+115 |             let seconds = Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                 `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+116 |             return EDLTimecode.frames(seconds: seconds, fps: fps)
+117 |         }
+[27/35] Compiling OnCueCore Timing.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Export/TextExports.swift:115:17: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+113 |             if useLTC, let tc = entry.timecode, let f = EDLTimecode.parse(tc, fps: fps) { return f }
+114 |             let c = calendar.dateComponents([.hour, .minute, .second, .nanosecond], from: entry.date)
+115 |             let seconds = Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                 `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+116 |             return EDLTimecode.frames(seconds: seconds, fps: fps)
+117 |         }
+[28/35] Compiling OnCueCore PDFExports.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Export/TextExports.swift:115:17: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+113 |             if useLTC, let tc = entry.timecode, let f = EDLTimecode.parse(tc, fps: fps) { return f }
+114 |             let c = calendar.dateComponents([.hour, .minute, .second, .nanosecond], from: entry.date)
+115 |             let seconds = Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                 `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+116 |             return EDLTimecode.frames(seconds: seconds, fps: fps)
+117 |         }
+[29/35] Compiling OnCueCore TextExports.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Export/TextExports.swift:115:17: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+113 |             if useLTC, let tc = entry.timecode, let f = EDLTimecode.parse(tc, fps: fps) { return f }
+114 |             let c = calendar.dateComponents([.hour, .minute, .second, .nanosecond], from: entry.date)
+115 |             let seconds = Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                 `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+116 |             return EDLTimecode.frames(seconds: seconds, fps: fps)
+117 |         }
+[30/35] Compiling OnCueCore Model.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Export/TextExports.swift:115:17: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+113 |             if useLTC, let tc = entry.timecode, let f = EDLTimecode.parse(tc, fps: fps) { return f }
+114 |             let c = calendar.dateComponents([.hour, .minute, .second, .nanosecond], from: entry.date)
+115 |             let seconds = Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                 `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+116 |             return EDLTimecode.frames(seconds: seconds, fps: fps)
+117 |         }
+[31/35] Compiling OnCueCore MachineProfile.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Export/TextExports.swift:115:17: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+113 |             if useLTC, let tc = entry.timecode, let f = EDLTimecode.parse(tc, fps: fps) { return f }
+114 |             let c = calendar.dateComponents([.hour, .minute, .second, .nanosecond], from: entry.date)
+115 |             let seconds = Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                 `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+116 |             return EDLTimecode.frames(seconds: seconds, fps: fps)
+117 |         }
+[32/35] Compiling OnCueCore ShowCoding.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Export/TextExports.swift:115:17: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+113 |             if useLTC, let tc = entry.timecode, let f = EDLTimecode.parse(tc, fps: fps) { return f }
+114 |             let c = calendar.dateComponents([.hour, .minute, .second, .nanosecond], from: entry.date)
+115 |             let seconds = Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                 `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+116 |             return EDLTimecode.frames(seconds: seconds, fps: fps)
+117 |         }
+[33/35] Compiling OnCueCore TolerantDecoding.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Export/TextExports.swift:115:17: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+113 |             if useLTC, let tc = entry.timecode, let f = EDLTimecode.parse(tc, fps: fps) { return f }
+114 |             let c = calendar.dateComponents([.hour, .minute, .second, .nanosecond], from: entry.date)
+115 |             let seconds = Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                 `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+116 |             return EDLTimecode.frames(seconds: seconds, fps: fps)
+117 |         }
+error: fatalError
