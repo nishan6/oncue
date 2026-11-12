@@ -308,6 +308,9 @@ public struct ProjectProperties: Codable, Hashable {
     /// Shot sizes, movements, framings, cast, statuses and transitions for this project.
     public var shots = ShotVocabulary()
     public var countdown = CountdownSettings()
+    /// Incoming OSC, MIDI, MSC and Art-Net mapped to OnCue actions (Trigger Routes).
+    public var triggerRoutes: [TriggerRoute] = []
+    public var chase = ChaseSettings()
     public init() {}
 }
 

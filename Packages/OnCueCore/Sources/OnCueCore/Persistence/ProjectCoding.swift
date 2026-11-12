@@ -114,6 +114,54 @@ extension ProjectProperties {
         roles = try c.value("roles", ProjectRole.standard.map { ProjectRole(name: $0) })
         shots = try c.value("shots", ShotVocabulary())
         countdown = try c.value("countdown", CountdownSettings())
+        triggerRoutes = try c.value("triggerRoutes", [])
+        chase = try c.value("chase", ChaseSettings())
+    }
+}
+
+extension ChaseSettings {
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: AnyCodingKey.self)
+        self.init()
+        freewheel = try c.enumValue("freewheel", .untilSongEnd)
+        freewheelSeconds = try c.value("freewheelSeconds", 5.0)
+        preRollSeconds = try c.value("preRollSeconds", 0.0)
+    }
+}
+
+extension TriggerRoute {
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: AnyCodingKey.self)
+        self.init(name: try c.value("name", ""), input: try c.value("input", TriggerInput()), action: try c.value("action", TriggerAction()))
+        id = try c.value("id", UUID())
+        enabled = try c.value("enabled", true)
+    }
+}
+
+extension TriggerInput {
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: AnyCodingKey.self)
+        self.init(kind: try c.enumValue("kind", .osc))
+        address = try c.value("address", "")
+        channel = try c.value("channel", 0)
+        number = try c.value("number", 0)
+        msc = MSCCommand(rawValue: try c.value("msc", MSCCommand.go.rawValue)) ?? .go
+        universe = try c.value("universe", 0)
+        threshold = try c.value("threshold", kind == .midiCC ? 64 : 128)
+    }
+}
+
+extension TriggerAction {
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: AnyCodingKey.self)
+        self.init(kind: try c.enumValue("kind", .command))
+        command = try c.enumValue("command", .next)
+        cameraNumber = try c.value("cameraNumber", 0)
+        target = try c.enumValue("target", .fixed)
+        itemID = try c.optional("itemID")
+        sectionID = try c.optional("sectionID")
+        cueID = try c.optional("cueID")
+        noteText = try c.value("noteText", "")
     }
 }
 
