@@ -106,7 +106,7 @@ public final class PreShowCheck: ObservableObject {
                 : (noCamera.isEmpty ? "" : "No camera: " + noCamera.joined(separator: ", "))
                 + (missing.isEmpty ? "" : (noCamera.isEmpty ? "" : ". ") + "Deleted camera: " + missing.joined(separator: ", ")))
         if !empty.isEmpty { add(g, "empty", "Songs without shots", .warn, empty.joined(separator: ", ")) }
-        let ltcItems = show.items.filter { $0.syncMode == .ltc && $0.ltcStart.isEmpty }
+        let ltcItems = show.items.filter { ($0.syncMode == .ltc || $0.syncMode == .mtc) && $0.ltcStart.isEmpty }
         if !ltcItems.isEmpty {
             add(g, "ltcstart", "LTC start times", .info, "No LTC start set, so these start at the first timecode after GO: "
                 + ltcItems.map(\.title).joined(separator: ", "))
@@ -203,6 +203,20 @@ public final class PreShowCheck: ObservableObject {
     private func checkTiming() {
         let g = "Timing"
         let modes = Set(show.items.map(\.syncMode))
+        if modes.contains(.mtc) {
+            if profile.midiClockSource.isEmpty {
+                add(g, "mtc", "MIDI timecode", .fail, "Songs follow MTC but no MIDI source is chosen in Settings (MIDI clock source).")
+            } else {
+                let ok = midiSources().contains(profile.midiClockSource)
+                add(g, "mtc", "MIDI timecode", ok ? .pass : .fail,
+                    ok ? "\(profile.midiClockSource) is connected. Whether timecode arrives shows in Live Mode." : "\(profile.midiClockSource) isn't connected to this Mac.")
+            }
+        }
+        if modes.contains(.osc) {
+            add(g, "oscpos", "OSC position", profile.oscControlPort > 0 ? .info : .fail,
+                profile.oscControlPort > 0 ? "Listening for /oncue/time or /oncue/beat on port \(profile.oscControlPort)."
+                                           : "Songs follow OSC but the OSC control port is off in Settings.")
+        }
         if modes.contains(.midiClock) {
             if profile.midiClockSource.isEmpty {
                 add(g, "midi", "MIDI clock", .fail, "Songs follow MIDI clock but no clock source is chosen in Settings.")
@@ -221,7 +235,7 @@ public final class PreShowCheck: ObservableObject {
                 add(g, "ltc", "LTC input", .fail, "The chosen audio input isn't connected to this Mac.")
             }
         }
-        if !modes.contains(.midiClock) && !modes.contains(.ltc) {
+        if modes.isDisjoint(with: [.midiClock, .ltc, .mtc, .osc]) {
             add(g, "manual", "Timing", .info, "Every song is driven by taps, NEXT or the internal clock.")
         }
     }

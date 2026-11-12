@@ -396,3 +396,34 @@ final class FakeATEM {
         return b
     }
 }
+
+final class MTCTests: XCTestCase {
+    func testQuarterFramesGiveTimeTwoFramesOn() {
+        var d = MTCDecoder()
+        let bytes = MTCDecoder.quarterFrames(hours: 1, minutes: 2, seconds: 3, frames: 10, rateBits: 1)
+        var result: Double?
+        for (k, b) in bytes.enumerated() {
+            let r = d.quarterFrame(b)
+            if k < 7 { XCTAssertNil(r) } else { result = r }
+        }
+        XCTAssertEqual(d.fps, 25)
+        XCTAssertEqual(result!, 3723 + 12.0 / 25, accuracy: 1e-9)
+    }
+
+    func testOutOfOrderPiecesAreIgnored() {
+        var d = MTCDecoder()
+        let bytes = MTCDecoder.quarterFrames(hours: 0, minutes: 0, seconds: 5, frames: 0, rateBits: 3)
+        for b in bytes.dropFirst(2) { XCTAssertNil(d.quarterFrame(b)) }
+        var last: Double?
+        for b in bytes { last = d.quarterFrame(b) }
+        XCTAssertEqual(last!, 5 + 2.0 / 30, accuracy: 1e-9)
+    }
+
+    func testFullFrame() {
+        var d = MTCDecoder()
+        let t = d.fullFrame([0xF0, 0x7F, 0x7F, 0x01, 0x01, 0x20 | 10, 30, 15, 12, 0xF7])
+        XCTAssertEqual(d.fps, 25)
+        XCTAssertEqual(t!, 10 * 3600 + 30 * 60 + 15 + 12.0 / 25, accuracy: 1e-9)
+        XCTAssertNil(d.fullFrame([0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7]))
+    }
+}

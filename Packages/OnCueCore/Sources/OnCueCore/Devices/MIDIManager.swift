@@ -21,6 +21,9 @@ struct MIDIEndpointInfo: Identifiable, Hashable {
 /// Network MIDI shows up here once a session is connected in Audio MIDI Setup > MIDI Network Setup.
 final class MIDIManager {
     var onClock: ((MIDIClockEvent) -> Void)?
+    /// MIDI Time Code from the clock source, in seconds since midnight.
+    var onTimecode: ((Double) -> Void)?
+    private var mtc = MTCDecoder()
     var onControl: ((_ channel: Int, _ number: Int, _ isCC: Bool, _ value: Int) -> Void)?
     var onDevicesChanged: (() -> Void)?
 
@@ -155,9 +158,16 @@ final class MIDIManager {
                 i += 3
                 continue
             }
+            if b == 0xF1, i + 1 < bytes.count {
+                if tag & Self.clockTag != 0, let t = mtc.quarterFrame(bytes[i + 1]) { emitTimecode(t) }
+                i += 2
+                continue
+            }
             if b == 0xF0 {
-                // Skip SysEx.
+                // SysEx: MTC full frames are read, the rest skipped.
+                let start = i
                 while i < bytes.count && bytes[i] != 0xF7 { i += 1 }
+                if tag & Self.clockTag != 0, i < bytes.count, let t = mtc.fullFrame(Array(bytes[start...i])) { emitTimecode(t) }
                 i += 1
                 continue
             }
@@ -189,6 +199,13 @@ final class MIDIManager {
             default:
                 i = dataStart + 2
             }
+        }
+    }
+
+    private func emitTimecode(_ seconds: Double) {
+        DispatchQueue.main.async {
+            self.lastClockActivity = Date()
+            self.onTimecode?(seconds)
         }
     }
 

@@ -66,7 +66,7 @@ struct ItemHeaderView: View {
                 HStack(alignment: .top, spacing: Space.m) {
                     MetaItem(label: "Timing") { TimingMenu(item: item, model: model) }
                     MetaItem(label: "Live follows") { SyncMenu(item: item, model: model) }
-                    if item.syncMode == .ltc && item.timeBase != .order {
+                    if (item.syncMode == .ltc || item.syncMode == .mtc) && item.timeBase != .order {
                         MetaItem(label: "LTC start") {
                             CommitField(placeholder: "First frame", value: item.ltcStart, font: .readout(13), width: 96) { text in
                                 let t = text.trimmingCharacters(in: .whitespaces)
@@ -282,6 +282,8 @@ struct SyncMenu: View {
         case .next: return "Every shot on NEXT"
         case .midiClock: return "Ableton or a DAW sends MIDI clock"
         case .ltc: return "Timecode on an audio input"
+        case .mtc: return "MIDI timecode from a DAW or show controller"
+        case .osc: return "Position sent over OSC by a media server or DAW"
         case .freeRun: return "OnCue's own clock from GO"
         }
     }

@@ -172,7 +172,7 @@ struct LiveToolbarStatus: View {
             Button { timingOpen = true } label: {
                 StatusChip(symbol: timingSymbol(status.timing), label: "Timing · \(status.timing.label)",
                            value: timingValue(status),
-                           warning: (status.timing == .midiClock || status.timing == .ltc) && !status.timingSignal,
+                           warning: [.midiClock, .ltc, .mtc, .osc].contains(status.timing) && !status.timingSignal,
                            help: timingHelp(status) + " Click to switch method.")
             }
             .buttonStyle(.plain)
@@ -227,6 +227,8 @@ struct LiveToolbarStatus: View {
         case .internalClock: return "clock"
         case .midiClock: return "pianokeys"
         case .ltc: return "waveform"
+        case .mtc: return "pianokeys.inverse"
+        case .osc: return "antenna.radiowaves.left.and.right"
         }
     }
 
@@ -239,8 +241,10 @@ struct LiveToolbarStatus: View {
         case .midiClock:
             guard s.timingSignal else { return "No clock" }
             return s.tempo.map { String(format: "%.1f BPM", $0) } ?? "Receiving"
-        case .ltc:
+        case .ltc, .mtc:
             return s.timingSignal ? (s.timecode ?? "Receiving") : "No timecode"
+        case .osc:
+            return s.timingSignal ? "Receiving" : "No OSC position"
         }
     }
 
@@ -251,6 +255,8 @@ struct LiveToolbarStatus: View {
         case .internalClock: return "OnCue's own clock runs from GO (Return) at the item's tempo."
         case .midiClock: return "Following MIDI clock from the source set in Settings (This Mac). Start in Ableton starts the song."
         case .ltc: return "Following LTC on the audio input set in Settings (This Mac)."
+        case .mtc: return "Following MIDI timecode from the MIDI clock source set in Settings (This Mac)."
+        case .osc: return "Following /oncue/time (seconds) or /oncue/beat (quarter notes) sent to this Mac's OSC control port."
         }
     }
 

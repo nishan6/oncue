@@ -23,7 +23,7 @@ public enum TimeBase: String, Codable, CaseIterable, Identifiable {
 
 /// How the playhead moves during the show.
 public enum SyncMode: String, Codable, CaseIterable, Identifiable {
-    case tap, next, midiClock, ltc, freeRun
+    case tap, next, midiClock, ltc, mtc, osc, freeRun
     public var id: String { rawValue }
     public var label: String {
         switch self {
@@ -31,6 +31,8 @@ public enum SyncMode: String, Codable, CaseIterable, Identifiable {
         case .next: return "NEXT per shot"
         case .midiClock: return "MIDI clock"
         case .ltc: return "LTC timecode"
+        case .mtc: return "MIDI timecode (MTC)"
+        case .osc: return "OSC position"
         case .freeRun: return "Free run (clock)"
         }
     }

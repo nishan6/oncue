@@ -3,7 +3,7 @@ import Combine
 
 /// Which timing source drives the current song or segment in Live Mode.
 public enum TimingSourceKind: Equatable {
-    case manual, taps, internalClock, midiClock, ltc
+    case manual, taps, internalClock, midiClock, ltc, mtc, osc
 
     public var label: String {
         switch self {
@@ -12,6 +12,8 @@ public enum TimingSourceKind: Equatable {
         case .internalClock: return "Internal clock"
         case .midiClock: return "MIDI clock"
         case .ltc: return "LTC"
+        case .mtc: return "MTC"
+        case .osc: return "OSC"
         }
     }
 }
@@ -187,6 +189,8 @@ public final class EngineController: ObservableObject {
         case .freeRun: return .internalClock
         case .midiClock: return .midiClock
         case .ltc: return .ltc
+        case .mtc: return .mtc
+        case .osc: return .osc
         }
     }
 
@@ -196,7 +200,7 @@ public final class EngineController: ObservableObject {
         ltcFollower.reset()
         tempoOverride = nil
         switch timingKind {
-        case .midiClock:
+        case .midiClock, .mtc:
             ensureMIDI()
         case .ltc:
             if ltcInput == nil {
@@ -272,7 +276,7 @@ public final class EngineController: ObservableObject {
         case .internalClock, .taps:
             clock.start(at: 0, now: now)
             engine.syncRaw(0)
-        case .ltc:
+        case .ltc, .mtc:
             ltcFollower.reset()
         default:
             break
@@ -388,6 +392,33 @@ public final class EngineController: ObservableObject {
         guard timingKind == .ltc, let item = engine.item, engine.transport == .running else { return }
         let p = ltcFollower.position(forTimecode: seconds, item: item, fps: engine.show.settings.ltcFPS)
         if !following { run(engine.setPosition(raw: p, now: now), publishNow: false) }
+    }
+
+    /// MIDI Time Code: followed like LTC (the song starts at its LTC start, or the first frame after GO).
+    private func handleMTC(_ seconds: Double) {
+        let now = Self.now
+        lastLTC = (seconds, now)
+        guard timingKind == .mtc, let item = engine.item, engine.transport == .running else { return }
+        let p = ltcFollower.position(forTimecode: seconds, item: item, fps: engine.show.settings.ltcFPS)
+        if !following { run(engine.setPosition(raw: p, now: now), publishNow: false) }
+    }
+
+    /// OSC position from another system (a media server, a DAW script, TouchOSC):
+    /// /oncue/time <seconds from the song's start> or /oncue/beat <quarter notes from the song's start>.
+    private var lastOSCPosition: Double?
+
+    func handleOSCPosition(seconds: Double?, beats: Double?) {
+        let now = Self.now
+        lastOSCPosition = now
+        guard timingKind == .osc, let item = engine.item, !following else { return }
+        if engine.transport != .running { run(engine.start(now: now), publishNow: false) }
+        let raw: Double
+        if let beats { raw = TimingMath.position(beats: beats, for: item) }
+        else if let seconds { raw = TimingMath.position(seconds: seconds, for: item) }
+        else { return }
+        // The OSC value is the song position itself: no offset.
+        engine.syncRaw(engine.position)
+        run(engine.setPosition(raw: raw, now: now), publishNow: false)
     }
 
     // MARK: - Clock and commands
@@ -519,7 +550,7 @@ public final class EngineController: ObservableObject {
             engine.syncRaw(clock.position)
         case .midiClock:
             if let item = engine.item { engine.syncRaw(TimingMath.position(beats: midiFollower.beats, for: item)) }
-        case .ltc, .manual:
+        case .ltc, .mtc, .osc, .manual:
             break
         }
         publish()
@@ -564,7 +595,7 @@ public final class EngineController: ObservableObject {
     }
 
     private var currentTimecode: String? {
-        guard timingKind == .ltc, let l = lastLTC, Self.now - l.time < 1 else { return nil }
+        guard timingKind == .ltc || timingKind == .mtc, let l = lastLTC, Self.now - l.time < 1 else { return nil }
         return TimeFormat.timecode(l.seconds, fps: engine.show.settings.ltcFPS)
     }
 
@@ -591,9 +622,11 @@ public final class EngineController: ObservableObject {
         var timecode: String?
         switch kind {
         case .midiClock: signal = lastMIDIEvent.map { now - $0 < 0.5 } ?? false
-        case .ltc:
+        case .ltc, .mtc:
             signal = lastLTC.map { now - $0.time < 0.5 } ?? false
             timecode = lastLTC.map { TimeFormat.timecode($0.seconds, fps: engine.show.settings.ltcFPS) }
+        case .osc:
+            signal = lastOSCPosition.map { now - $0 < 0.5 } ?? false
         case .internalClock, .taps: signal = clock.running
         case .manual: signal = true
         }
@@ -645,6 +678,7 @@ public final class EngineController: ObservableObject {
                     controllerSource: profile.controllerSource,
                     controllerDestination: profile.controllerDestination)
         m.onClock = { [weak self] event in self?.handleMIDI(event) }
+        m.onTimecode = { [weak self] seconds in self?.handleMTC(seconds) }
         m.onControl = { [weak self] channel, number, isCC, value in
             guard let self, let binding = ControlMapping.binding(for: channel, number: number, isCC: isCC, value: value,
                                                                   in: self.engine.show.midiBindings) else { return }
@@ -665,7 +699,21 @@ public final class EngineController: ObservableObject {
                 default: break
                 }
             }
-            guard let self, let parsed = ControlMapping.command(fromOSC: address, intArgument: number) else { return }
+            guard let self else { return }
+            if address == "/oncue/time" || address == "/oncue/beat" {
+                var value: Double?
+                if let first = args.first {
+                    switch first {
+                    case .int(let v): value = Double(v)
+                    case .float(let v): value = Double(v)
+                    default: value = nil
+                    }
+                }
+                guard let value else { return }
+                self.handleOSCPosition(seconds: address == "/oncue/time" ? value : nil, beats: address == "/oncue/beat" ? value : nil)
+                return
+            }
+            guard let parsed = ControlMapping.command(fromOSC: address, intArgument: number) else { return }
             self.perform(parsed.0, camera: parsed.1)
         }
         if profile.oscControlPort > 0 { oscControl.start(port: profile.oscControlPort) }
