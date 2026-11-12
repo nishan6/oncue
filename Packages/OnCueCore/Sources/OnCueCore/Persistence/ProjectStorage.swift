@@ -211,10 +211,10 @@ public enum ProjectLibrary {
         let keys: [URLResourceKey] = [.contentModificationDateKey]
         let urls = (try? FileManager.default.contentsOfDirectory(at: folder, includingPropertiesForKeys: keys,
                                                                     options: [.skipsHiddenFiles])) ?? []
-        // Packages come back from the directory listing with a trailing slash; rebuild each URL the
-        // same way create/rename build theirs, so they compare equal.
+        // Rebuilt the way packageURL builds them (packages marked as directories; older single-file
+        // shows stay plain files), so they compare equal to what create and rename return.
         return urls.filter { $0.pathExtension == fileExtension }
-            .map { folder.appendingPathComponent($0.lastPathComponent) }
+            .map { folder.appendingPathComponent($0.lastPathComponent, isDirectory: $0.hasDirectoryPath) }
             .map { url in
             let modified = (try? url.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate) ?? Date.distantPast
             var entry = LibraryEntry(url: url, projectID: nil, name: url.deletingPathExtension().lastPathComponent,
@@ -264,13 +264,20 @@ public enum ProjectLibrary {
         }
     }
 
+    /// Every project URL is built here, always marked as a directory (a package), so a URL made
+    /// before the package exists equals the one made after. Foundation otherwise checks the disk
+    /// and adds a trailing slash only when the folder is already there.
+    public static func packageURL(file: String, in folder: URL) -> URL {
+        folder.appendingPathComponent(file, isDirectory: true)
+    }
+
     /// A file name in the folder that is not taken: "Arena.oncue", "Arena 2.oncue", ...
     public static func uniqueURL(named name: String, in folder: URL) -> URL {
         let base = ProjectBackupFolder.safe(name)
-        var url = folder.appendingPathComponent(base).appendingPathExtension(fileExtension)
+        var url = packageURL(file: "\(base).\(fileExtension)", in: folder)
         var n = 2
         while FileManager.default.fileExists(atPath: url.path) {
-            url = folder.appendingPathComponent("\(base) \(n)").appendingPathExtension(fileExtension)
+            url = packageURL(file: "\(base) \(n).\(fileExtension)", in: folder)
             n += 1
         }
         return url
