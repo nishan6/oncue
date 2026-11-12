@@ -1,12 +1,12 @@
-# CI results for 5ade4b5
+# CI results for 8315866
 
-- Commit: 5ade4b5b12e22312d5b1104465b5c6afb49c3a05
-- Run: https://github.com/nishan6/oncue/actions/runs/43191648181
-- Date (UTC): 2026-11-12T09:45:27Z
+- Commit: 83158665564c8c58418086d5803332aeb644950b
+- Run: https://github.com/nishan6/oncue/actions/runs/43221930510
+- Date (UTC): 2026-11-12T12:54:08Z
 
 | Step | Result |
 | --- | --- |
-| Generate project | success (project changed: false) |
+| Generate project | success (project changed: true) |
 | Package tests | failure |
 | App build | failure |
 | Launch smoke test | skipped |
