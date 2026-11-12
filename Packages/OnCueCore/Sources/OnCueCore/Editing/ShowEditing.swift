@@ -297,6 +297,7 @@ extension Show {
     @discardableResult
     public mutating func deleteCamera(_ id: UUID) -> Int {
         var affected = 0
+        plot.markers.removeAll { $0.cameraID == id }
         for i in items.indices {
             for t in items[i].tracks.indices {
                 for c in items[i].tracks[t].cues.indices where items[i].tracks[t].cues[c].cameraID == id {

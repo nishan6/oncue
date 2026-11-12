@@ -269,5 +269,6 @@ extension Show {
         comments = try c.value("comments", [])
         midiBindings = try c.value("midiBindings", [])
         settings = try c.value("settings", ShowSettings())
+        plot = try c.value("plot", CameraPlot())
     }
 }

@@ -76,6 +76,9 @@ struct ShowWorkspaceView: View {
         .sheet(isPresented: $model.preShowCheckOpen) {
             PreShowCheckView(show: show, model: model)
         }
+        .sheet(isPresented: $model.plotOpen) {
+            CameraPlotView(show: show, model: model)
+        }
         .sheet(item: Binding(get: { model.reportLog.map(ReportBox.init) }, set: { model.reportLog = $0?.log })) { box in
             ShowReportView(show: show, log: box.log)
         }

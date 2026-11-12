@@ -482,6 +482,7 @@ public struct Show: Codable, Hashable, Identifiable {
     public var comments: [Comment] = []
     public var midiBindings: [MIDIBinding] = []
     public var settings = ShowSettings()
+    public var plot = CameraPlot()
 
     /// Counts shown by the app shell without exposing the internal model types.
     public var cameraCount: Int { cameras.count }

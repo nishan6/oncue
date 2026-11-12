@@ -139,9 +139,32 @@ enum ScreenshotRun {
             let rep = NSBitmapImageRep(cgImage: image)
             try? rep.representation(using: .png, properties: [:])?.write(to: folder.appendingPathComponent(name + ".png"))
         }
+        MainActor.assumeIsolated { renderPlot(show) }
         try? show.scriptCSV().write(to: folder.appendingPathComponent("export-script.csv"), atomically: true, encoding: .utf8)
         if let edl = show.markerEDL(itemID: show.items[0].id, fps: 25) {
             try? edl.write(to: folder.appendingPathComponent("export-markers.edl"), atomically: true, encoding: .utf8)
+        }
+    }
+
+    /// The camera plot with every camera placed and a few turned, as the editor draws it.
+    @MainActor private static func renderPlot(_ show: Show) {
+        var s = show
+        s.placeRemainingCameras()
+        let cams = s.sortedCameras
+        if cams.count >= 3 {
+            s.placeCamera(cams[1].id, x: 0.15, y: 0.4)
+            s.updatePlotMarker(cams[1].id) { $0.angle = 60; $0.note = "Pit left"; $0.lens = "Ronin" }
+            s.placeCamera(cams[2].id, x: 0.85, y: 0.4)
+            s.updatePlotMarker(cams[2].id) { $0.angle = 300; $0.note = "Pit right" }
+        }
+        let canvas = PlotCanvas(show: s, plot: s.plot, selected: cams.first?.id, dragging: nil, turning: nil)
+            .frame(width: 1100, height: 700)
+            .background(Gallery.panel)
+            .environment(\.colorScheme, .dark)
+        let renderer = ImageRenderer(content: canvas)
+        renderer.scale = 1
+        if let cg = renderer.cgImage, let png = NSBitmapImageRep(cgImage: cg).representation(using: .png, properties: [:]) {
+            try? png.write(to: folder.appendingPathComponent("export-plot.png"))
         }
     }
 }
