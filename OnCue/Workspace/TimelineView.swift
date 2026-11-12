@@ -189,6 +189,43 @@ struct RulerMark {
         let v = Int(s.rounded())
         return String(format: "%d:%02d", v / 60, v % 60)
     }
+
+    /// Ruler in time for any song or segment: labels are the scene's timecode when it has a
+    /// starting timecode, otherwise minutes and seconds from the start.
+    static func timecodeMarks(item: RundownItem, metrics: TimelineMetrics, width: CGFloat, rate: FrameRate) -> [RulerMark] {
+        let perSecond: Double
+        switch item.timeBase {
+        case .bars: perSecond = max(item.bpm, 1) / 60
+        case .seconds: perSecond = 1
+        case .order: return marks(item: item, metrics: metrics, width: width)
+        }
+        let pxPerSecond = metrics.unit * CGFloat(perSecond)
+        let every = [1, 2, 5, 10, 15, 30, 60, 120, 300].first { CGFloat($0) * pxPerSecond >= 84 } ?? 300
+        let minor = every >= 5 ? Double(every) / 5 : 1
+        let start = item.ltcStart.isEmpty ? nil : Timecode.frames(item.ltcStart, rate: rate)
+        var marks: [RulerMark] = []
+        var t = 0.0
+        while true {
+            let x = metrics.x(t * perSecond)
+            if x > width { break }
+            let isLabel = Int(t.rounded()) % every == 0 && abs(t - t.rounded()) < 1e-6
+            var label: String?
+            if isLabel {
+                if let start { label = Timecode.string(frames: start + rate.frames(seconds: t), rate: rate) }
+                else { label = clock(t) }
+            }
+            marks.append(RulerMark(x: x, major: isLabel, label: label))
+            t += minor
+        }
+        return marks
+    }
+}
+
+/// What the ruler counts in. Bars & beats only applies to songs counted in bars.
+enum RulerMode: String, CaseIterable, Identifiable {
+    case musical, timecode
+    var id: String { rawValue }
+    var label: String { self == .musical ? "Bars & beats" : "Timecode" }
 }
 
 // MARK: - Editor
@@ -334,6 +371,18 @@ struct TimelineToolbar: View {
                 .labelStyle(.titleAndIcon)
                 .font(.ocMeta)
                 .foregroundStyle(Gallery.faint)
+            if item.timeBase != .order {
+                Picker("Ruler", selection: $model.rulerMode) {
+                    ForEach(RulerMode.allCases) { mode in
+                        Text(item.timeBase == .bars ? mode.label : (mode == .musical ? "Time" : "Timecode")).tag(mode)
+                    }
+                }
+                .labelsHidden()
+                .pickerStyle(.segmented)
+                .controlSize(.small)
+                .fixedSize()
+                .help("Ruler in bars and beats or in timecode (the scene's starting timecode when it has one)")
+            }
             Image(systemName: "info.circle")
                 .font(.system(size: 11))
                 .foregroundStyle(Gallery.faint)
@@ -563,7 +612,7 @@ struct TimelineCanvas: View {
         let sections = show.sectionSpans(forItem: item.id)
         ZStack(alignment: .topLeading) {
             VStack(alignment: .leading, spacing: 1) {
-                RulerLane(item: item, metrics: metrics, width: width)
+                RulerLane(item: item, metrics: metrics, width: width, mode: model.rulerMode)
                 ForEach(lanes) { lane in
                     laneView(lane, spans: spans, sections: sections)
                 }
@@ -658,10 +707,15 @@ struct RulerLane: View {
     let item: RundownItem
     let metrics: TimelineMetrics
     let width: CGFloat
+    var mode: RulerMode = .musical
+    @Environment(\.projectFrameRate) private var projectRate
 
     var body: some View {
         Canvas { context, size in
-            for mark in RulerMark.marks(item: item, metrics: metrics, width: size.width) {
+            let marks = mode == .timecode
+                ? RulerMark.timecodeMarks(item: item, metrics: metrics, width: size.width, rate: item.frameRate ?? projectRate)
+                : RulerMark.marks(item: item, metrics: metrics, width: size.width)
+            for mark in marks {
                 var tick = Path()
                 let length: CGFloat = mark.label != nil ? 12 : (mark.major ? 7 : 4)
                 tick.move(to: CGPoint(x: mark.x + 0.5, y: size.height - length))
@@ -911,9 +965,11 @@ struct ShotBlock: View {
     let selected: Bool
     let isNext: Bool
     @State private var hovering = false
+    @Environment(\.shotVocabulary) private var vocab
 
     var body: some View {
         let cue = span.row.cue
+        let greyed = vocab.isCut(cue)
         let tint = camera?.swiftUIColor ?? Gallery.key
         let ink = camera?.inkColor ?? Gallery.ink
         let mix = cue.transition == .auto
@@ -932,8 +988,11 @@ struct ShotBlock: View {
                         .lineLimit(1)
                 }
                 Spacer(minLength: 0)
+                if width > 90, let size = vocab.size(cue.shotSize) {
+                    Text(size.short).font(.ocTag).tracking(0.4).foregroundStyle(ink.opacity(0.75))
+                }
                 if mix, width > 64 {
-                    Text("MIX").font(.ocTag).tracking(0.4).foregroundStyle(ink.opacity(0.75))
+                    Text(vocab.transitionTag(cue)).font(.ocTag).tracking(0.4).foregroundStyle(ink.opacity(0.75))
                 }
                 if !span.row.issues.isEmpty, width > 30 {
                     Image(systemName: "exclamationmark.triangle.fill")
@@ -1009,6 +1068,8 @@ struct ShotBlock: View {
         .animation(.easeOut(duration: 0.16), value: selected)
         .animation(.easeOut(duration: 0.18), value: camera?.id)
         .frame(width: max(width - 1, 3), alignment: .leading)
+        .saturation(greyed ? 0 : 1)
+        .opacity(greyed ? 0.45 : 1)
         .help(help)
     }
 
@@ -1034,7 +1095,9 @@ struct ShotBlock: View {
         var parts = ["Shot \(span.row.number) at \(item.format(span.start))"]
         parts.append(camera.map { "Camera \($0.number) \($0.displayName)" } ?? "No camera")
         if !span.row.cue.text.isEmpty { parts.append(span.row.cue.text) }
-        parts.append(span.row.cue.transition == .cut ? "Cut" : "Mix")
+        parts.append(span.row.cue.transition == .cut ? "Cut" : (vocab.transition(span.row.cue.transitionStyle)?.label ?? "Mix"))
+        if let size = vocab.size(span.row.cue.shotSize) { parts.append(size.label) }
+        if let status = vocab.status(span.row.cue.shotStatus) { parts.append("Status: \(status.label)") }
         parts += span.row.issues.map(\.message)
         return parts.joined(separator: "\n")
     }

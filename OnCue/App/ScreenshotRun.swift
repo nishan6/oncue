@@ -14,6 +14,7 @@ enum ScreenshotRun {
         guard let i = args.firstIndex(of: "--screenshots"), i + 1 < args.count else { return }
         folder = URL(fileURLWithPath: args[i + 1], isDirectory: true)
         try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        WorkspaceModel.restoresEditorMode = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 120) { finish("timed out", ok: false) }
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { openShows() }
     }

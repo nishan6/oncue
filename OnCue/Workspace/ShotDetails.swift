@@ -332,7 +332,7 @@ struct ShotIndexView: View {
                     model.scrollTarget = row.id.uuidString
                 } label: {
                     HStack(spacing: Space.s) {
-                        Text(row.number).font(.readout(11)).foregroundStyle(Gallery.faint).frame(width: 26, alignment: .trailing)
+                        Text("\(row.number)").font(.readout(11)).foregroundStyle(Gallery.faint).frame(width: 26, alignment: .trailing)
                         CameraChip(camera: show.camera(row.cue.cameraID), size: 18)
                         Text(vocab.size(row.cue.shotSize)?.short ?? "").font(.readout(10, weight: .semibold))
                             .foregroundStyle(Gallery.dim).frame(width: 34, alignment: .leading)
@@ -415,5 +415,36 @@ struct ShotReviewsView: View {
         let note = ShotNote(text: text, author: NSFullUserName())
         model.updateShots([row.id], "Add Note") { $0.reviews.append(note) }
         draft = ""
+    }
+}
+
+// MARK: - Vocabulary in the environment
+
+private struct ShotVocabularyKey: EnvironmentKey {
+    static let defaultValue = ShotVocabulary()
+}
+
+private struct ProjectFrameRateKey: EnvironmentKey {
+    static let defaultValue = FrameRate.r25
+}
+
+extension EnvironmentValues {
+    var projectFrameRate: FrameRate {
+        get { self[ProjectFrameRateKey.self] }
+        set { self[ProjectFrameRateKey.self] = newValue }
+    }
+
+    /// The open project's shot vocabulary, for rows and blocks that show sizes and transitions.
+    var shotVocabulary: ShotVocabulary {
+        get { self[ShotVocabularyKey.self] }
+        set { self[ShotVocabularyKey.self] = newValue }
+    }
+}
+
+extension ShotVocabulary {
+    /// "CUT", or the transition's short name ("MIX", "DIP", "STING").
+    func transitionTag(_ cue: Cue) -> String {
+        guard cue.transition == .auto else { return "CUT" }
+        return transition(cue.transitionStyle)?.short ?? "MIX"
     }
 }

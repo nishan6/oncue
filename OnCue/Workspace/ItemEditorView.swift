@@ -564,6 +564,7 @@ struct ShotRowView: View {
     @ObservedObject var model: WorkspaceModel
     @State private var hovering = false
     @State private var noteFocused = false
+    @Environment(\.shotVocabulary) private var vocab
 
     private var noteVisible: Bool {
         !row.cue.note.isEmpty || hovering || noteFocused || model.selectedShotIDs.contains(row.id)
@@ -593,6 +594,13 @@ struct ShotRowView: View {
             }
             .frame(width: 96, alignment: .leading)
             .lineLimit(1)
+
+            Text(vocab.size(row.cue.shotSize)?.short ?? "")
+                .font(.readout(10.5, weight: .semibold))
+                .foregroundStyle(Gallery.dim)
+                .frame(width: 34, alignment: .leading)
+                .help([vocab.size(row.cue.shotSize)?.label, vocab.movement(row.cue.movement)?.label,
+                       vocab.framing(row.cue.framing)?.label].compactMap { $0 }.joined(separator: " · "))
 
             VStack(alignment: .leading, spacing: 0) {
                 CommitField(placeholder: "Describe the shot", value: row.cue.text, font: .ocBody) { text in
@@ -628,13 +636,13 @@ struct ShotRowView: View {
             Button {
                 model.setTransition(row.cue.transition == .cut ? .auto : .cut, for: [row.id])
             } label: {
-                Pill(text: row.cue.transition == .cut ? "CUT" : "MIX",
+                Pill(text: vocab.transitionTag(row.cue),
                      color: row.cue.transition == .cut ? Gallery.dim : Gallery.selection,
                      filled: row.cue.transition == .auto)
                     .frame(width: 36)
             }
             .buttonStyle(.plain)
-            .help("Click to switch between cut and mix (⌥⌘T)")
+            .help("Click to switch between a cut and a transition (⌥⌘T)")
         }
         .padding(.vertical, 6)
         .padding(.horizontal, Space.xs)
@@ -644,6 +652,7 @@ struct ShotRowView: View {
                 .frame(width: 3)
                 .padding(.vertical, 7)
         }
+        .opacity(vocab.isCut(row.cue) ? 0.45 : 1)
         .onHover { hovering = $0 }
         .animation(.easeOut(duration: 0.12), value: hovering)
     }

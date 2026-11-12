@@ -86,6 +86,8 @@ struct ShowWorkspaceView: View {
         } message: {
             Text(model.errorMessage ?? "")
         }
+        .environment(\.shotVocabulary, document.project.properties.shots)
+        .environment(\.projectFrameRate, document.project.frameRate)
         .background(Deck.base)
         .preferredColorScheme(.dark)
         .tint(Deck.accent)

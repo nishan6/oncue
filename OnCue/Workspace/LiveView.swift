@@ -40,11 +40,20 @@ struct LiveView: View {
                     }
                 }
                 TimelineView(.periodic(from: .now, by: 0.1)) { context in
-                    NowNextPanels(show: show, item: item, cursor: cursor, takenAt: status.takenAt,
-                                  secondsToNext: status.secondsToNext, now: context.date)
+                    VStack(spacing: Space.l) {
+                        if let item {
+                            LiveCountdownBar(show: show, reading: reading(item: item, status: status))
+                        }
+                        NowNextPanels(show: show, item: item, cursor: cursor, takenAt: status.takenAt,
+                                      secondsToNext: status.secondsToNext, now: context.date)
+                    }
                 }
                 UpcomingStrip(show: show, cursor: cursor)
-                LiveCameraGrid(show: show, status: status)
+                TimelineView(.periodic(from: .now, by: 0.25)) { context in
+                    LiveCameraGrid(show: show, status: status,
+                                   standby: item.flatMap { reading(item: $0, status: status).standbyCameraID },
+                                   flash: Int(context.date.timeIntervalSinceReferenceDate * 3) % 2 == 0)
+                }
             }
             .padding(Space.xl)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -101,6 +110,46 @@ struct LiveView: View {
 }
 
 /// Automation stopped because the director cut by hand.
+extension LiveView {
+    func reading(item: RundownItem, status: EngineStatus) -> CountdownReading {
+        let p = model.project.properties
+        return Countdown.reading(item: item, next: show.liveNext(status.cursor),
+                                 position: status.secondsToNext == nil ? nil : status.position,
+                                 secondsToNext: status.secondsToNext, settings: p.countdown, vocabulary: p.shots)
+    }
+}
+
+/// Countdown across the top of Live Mode: next cut, next section and who is on standby.
+struct LiveCountdownBar: View {
+    let show: Show
+    let reading: CountdownReading
+
+    var body: some View {
+        HStack(spacing: Space.xl) {
+            field("NEXT CUT", reading.nextCut.map(liveClock) ?? "–", warn: (reading.nextCut ?? 99) <= 3)
+            field("NEXT SECTION", reading.nextSection.map { "\($0.name)  \(liveClock($0.seconds))" } ?? "–", warn: false)
+            if let id = reading.standbyCameraID, let cam = show.camera(id) {
+                HStack(spacing: Space.s) {
+                    Text("STANDBY").font(.ocTag).tracking(0.6).foregroundStyle(Gallery.amber)
+                    CameraChip(camera: cam, size: 22)
+                    Text(cam.displayName).font(.ocBodyStrong).foregroundStyle(Gallery.ink)
+                }
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, Space.l)
+        .frame(height: 40)
+        .background(LivePalette.panel, in: RoundedRectangle(cornerRadius: Radius.m))
+    }
+
+    private func field(_ label: String, _ value: String, warn: Bool) -> some View {
+        HStack(spacing: Space.s) {
+            Text(label).font(.ocTag).tracking(0.6).foregroundStyle(Gallery.faint)
+            Text(value).font(.readout(16, weight: .semibold)).foregroundStyle(warn ? Gallery.amber : Gallery.ink)
+        }
+    }
+}
+
 struct PausedBanner: View {
     let reason: String
     let resume: () -> Void
@@ -534,6 +583,9 @@ struct UpcomingStrip: View {
 struct LiveCameraGrid: View {
     let show: Show
     let status: EngineStatus
+    /// The camera to put on standby before its cut; its key flashes amber.
+    var standby: UUID? = nil
+    var flash = false
     @AppStorage("live.cameraView") private var view = "grid"
 
     var body: some View {
@@ -571,6 +623,19 @@ struct LiveCameraGrid: View {
                     ForEach(show.sortedCameras) { cam in
                         SourceButton(camera: cam, tally: pgm(cam) ? .current : (pvw(cam) ? .next : .off),
                                      live: true, width: 150, height: 62, numeral: 28)
+                            .overlay {
+                                if cam.id == standby {
+                                    RoundedRectangle(cornerRadius: Radius.m)
+                                        .strokeBorder(Gallery.amber.opacity(flash ? 1 : 0.35), lineWidth: 3)
+                                        .overlay(alignment: .topTrailing) {
+                                            Text("STBY").font(.ocTag).tracking(0.5).foregroundStyle(.black)
+                                                .padding(.horizontal, 5).padding(.vertical, 2)
+                                                .background(Gallery.amber, in: RoundedRectangle(cornerRadius: 3))
+                                                .padding(5)
+                                        }
+                                        .allowsHitTesting(false)
+                                }
+                            }
                     }
                 }
             }

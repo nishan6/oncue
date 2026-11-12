@@ -98,6 +98,8 @@ final class WorkspaceModel: ObservableObject {
             persistState()
         }
     }
+    /// Ruler units for songs in bars (segments always show time).
+    @Published var rulerMode: RulerMode = .musical
     /// Shot inspector page: Info, Index or Reviews.
     @Published var inspectorTab: InspectorTab = .info
     @Published var selectedShotIDs: Set<UUID> = [] {
@@ -115,7 +117,7 @@ final class WorkspaceModel: ObservableObject {
     /// Section whose rename editor is open on the timeline.
     @Published var editingSectionID: UUID?
     @Published var showInspector = true { didSet { persistState() } }
-    @Published var editorMode: EditorMode = .timeline { didSet { persistState() } }
+    @Published var editorMode: EditorMode = .split { didSet { persistState() } }
     /// Timeline zoom, 1 = default scale.
     @Published var zoom: Double = 1 { didSet { persistState() } }
     @Published var hiddenLanes: Set<TimelineLane> = [] { didSet { persistState() } }
@@ -977,7 +979,9 @@ final class WorkspaceModel: ObservableObject {
            let state = try? JSONDecoder().decode(SavedState.self, from: data) {
             selectedItemID = show.item(state.itemID) != nil ? state.itemID : show.items.first?.id
             showInspector = state.inspector
-            editorMode = state.editor ?? .timeline
+            // Every scene opens split: timeline on top, shot list below. (The screenshot run
+            // seeds other views to show them.)
+            editorMode = Self.restoresEditorMode ? (state.editor ?? .split) : .split
             zoom = state.zoom ?? 1
             hiddenLanes = Set(state.hiddenLanes ?? [])
             lockedLanes = Set(state.lockedLanes ?? [])
@@ -991,6 +995,9 @@ final class WorkspaceModel: ObservableObject {
     }
 
     /// Used by the screenshot run to pre-select a workspace before a show opens.
+    /// Only the screenshot run restores a saved view; a person always gets Split first.
+    static var restoresEditorMode = false
+
     static func seedState(showID: UUID, itemID: UUID?, shotIDs: [UUID], editor: EditorMode = .timeline) {
         let state = SavedState(itemID: itemID, shotIDs: shotIDs, inspector: true, editor: editor,
                                zoom: nil, hiddenLanes: nil, lockedLanes: nil)
