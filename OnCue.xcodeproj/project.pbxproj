@@ -18,6 +18,7 @@
 		86701766F106877478C0200B /* ShowDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FC41C44C1F7695F918F07D /* ShowDocument.swift */; };
 		AE6AE7C6777F266F9A225BD4 /* OnCueCore in Frameworks */ = {isa = PBXBuildFile; productRef = B336DDE3611B72052511C115 /* OnCueCore */; };
 		B684D8B1BFB1C4569341263E /* SmokeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3D28E021667A79D4C7536F /* SmokeTest.swift */; };
+		B8BC7C5723E59E56C4356C17 /* LiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF717A9AA87D0F24DA3FB3E /* LiveView.swift */; };
 		C036634E351DC13626E804B4 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43054B8BF76BCAA9784343FB /* TimelineView.swift */; };
 		DEA5FB5A2DDAE3F44C1AD85B /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8BECE970407DFA7EC43B7CE /* Theme.swift */; };
 		DFC71F7CBE23DF1F9EDC5B86 /* RunningOrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7CD1AE74643E8E7E7A69FD /* RunningOrderView.swift */; };
@@ -33,6 +34,7 @@
 		71DA87E37B8723563B71C8E9 /* CameraManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManagerView.swift; sourceTree = "<group>"; };
 		780AE26026DBAFD2B65DEF9D /* OnCueApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnCueApp.swift; sourceTree = "<group>"; };
 		AD9250067025E369E6EAD1D4 /* OnCueCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = OnCueCore; path = Packages/OnCueCore; sourceTree = SOURCE_ROOT; };
+		ADF717A9AA87D0F24DA3FB3E /* LiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveView.swift; sourceTree = "<group>"; };
 		AE93C49E05A47DAEC508FA0D /* OnCue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnCue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8BECE970407DFA7EC43B7CE /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		DF6AAA1B35A6655F52406962 /* InspectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorView.swift; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 				71DA87E37B8723563B71C8E9 /* CameraManagerView.swift */,
 				DF6AAA1B35A6655F52406962 /* InspectorView.swift */,
 				E271F3E9BE490209AD047BE0 /* ItemEditorView.swift */,
+				ADF717A9AA87D0F24DA3FB3E /* LiveView.swift */,
 				EC7CD1AE74643E8E7E7A69FD /* RunningOrderView.swift */,
 				F7F5424FF571E4C3F1A31568 /* ShowWorkspaceView.swift */,
 				43054B8BF76BCAA9784343FB /* TimelineView.swift */,
@@ -192,6 +195,7 @@
 				0947F8491CB412955A65C6EE /* CameraManagerView.swift in Sources */,
 				7CCED2FF9F4F02B6087CF920 /* InspectorView.swift in Sources */,
 				848009FB351D646A30816EF9 /* ItemEditorView.swift in Sources */,
+				B8BC7C5723E59E56C4356C17 /* LiveView.swift in Sources */,
 				3BD326E7A74A91ACF15FAF8D /* MachineProfileView.swift in Sources */,
 				675AE418F5CA08A9DE0DDEF3 /* OnCueApp.swift in Sources */,
 				DFC71F7CBE23DF1F9EDC5B86 /* RunningOrderView.swift in Sources */,
