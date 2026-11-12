@@ -20,9 +20,9 @@ struct TimelineMetrics {
 
     static func baseUnit(for item: RundownItem) -> CGFloat {
         switch item.timeBase {
-        case .bars: return 18
-        case .seconds: return 14
-        case .order: return 120
+        case .bars: return 9
+        case .seconds: return 6
+        case .order: return 100
         }
     }
 
@@ -45,7 +45,7 @@ struct TimelineMetrics {
 }
 
 enum TimelineLayout {
-    static let headerWidth: CGFloat = 118
+    static let headerWidth: CGFloat = 124
     static let toolbar: CGFloat = 30
     static let ruler: CGFloat = 24
     static let sections: CGFloat = 30
@@ -149,6 +149,7 @@ struct TimelineEditorView: View {
     @ObservedObject var model: WorkspaceModel
     var shotHeight: CGFloat
     @FocusState private var focused: Bool
+    @State private var scrollRequest: ScrollRequest?
 
     var body: some View {
         let metrics = TimelineMetrics(item: item, unit: TimelineMetrics.baseUnit(for: item) * CGFloat(model.zoom))
@@ -165,18 +166,17 @@ struct TimelineEditorView: View {
                 HStack(alignment: .top, spacing: 0) {
                     TrackHeaderColumn(show: show, lanes: lanes, shotHeight: shotHeight, model: model)
                     Rectangle().fill(Gallery.hairline).frame(width: 1)
-                    ScrollViewReader { proxy in
-                        ScrollView(.horizontal) {
-                            TimelineCanvas(show: show, item: item, model: model, metrics: metrics, width: width,
-                                           lanes: lanes, shotHeight: shotHeight, focus: { focused = true })
-                        }
-                        .scrollIndicators(.visible)
-                        .onAppear { reveal(proxy) }
-                        .onChange(of: item.id) { _, _ in reveal(proxy) }
-                        .onChange(of: model.scrollTarget) { _, target in
-                            guard let target, let uuid = UUID(uuidString: target) else { return }
-                            withAnimation(.easeOut(duration: 0.2)) { proxy.scrollTo(uuid, anchor: .center) }
-                        }
+                    ScrollView(.horizontal) {
+                        TimelineCanvas(show: show, item: item, model: model, metrics: metrics, width: width,
+                                       lanes: lanes, shotHeight: shotHeight, focus: { focused = true })
+                            .background(HorizontalScrollDriver(request: scrollRequest))
+                    }
+                    .scrollIndicators(.visible)
+                    .onAppear { reveal(metrics) }
+                    .onChange(of: item.id) { _, _ in reveal(metrics) }
+                    .onChange(of: model.scrollTarget) { _, target in
+                        guard let target, let uuid = UUID(uuidString: target) else { return }
+                        scroll(to: uuid, metrics: metrics)
                     }
                 }
                 Spacer(minLength: 0)
@@ -205,18 +205,70 @@ struct TimelineEditorView: View {
         .onDeleteCommand { model.deleteSelection() }
     }
 
-    private func reveal(_ proxy: ScrollViewProxy) {
+    /// Brings the restored or current selection into view once the timeline has laid out.
+    private func reveal(_ metrics: TimelineMetrics) {
         if model.editorMode == .timeline { DispatchQueue.main.async { focused = true } }
         for delay in [0.15, 0.6] {
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                 let rows = show.shotRows(forItem: item.id)
                 if let first = rows.first(where: { model.selectedShotIDs.contains($0.id) }) {
-                    proxy.scrollTo(first.id, anchor: .center)
+                    scroll(to: first.id, metrics: metrics)
                 } else if let cue = model.selectedCueID {
-                    proxy.scrollTo(cue, anchor: .center)
+                    scroll(to: cue, metrics: metrics)
                 }
             }
         }
+    }
+
+    /// Centres a shot, section or cue in the visible part of the timeline.
+    private func scroll(to id: UUID, metrics: TimelineMetrics) {
+        let x: CGFloat
+        if let span = show.shotSpans(forItem: item.id).first(where: { $0.id == id }) {
+            x = (metrics.x(span.start) + metrics.x(span.end)) / 2
+        } else if let section = item.sections.first(where: { $0.id == id }) {
+            x = metrics.x(section.at) + 200
+        } else if let cue = show.cue(id, inItem: item.id) {
+            x = metrics.x(cue.at)
+        } else {
+            return
+        }
+        scrollRequest = ScrollRequest(x: x, serial: (scrollRequest?.serial ?? 0) + 1)
+    }
+}
+
+struct ScrollRequest: Equatable {
+    let x: CGFloat
+    let serial: Int
+}
+
+/// Scrolls the enclosing horizontal scroll view so a content x position sits in the middle.
+/// (Timeline blocks are drawn with offsets, so they cannot be targets of ScrollViewReader.)
+struct HorizontalScrollDriver: NSViewRepresentable {
+    let request: ScrollRequest?
+
+    func makeNSView(context: Context) -> NSView { NSView() }
+
+    func updateNSView(_ view: NSView, context: Context) {
+        guard let request, context.coordinator.lastSerial != request.serial else { return }
+        context.coordinator.lastSerial = request.serial
+        DispatchQueue.main.async {
+            guard let scrollView = view.enclosingScrollView else { return }
+            let clip = scrollView.contentView
+            let visible = clip.bounds.width
+            let contentWidth = scrollView.documentView?.frame.width ?? 0
+            let originX = max(0, min(request.x - visible / 2, contentWidth - visible))
+            NSAnimationContext.runAnimationGroup { ctx in
+                ctx.duration = 0.2
+                clip.animator().setBoundsOrigin(NSPoint(x: originX, y: clip.bounds.origin.y))
+            }
+            scrollView.reflectScrolledClipView(clip)
+        }
+    }
+
+    func makeCoordinator() -> Coordinator { Coordinator() }
+
+    final class Coordinator {
+        var lastSerial = -1
     }
 }
 
@@ -293,6 +345,8 @@ struct TrackHeaderCell: View {
                 Text(lane.label)
                     .font(.umd(hidden ? 10 : 12))
                     .foregroundStyle(hidden ? Gallery.faint : Gallery.ink)
+                    .lineLimit(1)
+                    .fixedSize()
                 if let subtitle, !hidden {
                     Text(subtitle).font(.system(size: 10)).foregroundStyle(Gallery.dim).lineLimit(1)
                 }
@@ -351,7 +405,6 @@ struct TimelineCanvas: View {
                 }
             }
             SelectionMarker(position: selectedPosition(spans), metrics: metrics, height: totalHeight)
-            ScrollAnchors(show: show, item: item, spans: spans, sections: sections, metrics: metrics)
         }
         .frame(width: width, alignment: .topLeading)
         .background(Gallery.hairline)
@@ -406,33 +459,6 @@ struct SelectionMarker: View {
                 .offset(x: metrics.x(position))
                 .allowsHitTesting(false)
         }
-    }
-}
-
-/// Invisible, correctly laid-out views that ScrollViewReader can scroll to (blocks themselves
-/// are drawn with offsets, which do not move their layout frames).
-struct ScrollAnchors: View {
-    let show: Show
-    let item: RundownItem
-    let spans: [ShotSpan]
-    let sections: [SectionSpan]
-    let metrics: TimelineMetrics
-
-    var body: some View {
-        let cues = item.tracks.filter { $0.kind != .shots }.flatMap(\.cues)
-        ZStack(alignment: .topLeading) {
-            ForEach(spans) { span in anchor(span.id, at: span.start, to: span.end) }
-            ForEach(sections) { span in anchor(span.id, at: span.start, to: span.start + 1) }
-            ForEach(cues) { cue in anchor(cue.id, at: cue.at, to: cue.at + 1) }
-        }
-        .allowsHitTesting(false)
-    }
-
-    private func anchor(_ id: UUID, at start: Double, to end: Double) -> some View {
-        Color.clear
-            .frame(width: max(metrics.x(end) - metrics.x(start), 1), height: 1)
-            .id(id)
-            .padding(.leading, max(metrics.x(start), 0))
     }
 }
 
