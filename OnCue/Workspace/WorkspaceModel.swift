@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 import OnCueCore
 
 /// How the centre panel shows a song or segment.
@@ -620,9 +621,11 @@ final class WorkspaceModel: ObservableObject {
         let stamp = Date().formatted(date: .abbreviated, time: .shortened)
         let night = show.settings.nightLabel
         edit("Version Before Live") { $0.saveVersion(name: "Before Live" + (night.isEmpty ? ", \(stamp)" : ", \(night)"), automatic: true) }
-        let controller = EngineController(show: show, itemID: id, profile: MachineProfileStore().profile)
+        let profile = MachineProfileStore().profile
+        let controller = EngineController(show: show, itemID: id, profile: profile)
         controller.connectSwitcher()
         engine = controller
+        startBackupLink(controller, role: BackupRole(rawValue: profile.backupRole) ?? .off, primaryHost: profile.primaryHost)
     }
 
     /// Leaves Live Mode, selecting the song and the shot that was on air.
@@ -631,6 +634,7 @@ final class WorkspaceModel: ObservableObject {
         let cursor = controller.status.cursor
         let onAir = show.liveNow(cursor)
         monitors.close()
+        stopBackupLink()
         controller.shutdown()
         let log = controller.log
         engine = nil
@@ -641,6 +645,78 @@ final class WorkspaceModel: ObservableObject {
             selectedShotIDs = [onAir.id]
             scrollTarget = onAir.id.uuidString
         }
+    }
+
+    // MARK: - Backup Mac link
+
+    private var backupServer: BackupLinkServer?
+    private var backupClient: BackupLinkClient?
+    private var backupWatch: AnyCancellable?
+    @Published var backupMacs = 0
+    @Published var backupLinkError: String?
+
+    private func startBackupLink(_ controller: EngineController, role: BackupRole, primaryHost: String) {
+        stopBackupLink()
+        switch role {
+        case .off:
+            break
+        case .primary:
+            let server = BackupLinkServer()
+            server.onClientsChanged = { [weak self] n in self?.backupMacs = n }
+            server.start { [weak self] result in
+                if case .failure(let e) = result { self?.backupLinkError = "The backup link couldn't start: \(e.localizedDescription)" }
+            }
+            if let data = try? ShowCoding.encode(show) { server.send(show: data) }
+            backupWatch = controller.$status
+                .throttle(for: .milliseconds(100), scheduler: RunLoop.main, latest: true)
+                .sink { [weak server, weak controller] _ in
+                    guard let server, let controller else { return }
+                    server.send(state: controller.backupState)
+                }
+            backupServer = server
+        case .backup:
+            controller.startFollowing()
+            let client = BackupLinkClient()
+            client.onConnectedChanged = { [weak controller] up in controller?.setMainLinked(up) }
+            client.onMessage = { [weak self, weak controller] message in
+                guard let self, let controller else { return }
+                switch message {
+                case .state(let state):
+                    controller.follow(state)
+                case .show(let data):
+                    guard let remote = try? ShowCoding.decode(data), remote.id == self.show.id else { return }
+                    var incoming = remote
+                    incoming.versions = self.show.versions
+                    if incoming != self.show { self.edit("Update from Main Mac") { $0 = incoming } }
+                case .hello:
+                    break
+                }
+            }
+            client.connect(to: primaryHost)
+            backupClient = client
+        }
+    }
+
+    private func stopBackupLink() {
+        backupWatch = nil
+        backupServer?.stop()
+        backupServer = nil
+        backupClient?.disconnect()
+        backupClient = nil
+        backupMacs = 0
+    }
+
+    /// Main Mac: the script changed during the show; the backup gets it too.
+    func sendShowToBackup(_ show: Show) {
+        guard let server = backupServer, let data = try? ShowCoding.encode(show) else { return }
+        server.send(show: data)
+    }
+
+    /// Backup Mac: take the show (the main Mac failed).
+    func takeOverFromMain() {
+        engine?.takeOver()
+        backupClient?.disconnect()
+        backupClient = nil
     }
 
     func toggleLive() {

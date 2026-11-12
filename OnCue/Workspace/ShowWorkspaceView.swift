@@ -108,6 +108,7 @@ struct ShowWorkspaceView: View {
             model.engine?.update(show: newShow)
             model.crew.showChanged(newShow)
             model.scheduleBackup(newShow)
+            model.sendShowToBackup(newShow)
         }
         .onDisappear { model.crew.stop() }
     }

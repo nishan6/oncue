@@ -31,7 +31,7 @@ final class BackupTests: XCTestCase {
         XCTAssertEqual(backup.status.index, 1, "same shot as the main Mac")
         XCTAssertEqual(backup.status.transport, .running)
         XCTAssertEqual(backup.deviceForTesting(S)?.state.program, programBefore, "the backup sends nothing while following")
-        XCTAssertEqual(backup.log.scripted.count, 2, "the backup still logs the calls")
+        XCTAssertEqual(backup.log.scripted.count, 1, "the backup still logs the shot it joined on")
 
         // Main Mac lost: the backup takes the show in the main Mac's modes and continues.
         backup.takeOver()

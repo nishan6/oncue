@@ -25,6 +25,9 @@ struct LiveView: View {
         let item = show.item(cursor.itemID)
         HStack(spacing: 0) {
             VStack(spacing: Space.l) {
+                if status.following {
+                    BackupBanner(linked: status.mainLinked) { model.takeOverFromMain() }
+                }
                 if let reason = status.pauseReason {
                     PausedBanner(reason: reason) { engine.resume() }
                 }
@@ -952,5 +955,36 @@ struct MonitorsToggle: View {
                    help: "Show the crew views on the displays chosen in Show Setup") {
             if windows.isOpen { windows.close() } else { windows.open(model: model, engine: engine, show: show) }
         }
+    }
+}
+
+
+/// Backup Mac: following the main Mac, or the main Mac is gone and this one can take the show.
+struct BackupBanner: View {
+    let linked: Bool
+    let takeOver: () -> Void
+
+    var body: some View {
+        HStack(spacing: Space.m) {
+            Image(systemName: linked ? "link" : "exclamationmark.triangle.fill")
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundStyle(linked ? Gallery.next : Gallery.well)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(linked ? "Backup: following the main Mac" : "Main Mac lost")
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundStyle(linked ? Gallery.ink : Gallery.well)
+                Text(linked ? "Nothing is sent from this Mac. Take over only if the main Mac fails."
+                            : "This Mac is not sending anything. Take over to run the show from here.")
+                    .font(.ocMeta)
+                    .foregroundStyle(linked ? Gallery.dim : Gallery.well.opacity(0.8))
+            }
+            Spacer()
+            Button("Take Over", action: takeOver)
+                .buttonStyle(LiveKeyStyle(color: linked ? Gallery.amber : Gallery.well, subtle: linked))
+                .frame(width: 130)
+                .help("Start sending to the switchers from this Mac, in the modes the main Mac was using")
+        }
+        .padding(Space.m)
+        .background(linked ? LivePalette.panel : Gallery.tally, in: RoundedRectangle(cornerRadius: Radius.l))
     }
 }
