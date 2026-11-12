@@ -76,6 +76,7 @@ final class RundownTimingTests: XCTestCase {
         let late = at(23, 30)
         XCTAssertEqual(RundownTiming.deadline("00:15", around: late, calendar: calendar), at(23, 30).addingTimeInterval(45 * 60))
         XCTAssertEqual(RundownTiming.deadline("23:00", around: at(0, 30), calendar: calendar)?.timeIntervalSince(at(0, 30)), -90 * 60)
+        XCTAssertEqual(RundownTiming.deadline("21:40", around: at(8, 40), calendar: calendar), at(21, 40), "tonight, not last night")
         XCTAssertNil(RundownTiming.deadline("25:00", around: late, calendar: calendar))
     }
 

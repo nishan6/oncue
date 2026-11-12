@@ -52,8 +52,8 @@ public struct RundownTiming: Equatable {
         }
     }
 
-    /// The deadline for an "HH:MM" hard out on the day of `reference` (the next day if that is
-    /// more than 12 hours earlier, for shows running past midnight).
+    /// The deadline for an "HH:MM" hard out nearest to `reference`, between 6 hours past and
+    /// 18 hours ahead (so shows running past midnight work).
     public static func deadline(_ hhmm: String, around reference: Date, calendar: Calendar = .current) -> Date? {
         let parts = hhmm.split(separator: ":").compactMap { Int($0) }
         guard parts.count >= 2, (0..<24).contains(parts[0]), (0..<60).contains(parts[1]) else { return nil }
@@ -62,8 +62,10 @@ public struct RundownTiming: Equatable {
         comps.minute = parts[1]
         comps.second = parts.count > 2 ? parts[2] : 0
         guard var d = calendar.date(from: comps) else { return nil }
-        if d.timeIntervalSince(reference) < -12 * 3600 { d = d.addingTimeInterval(24 * 3600) }
-        if d.timeIntervalSince(reference) > 12 * 3600 { d = d.addingTimeInterval(-24 * 3600) }
+        // Up to 18 hours ahead or 6 hours past: an evening hard out seen in the morning is
+        // tonight's, and "00:15" seen at 23:30 is in 45 minutes.
+        if d.timeIntervalSince(reference) < -6 * 3600 { d = d.addingTimeInterval(24 * 3600) }
+        if d.timeIntervalSince(reference) > 18 * 3600 { d = d.addingTimeInterval(-24 * 3600) }
         return d
     }
 
