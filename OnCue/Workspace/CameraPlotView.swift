@@ -311,7 +311,7 @@ struct PlotCanvas: View {
         let color = cam.swiftUIColor
         let isSelected = selected == marker.cameraID
         let reach: CGFloat = min(area.width, area.height) * 0.16
-        let radians = (angle - 90) * .pi / 180
+        let radians = CGFloat((angle - 90) * .pi / 180)
         let tip = CGPoint(x: center.x + cos(radians) * reach, y: center.y + sin(radians) * reach)
 
         return ZStack(alignment: .topLeading) {
