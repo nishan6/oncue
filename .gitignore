@@ -5,3 +5,4 @@ build/
 *.xcuserstate
 *.dmg
 ci-logs/
+dist/

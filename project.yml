@@ -39,6 +39,7 @@ targets:
       base:
         PRODUCT_NAME: OnCue
         PRODUCT_BUNDLE_IDENTIFIER: com.nishanpani.oncue
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         INFOPLIST_FILE: OnCue/Resources/Info.plist
         GENERATE_INFOPLIST_FILE: NO
         CODE_SIGN_ENTITLEMENTS: OnCue/Resources/OnCue.entitlements

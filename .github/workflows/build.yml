@@ -19,7 +19,7 @@ defaults:
 jobs:
   build:
     runs-on: macos-15
-    timeout-minutes: 40
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
 
@@ -85,6 +85,48 @@ jobs:
           screencapture -x ci-logs/screenshots/full-screen-after.png 2>/dev/null || true
           grep -q "PASS:" ci-logs/screenshots.log
 
+      - name: Package the DMG (Release build)
+        id: dmg
+        if: steps.build.outcome == 'success'
+        continue-on-error: true
+        env:
+          # Optional repository secrets for a Developer ID signed and notarized DMG.
+          DEVELOPER_ID_P12: ${{ secrets.DEVELOPER_ID_P12 }}
+          DEVELOPER_ID_P12_PASSWORD: ${{ secrets.DEVELOPER_ID_P12_PASSWORD }}
+          SIGN_IDENTITY_SECRET: ${{ secrets.SIGN_IDENTITY }}
+          TEAM_ID: ${{ secrets.TEAM_ID }}
+          NOTARY_APPLE_ID: ${{ secrets.NOTARY_APPLE_ID }}
+          NOTARY_PASSWORD: ${{ secrets.NOTARY_PASSWORD }}
+        run: |
+          if [ -n "$DEVELOPER_ID_P12" ] && [ -n "$SIGN_IDENTITY_SECRET" ]; then
+            KEYCHAIN="$RUNNER_TEMP/signing.keychain-db"
+            security create-keychain -p ci "$KEYCHAIN"
+            security set-keychain-settings -lut 3600 "$KEYCHAIN"
+            security unlock-keychain -p ci "$KEYCHAIN"
+            echo "$DEVELOPER_ID_P12" | base64 --decode > "$RUNNER_TEMP/id.p12"
+            security import "$RUNNER_TEMP/id.p12" -k "$KEYCHAIN" -P "$DEVELOPER_ID_P12_PASSWORD" -T /usr/bin/codesign
+            security set-key-partition-list -S apple-tool:,apple: -s -k ci "$KEYCHAIN" >/dev/null
+            security list-keychains -d user -s "$KEYCHAIN" $(security list-keychains -d user | tr -d '"')
+            export SIGN_IDENTITY="$SIGN_IDENTITY_SECRET"
+          fi
+          scripts/package-dmg.sh "$RUNNER_TEMP/dist" 2>&1 | tee ci-logs/dmg.log
+          ls -la "$RUNNER_TEMP/dist" | tee -a ci-logs/dmg.log
+          ls "$RUNNER_TEMP"/dist/*.dmg >/dev/null
+
+      - name: Keep the DMG
+        if: steps.dmg.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: OnCue-dmg-${{ github.sha }}
+          path: ${{ runner.temp }}/dist/*.dmg
+          retention-days: 30
+
+      - name: Publish a release for version tags
+        if: steps.dmg.outcome == 'success' && startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create "${GITHUB_REF_NAME}" "$RUNNER_TEMP"/dist/*.dmg --title "OnCue ${GITHUB_REF_NAME#v}" --generate-notes
+
       - name: Commit regenerated Xcode project
         if: >-
           steps.generate.outputs.changed == 'true' && steps.build.outcome == 'success' &&
@@ -125,6 +167,7 @@ jobs:
             echo "| App build | ${{ steps.build.outcome }} |"
             echo "| Launch smoke test | ${{ steps.smoke.outcome }} |"
             echo "| Screenshots | ${{ steps.screenshots.outcome }} |"
+            echo "| DMG | ${{ steps.dmg.outcome }} |"
             echo
             echo "## Toolchain"; echo '```'; cat ci-logs/toolchain.log 2>/dev/null; echo '```'
             echo "## Test summary"; echo '```'
@@ -134,6 +177,7 @@ jobs:
             echo "## Warnings ($(wc -l < ci-logs/xcodebuild-warnings.log 2>/dev/null || echo 0))"; echo '```'
             cat ci-logs/xcodebuild-warnings.log 2>/dev/null | head -n 80; echo '```'
             echo "## Smoke test"; echo '```'; cat ci-logs/smoke.log 2>/dev/null; echo '```'
+            echo "## DMG"; echo '```'; tail -n 15 ci-logs/dmg.log 2>/dev/null; echo '```'
           } > ci-logs/SUMMARY.md
           cat ci-logs/SUMMARY.md >> "$GITHUB_STEP_SUMMARY"
 
@@ -162,4 +206,5 @@ jobs:
           [ "${{ steps.tests.outcome }}" = "success" ] || { echo "Package tests failed"; fail=1; }
           [ "${{ steps.build.outcome }}" = "success" ] || { echo "App build failed"; fail=1; }
           [ "${{ steps.smoke.outcome }}" = "success" ] || { echo "Launch smoke test failed or did not run"; fail=1; }
+          [ "${{ steps.dmg.outcome }}" = "success" ] || { echo "DMG packaging failed or did not run"; fail=1; }
           exit $fail
