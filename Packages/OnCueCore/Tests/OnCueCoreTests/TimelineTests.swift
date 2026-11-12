@@ -114,4 +114,47 @@ final class TimelineTests: XCTestCase {
         XCTAssertEqual(show.shotSpans(forItem: opener).count, 19)
         XCTAssertEqual(show.itemEnd(forItem: opener), 88 * 4)
     }
+
+    func testRunLength() {
+        let show = Show.sample()
+        // Neon Skyline: 88 bars of 4 at 128 BPM.
+        XCTAssertEqual(show.runLength(forItem: show.items[0].id)!, 88 * 4 * 60 / 128, accuracy: 0.001)
+        XCTAssertEqual(show.runLength(forItem: show.items[2].id), 180, "segment runs its planned length")
+        XCTAssertNil(show.runLength(forItem: show.items[3].id), "NEXT order has no length")
+    }
+
+    // MARK: Live cursor
+
+    func testLiveCursorSteppingAndJumping() {
+        let show = Show.sample()
+        let opener = show.items[0].id
+        var cursor = LiveCursor(itemID: opener)
+        XCTAssertTrue(cursor.isStandingBy)
+        XCTAssertNil(show.liveNow(cursor))
+        XCTAssertEqual(show.liveNext(cursor)?.number, 1)
+
+        XCTAssertTrue(show.advance(&cursor))
+        XCTAssertEqual(show.liveNow(cursor)?.number, 1)
+        XCTAssertEqual(show.liveNext(cursor)?.number, 2)
+        XCTAssertEqual(show.liveUpcoming(cursor, limit: 3).map(\.number), [3, 4, 5])
+
+        let chorus = show.item(opener)!.sortedSections[3] // Chorus
+        XCTAssertTrue(show.jump(&cursor, toSection: chorus.id))
+        XCTAssertEqual(show.liveNow(cursor)?.sectionID, chorus.id)
+
+        XCTAssertTrue(show.stepBack(&cursor))
+        XCTAssertNotEqual(show.liveNow(cursor)?.sectionID, chorus.id)
+
+        cursor.index = 18
+        XCTAssertFalse(show.advance(&cursor), "stays on the last shot")
+        XCTAssertNil(show.liveNext(cursor))
+
+        XCTAssertTrue(show.moveItem(&cursor, by: 1))
+        XCTAssertEqual(cursor, LiveCursor(itemID: show.items[1].id))
+        XCTAssertFalse(show.moveItem(&cursor, by: -5))
+        cursor = LiveCursor(itemID: opener, index: 0)
+        XCTAssertTrue(show.stepBack(&cursor))
+        XCTAssertTrue(cursor.isStandingBy)
+        XCTAssertFalse(show.stepBack(&cursor))
+    }
 }

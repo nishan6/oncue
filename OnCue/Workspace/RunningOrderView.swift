@@ -1,49 +1,48 @@
 import SwiftUI
 import OnCueCore
 
-/// Left panel: production name and the running order (songs and segments, drag to reorder).
+/// Left panel: the production and its running order (songs and segments, drag to reorder).
 struct RunningOrderView: View {
     let show: Show
     @ObservedObject var model: WorkspaceModel
 
     var body: some View {
         VStack(spacing: 0) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Production")
-                    .font(.umd(11))
-                    .foregroundStyle(Gallery.dim)
-                CommitField(placeholder: "Production name", value: show.name, font: .title(17)) { text in
+            VStack(alignment: .leading, spacing: Space.xs) {
+                CommitField(placeholder: "Production name", value: show.name, font: .system(size: 15, weight: .semibold)) { text in
                     let t = text.trimmingCharacters(in: .whitespaces)
                     guard !t.isEmpty else { return false }
                     model.renameShow(t)
                     return true
                 }
-                HStack(spacing: 10) {
-                    stat("\(show.items.count)", show.items.count == 1 ? "item" : "items")
-                    stat("\(show.cameraCount)", show.cameraCount == 1 ? "camera" : "cameras")
-                    stat("\(totalShots)", totalShots == 1 ? "shot" : "shots")
-                }
+                MetaLine(parts: [
+                    "\(show.items.count) \(show.items.count == 1 ? "item" : "items")",
+                    "\(show.cameraCount) \(show.cameraCount == 1 ? "camera" : "cameras")",
+                    "\(totalShots) shots",
+                    totalRun > 0 ? clockText(totalRun) : ""
+                ])
+                .padding(.leading, 5)
             }
-            .padding(.horizontal, 14)
-            .padding(.top, 12)
-            .padding(.bottom, 10)
+            .padding(.horizontal, Space.m)
+            .padding(.top, Space.m)
+            .padding(.bottom, Space.s)
             .frame(maxWidth: .infinity, alignment: .leading)
 
-            Rectangle().fill(Gallery.hairline).frame(height: 1)
-
-            PanelHeader(title: "Running order")
+            PanelHeader(title: "Running order") {
+                IconButton(symbol: "plus", help: "New song after the selection (⌥⌘N)") { model.addSong() }
+            }
 
             List(selection: $model.selectedItemID) {
                 ForEach(Array(show.items.enumerated()), id: \.element.id) { index, item in
                     RunningOrderRow(index: index + 1, item: item,
                                     shotCount: show.shotRows(forItem: item.id).count,
+                                    runLength: show.runLength(forItem: item.id),
                                     strip: ShotStrip.segments(show: show, item: item),
                                     selected: model.selectedItemID == item.id,
                                     renaming: model.renamingItemID == item.id,
                                     model: model)
                         .tag(item.id)
                         .listRowSeparator(.hidden)
-                        .listRowInsets(EdgeInsets(top: 2, leading: 6, bottom: 2, trailing: 6))
                         .contextMenu {
                             Button("Rename") { model.renamingItemID = item.id }
                             Button("Duplicate") { model.duplicateItem(item.id) }
@@ -63,17 +62,15 @@ struct RunningOrderView: View {
             }
 
             Rectangle().fill(Gallery.hairline).frame(height: 1)
-            HStack(spacing: 8) {
+            HStack(spacing: Space.s) {
                 Button { model.addSong() } label: { Label("Song", systemImage: "plus") }
                     .help("New song after the selection (⌥⌘N)")
                 Button { model.addSegment() } label: { Label("Segment", systemImage: "plus") }
                     .help("New segment after the selection (⌥⇧⌘N)")
                 Spacer()
             }
-            .buttonStyle(.borderless)
-            .font(.system(size: 12, weight: .medium))
-            .foregroundStyle(Gallery.ink)
-            .padding(10)
+            .buttonStyle(QuietButtonStyle())
+            .padding(Space.m)
         }
         .background(Gallery.panel)
     }
@@ -82,11 +79,8 @@ struct RunningOrderView: View {
         show.items.reduce(0) { $0 + show.shotRows(forItem: $1.id).count }
     }
 
-    private func stat(_ value: String, _ label: String) -> some View {
-        HStack(spacing: 3) {
-            Text(value).font(.readout(11, weight: .semibold)).foregroundStyle(Gallery.ink)
-            Text(label).font(.system(size: 11)).foregroundStyle(Gallery.dim)
-        }
+    private var totalRun: Double {
+        show.items.reduce(0) { $0 + (show.runLength(forItem: $1.id) ?? 0) }
     }
 }
 
@@ -127,74 +121,76 @@ struct RunningOrderRow: View {
     let index: Int
     let item: RundownItem
     let shotCount: Int
+    let runLength: Double?
     let strip: [ShotStrip.Segment]
     let selected: Bool
     let renaming: Bool
     @ObservedObject var model: WorkspaceModel
     @State private var draft = ""
+    @State private var hovering = false
     @FocusState private var focused: Bool
 
     var body: some View {
-        HStack(alignment: .center, spacing: 10) {
+        HStack(alignment: .top, spacing: Space.s) {
             Text(String(format: "%02d", index))
-                .font(.readout(12, weight: .semibold))
+                .font(.readout(11, weight: .semibold))
                 .foregroundStyle(selected ? Gallery.ink : Gallery.faint)
-                .frame(width: 22, alignment: .trailing)
+                .frame(width: 18, alignment: .trailing)
+                .padding(.top, 1)
 
-            Rectangle()
-                .fill(item.kind == .song ? Gallery.dim : Gallery.amber)
-                .frame(width: 3, height: 34)
-                .clipShape(Capsule())
-
-            VStack(alignment: .leading, spacing: 3) {
-                if renaming {
-                    TextField("Title", text: $draft)
-                        .textFieldStyle(.plain)
-                        .font(.system(size: 13, weight: .semibold))
-                        .focused($focused)
-                        .onAppear { draft = item.title; focused = true }
-                        .onSubmit { model.renameItem(item.id, to: draft); model.renamingItemID = nil }
-                        .onExitCommand { model.renamingItemID = nil }
-                        .onChange(of: focused) { _, f in if !f { model.renamingItemID = nil } }
-                } else {
-                    Text(item.title)
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(Gallery.ink)
-                        .lineLimit(1)
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: 6) {
+                    Circle().fill(item.kind == .song ? Gallery.selection : Gallery.amber).frame(width: 6, height: 6)
+                    if renaming {
+                        TextField("Title", text: $draft)
+                            .textFieldStyle(.plain)
+                            .font(.ocBodyStrong)
+                            .focused($focused)
+                            .onAppear { draft = item.title; focused = true }
+                            .onSubmit { model.renameItem(item.id, to: draft); model.renamingItemID = nil }
+                            .onExitCommand { model.renamingItemID = nil }
+                            .onChange(of: focused) { _, f in if !f { model.renamingItemID = nil } }
+                    } else {
+                        Text(item.title)
+                            .font(.ocBodyStrong)
+                            .foregroundStyle(Gallery.ink)
+                            .lineLimit(1)
+                    }
                 }
-                HStack(spacing: 8) {
-                    Text(item.kind == .song ? "Song" : "Segment")
-                    Text(meta)
-                }
-                .font(.umd(10))
-                .foregroundStyle(Gallery.dim)
-                .lineLimit(1)
+                MetaLine(parts: meta, font: .ocMeta, color: Gallery.dim)
                 if !strip.isEmpty {
-                    ShotStrip(segments: strip).padding(.top, 2)
+                    ShotStrip(segments: strip).padding(.top, 1)
                 }
             }
-            Spacer(minLength: 4)
-            VStack(alignment: .trailing, spacing: 0) {
+            Spacer(minLength: Space.xs)
+            VStack(alignment: .trailing, spacing: 2) {
                 Text("\(shotCount)")
-                    .font(.readout(13, weight: .semibold))
-                    .foregroundStyle(shotCount == 0 ? Gallery.faint : Gallery.ink)
-                Text(shotCount == 1 ? "shot" : "shots")
-                    .font(.umd(9))
-                    .foregroundStyle(Gallery.dim)
+                    .font(.readout(12, weight: .semibold))
+                    .foregroundStyle(shotCount == 0 ? Gallery.faint : Gallery.dim)
+                if hovering {
+                    Image(systemName: "line.3.horizontal")
+                        .font(.system(size: 9, weight: .semibold))
+                        .foregroundStyle(Gallery.faint)
+                        .help("Drag to reorder")
+                }
             }
+            .padding(.top, 1)
         }
-        .padding(.vertical, 5)
+        .padding(.vertical, Space.xs + 2)
         .contentShape(Rectangle())
+        .onHover { hovering = $0 }
+        .help("\(item.title): \(shotCount) \(shotCount == 1 ? "shot" : "shots")")
     }
 
-    private var meta: String {
+    private var meta: [String] {
         var parts: [String] = []
         switch item.timeBase {
-        case .bars: parts.append("\(Int(item.bpm.rounded())) BPM  \(item.beatsPerBar)/4")
-        case .seconds: if item.plannedDuration > 0 { parts.append(TimeFormat.mmss(item.plannedDuration).replacingOccurrences(of: ".0", with: "")) }
-        case .order: parts.append("NEXT order")
+        case .bars: parts.append("\(Int(item.bpm.rounded())) BPM")
+        case .seconds: parts.append(item.kind.label)
+        case .order: parts.append("NEXT")
         }
+        if let runLength { parts.append(clockText(runLength)) }
         if !item.hardOut.isEmpty { parts.append("out \(item.hardOut)") }
-        return parts.joined(separator: "   ")
+        return parts
     }
 }

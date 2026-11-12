@@ -1,14 +1,15 @@
 import SwiftUI
 import OnCueCore
 
-/// Right panel: properties of the selected shot(s), or of the song/segment when no shot is selected.
+/// Right panel: properties of the selection: a shot, several shots, a lyric/note/FX cue, or the
+/// song or segment when nothing is selected.
 struct InspectorView: View {
     let show: Show
     @ObservedObject var model: WorkspaceModel
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 0) {
                 if let item = show.item(model.selectedItemID) {
                     let rows = show.shotRows(forItem: item.id)
                     let selected = rows.filter { model.selectedShotIDs.contains($0.id) }
@@ -23,10 +24,12 @@ struct InspectorView: View {
                         ItemInspector(show: show, item: item, model: model)
                     }
                 } else {
-                    Text("Nothing selected").foregroundStyle(Gallery.dim)
+                    Text("Nothing selected")
+                        .font(.ocMeta)
+                        .foregroundStyle(Gallery.faint)
+                        .padding(Space.l)
                 }
             }
-            .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .background(Gallery.panel)
@@ -38,15 +41,44 @@ struct InspectorView: View {
     }
 }
 
-private struct InspectorSection<Content: View>: View {
-    let title: String
-    @ViewBuilder var content: Content
+/// Camera picker shown as a field: the camera's chip, name and operator.
+private struct CameraField: View {
+    let show: Show
+    let camera: Camera?
+    let missing: Bool
+    let choose: (UUID?) -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(title).font(.umd(11)).foregroundStyle(Gallery.dim)
-            content
+        Menu {
+            ForEach(show.sortedCameras) { cam in
+                Button("\(cam.number)  \(cam.label)") { choose(cam.id) }
+            }
+            Divider()
+            Button("No camera") { choose(nil) }
+        } label: {
+            HStack(spacing: Space.s) {
+                CameraChip(camera: camera, missing: missing, size: 22)
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(camera?.displayName ?? (missing ? "Deleted camera" : "Choose a camera"))
+                        .font(.ocBodyStrong)
+                        .foregroundStyle(camera == nil ? Gallery.amber : Gallery.ink)
+                    if let op = camera?.operatorName, !op.isEmpty {
+                        Text(op).font(.ocMeta).foregroundStyle(Gallery.faint)
+                    }
+                }
+                Spacer(minLength: 0)
+                Image(systemName: "chevron.up.chevron.down")
+                    .font(.system(size: 9, weight: .semibold))
+                    .foregroundStyle(Gallery.faint)
+            }
+            .padding(.horizontal, Space.s)
+            .padding(.vertical, 6)
+            .background(Gallery.raised, in: RoundedRectangle(cornerRadius: Radius.m))
+            .contentShape(Rectangle())
         }
+        .menuStyle(.borderlessButton)
+        .menuIndicator(.hidden)
+        .help("Or type the camera number with the timeline or shot list selected")
     }
 }
 
@@ -59,96 +91,109 @@ private struct ShotInspector: View {
 
     var body: some View {
         let camera = show.camera(row.cue.cameraID)
-        VStack(alignment: .leading, spacing: 16) {
-            HStack(alignment: .center, spacing: 12) {
-                CameraTile(camera: camera, missing: row.cue.cameraID != nil && camera == nil, tally: .current, size: 76)
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Shot \(row.number)")
-                        .font(.title(20))
-                        .foregroundStyle(Gallery.ink)
-                    Text(sectionName)
-                        .font(.umd(12))
-                        .foregroundStyle(Gallery.dim)
-                    if let next {
-                        HStack(spacing: 6) {
-                            Circle().fill(Gallery.next).frame(width: 7, height: 7)
-                            Text("Next: \(show.camera(next.cue.cameraID).map { "\($0.number) \($0.displayName)" } ?? "no camera")")
-                                .font(.umd(11))
-                                .foregroundStyle(Gallery.dim)
+        let missing = row.cue.cameraID != nil && camera == nil
+        VStack(alignment: .leading, spacing: 0) {
+            // Identity: the shot in its camera's colour.
+            VStack(alignment: .leading, spacing: Space.m) {
+                HStack(alignment: .center, spacing: Space.m) {
+                    CameraChip(camera: camera, missing: missing, size: 46)
+                    VStack(alignment: .leading, spacing: 3) {
+                        HStack(spacing: Space.s) {
+                            Text("Shot \(row.number)").font(.ocTitle).foregroundStyle(Gallery.ink)
+                            TallyTag(state: .current)
+                        }
+                        MetaLine(parts: [sectionName, item.format(row.cue.at)])
+                    }
+                }
+                if let next {
+                    let nextCam = show.camera(next.cue.cameraID)
+                    HStack(spacing: Space.s) {
+                        TallyTag(state: .next)
+                        CameraChip(camera: nextCam, size: 16)
+                        Text(nextCam.map { $0.displayName } ?? "No camera")
+                            .font(.ocLabel)
+                            .foregroundStyle(Gallery.dim)
+                        if !next.cue.text.isEmpty {
+                            Text(next.cue.text).font(.ocMeta).foregroundStyle(Gallery.faint).lineLimit(1)
                         }
                     }
                 }
             }
+            .padding(.horizontal, Space.l)
+            .padding(.top, Space.l)
+            .padding(.bottom, Space.m)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background((camera?.swiftUIColor ?? Gallery.key).opacity(0.10))
+            .overlay(alignment: .top) {
+                Rectangle().fill(camera?.swiftUIColor ?? Gallery.key).frame(height: 3)
+            }
+            .overlay(alignment: .bottom) { Rectangle().fill(Gallery.hairline).frame(height: 1) }
 
-            InspectorSection(title: "Camera") {
-                Menu {
-                    ForEach(show.sortedCameras) { cam in
-                        Button("\(cam.number)  \(cam.label)") { model.useCamera(cam.id, newShot: false) }
-                    }
-                    Divider()
-                    Button("No camera") {
+            InspectorGroup(title: "Camera") {
+                CameraField(show: show, camera: camera, missing: missing) { id in
+                    if let id { model.useCamera(id, newShot: false) } else {
                         model.updateShot(row.id, "Clear Camera") { $0.cameraID = nil }
                     }
-                } label: {
-                    Text(camera.map { "\($0.number)  \($0.label)" } ?? "Choose a camera")
-                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .help("Or type the camera number with the shot list selected")
             }
 
-            HStack(alignment: .top, spacing: 12) {
-                InspectorSection(title: "Position") {
-                    CommitField(placeholder: "Position", value: item.format(row.cue.at), font: .readout(14, weight: .semibold), width: 90) { text in
+            InspectorGroup(title: "Timing") {
+                PropertyRow(label: "Position") {
+                    CommitField(placeholder: "Position", value: item.format(row.cue.at), font: .readout(13), width: 90) { text in
                         model.setShotPosition(row.id, text: text)
                     }
                     .help(positionHint)
                 }
-                InspectorSection(title: "Length") {
-                    Text(row.lengthSeconds.map { String(format: "%.1f s", $0) } ?? "–")
-                        .font(.readout(14, weight: .semibold))
+                PropertyRow(label: "Length") {
+                    Text(row.lengthSeconds.map { String(format: "%.1f s", $0) } ?? "Until NEXT")
+                        .font(.readout(13))
                         .foregroundStyle(Gallery.ink)
+                        .padding(.leading, 5)
+                }
+                PropertyRow(label: "Transition") {
+                    Picker("Transition", selection: Binding(get: { row.cue.transition },
+                                                             set: { model.setTransition($0, for: [row.id]) })) {
+                        Text("Cut").tag(TransitionKind.cut)
+                        Text("Mix").tag(TransitionKind.auto)
+                    }
+                    .labelsHidden()
+                    .pickerStyle(.segmented)
+                    .frame(maxWidth: 150)
                 }
             }
 
-            InspectorSection(title: "Transition") {
-                Picker("Transition", selection: Binding(get: { row.cue.transition },
-                                                         set: { model.setTransition($0, for: [row.id]) })) {
-                    Text("Cut").tag(TransitionKind.cut)
-                    Text("Mix").tag(TransitionKind.auto)
-                }
-                .labelsHidden()
-                .pickerStyle(.segmented)
-            }
-
-            InspectorSection(title: "Shot description") {
+            InspectorGroup(title: "Description") {
                 CommitTextArea(placeholder: "What the audience sees", value: row.cue.text) { text in
                     model.updateShot(row.id, "Edit Shot") { $0.text = text }
                 }
             }
 
-            InspectorSection(title: "Note for the operator") {
+            InspectorGroup(title: "Note for the operator") {
                 CommitTextArea(placeholder: "Framing, movement, timing", value: row.cue.note) { text in
                     model.updateShot(row.id, "Edit Operator Note") { $0.note = text }
                 }
             }
 
             if !row.issues.isEmpty {
-                InspectorSection(title: "Check") {
+                InspectorGroup(title: "Check") {
                     ForEach(row.issues, id: \.self) { issue in
-                        HStack(spacing: 6) {
-                            Circle().fill(Gallery.amber).frame(width: 6, height: 6)
-                            Text(issue.message).font(.system(size: 12)).foregroundStyle(Gallery.ink)
-                        }
+                        Label(issue.message, systemImage: "exclamationmark.triangle.fill")
+                            .font(.ocMeta)
+                            .foregroundStyle(Gallery.amber)
                     }
                 }
             }
 
-            HStack {
-                Button("Duplicate") { model.duplicateSelectedShots() }
+            HStack(spacing: Space.s) {
+                Button { model.duplicateSelectedShots() } label: { Label("Duplicate", systemImage: "plus.square.on.square") }
+                    .buttonStyle(QuietButtonStyle())
+                    .help("Duplicate (⌘D)")
                 Spacer()
-                Button("Delete Shot", role: .destructive) { model.deleteSelectedShots() }
+                Button(role: .destructive) { model.deleteSelectedShots() } label: { Label("Delete", systemImage: "trash") }
+                    .buttonStyle(QuietButtonStyle(destructive: true))
+                    .help("Delete (⌫)")
             }
-            .controlSize(.small)
+            .padding(Space.l)
         }
     }
 
@@ -171,29 +216,35 @@ private struct MultiShotInspector: View {
     @ObservedObject var model: WorkspaceModel
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("\(rows.count) shots selected")
-                .font(.title(18))
-                .foregroundStyle(Gallery.ink)
-            InspectorSection(title: "Set camera on all") {
-                Menu("Choose a camera") {
-                    ForEach(show.sortedCameras) { cam in
-                        Button("\(cam.number)  \(cam.label)") { model.useCamera(cam.id, newShot: false) }
+        VStack(alignment: .leading, spacing: 0) {
+            InspectorGroup(title: nil) {
+                Text("\(rows.count) shots").font(.ocTitle).foregroundStyle(Gallery.ink)
+                HStack(spacing: 3) {
+                    ForEach(rows.prefix(16)) { row in
+                        CameraChip(camera: show.camera(row.cue.cameraID), size: 16)
                     }
                 }
             }
-            InspectorSection(title: "Transition") {
-                HStack {
+            InspectorGroup(title: "Camera for all") {
+                CameraField(show: show, camera: nil, missing: false) { id in
+                    if let id { model.useCamera(id, newShot: false) }
+                }
+            }
+            InspectorGroup(title: "Transition for all") {
+                HStack(spacing: Space.s) {
                     Button("All cuts") { model.setTransition(.cut) }
                     Button("All mixes") { model.setTransition(.auto) }
                 }
+                .buttonStyle(QuietButtonStyle())
             }
-            HStack {
-                Button("Duplicate") { model.duplicateSelectedShots() }
+            HStack(spacing: Space.s) {
+                Button { model.duplicateSelectedShots() } label: { Label("Duplicate", systemImage: "plus.square.on.square") }
+                    .buttonStyle(QuietButtonStyle())
                 Spacer()
-                Button("Delete Shots", role: .destructive) { model.deleteSelectedShots() }
+                Button(role: .destructive) { model.deleteSelectedShots() } label: { Label("Delete", systemImage: "trash") }
+                    .buttonStyle(QuietButtonStyle(destructive: true))
             }
-            .controlSize(.small)
+            .padding(Space.l)
         }
     }
 }
@@ -204,49 +255,64 @@ private struct ItemInspector: View {
     @ObservedObject var model: WorkspaceModel
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(item.title)
-                .font(.title(18))
-                .foregroundStyle(Gallery.ink)
-            Text("Select a shot to edit it. Double-click a track on the timeline to add a shot, lyric, note or FX cue. Return adds a shot, and typing a number sets its camera.")
-                .font(.system(size: 12))
-                .foregroundStyle(Gallery.dim)
-                .fixedSize(horizontal: false, vertical: true)
+        VStack(alignment: .leading, spacing: 0) {
+            InspectorGroup(title: nil) {
+                KindTag(kind: item.kind)
+                Text(item.title).font(.ocTitle).foregroundStyle(Gallery.ink)
+                Text("Select a shot to edit it. Double-click a track on the timeline to add a shot, lyric, note or FX cue. Return adds a shot; typing a number sets its camera.")
+                    .font(.ocMeta)
+                    .foregroundStyle(Gallery.dim)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
 
-            InspectorSection(title: "Sections") {
+            InspectorGroup(title: "Sections") {
                 if item.sections.isEmpty {
-                    Text("None yet").foregroundStyle(Gallery.faint)
-                }
-                List {
-                    ForEach(item.sortedSections) { section in
-                        HStack {
-                            Text(section.name).font(.umd(13)).foregroundStyle(Gallery.ink)
-                            Spacer()
-                            Text(item.format(section.at)).font(.readout(11)).foregroundStyle(Gallery.dim)
+                    Text("None yet").font(.ocMeta).foregroundStyle(Gallery.faint)
+                } else {
+                    List {
+                        ForEach(item.sortedSections) { section in
+                            HStack {
+                                Text(section.name).font(.ocBody).foregroundStyle(Gallery.ink)
+                                Spacer()
+                                Text(item.format(section.at)).font(.readout(11)).foregroundStyle(Gallery.faint)
+                            }
                         }
+                        .onMove { model.moveSections($0, $1) }
                     }
-                    .onMove { model.moveSections($0, $1) }
+                    .listStyle(.plain)
+                    .scrollContentBackground(.hidden)
+                    .frame(height: CGFloat(item.sections.count) * 26 + 6)
                 }
-                .listStyle(.plain)
-                .scrollContentBackground(.hidden)
-                .frame(height: CGFloat(max(item.sections.count, 1)) * 26 + 8)
-                Button("New Section") { model.addSection() }
-                    .controlSize(.small)
+                Button { model.addSection() } label: { Label("New Section", systemImage: "plus") }
+                    .buttonStyle(QuietButtonStyle())
             }
 
             let unused = show.unusedCameras(inItem: item.id)
             if !unused.isEmpty {
-                InspectorSection(title: "Cameras not used here") {
-                    Text(unused.map { "\($0.number) \($0.displayName)" }.joined(separator: ", "))
-                        .font(.system(size: 12))
-                        .foregroundStyle(Gallery.dim)
-                        .fixedSize(horizontal: false, vertical: true)
+                InspectorGroup(title: "Cameras not used here") {
+                    FlowChips(cameras: unused)
                 }
             }
 
-            InspectorSection(title: "Notes") {
-                CommitTextArea(placeholder: "Notes for this \(item.kind == .song ? "song" : "segment")", value: item.notes) { text in
+            InspectorGroup(title: "Notes") {
+                CommitTextArea(placeholder: "Notes for this \(item.kind == .song ? "song" : "segment")", value: item.notes, minLines: 3) { text in
                     model.updateItem("Edit Notes") { $0.notes = text }
+                }
+            }
+        }
+    }
+}
+
+/// Camera chips with names, wrapping into rows.
+private struct FlowChips: View {
+    let cameras: [Camera]
+
+    var body: some View {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 104), spacing: Space.s, alignment: .leading)], alignment: .leading, spacing: Space.s) {
+            ForEach(cameras) { cam in
+                HStack(spacing: 6) {
+                    CameraChip(camera: cam, size: 18)
+                    Text(cam.displayName).font(.ocMeta).foregroundStyle(Gallery.dim).lineLimit(1)
                 }
             }
         }
@@ -261,41 +327,49 @@ private struct CueInspector: View {
     @ObservedObject var model: WorkspaceModel
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack(spacing: 8) {
-                RoundedRectangle(cornerRadius: 1).fill(lane.tone).frame(width: 4, height: 22)
-                Text(title).font(.title(20)).foregroundStyle(Gallery.ink)
+        VStack(alignment: .leading, spacing: 0) {
+            InspectorGroup(title: nil) {
+                HStack(spacing: Space.s) {
+                    Image(systemName: lane.symbol).font(.system(size: 14, weight: .medium)).foregroundStyle(lane.tone)
+                    Text(title).font(.ocTitle).foregroundStyle(Gallery.ink)
+                }
+                MetaLine(parts: [lane.label + " track", item.format(cue.at)])
             }
-            InspectorSection(title: "Position") {
-                CommitField(placeholder: "Position", value: item.format(cue.at), font: .readout(14, weight: .semibold), width: 90) { text in
-                    guard let pos = item.parse(text), pos >= 0 else { return false }
-                    model.moveCue(cue.id, to: pos)
-                    return true
+            .overlay(alignment: .top) { Rectangle().fill(lane.tone).frame(height: 3) }
+
+            InspectorGroup(title: "Timing") {
+                PropertyRow(label: "Position") {
+                    CommitField(placeholder: "Position", value: item.format(cue.at), font: .readout(13), width: 90) { text in
+                        guard let pos = item.parse(text), pos >= 0 else { return false }
+                        model.moveCue(cue.id, to: pos)
+                        return true
+                    }
                 }
             }
             if kind == .fx {
-                InspectorSection(title: "Action") {
+                InspectorGroup(title: "Action") {
                     Picker("Action", selection: Binding(get: { cue.fxAction ?? .macro },
                                                          set: { a in model.updateCue(cue.id, "Change FX Action") { $0.fxAction = a } })) {
                         ForEach(FXAction.allCases) { Text($0.label).tag($0) }
                     }
                     .labelsHidden()
                     Text("Stored in the script. FX cues run on the switcher once the show engine is built.")
-                        .font(.system(size: 11))
+                        .font(.ocMeta)
                         .foregroundStyle(Gallery.faint)
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
-            InspectorSection(title: kind == .lyrics ? "Lyric line" : (kind == .fx ? "Label" : "Note")) {
+            InspectorGroup(title: kind == .lyrics ? "Lyric line" : (kind == .fx ? "Label" : "Note")) {
                 CommitTextArea(placeholder: kind == .lyrics ? "Lyric line" : "Text", value: cue.text) { text in
                     model.updateCue(cue.id, "Edit \(title)") { $0.text = text }
                 }
             }
             HStack {
                 Spacer()
-                Button("Delete \(title)", role: .destructive) { model.deleteSelectedCue() }
+                Button(role: .destructive) { model.deleteSelectedCue() } label: { Label("Delete \(title)", systemImage: "trash") }
+                    .buttonStyle(QuietButtonStyle(destructive: true))
             }
-            .controlSize(.small)
+            .padding(Space.l)
         }
     }
 
@@ -313,29 +387,5 @@ private struct CueInspector: View {
         case .fx: return "FX cue"
         default: return "Note"
         }
-    }
-}
-
-/// Multi-line text that commits when editing ends (one undo step per edit, not per keystroke).
-struct CommitTextArea: View {
-    let placeholder: String
-    let value: String
-    let commit: (String) -> Void
-    @State private var draft = ""
-    @FocusState private var focused: Bool
-
-    var body: some View {
-        TextField(placeholder, text: $draft, axis: .vertical)
-            .textFieldStyle(.plain)
-            .font(.system(size: 13))
-            .foregroundStyle(Gallery.ink)
-            .lineLimit(2...8)
-            .focused($focused)
-            .padding(8)
-            .background(Gallery.raised, in: RoundedRectangle(cornerRadius: 5))
-            .overlay(RoundedRectangle(cornerRadius: 5).strokeBorder(focused ? Gallery.steel : Gallery.hairline, lineWidth: 1))
-            .onAppear { draft = value }
-            .onChange(of: value) { _, new in if !focused { draft = new } }
-            .onChange(of: focused) { _, f in if !f && draft != value { commit(draft) } }
     }
 }

@@ -21,6 +21,7 @@ enum ScreenshotRun {
         ("Live at the Arena.oncue", "workspace-timeline.png"),
         ("Live at the Arena (split).oncue", "workspace-split.png"),
         ("Live at the Arena (list).oncue", "workspace-list.png"),
+        ("Live at the Arena (live).oncue", "live-mode.png"),
     ]
 
     private static func openShows() {
@@ -40,9 +41,14 @@ enum ScreenshotRun {
         WorkspaceModel.seedState(showID: list.id, itemID: ballad,
                                  shotIDs: [list.shotRows(forItem: ballad)[2].id], editor: .list)
 
+        // Live Mode: the opener with shot 6 on air.
+        let live = Show.sample()
+        WorkspaceModel.seedState(showID: live.id, itemID: live.items[0].id, shotIDs: [], editor: .timeline)
+        WorkspaceModel.openLive[live.id] = 5
+
         let urls = shots.map { folder.appendingPathComponent($0.file) }
         do {
-            for (show, url) in zip([timeline, split, list], urls) { try ShowFileIO.write(show, to: url) }
+            for (show, url) in zip([timeline, split, list, live], urls) { try ShowFileIO.write(show, to: url) }
         } catch {
             return finish("could not write sample shows: \(error.localizedDescription)", ok: false)
         }
@@ -50,7 +56,9 @@ enum ScreenshotRun {
         open(urls[0]) {
             open(urls[1]) {
                 open(urls[2]) {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 4) { capture() }
+                    open(urls[3]) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 4) { capture() }
+                    }
                 }
             }
         }

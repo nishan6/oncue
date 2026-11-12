@@ -76,6 +76,12 @@ final class WorkspaceModel: ObservableObject {
     /// Timeline zoom, 1 = default scale.
     @Published var zoom: Double = 1 { didSet { persistState() } }
     @Published var hiddenLanes: Set<TimelineLane> = [] { didSet { persistState() } }
+    /// Live Mode position, nil in Edit Mode.
+    @Published var live: LiveCursor?
+    /// When the shot on air was taken (drives the elapsed and countdown readouts).
+    @Published var liveTakenAt: Date?
+    /// Used by the screenshot run: shows that open straight into Live Mode at a shot index.
+    static var openLive: [UUID: Int] = [:]
     @Published var lockedLanes: Set<TimelineLane> = [] { didSet { persistState() } }
     @Published var cameraManagerOpen = false
     @Published var renamingItemID: UUID?
@@ -101,6 +107,10 @@ final class WorkspaceModel: ObservableObject {
         if attachedShowID != show.id {
             attachedShowID = show.id
             restoreState(for: show)
+            if let index = Self.openLive[show.id], let item = selectedItemID {
+                live = LiveCursor(itemID: item, index: index)
+                liveTakenAt = Date().addingTimeInterval(-3.4)
+            }
         }
     }
 
@@ -499,6 +509,65 @@ final class WorkspaceModel: ObservableObject {
 
     func deleteCamera(_ id: UUID) {
         edit("Delete Camera") { $0.deleteCamera(id) }
+    }
+
+    // MARK: - Live Mode
+
+    /// Enters Live Mode on the selected song or segment, standing by (nothing taken yet).
+    func enterLive() {
+        guard let id = selectedItemID ?? show.items.first?.id else { return }
+        editingCueID = nil
+        live = LiveCursor(itemID: id)
+        liveTakenAt = nil
+    }
+
+    /// Leaves Live Mode, selecting the song and the shot that was on air.
+    func exitLive() {
+        guard let cursor = live else { return }
+        let onAir = show.liveNow(cursor)
+        live = nil
+        liveTakenAt = nil
+        if selectedItemID != cursor.itemID { selectedItemID = cursor.itemID }
+        if let onAir {
+            selectedShotIDs = [onAir.id]
+            scrollTarget = onAir.id.uuidString
+        }
+    }
+
+    func toggleLive() {
+        if live == nil { enterLive() } else { exitLive() }
+    }
+
+    func liveAdvance() {
+        guard var cursor = live else { return }
+        if show.advance(&cursor) {
+            live = cursor
+            liveTakenAt = Date()
+        }
+    }
+
+    func liveBack() {
+        guard var cursor = live else { return }
+        if show.stepBack(&cursor) {
+            live = cursor
+            liveTakenAt = cursor.isStandingBy ? nil : Date()
+        }
+    }
+
+    func liveJump(toSection sectionID: UUID) {
+        guard var cursor = live else { return }
+        if show.jump(&cursor, toSection: sectionID) {
+            live = cursor
+            liveTakenAt = Date()
+        }
+    }
+
+    func liveMoveItem(by delta: Int) {
+        guard var cursor = live else { return }
+        if show.moveItem(&cursor, by: delta) {
+            live = cursor
+            liveTakenAt = nil
+        }
     }
 
     // MARK: - Workspace persistence (per show, per Mac)

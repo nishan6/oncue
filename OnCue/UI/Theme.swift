@@ -1,31 +1,63 @@
 import SwiftUI
-
 import AppKit
 import OnCueCore
 
-/// OnCue's palette: layered graphite, so the camera colours read clearly, like a timeline in a
-/// broadcast control or edit suite. Each camera has its own colour. Red and green carry tally
-/// meaning only (red = the selected shot's camera, green = the next shot's camera), and a
-/// restrained blue ring marks the selection.
+// OnCue design system.
+//
+// Surfaces are layered charcoal: the window base is darkest, panels sit one step up, controls one
+// more. Separation comes from tone and hairlines, not boxes. Colour is reserved for meaning:
+// each camera keeps its identity colour; red and green mean program and preview tally (always
+// with a label, never colour alone); one restrained blue marks selection and focus.
+
+// MARK: - Tokens
+
 enum Gallery {
-    static let well = Color(hex: "#161719")      // track lanes, behind the blocks
-    static let canvas = Color(hex: "#1D1E22")    // editor background
-    static let panel = Color(hex: "#25262B")     // header, sidebars, track headers
-    static let raised = Color(hex: "#2F3036")    // fields, section blocks
-    static let key = Color(hex: "#3A3B42")       // buttons
-    static let hairline = Color.white.opacity(0.08)
-    static let ink = Color(hex: "#ECECEE")
-    static let dim = Color(hex: "#9C9EA7")
-    static let faint = Color(hex: "#676973")
-    static let tally = Color(hex: "#E8202A")     // program red
-    static let next = Color(hex: "#2ED15F")      // preview green
-    static let amber = Color(hex: "#FFB000")     // warnings
-    static let selection = Color(hex: "#5B9BFF") // selection ring and focus
+    // Surfaces, darkest to lightest.
+    static let well = Color(hex: "#0F1012")       // timeline lanes
+    static let base = Color(hex: "#141518")       // window base, editor canvas
+    static let canvas = base
+    static let panel = Color(hex: "#191A1E")      // sidebar, inspector, headers
+    static let raised = Color(hex: "#212228")     // controls, fields
+    static let key = Color(hex: "#2A2C33")        // buttons, pressed fields
+    static let hover = Color.white.opacity(0.05)
+    static let pressed = Color.white.opacity(0.09)
+    static let hairline = Color.white.opacity(0.07)
+    static let divider = Color.white.opacity(0.10)
+
+    // Text.
+    static let ink = Color(hex: "#F1F1F3")
+    static let dim = Color(hex: "#A1A3AC")
+    static let faint = Color(hex: "#6A6D77")
+
+    // Meaning.
+    static let tally = Color(hex: "#F0313A")      // program
+    static let next = Color(hex: "#2BD167")       // preview
+    static let amber = Color(hex: "#FFB020")      // warnings
+    static let selection = Color(hex: "#5E9BFF")  // selection, focus
     static let steel = selection
-    static let steelFill = Color(hex: "#5B9BFF").opacity(0.16)
-    static let lyric = Color(hex: "#B9AEE6")
-    static let note = Color(hex: "#E6CF8F")
-    static let fx = Color(hex: "#8CCFE0")
+    static let steelFill = Color(hex: "#5E9BFF").opacity(0.16)
+
+    // Track identities.
+    static let lyric = Color(hex: "#B5A9EE")
+    static let note = Color(hex: "#E9CF8A")
+    static let fx = Color(hex: "#7FD0E4")
+}
+
+/// Spacing scale (points).
+enum Space {
+    static let xxs: CGFloat = 2
+    static let xs: CGFloat = 4
+    static let s: CGFloat = 8
+    static let m: CGFloat = 12
+    static let l: CGFloat = 16
+    static let xl: CGFloat = 24
+}
+
+/// Corner radii: small for blocks and fields, medium for text areas, large for sheets.
+enum Radius {
+    static let s: CGFloat = 4
+    static let m: CGFloat = 6
+    static let l: CGFloat = 10
 }
 
 extension Color {
@@ -46,7 +78,7 @@ extension Color {
         let v = UInt32(digits, radix: 16) ?? 0x808080
         let r = Double((v >> 16) & 0xFF) / 255, g = Double((v >> 8) & 0xFF) / 255, b = Double(v & 0xFF) / 255
         let luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b
-        return luminance > 0.55 ? Color(hex: "#141518") : Color.white
+        return luminance > 0.55 ? Color(hex: "#121316") : Color.white
     }
 }
 
@@ -55,38 +87,174 @@ extension Camera {
     var inkColor: Color { Color.ink(onHex: resolvedColor) }
 }
 
+// MARK: - Type scale
+
 extension Font {
-    /// Big camera numerals: heavy, like the legend on a switcher key.
+    /// Window-level titles (Live Mode, empty states).
+    static let ocDisplay = Font.system(size: 26, weight: .semibold)
+    /// Song and segment titles.
+    static let ocTitle = Font.system(size: 19, weight: .semibold)
+    /// Panel and inspector headings.
+    static let ocHeading = Font.system(size: 13, weight: .semibold)
+    /// Primary content: shot descriptions, item names.
+    static let ocBody = Font.system(size: 13, weight: .regular)
+    static let ocBodyStrong = Font.system(size: 13, weight: .medium)
+    /// Metadata and secondary labels.
+    static let ocMeta = Font.system(size: 11, weight: .regular)
+    static let ocLabel = Font.system(size: 11, weight: .medium)
+    /// Small tags (CUT, MIX, PGM).
+    static let ocTag = Font.system(size: 9.5, weight: .bold)
+
+    /// Camera numerals: heavy and wide, OnCue's signature.
     static func cameraNumeral(_ size: CGFloat) -> Font {
         .system(size: size, weight: .heavy).width(.expanded)
     }
-    /// Labels: condensed and semibold.
-    static func umd(_ size: CGFloat = 11) -> Font {
-        .system(size: size, weight: .semibold).width(.condensed)
-    }
-    /// Positions, durations and shot numbers.
+    /// Positions, durations, counts: tabular figures.
     static func readout(_ size: CGFloat = 12, weight: Font.Weight = .medium) -> Font {
         .system(size: size, weight: weight).monospacedDigit()
     }
-    /// Production and song titles.
+    /// Condensed labels where width is tight (camera names on keys and blocks).
+    static func umd(_ size: CGFloat = 11) -> Font {
+        .system(size: size, weight: .semibold).width(.condensed)
+    }
     static func title(_ size: CGFloat) -> Font {
-        .system(size: size, weight: .bold)
+        .system(size: size, weight: .semibold)
     }
 }
 
-/// Tally state of a camera relative to the selected shot.
-enum TallyState {
-    case off, current, next
-    var color: Color {
-        switch self {
-        case .off: return Color.black.opacity(0.35)
-        case .current: return Gallery.tally
-        case .next: return Gallery.next
+// MARK: - Interaction states
+
+/// Hover and press feedback for borderless controls.
+struct InteractiveBackground: ViewModifier {
+    var radius: CGFloat = Radius.s
+    var active = false
+    @State private var hovering = false
+
+    func body(content: Content) -> some View {
+        content
+            .background(active ? Gallery.pressed : (hovering ? Gallery.hover : Color.clear),
+                        in: RoundedRectangle(cornerRadius: radius))
+            .onHover { hovering = $0 }
+            .animation(.easeOut(duration: 0.12), value: hovering)
+    }
+}
+
+extension View {
+    func interactive(radius: CGFloat = Radius.s, active: Bool = false) -> some View {
+        modifier(InteractiveBackground(radius: radius, active: active))
+    }
+}
+
+/// Button style with hover and pressed states: quiet by default, blue when prominent.
+struct QuietButtonStyle: ButtonStyle {
+    var prominent = false
+    var destructive = false
+
+    func makeBody(configuration: Configuration) -> some View {
+        QuietButton(configuration: configuration, prominent: prominent, destructive: destructive)
+    }
+
+    private struct QuietButton: View {
+        let configuration: ButtonStyleConfiguration
+        let prominent: Bool
+        let destructive: Bool
+        @State private var hovering = false
+        @Environment(\.isEnabled) private var enabled
+
+        var body: some View {
+            configuration.label
+                .font(.ocLabel)
+                .foregroundStyle(destructive ? Gallery.tally : (prominent ? Color.white : Gallery.ink))
+                .padding(.horizontal, Space.s + 2)
+                .frame(minHeight: 24)
+                .background(background, in: RoundedRectangle(cornerRadius: Radius.s))
+                .opacity(enabled ? 1 : 0.4)
+                .onHover { hovering = $0 }
+                .animation(.easeOut(duration: 0.1), value: hovering)
+        }
+
+        private var background: Color {
+            if prominent { return Gallery.selection.opacity(configuration.isPressed ? 0.7 : (hovering ? 0.95 : 0.85)) }
+            if configuration.isPressed { return Gallery.pressed }
+            return hovering ? Gallery.key : Gallery.raised
         }
     }
 }
 
-/// A camera as a switcher key: its colour, its number, a name strip and a tally border.
+// MARK: - Tally
+
+/// Tally relative to the selected shot (Edit) or the running position (Live).
+enum TallyState {
+    case off, current, next
+
+    var color: Color {
+        switch self {
+        case .off: return Color.clear
+        case .current: return Gallery.tally
+        case .next: return Gallery.next
+        }
+    }
+
+    /// Text that carries the meaning without colour.
+    func label(live: Bool) -> String? {
+        switch self {
+        case .off: return nil
+        case .current: return live ? "PGM" : "SHOT"
+        case .next: return live ? "PVW" : "NEXT"
+        }
+    }
+}
+
+/// Small tally tag: filled for program, outlined for preview, so the two also differ in shape.
+struct TallyTag: View {
+    let state: TallyState
+    var live = false
+
+    var body: some View {
+        if let text = state.label(live: live) {
+            Text(text)
+                .font(.ocTag)
+                .tracking(0.4)
+                .foregroundStyle(state == .current ? Color.white : Gallery.next)
+                .padding(.horizontal, 4)
+                .frame(height: 14)
+                .background(state == .current ? Gallery.tally : Color.clear, in: RoundedRectangle(cornerRadius: 3))
+                .overlay(RoundedRectangle(cornerRadius: 3).strokeBorder(state == .next ? Gallery.next : Color.clear, lineWidth: 1.2))
+        }
+    }
+}
+
+// MARK: - Camera chips
+
+/// A camera's identity: its colour with its number. Used in lists, inspectors and popovers.
+struct CameraChip: View {
+    let camera: Camera?
+    var missing = false
+    var size: CGFloat = 28
+
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: Radius.s)
+                .fill(camera?.swiftUIColor ?? Gallery.key)
+            if let camera {
+                Text("\(camera.number)")
+                    .font(.cameraNumeral(size * 0.46))
+                    .foregroundStyle(camera.inkColor)
+                    .minimumScaleFactor(0.5)
+                    .padding(.horizontal, 2)
+            } else {
+                Image(systemName: missing ? "exclamationmark" : "questionmark")
+                    .font(.system(size: size * 0.38, weight: .bold))
+                    .foregroundStyle(Gallery.amber)
+            }
+        }
+        .frame(width: size * 1.15, height: size)
+        .help(camera.map { $0.operatorName.isEmpty ? $0.displayName : "\($0.displayName), operated by \($0.operatorName)" }
+              ?? (missing ? "This camera was deleted" : "No camera chosen"))
+    }
+}
+
+/// A camera chip with a tally ring.
 struct CameraTile: View {
     let camera: Camera?
     var missing = false
@@ -95,87 +263,17 @@ struct CameraTile: View {
     var compact = false
 
     var body: some View {
-        VStack(spacing: 0) {
-            ZStack {
-                if let camera {
-                    camera.swiftUIColor
-                    Text("\(camera.number)")
-                        .font(.cameraNumeral(size * (compact ? 0.40 : 0.38)))
-                        .foregroundStyle(camera.inkColor)
-                        .minimumScaleFactor(0.5)
-                } else {
-                    Gallery.key
-                    Image(systemName: "questionmark")
-                        .font(.system(size: size * 0.26, weight: .bold))
-                        .foregroundStyle(Gallery.amber)
-                }
-            }
-            if !compact {
-                Text(camera?.displayName ?? (missing ? "Deleted" : "No camera"))
-                    .font(.umd(10))
-                    .lineLimit(1)
-                    .foregroundStyle(Gallery.ink)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 3)
-                    .background(Color.black.opacity(0.45))
-            }
-        }
-        .frame(width: size, height: compact ? size * 0.72 : size)
-        .clipShape(RoundedRectangle(cornerRadius: 5))
-        .overlay(
-            RoundedRectangle(cornerRadius: 5)
-                .strokeBorder(tally.color, lineWidth: tally == .off ? 1 : 3)
-        )
-        .shadow(color: tally == .off ? .clear : tally.color.opacity(0.5), radius: 6)
-        .help(help)
-    }
-
-    private var help: String {
-        guard let camera else { return missing ? "This camera was deleted" : "No camera chosen" }
-        return camera.operatorName.isEmpty ? camera.displayName : "\(camera.displayName), operated by \(camera.operatorName)"
+        CameraChip(camera: camera, missing: missing, size: compact ? size * 0.72 : size)
+            .overlay(RoundedRectangle(cornerRadius: Radius.s + 2)
+                .inset(by: -3)
+                .stroke(tally.color, lineWidth: tally == .off ? 0 : 2))
     }
 }
 
-/// Compact labelled value used in the item header ("BPM 128").
-struct ReadoutField<Content: View>: View {
-    let label: String
-    @ViewBuilder var content: Content
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(label)
-                .font(.umd(10))
-                .foregroundStyle(Gallery.dim)
-            content
-        }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 6)
-        .background(Gallery.raised, in: RoundedRectangle(cornerRadius: 6))
-    }
-}
-
-/// Text field styled for the gallery: no bezel, subtle fill on focus.
-struct GalleryTextField: View {
-    let placeholder: String
-    @Binding var text: String
-    var font: Font = .system(size: 13)
-    var color: Color = Gallery.ink
-    @FocusState private var focused: Bool
-
-    var body: some View {
-        TextField(placeholder, text: $text)
-            .textFieldStyle(.plain)
-            .font(font)
-            .foregroundStyle(color)
-            .focused($focused)
-            .padding(.horizontal, 4)
-            .padding(.vertical, 2)
-            .background(focused ? Gallery.steelFill : Color.clear, in: RoundedRectangle(cornerRadius: 3))
-    }
-}
+// MARK: - Fields
 
 /// Text field that edits a value through parse/format (positions, numbers), committing on Return
-/// or when focus leaves, and reverting invalid input.
+/// or when focus leaves, and reverting invalid input. Borderless until hovered or focused.
 struct CommitField: View {
     let placeholder: String
     let value: String
@@ -186,6 +284,7 @@ struct CommitField: View {
 
     @State private var draft = ""
     @State private var invalid = false
+    @State private var hovering = false
     @FocusState private var focused: Bool
 
     var body: some View {
@@ -196,9 +295,13 @@ struct CommitField: View {
             .foregroundStyle(invalid ? Gallery.amber : Gallery.ink)
             .focused($focused)
             .frame(width: width)
-            .padding(.horizontal, 4)
-            .padding(.vertical, 2)
-            .background(focused ? Gallery.steelFill : Color.clear, in: RoundedRectangle(cornerRadius: 3))
+            .padding(.horizontal, 5)
+            .padding(.vertical, 3)
+            .background(focused ? Gallery.raised : (hovering ? Gallery.hover : Color.clear),
+                        in: RoundedRectangle(cornerRadius: Radius.s))
+            .overlay(RoundedRectangle(cornerRadius: Radius.s)
+                .strokeBorder(focused ? Gallery.selection.opacity(0.8) : Color.clear, lineWidth: 1))
+            .onHover { hovering = $0 }
             .onAppear { draft = value }
             .onChange(of: value) { _, new in if !focused { draft = new } }
             .onChange(of: focused) { _, isFocused in if !isFocused { apply() } }
@@ -219,7 +322,88 @@ struct CommitField: View {
     }
 }
 
-/// Small pill used for CUT / MIX and item kinds.
+/// Multi-line text that commits when editing ends (one undo step per edit, not per keystroke).
+struct CommitTextArea: View {
+    let placeholder: String
+    let value: String
+    var minLines = 2
+    let commit: (String) -> Void
+    @State private var draft = ""
+    @FocusState private var focused: Bool
+
+    var body: some View {
+        TextField(placeholder, text: $draft, axis: .vertical)
+            .textFieldStyle(.plain)
+            .font(.ocBody)
+            .foregroundStyle(Gallery.ink)
+            .lineLimit(minLines...8)
+            .focused($focused)
+            .padding(Space.s)
+            .background(Gallery.raised, in: RoundedRectangle(cornerRadius: Radius.m))
+            .overlay(RoundedRectangle(cornerRadius: Radius.m)
+                .strokeBorder(focused ? Gallery.selection.opacity(0.8) : Gallery.hairline, lineWidth: 1))
+            .onAppear { draft = value }
+            .onChange(of: value) { _, new in if !focused { draft = new } }
+            .onChange(of: focused) { _, f in if !f && draft != value { commit(draft) } }
+    }
+}
+
+/// Inline metadata item in a header: a small label above an editable or read-only value.
+struct MetaItem<Content: View>: View {
+    let label: String
+    @ViewBuilder var content: Content
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 1) {
+            Text(label)
+                .font(.ocMeta)
+                .foregroundStyle(Gallery.faint)
+                .padding(.leading, 5)
+            content
+        }
+    }
+}
+
+/// Inspector row: label on the left, control on the right.
+struct PropertyRow<Content: View>: View {
+    let label: String
+    @ViewBuilder var content: Content
+
+    var body: some View {
+        HStack(alignment: .center, spacing: Space.s) {
+            Text(label)
+                .font(.ocMeta)
+                .foregroundStyle(Gallery.dim)
+                .frame(width: 72, alignment: .leading)
+            content
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .frame(minHeight: 24)
+    }
+}
+
+/// Inspector group: an optional heading and its content, with a hairline after it.
+struct InspectorGroup<Content: View>: View {
+    let title: String?
+    @ViewBuilder var content: Content
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Space.s) {
+            if let title {
+                Text(title).font(.ocLabel).foregroundStyle(Gallery.dim)
+            }
+            content
+        }
+        .padding(.horizontal, Space.l)
+        .padding(.vertical, Space.m)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .overlay(alignment: .bottom) { Rectangle().fill(Gallery.hairline).frame(height: 1) }
+    }
+}
+
+// MARK: - Small components
+
+/// Small text tag: CUT / MIX, Song / Segment.
 struct Pill: View {
     let text: String
     var color: Color = Gallery.dim
@@ -227,12 +411,12 @@ struct Pill: View {
 
     var body: some View {
         Text(text)
-            .font(.umd(10))
-            .foregroundStyle(filled ? Color.black : color)
-            .padding(.horizontal, 6)
-            .padding(.vertical, 2)
-            .background(filled ? color : Color.clear, in: Capsule())
-            .overlay(Capsule().strokeBorder(color.opacity(filled ? 0 : 0.6), lineWidth: 1))
+            .font(.ocTag)
+            .tracking(0.3)
+            .foregroundStyle(filled ? Color.white : color)
+            .padding(.horizontal, 5)
+            .frame(height: 16)
+            .background(filled ? color.opacity(0.85) : color.opacity(0.14), in: RoundedRectangle(cornerRadius: 3))
     }
 }
 
@@ -242,15 +426,13 @@ struct PanelHeader<Trailing: View>: View {
     @ViewBuilder var trailing: Trailing
 
     var body: some View {
-        HStack(spacing: 8) {
-            Text(title)
-                .font(.umd(12))
-                .foregroundStyle(Gallery.dim)
+        HStack(spacing: Space.s) {
+            Text(title).font(.ocLabel).foregroundStyle(Gallery.dim)
             Spacer()
             trailing
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
+        .padding(.horizontal, Space.m)
+        .padding(.vertical, Space.s)
     }
 }
 
@@ -261,21 +443,51 @@ extension PanelHeader where Trailing == EmptyView {
     }
 }
 
-/// Borderless icon button with a tooltip and optional keyboard shortcut in the help text.
+/// Borderless icon button with hover and press states.
 struct IconButton: View {
     let symbol: String
     let help: String
+    var active = false
+    var size: CGFloat = 24
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Image(systemName: symbol)
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(Gallery.ink)
-                .frame(width: 24, height: 22)
-                .background(Gallery.key, in: RoundedRectangle(cornerRadius: 5))
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(active ? Gallery.selection : Gallery.dim)
+                .frame(width: size, height: size - 2)
+                .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(IconPressStyle(active: active))
         .help(help)
     }
+}
+
+private struct IconPressStyle: ButtonStyle {
+    let active: Bool
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .interactive(active: configuration.isPressed || active)
+    }
+}
+
+/// A run of metadata separated by dots, e.g. "Song · 128 BPM · 2:38".
+struct MetaLine: View {
+    let parts: [String]
+    var font: Font = .ocMeta
+    var color: Color = Gallery.dim
+
+    var body: some View {
+        Text(parts.filter { !$0.isEmpty }.joined(separator: "  ·  "))
+            .font(font)
+            .foregroundStyle(color)
+            .lineLimit(1)
+    }
+}
+
+/// m:ss (or h:mm:ss) for durations.
+func clockText(_ seconds: Double) -> String {
+    let v = Int(max(seconds, 0).rounded())
+    return v >= 3600 ? String(format: "%d:%02d:%02d", v / 3600, (v % 3600) / 60, v % 60) : String(format: "%d:%02d", v / 60, v % 60)
 }

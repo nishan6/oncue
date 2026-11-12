@@ -29,7 +29,11 @@ struct MachineProfileView: View {
             Text("Saved in \(machine.fileURL.path)").font(.footnote).foregroundStyle(.secondary)
         }
         .formStyle(.grouped)
-        .frame(width: 460)
+        .scrollContentBackground(.hidden)
+        .background(Gallery.panel)
+        .frame(width: 480)
+        .preferredColorScheme(.dark)
+        .tint(Gallery.selection)
     }
 
     private func field(_ label: String, _ key: WritableKeyPath<MachineProfile, String>, prompt: String) -> some View {

@@ -15,10 +15,17 @@ struct WorkspaceCommands: Commands {
             Button("New Section") { workspace?.addSection() }
                 .keyboardShortcut("e", modifiers: [.command, .option])
             Divider()
-            Button("Previous Song or Segment") { workspace?.selectItem(offset: -1) }
+            Button("Previous Song or Segment") {
+                if workspace?.live != nil { workspace?.liveMoveItem(by: -1) } else { workspace?.selectItem(offset: -1) }
+            }
                 .keyboardShortcut("[", modifiers: .command)
-            Button("Next Song or Segment") { workspace?.selectItem(offset: 1) }
+            Button("Next Song or Segment") {
+                if workspace?.live != nil { workspace?.liveMoveItem(by: 1) } else { workspace?.selectItem(offset: 1) }
+            }
                 .keyboardShortcut("]", modifiers: .command)
+            Divider()
+            Button(workspace?.live == nil ? "Enter Live Mode" : "Exit Live Mode") { workspace?.toggleLive() }
+                .keyboardShortcut("l", modifiers: .command)
             Divider()
             Button("Cameras…") { workspace?.cameraManagerOpen = true }
                 .keyboardShortcut("c", modifiers: [.command, .option])

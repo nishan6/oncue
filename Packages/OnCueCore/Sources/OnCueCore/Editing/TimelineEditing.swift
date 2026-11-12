@@ -143,3 +143,12 @@ extension Show {
         updateCue(cueID, inItem: id) { $0.at = max(0, position) }
     }
 }
+
+extension Show {
+    /// How long the song or segment runs, in seconds, when its time base allows knowing it.
+    public func runLength(forItem id: UUID) -> Double? {
+        guard let item = item(id), item.timeBase != .order else { return nil }
+        let end = itemEnd(forItem: id)
+        return end > 0 ? item.seconds(for: end) : nil
+    }
+}

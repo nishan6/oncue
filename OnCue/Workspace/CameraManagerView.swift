@@ -56,14 +56,14 @@ struct CameraManagerView: View {
         VStack(spacing: 0) {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Cameras").font(.title(20)).foregroundStyle(Gallery.ink)
-                    Text("Numbers are what you call on comms. Names and operators can change for every show.")
-                        .font(.system(size: 12))
+                    Text("Cameras").font(.ocTitle).foregroundStyle(Gallery.ink)
+                    Text("Numbers are what you call on comms. Colours, names and operators can change for every show.")
+                        .font(.ocMeta)
                         .foregroundStyle(Gallery.dim)
                 }
                 Spacer()
             }
-            .padding(18)
+            .padding(Space.l)
 
             Table(show.sortedCameras, selection: $selection) {
                 TableColumn("Colour") { cam in
@@ -106,22 +106,26 @@ struct CameraManagerView: View {
             }
             .onDeleteCommand { deleteSelection() }
 
-            HStack(spacing: 10) {
+            HStack(spacing: Space.s) {
                 Button { model.addCamera() } label: { Label("New Camera", systemImage: "plus") }
-                Button(role: .destructive) { deleteSelection() } label: { Label("Delete", systemImage: "minus") }
+                    .buttonStyle(QuietButtonStyle())
+                Button(role: .destructive) { deleteSelection() } label: { Label("Delete", systemImage: "trash") }
+                    .buttonStyle(QuietButtonStyle(destructive: true))
                     .disabled(selection.isEmpty)
                 Spacer()
                 Text("Deleting a camera keeps its shots; they show as \"no camera\".")
-                    .font(.system(size: 11))
+                    .font(.ocMeta)
                     .foregroundStyle(Gallery.faint)
                 Button("Done") { dismiss() }
+                    .buttonStyle(QuietButtonStyle(prominent: true))
                     .keyboardShortcut(.defaultAction)
             }
-            .padding(14)
+            .padding(Space.m)
         }
         .frame(minWidth: 780, minHeight: 460)
         .background(Gallery.panel)
         .preferredColorScheme(.dark)
+        .tint(Gallery.selection)
     }
 
     private func deleteSelection() {

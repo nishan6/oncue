@@ -11,6 +11,7 @@ struct ShowWorkspaceView: View {
 
     var body: some View {
         let show = document.show
+        ZStack {
         NavigationSplitView {
             RunningOrderView(show: show, model: model)
                 .navigationSplitViewColumnWidth(min: 220, ideal: 270, max: 400)
@@ -26,8 +27,15 @@ struct ShowWorkspaceView: View {
         }
         .inspector(isPresented: $model.showInspector) {
             InspectorView(show: show, model: model)
-                .inspectorColumnWidth(min: 260, ideal: 320, max: 460)
+                .inspectorColumnWidth(min: 280, ideal: 320, max: 460)
         }
+        if let cursor = model.live {
+            LiveView(show: show, cursor: cursor, model: model)
+                .transition(.opacity)
+        }
+        }
+        .animation(.easeOut(duration: 0.18), value: model.live == nil)
+        .toolbar(model.live == nil ? .visible : .hidden, for: .windowToolbar)
         .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {
                 Button { model.addSong() } label: { Label("New Song", systemImage: "music.note.list") }
@@ -36,6 +44,8 @@ struct ShowWorkspaceView: View {
                     .help("New segment (⌥⇧⌘N)")
                 Button { model.cameraManagerOpen = true } label: { Label("Cameras", systemImage: "video") }
                     .help("Cameras (⌥⌘C)")
+                Button { model.enterLive() } label: { Label("Live Mode", systemImage: "dot.radiowaves.left.and.right") }
+                    .help("Live Mode (⌘L)")
                 Button { model.showInspector.toggle() } label: { Label("Inspector", systemImage: "sidebar.right") }
                     .help("Show or hide the inspector (⌥⌘I)")
             }
@@ -49,7 +59,7 @@ struct ShowWorkspaceView: View {
         } message: {
             Text(model.errorMessage ?? "")
         }
-        .background(Gallery.canvas)
+        .background(Gallery.base)
         .preferredColorScheme(.dark)
         .tint(Gallery.steel)
         .focusedSceneObject(model)
@@ -65,22 +75,29 @@ struct EmptyProductionView: View {
     let hasItems: Bool
 
     var body: some View {
-        VStack(spacing: 18) {
-            Text(hasItems ? "Pick a song or segment from the running order." : "Start the running order")
-                .font(.title(22))
+        VStack(spacing: Space.m) {
+            Image(systemName: hasItems ? "sidebar.left" : "music.note.list")
+                .font(.system(size: 34, weight: .light))
+                .foregroundStyle(Gallery.faint)
+            Text(hasItems ? "Pick a song or segment" : "Start the running order")
+                .font(.ocTitle)
                 .foregroundStyle(Gallery.ink)
+            Text(hasItems ? "Choose one from the running order to script its shots."
+                 : "Add the first song or segment, then script its shots on the timeline.")
+                .font(.ocBody)
+                .foregroundStyle(Gallery.dim)
             if !hasItems {
-                Text("Add the first song or segment, then script its shots.")
-                    .foregroundStyle(Gallery.dim)
-                HStack(spacing: 12) {
+                HStack(spacing: Space.s) {
                     Button("New Song") { model.addSong() }
+                        .buttonStyle(QuietButtonStyle(prominent: true))
                         .keyboardShortcut(.defaultAction)
                     Button("New Segment") { model.addSegment() }
+                        .buttonStyle(QuietButtonStyle())
                 }
-                .controlSize(.large)
+                .padding(.top, Space.s)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Gallery.canvas)
+        .background(Gallery.base)
     }
 }

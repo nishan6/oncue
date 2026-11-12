@@ -3,9 +3,9 @@ import AppKit
 import OnCueCore
 
 /// Centre panel for one song or segment: header, then the timeline, the shot list or both, and the
-/// camera bank.
+/// camera palette.
 struct ItemEditorView: View {
-    static let splitShotHeight: CGFloat = 92
+    static let splitShotHeight: CGFloat = 96
     let show: Show
     let item: RundownItem
     @ObservedObject var model: WorkspaceModel
@@ -14,14 +14,14 @@ struct ItemEditorView: View {
         let groups = show.shotGroups(forItem: item.id)
         let rows = groups.flatMap(\.rows)
         VStack(spacing: 0) {
-            ItemHeaderView(item: item, rows: rows, model: model)
+            ItemHeaderView(item: item, rows: rows, runLength: show.runLength(forItem: item.id), model: model)
             Rectangle().fill(Gallery.hairline).frame(height: 1)
             switch model.editorMode {
             case .timeline:
                 GeometryReader { geo in
                     let chrome = TimelineLayout.chromeHeight(for: item, hidden: model.hiddenLanes)
                     TimelineEditorView(show: show, item: item, model: model,
-                                       shotHeight: min(max(geo.size.height - chrome - 8, 84), 320))
+                                       shotHeight: min(max(geo.size.height - chrome - 8, 84), 300))
                 }
             case .split:
                 TimelineEditorView(show: show, item: item, model: model, shotHeight: Self.splitShotHeight)
@@ -34,9 +34,9 @@ struct ItemEditorView: View {
                 ShotListView(show: show, item: item, groups: groups, rows: rows, model: model)
             }
             Rectangle().fill(Gallery.hairline).frame(height: 1)
-            CameraBankView(show: show, model: model)
+            CameraPaletteView(show: show, model: model)
         }
-        .background(Gallery.canvas)
+        .background(Gallery.base)
     }
 }
 
@@ -45,110 +45,156 @@ struct ItemEditorView: View {
 struct ItemHeaderView: View {
     let item: RundownItem
     let rows: [ShotRow]
+    let runLength: Double?
     @ObservedObject var model: WorkspaceModel
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(alignment: .center, spacing: 10) {
-                Pill(text: item.kind == .song ? "Song" : "Segment",
-                     color: item.kind == .song ? Gallery.ink : Gallery.amber)
-                CommitField(placeholder: "Title", value: item.title, font: .title(22)) { text in
-                    let t = text.trimmingCharacters(in: .whitespaces)
-                    guard !t.isEmpty else { return false }
-                    model.renameItem(item.id, to: t)
-                    return true
-                }
-                Spacer(minLength: 12)
-                Picker("View", selection: $model.editorMode) {
-                    ForEach(EditorMode.allCases) { mode in
-                        Image(systemName: mode.symbol).help(mode.label).tag(mode)
+        HStack(alignment: .center, spacing: Space.l) {
+            VStack(alignment: .leading, spacing: Space.s) {
+                HStack(spacing: Space.s) {
+                    KindTag(kind: item.kind)
+                    CommitField(placeholder: "Title", value: item.title, font: .ocTitle) { text in
+                        let t = text.trimmingCharacters(in: .whitespaces)
+                        guard !t.isEmpty else { return false }
+                        model.renameItem(item.id, to: t)
+                        return true
                     }
+                    .frame(maxWidth: 520, alignment: .leading)
                 }
-                .labelsHidden()
-                .pickerStyle(.segmented)
-                .fixedSize()
-                .help("Timeline, timeline and list, or list (⌘1, ⌘2, ⌘3)")
-            }
-            HStack(spacing: 8) {
-                ReadoutField(label: "Timing") {
-                    Picker("Timing", selection: Binding(get: { item.timeBase }, set: { model.setTimeBase($0) })) {
-                        ForEach(TimeBase.allCases) { Text($0.label).tag($0) }
+                HStack(alignment: .top, spacing: Space.m) {
+                    MetaItem(label: "Timing") { TimingMenu(item: item, model: model) }
+                    if item.timeBase == .bars {
+                        MetaItem(label: "Tempo") {
+                            HStack(spacing: 0) {
+                                CommitField(placeholder: "120", value: String(format: "%g", item.bpm), font: .readout(13), width: 40) { text in
+                                    guard let v = Double(text), (20...400).contains(v) else { return false }
+                                    model.updateItem("Change Tempo") { $0.bpm = v }
+                                    return true
+                                }
+                                Text("BPM").font(.ocMeta).foregroundStyle(Gallery.faint)
+                            }
+                        }
+                        MetaItem(label: "Meter") {
+                            HStack(spacing: 0) {
+                                CommitField(placeholder: "4", value: "\(item.beatsPerBar)", font: .readout(13), width: 26, alignment: .trailing) { text in
+                                    guard let v = Int(text), (1...16).contains(v) else { return false }
+                                    model.updateItem("Change Beats per Bar") { $0.beatsPerBar = v }
+                                    return true
+                                }
+                                Text("/4").font(.readout(13)).foregroundStyle(Gallery.dim)
+                            }
+                        }
                     }
-                    .labelsHidden()
-                    .pickerStyle(.menu)
-                    .fixedSize()
-                    .help("How shot positions are measured. Changing it converts every position.")
-                }
-                if item.timeBase == .bars {
-                    ReadoutField(label: "Tempo") {
-                        HStack(spacing: 3) {
-                            CommitField(placeholder: "120", value: String(format: "%g", item.bpm), font: .readout(13, weight: .semibold), width: 46) { text in
-                                guard let v = Double(text), (20...400).contains(v) else { return false }
-                                model.updateItem("Change Tempo") { $0.bpm = v }
+                    MetaItem(label: "Planned length") {
+                        CommitField(placeholder: "m:ss", value: item.plannedDuration > 0 ? clockText(item.plannedDuration) : "",
+                                    font: .readout(13), width: 52) { text in
+                            if text.trimmingCharacters(in: .whitespaces).isEmpty {
+                                model.updateItem("Clear Planned Length") { $0.plannedDuration = 0 }
                                 return true
                             }
-                            Text("BPM").font(.umd(10)).foregroundStyle(Gallery.dim)
-                        }
-                    }
-                    ReadoutField(label: "Beats per bar") {
-                        CommitField(placeholder: "4", value: "\(item.beatsPerBar)", font: .readout(13, weight: .semibold), width: 30) { text in
-                            guard let v = Int(text), (1...16).contains(v) else { return false }
-                            model.updateItem("Change Beats per Bar") { $0.beatsPerBar = v }
+                            guard let v = TimeFormat.parseSeconds(text), v >= 0 else { return false }
+                            model.updateItem("Change Planned Length") { $0.plannedDuration = v }
                             return true
                         }
                     }
-                }
-                ReadoutField(label: "Planned length") {
-                    CommitField(placeholder: "m:ss", value: item.plannedDuration > 0 ? clock(item.plannedDuration) : "",
-                                font: .readout(13, weight: .semibold), width: 56) { text in
-                        if text.trimmingCharacters(in: .whitespaces).isEmpty {
-                            model.updateItem("Clear Planned Length") { $0.plannedDuration = 0 }
+                    MetaItem(label: "Hard out") {
+                        CommitField(placeholder: "HH:MM", value: item.hardOut, font: .readout(13), width: 52) { text in
+                            let t = text.trimmingCharacters(in: .whitespaces)
+                            guard t.isEmpty || TimeFormat.todayAt(t) != nil else { return false }
+                            model.updateItem("Change Hard Out") { $0.hardOut = t }
                             return true
                         }
-                        guard let v = TimeFormat.parseSeconds(text), v >= 0 else { return false }
-                        model.updateItem("Change Planned Length") { $0.plannedDuration = v }
-                        return true
-                    }
-                }
-                ReadoutField(label: "Hard out") {
-                    CommitField(placeholder: "HH:MM", value: item.hardOut, font: .readout(13, weight: .semibold), width: 52) { text in
-                        let t = text.trimmingCharacters(in: .whitespaces)
-                        guard t.isEmpty || TimeFormat.todayAt(t) != nil else { return false }
-                        model.updateItem("Change Hard Out") { $0.hardOut = t }
-                        return true
-                    }
-                }
-                Spacer(minLength: 8)
-                ReadoutField(label: "Shots") {
-                    Text("\(rows.count)").font(.readout(13, weight: .semibold)).foregroundStyle(Gallery.ink)
-                }
-                if let length = scriptLength {
-                    ReadoutField(label: "Script runs") {
-                        Text(clock(length)).font(.readout(13, weight: .semibold)).foregroundStyle(Gallery.ink)
                     }
                 }
             }
+            Spacer(minLength: Space.m)
+            HStack(spacing: Space.l) {
+                Stat(value: "\(rows.count)", label: rows.count == 1 ? "shot" : "shots")
+                if let runLength { Stat(value: clockText(runLength), label: "runs") }
+            }
+            Picker("View", selection: $model.editorMode) {
+                ForEach(EditorMode.allCases) { mode in
+                    Image(systemName: mode.symbol).help(mode.label).tag(mode)
+                }
+            }
+            .labelsHidden()
+            .pickerStyle(.segmented)
+            .fixedSize()
+            .help("Timeline, timeline and list, or list (⌘1, ⌘2, ⌘3)")
+            Button {
+                model.enterLive()
+            } label: {
+                Label("Live", systemImage: "dot.radiowaves.left.and.right")
+            }
+            .buttonStyle(QuietButtonStyle(prominent: true))
+            .disabled(rows.isEmpty)
+            .help("Run this script in Live Mode (⌘L)")
         }
-        .padding(.horizontal, 16)
-        .padding(.top, 10)
-        .padding(.bottom, 10)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, Space.l)
+        .padding(.vertical, Space.m)
         .background(Gallery.panel)
-    }
-
-    /// Time from the first to the last shot, when the time base allows it.
-    private var scriptLength: Double? {
-        guard item.timeBase != .order, let last = rows.last?.cue.at else { return nil }
-        return item.seconds(for: last)
-    }
-
-    private func clock(_ s: Double) -> String {
-        let v = Int(s.rounded())
-        return String(format: "%d:%02d", v / 60, v % 60)
     }
 }
 
-// MARK: - Section strip
+/// Song or segment tag: a colour dot and the word.
+struct KindTag: View {
+    let kind: ItemKind
+
+    var body: some View {
+        HStack(spacing: 5) {
+            Circle().fill(kind == .song ? Gallery.selection : Gallery.amber).frame(width: 6, height: 6)
+            Text(kind.label).font(.ocLabel).foregroundStyle(Gallery.dim)
+        }
+        .padding(.horizontal, 7)
+        .frame(height: 20)
+        .background(Gallery.raised, in: Capsule())
+    }
+}
+
+/// Big number with a small label (header stats).
+struct Stat: View {
+    let value: String
+    let label: String
+
+    var body: some View {
+        VStack(alignment: .trailing, spacing: 0) {
+            Text(value).font(.readout(17, weight: .semibold)).foregroundStyle(Gallery.ink)
+            Text(label).font(.ocMeta).foregroundStyle(Gallery.faint)
+        }
+    }
+}
+
+/// Timing (time base) as a borderless menu.
+struct TimingMenu: View {
+    let item: RundownItem
+    @ObservedObject var model: WorkspaceModel
+
+    var body: some View {
+        Menu {
+            ForEach(TimeBase.allCases) { base in
+                Button {
+                    model.setTimeBase(base)
+                } label: {
+                    if base == item.timeBase { Label(base.label, systemImage: "checkmark") } else { Text(base.label) }
+                }
+            }
+        } label: {
+            HStack(spacing: 4) {
+                Text(item.timeBase.label).font(.ocBodyStrong).foregroundStyle(Gallery.ink)
+                Image(systemName: "chevron.down").font(.system(size: 8, weight: .bold)).foregroundStyle(Gallery.faint)
+            }
+            .padding(.horizontal, 5)
+            .padding(.vertical, 3)
+            .interactive()
+        }
+        .menuStyle(.borderlessButton)
+        .menuIndicator(.hidden)
+        .fixedSize()
+        .help("How shot positions are measured. Changing it converts every position.")
+    }
+}
+
+// MARK: - Section strip (list view)
 
 /// The song structure as proportional blocks. Click to jump, drag a block onto another to move
 /// that section (with its shots) before it, drop on the end cap to move it last.
@@ -159,18 +205,18 @@ struct SectionStripView: View {
 
     var body: some View {
         let sections = item.sortedSections
-        HStack(spacing: 8) {
+        HStack(spacing: Space.s) {
             if sections.isEmpty {
                 Text("No sections yet. Sections group shots by verse, chorus, bridge.")
-                    .font(.system(size: 12))
-                    .foregroundStyle(Gallery.dim)
+                    .font(.ocMeta)
+                    .foregroundStyle(Gallery.faint)
                 Spacer()
             } else {
                 GeometryReader { geo in
                     let lengths = spanLengths(for: sections)
                     let total = max(lengths.reduce(0, +), 0.0001)
-                    let available = max(geo.size.width - CGFloat(sections.count - 1) * 3 - 34, 60)
-                    HStack(spacing: 3) {
+                    let available = max(geo.size.width - CGFloat(sections.count - 1) * 2 - 30, 60)
+                    HStack(spacing: 2) {
                         ForEach(Array(sections.enumerated()), id: \.element.id) { k, section in
                             let width = max(available * CGFloat(lengths[k] / total), 44)
                             sectionBlock(section, shots: rows.filter { $0.sectionID == section.id }.count)
@@ -179,33 +225,28 @@ struct SectionStripView: View {
                         endCap
                     }
                 }
-                .frame(height: 38)
+                .frame(height: 34)
             }
             IconButton(symbol: "plus", help: "New section (⌥⌘E)") { model.addSection() }
         }
-        .padding(.horizontal, 18)
-        .padding(.vertical, 8)
+        .padding(.horizontal, Space.l)
+        .padding(.vertical, Space.s)
         .background(Gallery.panel)
     }
 
     private func sectionBlock(_ section: SongSection, shots: Int) -> some View {
         VStack(alignment: .leading, spacing: 1) {
-            Text(section.name)
-                .font(.umd(12))
-                .foregroundStyle(Gallery.ink)
+            Text(section.name).font(.ocLabel).foregroundStyle(Gallery.ink).lineLimit(1)
+            Text("\(item.format(section.at))  ·  \(shots) \(shots == 1 ? "shot" : "shots")")
+                .font(.readout(10, weight: .regular))
+                .foregroundStyle(Gallery.faint)
                 .lineLimit(1)
-            HStack(spacing: 6) {
-                Text(item.format(section.at)).font(.readout(10))
-                Text(shots == 1 ? "1 shot" : "\(shots) shots").font(.umd(10))
-            }
-            .foregroundStyle(Gallery.dim)
         }
-        .padding(.horizontal, 7)
+        .padding(.horizontal, Space.s)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-        .background(Gallery.raised, in: RoundedRectangle(cornerRadius: 3))
-        .overlay(alignment: .leading) {
-            Rectangle().fill(Gallery.steel.opacity(0.7)).frame(width: 2)
-        }
+        .background(Gallery.raised, in: RoundedRectangle(cornerRadius: Radius.s))
+        .overlay(alignment: .leading) { Rectangle().fill(Gallery.dim.opacity(0.6)).frame(width: 2) }
+        .clipShape(RoundedRectangle(cornerRadius: Radius.s))
         .contentShape(Rectangle())
         .onTapGesture { model.scrollTarget = section.id.uuidString }
         .draggable(section.id.uuidString)
@@ -218,10 +259,10 @@ struct SectionStripView: View {
     }
 
     private var endCap: some View {
-        RoundedRectangle(cornerRadius: 3)
-            .strokeBorder(Gallery.hairline, style: StrokeStyle(lineWidth: 1, dash: [3, 3]))
-            .frame(width: 28)
-            .overlay(Image(systemName: "arrow.down.to.line").rotationEffect(.degrees(-90)).font(.system(size: 10)).foregroundStyle(Gallery.faint))
+        RoundedRectangle(cornerRadius: Radius.s)
+            .strokeBorder(Gallery.divider, style: StrokeStyle(lineWidth: 1, dash: [3, 3]))
+            .frame(width: 24)
+            .overlay(Image(systemName: "arrow.right.to.line").font(.system(size: 9)).foregroundStyle(Gallery.faint))
             .dropDestination(for: String.self) { dropped, _ in
                 guard let raw = dropped.first, let moving = UUID(uuidString: raw) else { return false }
                 model.moveSection(moving, before: nil)
@@ -261,7 +302,7 @@ struct ShotListView: View {
                                         tally: model.tally(forShot: row.id, in: rows), model: model)
                                 .tag(row.id)
                                 .listRowSeparator(.hidden)
-                                .listRowInsets(EdgeInsets(top: 1, leading: 8, bottom: 1, trailing: 12))
+                                .listRowInsets(EdgeInsets(top: 0, leading: Space.s, bottom: 0, trailing: Space.m))
                         }
                         .onMove { model.moveShots(section: group.section?.id, $0, $1) }
                     } header: {
@@ -272,15 +313,15 @@ struct ShotListView: View {
             }
             .listStyle(.inset)
             .scrollContentBackground(.hidden)
-            .background(Gallery.canvas)
-            .environment(\.defaultMinListRowHeight, 30)
+            .background(Gallery.base)
+            .environment(\.defaultMinListRowHeight, 34)
             .overlay {
                 if rows.isEmpty {
-                    VStack(spacing: 8) {
-                        Text("No shots yet")
-                            .font(.title(18))
-                            .foregroundStyle(Gallery.ink)
+                    VStack(spacing: Space.s) {
+                        Image(systemName: "video.badge.plus").font(.system(size: 26, weight: .light)).foregroundStyle(Gallery.faint)
+                        Text("No shots yet").font(.ocHeading).foregroundStyle(Gallery.ink)
                         Text("Click a camera below, or select this list and press Return.")
+                            .font(.ocMeta)
                             .foregroundStyle(Gallery.dim)
                     }
                     .allowsHitTesting(false)
@@ -327,7 +368,7 @@ struct ShotListView: View {
 
     /// Typing goes to the shot list, and the restored or current selection is brought into view.
     private func revealSelection(_ proxy: ScrollViewProxy) {
-        DispatchQueue.main.async { listFocused = true }
+        if model.editorMode == .list { DispatchQueue.main.async { listFocused = true } }
         // The list lays out its rows over the first few runloop passes, so scroll after it has.
         for delay in [0.15, 0.6] {
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
@@ -363,26 +404,27 @@ struct SectionHeaderView: View {
     @ObservedObject var model: WorkspaceModel
 
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: Space.s) {
             if let section {
-                CommitField(placeholder: "Section", value: section.name, font: .umd(14)) { text in
+                CommitField(placeholder: "Section", value: section.name, font: .ocHeading) { text in
                     let t = text.trimmingCharacters(in: .whitespaces)
                     guard !t.isEmpty else { return false }
                     model.renameSection(section.id, to: t)
                     return true
                 }
                 .frame(maxWidth: 220, alignment: .leading)
-                CommitField(placeholder: "Start", value: item.format(section.at), font: .readout(11), width: 70) { text in
+                CommitField(placeholder: "Start", value: item.format(section.at), font: .readout(11), width: 64) { text in
                     model.setSectionPosition(section.id, text: text)
                 }
                 .help("Section start (\(positionHint))")
             } else {
                 Text(item.sections.isEmpty ? "Shots" : "Before the first section")
-                    .font(.umd(13))
+                    .font(.ocHeading)
                     .foregroundStyle(Gallery.dim)
+                    .padding(.leading, 5)
             }
             Text("\(shotCount) \(shotCount == 1 ? "shot" : "shots")")
-                .font(.umd(11))
+                .font(.ocMeta)
                 .foregroundStyle(Gallery.faint)
             Spacer()
             if let section {
@@ -396,10 +438,10 @@ struct SectionHeaderView: View {
                     Button("Delete Section", role: .destructive) { model.deleteSection(section.id) }
                 } label: {
                     Image(systemName: "ellipsis")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(Gallery.ink)
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(Gallery.dim)
                         .frame(width: 24, height: 22)
-                        .background(Gallery.key, in: RoundedRectangle(cornerRadius: 4))
+                        .interactive()
                 }
                 .menuStyle(.borderlessButton)
                 .menuIndicator(.hidden)
@@ -407,9 +449,8 @@ struct SectionHeaderView: View {
                 .help("Move or delete this section. Its shots move with it; deleting keeps the shots.")
             }
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 5)
-        .background(Gallery.raised, in: RoundedRectangle(cornerRadius: 4))
+        .padding(.vertical, Space.xs)
+        .overlay(alignment: .bottom) { Rectangle().fill(Gallery.hairline).frame(height: 1) }
     }
 
     private var positionHint: String {
@@ -429,125 +470,179 @@ struct ShotRowView: View {
     @ObservedObject var model: WorkspaceModel
 
     var body: some View {
-        HStack(spacing: 10) {
-            Rectangle()
-                .fill(tally == .off ? Color.clear : tally.color)
-                .frame(width: 3)
-                .clipShape(Capsule())
+        HStack(spacing: Space.m) {
+            RoundedRectangle(cornerRadius: 1)
+                .fill(camera?.swiftUIColor ?? Gallery.key)
+                .frame(width: 3, height: 26)
 
             Text(String(format: "%02d", row.number))
-                .font(.readout(12, weight: .semibold))
-                .foregroundStyle(Gallery.dim)
-                .frame(width: 24, alignment: .trailing)
+                .font(.readout(11))
+                .foregroundStyle(Gallery.faint)
+                .frame(width: 20, alignment: .trailing)
 
             Text(item.format(row.cue.at))
                 .font(.readout(12))
-                .foregroundStyle(Gallery.ink)
-                .frame(width: 58, alignment: .leading)
+                .foregroundStyle(Gallery.dim)
+                .frame(width: 52, alignment: .leading)
 
-            CameraTile(camera: camera, missing: row.cue.cameraID != nil && camera == nil,
-                       tally: tally, size: 38, compact: true)
+            CameraChip(camera: camera, missing: row.cue.cameraID != nil && camera == nil, size: 24)
 
             VStack(alignment: .leading, spacing: 0) {
                 Text(camera?.displayName ?? (row.cue.cameraID == nil ? "No camera" : "Deleted camera"))
-                    .font(.umd(12))
+                    .font(.ocBodyStrong)
                     .foregroundStyle(camera == nil ? Gallery.amber : Gallery.ink)
-                Text(camera?.operatorName ?? "")
-                    .font(.umd(10))
-                    .foregroundStyle(Gallery.dim)
+                if let op = camera?.operatorName, !op.isEmpty {
+                    Text(op).font(.ocMeta).foregroundStyle(Gallery.faint)
+                }
             }
-            .frame(width: 92, alignment: .leading)
+            .frame(width: 96, alignment: .leading)
             .lineLimit(1)
 
-            VStack(alignment: .leading, spacing: 1) {
-                CommitField(placeholder: "Describe the shot", value: row.cue.text, font: .system(size: 13, weight: .medium)) { text in
+            VStack(alignment: .leading, spacing: 0) {
+                CommitField(placeholder: "Describe the shot", value: row.cue.text, font: .ocBody) { text in
                     model.updateShot(row.id, "Edit Shot") { $0.text = text }
                     return true
                 }
-                CommitField(placeholder: "Operator note", value: row.cue.note, font: .system(size: 11)) { text in
+                CommitField(placeholder: "Add a note for the operator", value: row.cue.note, font: .ocMeta) { text in
                     model.updateShot(row.id, "Edit Operator Note") { $0.note = text }
                     return true
                 }
-                .foregroundStyle(Gallery.dim)
+                .opacity(row.cue.note.isEmpty ? 0.55 : 0.85)
             }
 
-            Spacer(minLength: 6)
+            Spacer(minLength: Space.xs)
+
+            TallyTag(state: tally)
 
             if !row.issues.isEmpty {
-                Circle()
-                    .fill(Gallery.amber.opacity(0.85))
-                    .frame(width: 6, height: 6)
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.system(size: 10))
+                    .foregroundStyle(Gallery.amber)
                     .help(row.issues.map(\.message).joined(separator: "\n"))
             }
 
-            Text(row.lengthSeconds.map { String(format: "%.1f s", $0) } ?? "")
+            Text(row.lengthSeconds.map { String(format: "%.1fs", $0) } ?? "")
                 .font(.readout(11))
                 .foregroundStyle(Gallery.dim)
-                .frame(width: 52, alignment: .trailing)
+                .frame(width: 44, alignment: .trailing)
 
             Button {
                 model.setTransition(row.cue.transition == .cut ? .auto : .cut, for: [row.id])
             } label: {
                 Pill(text: row.cue.transition == .cut ? "CUT" : "MIX",
-                     color: row.cue.transition == .cut ? Gallery.dim : Gallery.steel,
+                     color: row.cue.transition == .cut ? Gallery.dim : Gallery.selection,
                      filled: row.cue.transition == .auto)
-                    .frame(width: 40)
+                    .frame(width: 36)
             }
             .buttonStyle(.plain)
             .help("Click to switch between cut and mix (⌥⌘T)")
         }
-        .padding(.vertical, 3)
-        .padding(.trailing, 4)
-        .background((camera?.swiftUIColor ?? Color.clear).opacity(0.10), in: RoundedRectangle(cornerRadius: 4))
+        .padding(.vertical, Space.xs)
     }
 }
 
-// MARK: - Camera bank
+// MARK: - Camera palette
 
-/// The cameras as switcher keys. Red = camera of the selected shot, green = camera of the next shot.
-struct CameraBankView: View {
+/// The cameras as source-selection controls. In Edit Mode the selected shot's camera is marked
+/// SHOT (red, filled tag) and the next shot's camera NEXT (green, outlined tag).
+struct CameraPaletteView: View {
     let show: Show
     @ObservedObject var model: WorkspaceModel
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack(spacing: 10) {
-                Text("Cameras").font(.umd(12)).foregroundStyle(Gallery.dim)
-                Text(model.selectedShotIDs.isEmpty ? "Click a camera to add a shot with it" : "Click to set the camera on the selected shot. Option-click adds a new shot.")
-                    .font(.system(size: 11))
+        HStack(alignment: .center, spacing: Space.m) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Cameras").font(.ocHeading).foregroundStyle(Gallery.ink)
+                Text(model.selectedShotIDs.isEmpty ? "Click to add a shot" : "Click sets · ⌥-click adds")
+                    .font(.ocMeta)
                     .foregroundStyle(Gallery.faint)
-                Spacer()
-                IconButton(symbol: "plus", help: "New camera") { model.addCamera() }
-                IconButton(symbol: "slider.horizontal.3", help: "Manage cameras (⌥⌘C)") { model.cameraManagerOpen = true }
+                    .lineLimit(1)
+                HStack(spacing: 2) {
+                    IconButton(symbol: "plus", help: "New camera") { model.addCamera() }
+                    IconButton(symbol: "slider.horizontal.3", help: "Manage cameras (⌥⌘C)") { model.cameraManagerOpen = true }
+                }
+                .padding(.leading, -5)
             }
+            .frame(width: 128, alignment: .leading)
             ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(spacing: 8) {
+                LazyHStack(spacing: Space.s) {
                     ForEach(show.sortedCameras) { cam in
-                        Button {
+                        SourceButton(camera: cam, tally: model.tally(forCamera: cam.id)) {
                             model.useCamera(cam.id, newShot: NSEvent.modifierFlags.contains(.option))
-                        } label: {
-                            VStack(spacing: 3) {
-                                CameraTile(camera: cam, tally: model.tally(forCamera: cam.id), size: 58)
-                                Text(cam.operatorName.isEmpty ? " " : cam.operatorName)
-                                    .font(.umd(10))
-                                    .foregroundStyle(Gallery.dim)
-                                    .lineLimit(1)
-                                    .frame(width: 58)
-                            }
                         }
-                        .buttonStyle(.plain)
                     }
                     if show.cameras.isEmpty {
                         Button("Add the first camera") { model.addCamera() }
+                            .buttonStyle(QuietButtonStyle())
                     }
                 }
-                .padding(.vertical, 4)
-                .padding(.horizontal, 2)
+                .padding(.vertical, Space.xs)
             }
-            .frame(height: 86)
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 8)
+        .padding(.horizontal, Space.l)
+        .padding(.vertical, Space.s)
+        .frame(height: 76)
         .background(Gallery.panel)
+    }
+}
+
+/// One camera as a source button: colour chip with the number, name, operator and tally tag.
+/// Without an action it is a display (Live Mode's camera grid).
+struct SourceButton: View {
+    let camera: Camera
+    let tally: TallyState
+    var live = false
+    var width: CGFloat = 138
+    var height: CGFloat = 48
+    var action: (() -> Void)? = nil
+    @State private var hovering = false
+
+    var body: some View {
+        Group {
+            if let action {
+                Button(action: action) { face }
+                    .buttonStyle(.plain)
+                    .onHover { hovering = $0 }
+            } else {
+                face
+            }
+        }
+        .animation(.easeOut(duration: 0.12), value: hovering)
+        .help(camera.operatorName.isEmpty ? "Camera \(camera.number), \(camera.displayName)"
+              : "Camera \(camera.number), \(camera.displayName), operated by \(camera.operatorName)")
+    }
+
+    private var face: some View {
+        HStack(spacing: Space.s) {
+            CameraChip(camera: camera, size: min(30, height - 16))
+            VStack(alignment: .leading, spacing: 1) {
+                Text(camera.displayName)
+                    .font(.ocBodyStrong)
+                    .foregroundStyle(Gallery.ink)
+                    .lineLimit(1)
+                Text(camera.operatorName.isEmpty ? " " : camera.operatorName)
+                    .font(.ocMeta)
+                    .foregroundStyle(Gallery.faint)
+                    .lineLimit(1)
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, Space.s)
+        .frame(width: width, height: height)
+        .background(background, in: RoundedRectangle(cornerRadius: Radius.m))
+        .overlay(RoundedRectangle(cornerRadius: Radius.m)
+            .strokeBorder(tally == .off ? Gallery.hairline : tally.color, lineWidth: tally == .off ? 1 : 2))
+        .overlay(alignment: .topTrailing) {
+            TallyTag(state: tally, live: live).padding(5)
+        }
+        .contentShape(Rectangle())
+    }
+
+    private var background: Color {
+        switch tally {
+        case .current: return Gallery.tally.opacity(0.16)
+        case .next: return Gallery.next.opacity(0.10)
+        case .off: return hovering ? Gallery.key : Gallery.raised
+        }
     }
 }

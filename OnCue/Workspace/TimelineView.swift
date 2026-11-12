@@ -75,6 +75,16 @@ enum TimelineLayout {
 }
 
 extension TimelineLane {
+    var symbol: String {
+        switch self {
+        case .sections: return "square.split.diagonal"
+        case .shots: return "video.fill"
+        case .lyrics: return "quote.opening"
+        case .notes: return "note.text"
+        case .fx: return "sparkles"
+        }
+    }
+
     var tone: Color {
         switch self {
         case .sections: return Gallery.dim
@@ -158,7 +168,7 @@ struct TimelineEditorView: View {
         let lanes = TimelineLayout.lanes(for: item)
         GeometryReader { geo in
             VStack(spacing: 0) {
-                TimelineToolbar(model: model) {
+                TimelineToolbar(item: item, model: model) {
                     let available = geo.size.width - TimelineLayout.headerWidth - 40
                     let units = max(end - metrics.origin, 1)
                     model.zoom = min(max(Double(available) / (Double(TimelineMetrics.baseUnit(for: item)) * units), 0.15), 6)
@@ -273,34 +283,46 @@ struct HorizontalScrollDriver: NSViewRepresentable {
 }
 
 struct TimelineToolbar: View {
+    let item: RundownItem
     @ObservedObject var model: WorkspaceModel
     let fit: () -> Void
 
     var body: some View {
-        HStack(spacing: 8) {
-            Text("Double-click a track to add. Drag to move; drag a shot's right edge to trim. Type a camera number to set it.")
+        HStack(spacing: Space.s) {
+            Label(snapText, systemImage: "rectangle.split.3x1")
+                .labelStyle(.titleAndIcon)
+                .font(.ocMeta)
+                .foregroundStyle(Gallery.faint)
+            Image(systemName: "info.circle")
                 .font(.system(size: 11))
                 .foregroundStyle(Gallery.faint)
-                .lineLimit(1)
-            Spacer(minLength: 8)
-            IconButton(symbol: "minus.magnifyingglass", help: "Zoom out (⌘-)") { model.changeZoom(by: 1 / 1.4) }
+                .help("Double-click a track to add. Drag a block to move it; drag a shot's right edge to trim. Double-click a block to edit it. Type a camera number to set it; ← and → step through shots.")
+            Spacer(minLength: Space.s)
+            IconButton(symbol: "minus", help: "Zoom out (⌘-)", size: 20) { model.changeZoom(by: 1 / 1.4) }
+            Slider(value: Binding(get: { log2(model.zoom) }, set: { model.zoom = pow(2, $0) }), in: log2(0.15)...log2(6))
+                .controlSize(.mini)
+                .frame(width: 110)
+                .help("Zoom")
+            IconButton(symbol: "plus", help: "Zoom in (⌘=)", size: 20) { model.changeZoom(by: 1.4) }
             Text("\(Int((model.zoom * 100).rounded()))%")
-                .font(.readout(11, weight: .semibold))
-                .foregroundStyle(Gallery.dim)
-                .frame(width: 42)
-            IconButton(symbol: "plus.magnifyingglass", help: "Zoom in (⌘=)") { model.changeZoom(by: 1.4) }
+                .font(.readout(10))
+                .foregroundStyle(Gallery.faint)
+                .frame(width: 36, alignment: .trailing)
             Button("Fit", action: fit)
-                .buttonStyle(.plain)
-                .font(.umd(11))
-                .foregroundStyle(Gallery.ink)
-                .padding(.horizontal, 8)
-                .frame(height: 22)
-                .background(Gallery.key, in: RoundedRectangle(cornerRadius: 5))
+                .buttonStyle(QuietButtonStyle())
                 .help("Fit the whole song or segment in the window")
         }
-        .padding(.horizontal, 12)
+        .padding(.horizontal, Space.m)
         .frame(height: TimelineLayout.toolbar)
         .background(Gallery.panel)
+    }
+
+    private var snapText: String {
+        switch item.timeBase {
+        case .bars: return "Snaps to the beat"
+        case .seconds: return "Snaps to half seconds"
+        case .order: return "NEXT order"
+        }
     }
 }
 
@@ -335,47 +357,59 @@ struct TrackHeaderCell: View {
     let locked: Bool
     let height: CGFloat
     @ObservedObject var model: WorkspaceModel
+    @State private var hovering = false
 
     var body: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: 7) {
             RoundedRectangle(cornerRadius: 1)
-                .fill(lane.tone.opacity(hidden ? 0.35 : 1))
-                .frame(width: 3, height: max(min(height - 10, 18), 6))
+                .fill(lane.tone.opacity(hidden ? 0.35 : 0.9))
+                .frame(width: 2)
+                .padding(.vertical, hidden ? 3 : 6)
+            if !hidden {
+                Image(systemName: lane.symbol)
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(Gallery.dim)
+                    .frame(width: 14)
+            }
             VStack(alignment: .leading, spacing: 0) {
                 Text(lane.label)
-                    .font(.umd(hidden ? 10 : 12))
+                    .font(hidden ? .ocMeta : .ocLabel)
                     .foregroundStyle(hidden ? Gallery.faint : Gallery.ink)
                     .lineLimit(1)
                     .fixedSize()
                 if let subtitle, !hidden {
-                    Text(subtitle).font(.system(size: 10)).foregroundStyle(Gallery.dim).lineLimit(1)
+                    Text(subtitle).font(.ocMeta).foregroundStyle(Gallery.faint).lineLimit(1)
                 }
             }
-            Spacer(minLength: 2)
-            if lane != .shots {
-                toggle(symbol: hidden ? "eye.slash" : "eye", on: !hidden,
+            Spacer(minLength: 0)
+            if lane != .shots, hovering || hidden {
+                toggle(symbol: hidden ? "eye.slash" : "eye", on: hidden,
                        help: hidden ? "Show the \(lane.label.lowercased()) track" : "Hide the \(lane.label.lowercased()) track (its cues are kept)") {
                     model.toggleLaneHidden(lane)
                 }
             }
-            if !hidden {
+            if !hidden, hovering || locked {
                 toggle(symbol: locked ? "lock.fill" : "lock.open", on: locked,
                        help: locked ? "Unlock this track" : "Lock this track against edits") {
                     model.toggleLaneLocked(lane)
                 }
             }
         }
-        .padding(.horizontal, 8)
+        .padding(.leading, Space.s)
+        .padding(.trailing, Space.xs)
         .frame(width: TimelineLayout.headerWidth, height: height)
-        .background(Gallery.panel)
+        .background(hovering ? Gallery.raised : Gallery.panel)
+        .onHover { hovering = $0 }
+        .animation(.easeOut(duration: 0.12), value: hovering)
     }
 
     private func toggle(symbol: String, on: Bool, help: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Image(systemName: symbol)
                 .font(.system(size: 10, weight: .semibold))
-                .foregroundStyle(on ? Gallery.ink : Gallery.faint)
-                .frame(width: 16, height: 14)
+                .foregroundStyle(on ? Gallery.amber : Gallery.dim)
+                .frame(width: 18, height: 16)
+                .interactive()
         }
         .buttonStyle(.plain)
         .help(help)
@@ -453,12 +487,33 @@ struct SelectionMarker: View {
 
     var body: some View {
         if let position {
-            Rectangle()
-                .fill(Gallery.selection.opacity(0.8))
-                .frame(width: 1, height: height)
-                .offset(x: metrics.x(position))
-                .allowsHitTesting(false)
+            ZStack(alignment: .top) {
+                Rectangle()
+                    .fill(Gallery.selection.opacity(0.85))
+                    .frame(width: 1.5, height: height)
+                PlayheadHead()
+                    .fill(Gallery.selection)
+                    .frame(width: 11, height: 9)
+                    .offset(y: TimelineLayout.ruler - 10)
+            }
+            .frame(width: 11, height: height, alignment: .top)
+            .offset(x: metrics.x(position) - 5.5)
+            .allowsHitTesting(false)
         }
+    }
+}
+
+/// Downward-pointing head of the playhead, sitting on the ruler.
+struct PlayheadHead: Shape {
+    func path(in rect: CGRect) -> Path {
+        var p = Path()
+        p.move(to: CGPoint(x: rect.minX, y: rect.minY))
+        p.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
+        p.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY * 0.45))
+        p.addLine(to: CGPoint(x: rect.midX, y: rect.maxY))
+        p.addLine(to: CGPoint(x: rect.minX, y: rect.maxY * 0.45))
+        p.closeSubpath()
+        return p
     }
 }
 
@@ -614,12 +669,7 @@ struct ShotLane: View {
     }
 
     private func trimHandle(span: ShotSpan, next: ShotSpan, afterNext: ShotSpan?) -> some View {
-        Color.clear
-            .frame(width: 7)
-            .contentShape(Rectangle())
-            .onHover { inside in
-                if inside { NSCursor.resizeLeftRight.push() } else { NSCursor.pop() }
-            }
+        TrimHandle(active: drag?.id == span.id && drag?.kind == .trim)
             .gesture(DragGesture(minimumDistance: 1)
                 .onChanged { value in drag = TimelineDrag(id: span.id, kind: .trim, dx: value.translation.width) }
                 .onEnded { value in
@@ -662,6 +712,29 @@ struct ShotLane: View {
     }
 }
 
+/// Right-edge grip of a shot: invisible until hovered, then a bright bar with a resize cursor.
+struct TrimHandle: View {
+    let active: Bool
+    @State private var hovering = false
+
+    var body: some View {
+        ZStack(alignment: .trailing) {
+            Color.clear
+            RoundedRectangle(cornerRadius: 1)
+                .fill(Color.white.opacity(hovering || active ? 0.9 : 0))
+                .frame(width: 3)
+                .padding(.vertical, 6)
+                .padding(.trailing, 2)
+        }
+        .frame(width: 8)
+        .contentShape(Rectangle())
+        .onHover { inside in
+            hovering = inside
+            if inside { NSCursor.resizeLeftRight.push() } else { NSCursor.pop() }
+        }
+    }
+}
+
 /// Triangle in the upper left of a block: the shot comes in with a mix.
 struct MixRamp: Shape {
     func path(in rect: CGRect) -> Path {
@@ -682,6 +755,7 @@ struct ShotBlock: View {
     let height: CGFloat
     let selected: Bool
     let isNext: Bool
+    @State private var hovering = false
 
     var body: some View {
         let cue = span.row.cue
@@ -739,7 +813,9 @@ struct ShotBlock: View {
             .padding(.vertical, 4)
         }
         .frame(width: max(width - 1, 3), height: height)
+        .overlay(Color.white.opacity(hovering && !selected ? 0.08 : 0))
         .clipShape(RoundedRectangle(cornerRadius: 3))
+        .onHover { hovering = $0 }
         .overlay(alignment: .bottom) {
             if isNext {
                 Rectangle().fill(Gallery.next).frame(height: 4).clipShape(RoundedRectangle(cornerRadius: 1))
@@ -873,19 +949,18 @@ struct SectionLane: View {
                               set: { if !$0, model.editingSectionID == span.id { model.editingSectionID = nil } })
         return HStack(spacing: 6) {
             Text(span.section.name)
-                .font(.umd(12))
+                .font(.ocLabel)
                 .foregroundStyle(Gallery.ink)
                 .lineLimit(1)
             if w > 110 {
-                Text(item.format(span.start)).font(.readout(10)).foregroundStyle(Gallery.dim)
+                Text(item.format(span.start)).font(.readout(10, weight: .regular)).foregroundStyle(Gallery.faint)
             }
             Spacer(minLength: 0)
         }
-        .padding(.horizontal, 7)
-        .frame(width: max(w - 1, 4), height: TimelineLayout.sections - 6, alignment: .leading)
-        .background(Gallery.raised, in: RoundedRectangle(cornerRadius: 3))
-        .overlay(alignment: .leading) { Rectangle().fill(Gallery.dim).frame(width: 2) }
-        .clipShape(RoundedRectangle(cornerRadius: 3))
+        .padding(.horizontal, Space.s)
+        .frame(width: max(w - 1, 4), height: TimelineLayout.sections, alignment: .leading)
+        .background(Color.white.opacity(0.035))
+        .overlay(alignment: .leading) { Rectangle().fill(Gallery.ink.opacity(0.55)).frame(width: 2) }
         .popover(isPresented: editing, arrowEdge: .bottom) {
             SectionQuickEditor(section: span.section, model: model)
         }
@@ -895,7 +970,7 @@ struct SectionLane: View {
             Divider()
             Button("Delete Section", role: .destructive) { model.deleteSection(span.id) }
         }
-        .offset(x: x + dx, y: 3)
+        .offset(x: x + dx, y: 0)
         .zIndex(drag?.id == span.id ? 1 : 0)
         .onTapGesture(count: 2) { if !locked { model.editingSectionID = span.id } }
         .onTapGesture { model.scrollTarget = span.id.uuidString; focus() }
