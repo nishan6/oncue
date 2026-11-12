@@ -20,6 +20,7 @@ final class EngineTests: XCTestCase {
 
     func testDisplayModeSendsNothingButFollowsThePlayhead() {
         let (show, song) = scriptedShow()
+        let S = show.mainOutput!.switcherID!
         let engine = ShowEngine(show: show, itemID: song)
         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
         XCTAssertEqual(engine.start(now: 0), [])
@@ -31,40 +32,44 @@ final class EngineTests: XCTestCase {
 
     func testAutoCutTakesShotsAndPreloadsTheNext() {
         let (show, song) = scriptedShow(transitions: [.cut, .auto, .cut])
+        let S = show.mainOutput!.switcherID!
         let engine = ShowEngine(show: show, itemID: song, mode: .cut)
-        XCTAssertEqual(engine.load(itemID: song, now: 0), [.preview(input: 1)], "first shot waits on preview")
-        XCTAssertEqual(engine.start(now: 0), [.preview(input: 1), .cut, .preview(input: 2)])
+        XCTAssertEqual(engine.load(itemID: song, now: 0), [.preview(switcher: S, input: 1)], "first shot waits on preview")
+        XCTAssertEqual(engine.start(now: 0), [.preview(switcher: S, input: 1), .cut(switcher: S), .preview(switcher: S, input: 2)])
         XCTAssertEqual(engine.setPosition(3.9, now: 1), [], "nothing until the next shot's position")
-        XCTAssertEqual(engine.setPosition(4, now: 2), [.preview(input: 2), .auto, .preview(input: 3)], "a mix shot mixes")
-        XCTAssertEqual(engine.setPosition(9, now: 3), [.preview(input: 3), .cut])
+        XCTAssertEqual(engine.setPosition(4, now: 2), [.preview(switcher: S, input: 2), .auto(switcher: S), .preview(switcher: S, input: 3)], "a mix shot mixes")
+        XCTAssertEqual(engine.setPosition(9, now: 3), [.preview(switcher: S, input: 3), .cut(switcher: S)])
         XCTAssertNil(engine.next)
     }
 
     func testAutoPreviewOnlyLoadsPreview() {
         let (show, song) = scriptedShow()
+        let S = show.mainOutput!.switcherID!
         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
         _ = engine.load(itemID: song, now: 0)
-        XCTAssertEqual(engine.start(now: 0), [.preview(input: 2)])
-        XCTAssertEqual(engine.setPosition(4, now: 1), [.preview(input: 3)])
+        XCTAssertEqual(engine.start(now: 0), [.preview(switcher: S, input: 2)])
+        XCTAssertEqual(engine.setPosition(4, now: 1), [.preview(switcher: S, input: 3)])
     }
 
     func testManualCutPausesAutoCutUntilResume() {
         let (show, song) = scriptedShow()
+        let S = show.mainOutput!.switcherID!
         let engine = ShowEngine(show: show, itemID: song, mode: .cut)
         _ = engine.load(itemID: song, now: 0)
         _ = engine.start(now: 0)
         engine.programChanged(to: 1, now: 0.1)
         XCTAssertFalse(engine.isPaused, "OnCue's own cut is expected")
         engine.programChanged(to: 4, now: 1)
-        XCTAssertEqual(engine.pause?.reason, "Manual cut to input 4")
+        XCTAssertEqual(engine.pause?.reason, "Manual cut to input 4 on Simulator")
         XCTAssertEqual(engine.setPosition(4, now: 2), [], "paused: no commands")
         XCTAssertEqual(engine.onAir?.number, 2, "the playhead still follows")
-        XCTAssertEqual(engine.resume(), [.preview(input: 3)])
-        XCTAssertEqual(engine.setPosition(8, now: 3), [.preview(input: 3), .cut])
+        XCTAssertEqual(engine.resume(), [.preview(switcher: S, input: 3)])
+        XCTAssertEqual(engine.setPosition(8, now: 3), [.preview(switcher: S, input: 3), .cut(switcher: S)])
     }
 
     func testAutoPreviewIgnoresTheDirectorsCuts() {
         let (show, song) = scriptedShow()
+        let S = show.mainOutput!.switcherID!
         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
         _ = engine.load(itemID: song, now: 0)
         _ = engine.start(now: 0)
@@ -74,9 +79,10 @@ final class EngineTests: XCTestCase {
 
     func testNextBackTapAndJump() {
         let (show, song) = scriptedShow()
+        let S = show.mainOutput!.switcherID!
         let engine = ShowEngine(show: show, itemID: song, mode: .cut)
         _ = engine.load(itemID: song, now: 0)
-        XCTAssertEqual(engine.next(now: 0), [.preview(input: 1), .cut, .preview(input: 2)])
+        XCTAssertEqual(engine.next(now: 0), [.preview(switcher: S, input: 1), .cut(switcher: S), .preview(switcher: S, input: 2)])
         XCTAssertEqual(engine.transport, .running)
         _ = engine.next(now: 1)
         XCTAssertEqual(engine.position, 4)
@@ -97,11 +103,12 @@ final class EngineTests: XCTestCase {
         let pair = scriptedShow()
         var show = pair.0
         let song = pair.1
+        let S = show.mainOutput!.switcherID!
         show.updateCamera(show.sortedCameras[1].id) { $0.input = 0 }
         let engine = ShowEngine(show: show, itemID: song, mode: .cut)
         _ = engine.load(itemID: song, now: 0)
-        XCTAssertEqual(engine.start(now: 0), [.preview(input: 1), .cut])
-        XCTAssertEqual(engine.setPosition(4, now: 1), [.preview(input: 3)])
+        XCTAssertEqual(engine.start(now: 0), [.preview(switcher: S, input: 1), .cut(switcher: S)])
+        XCTAssertEqual(engine.setPosition(4, now: 1), [.preview(switcher: S, input: 3)])
     }
 
     func testSecondsToNextUsesTheTempo() {
@@ -196,6 +203,7 @@ final class EngineTests: XCTestCase {
 
     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
         let (show, song) = scriptedShow()
+        let S = show.mainOutput!.switcherID!
         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
         defer { controller.shutdown() }
         controller.connectSwitcher()
@@ -212,9 +220,9 @@ final class EngineTests: XCTestCase {
         XCTAssertNil(controller.status.pauseReason)
 
         // The director cuts by hand.
-        let device = try XCTUnwrap(controller.switcherForTesting)
+        let device = try XCTUnwrap(controller.deviceForTesting(show.mainOutput!.switcherID!))
         device.setProgram(4)
-        XCTAssertEqual(controller.status.pauseReason, "Manual cut to input 4")
+        XCTAssertEqual(controller.status.pauseReason, "Manual cut to input 4 on Simulator")
         controller.next()
         XCTAssertEqual(controller.status.program, 4, "paused: OnCue leaves the director's cut alone")
         controller.resume()
@@ -223,6 +231,7 @@ final class EngineTests: XCTestCase {
 
     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+        let S = show.mainOutput!.switcherID!
         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
         defer { controller.shutdown() }
         controller.connectSwitcher()
@@ -275,9 +284,6 @@ final class EngineTests: XCTestCase {
     }
 }
 
-extension EngineController {
-    var switcherForTesting: SwitcherDevice? { Mirror(reflecting: self).descendant("switcher") as? SwitcherDevice }
-}
 
 /// A minimal ATEM on localhost: answers the hello, sends a state dump, acknowledges commands.
 final class FakeATEM {

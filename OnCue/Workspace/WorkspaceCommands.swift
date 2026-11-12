@@ -27,6 +27,10 @@ struct WorkspaceCommands: Commands {
             Button(workspace?.isLive == true ? "Exit Live Mode" : "Enter Live Mode") { workspace?.toggleLive() }
                 .keyboardShortcut("l", modifiers: .command)
             Divider()
+            Button("Open Switch Log…") {
+                SwitchLogPicker.choose { workspace?.reportLog = $0 } failure: { workspace?.errorMessage = $0 }
+            }
+            Divider()
             Button("Switcher…") { workspace?.switcherSetupOpen = true }
                 .keyboardShortcut("s", modifiers: [.command, .option])
             Button("Cameras…") { workspace?.cameraManagerOpen = true }

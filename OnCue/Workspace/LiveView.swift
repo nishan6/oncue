@@ -26,6 +26,9 @@ struct LiveView: View {
                 if let reason = status.pauseReason {
                     PausedBanner(reason: reason) { engine.resume() }
                 }
+                if status.freeMode {
+                    FreeModeBanner(show: show, hints: status.hints) { engine.setFreeMode(false) }
+                }
                 TimelineView(.periodic(from: .now, by: 0.1)) { context in
                     NowNextPanels(show: show, item: item, cursor: cursor, takenAt: status.takenAt,
                                   secondsToNext: status.secondsToNext, now: context.date)
@@ -41,6 +44,7 @@ struct LiveView: View {
         }
         .background(LivePalette.base)
         .animation(.easeOut(duration: 0.15), value: status.pauseReason)
+        .animation(.easeOut(duration: 0.15), value: status.freeMode)
         .focusable()
         .focusEffectDisabled()
         .focused($focused)
@@ -52,11 +56,20 @@ struct LiveView: View {
             if status.transport == .running { engine.stop() } else { engine.go() }
             return .handled
         }
-        .onKeyPress(characters: CharacterSet(charactersIn: "tTrR")) { press in
-            if press.characters.lowercased() == "t" { engine.tap() } else { engine.resume() }
+        .onKeyPress(characters: CharacterSet(charactersIn: "tTrRfFlL")) { press in
+            switch press.characters.lowercased() {
+            case "t": engine.tap()
+            case "r": engine.resume()
+            case "f": engine.setFreeMode(!status.freeMode)
+            default: engine.toggleLoop()
+            }
             return .handled
         }
-        .onExitCommand { model.exitLive() }
+        // Esc is the panic key: every output to display only. Leaving Live is ⌘L or Exit.
+        .onExitCommand { engine.panic() }
+        .sheet(isPresented: $model.cameraDownOpen) {
+            CameraDownSheet(show: show, engine: engine, model: model)
+        }
     }
 }
 
@@ -124,14 +137,44 @@ struct LiveToolbarStatus: View {
     @ObservedObject var engine: EngineController
     @ObservedObject var model: WorkspaceModel
     @State private var switcherOpen = false
+    @State private var timingOpen = false
 
     var body: some View {
         let status = engine.status
         HStack(spacing: Space.s) {
-            StatusChip(symbol: timingSymbol(status.timing), label: "Timing · \(status.timing.label)",
-                       value: timingValue(status),
-                       warning: (status.timing == .midiClock || status.timing == .ltc) && !status.timingSignal,
-                       help: timingHelp(status))
+            Button { timingOpen = true } label: {
+                StatusChip(symbol: timingSymbol(status.timing), label: "Timing · \(status.timing.label)",
+                           value: timingValue(status),
+                           warning: (status.timing == .midiClock || status.timing == .ltc) && !status.timingSignal,
+                           help: timingHelp(status) + " Click to switch method.")
+            }
+            .buttonStyle(.plain)
+            .popover(isPresented: $timingOpen, arrowEdge: .bottom) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Follow this song with").sectionLabel().padding(.bottom, 4)
+                    ForEach(SyncMode.allCases) { mode in
+                        Button {
+                            timingOpen = false
+                            let id = status.itemID
+                            model.edit("Change Live Timing") { $0.updateItem(id) { $0.syncMode = mode } }
+                        } label: {
+                            HStack {
+                                Text(mode.label).font(.ocBodyStrong).foregroundStyle(Gallery.ink)
+                                Spacer()
+                                if show.item(status.itemID)?.syncMode == mode {
+                                    Image(systemName: "checkmark").font(.system(size: 10, weight: .bold)).foregroundStyle(Gallery.selection)
+                                }
+                            }
+                            .padding(.horizontal, Space.s)
+                            .frame(width: 220, height: 28)
+                            .contentShape(Rectangle())
+                            .interactive()
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(Space.m)
+            }
             Button { switcherOpen = true } label: {
                 StatusChip(symbol: status.switcherConnected ? "cable.connector" : "cable.connector.slash",
                            label: "Switcher · \(status.switcherName)",
@@ -146,7 +189,7 @@ struct LiveToolbarStatus: View {
             Button { model.exitLive() } label: { Label("Exit Live", systemImage: "xmark") }
                 .labelStyle(.titleAndIcon)
                 .buttonStyle(QuietButtonStyle())
-                .help("Back to editing (Esc or ⌘L)")
+                .help("Back to editing (⌘L). Automation stops; switchers keep their state.")
         }
     }
 
@@ -499,7 +542,7 @@ struct LiveControls: View {
         let running = status.transport == .running
         VStack(alignment: .leading, spacing: Space.m) {
             Text("Switcher mode").sectionLabel()
-            Picker("Mode", selection: Binding(get: { status.mode }, set: { engine.setMode($0) })) {
+            Picker("Mode", selection: Binding(get: { status.mode(show.mainOutput?.id) }, set: { engine.setMode($0) })) {
                 Text("Display").tag(OutputMode.display)
                 Text("Preview").tag(OutputMode.preview)
                 Text("Cut").tag(OutputMode.cut)
@@ -507,10 +550,53 @@ struct LiveControls: View {
             .labelsHidden()
             .pickerStyle(.segmented)
             .help("Display: OnCue only shows the calls. Preview: OnCue puts the next shot on preview; you cut. Cut: OnCue cuts on the script.")
-            if status.mode != .display && !status.switcherConnected {
+            if status.mode(show.mainOutput?.id) != .display && !status.switcherConnected {
                 Label("No switcher connected: nothing is sent.", systemImage: "exclamationmark.triangle.fill")
                     .font(.ocMeta).foregroundStyle(Gallery.amber)
             }
+
+            if show.outputs.count > 1 {
+                VStack(alignment: .leading, spacing: 4) {
+                    ForEach(show.outputs.dropFirst()) { output in
+                        HStack(spacing: Space.s) {
+                            Text(output.name).font(.ocLabel).foregroundStyle(Gallery.dim).lineLimit(1)
+                            Spacer(minLength: 4)
+                            Picker(output.name, selection: Binding(get: { status.mode(output.id) },
+                                                                   set: { engine.setMode($0, for: output.id) })) {
+                                Text("Off").tag(OutputMode.display)
+                                Text("Pvw").tag(OutputMode.preview)
+                                Text("Cut").tag(OutputMode.cut)
+                            }
+                            .labelsHidden()
+                            .pickerStyle(.segmented)
+                            .controlSize(.small)
+                            .frame(width: 132)
+                        }
+                    }
+                }
+            }
+
+            HStack(spacing: Space.s) {
+                ToolToggle(title: "Free", symbol: "hand.raised", on: status.freeMode, color: Gallery.amber,
+                           help: "Free mode (F): the script holds; you cut. Hints show cameras not used lately.") {
+                    engine.setFreeMode(!status.freeMode)
+                }
+                ToolToggle(title: "Loop", symbol: "repeat", on: status.loopSectionID != nil, color: Gallery.selection,
+                           help: "Loop the current section until released (L)") {
+                    engine.toggleLoop()
+                }
+                ToolToggle(title: "Cam down", symbol: "video.slash", on: false, color: Gallery.tally,
+                           help: "Move a dead camera's upcoming shots to another camera") {
+                    model.cameraDownOpen = true
+                }
+            }
+            Button { engine.panic() } label: {
+                Label("Display only (Esc)", systemImage: "exclamationmark.octagon")
+                    .font(.system(size: 12, weight: .semibold))
+                    .frame(maxWidth: .infinity, minHeight: 28)
+            }
+            .buttonStyle(LiveKeyStyle(color: Gallery.tally, subtle: true))
+            .help("Panic: every output drops to display only. Switchers keep what is on air.")
 
             if status.timing != .manual {
                 Button { running ? engine.stop() : engine.go() } label: {
@@ -637,5 +723,139 @@ struct LiveKeyStyle: ButtonStyle {
             if subtle { return configuration.isPressed ? Gallery.pressed : (hovering ? LivePalette.raised : Color.clear) }
             return color.opacity(configuration.isPressed ? 0.28 : (hovering ? 0.18 : 0.12))
         }
+    }
+}
+
+
+/// Small toggle button for Live tools (free mode, loop, camera down).
+struct ToolToggle: View {
+    let title: String
+    let symbol: String
+    let on: Bool
+    let color: Color
+    let help: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 3) {
+                Image(systemName: symbol).font(.system(size: 14, weight: .semibold))
+                Text(title).font(.system(size: 10.5, weight: .semibold))
+            }
+            .foregroundStyle(on ? color : Gallery.dim)
+            .frame(maxWidth: .infinity, minHeight: 46)
+            .background(on ? color.opacity(0.16) : LivePalette.raised, in: RoundedRectangle(cornerRadius: Radius.m))
+            .overlay(RoundedRectangle(cornerRadius: Radius.m).strokeBorder(on ? color.opacity(0.8) : Gallery.hairline, lineWidth: on ? 1.5 : 1))
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .help(help)
+    }
+}
+
+/// Free mode: the script holds and the director cuts; cameras not used lately are suggested.
+struct FreeModeBanner: View {
+    let show: Show
+    let hints: [UUID]
+    let leave: () -> Void
+
+    var body: some View {
+        HStack(spacing: Space.m) {
+            Image(systemName: "hand.raised.fill").font(.system(size: 18)).foregroundStyle(Gallery.amber)
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Free mode").font(.system(size: 15, weight: .semibold)).foregroundStyle(Gallery.ink)
+                HStack(spacing: 6) {
+                    Text(hints.isEmpty ? "The script holds; OnCue sends nothing. Your cuts are logged." : "Not used lately:")
+                        .font(.ocMeta).foregroundStyle(Gallery.dim)
+                    ForEach(hints, id: \.self) { id in
+                        if let cam = show.camera(id) {
+                            HStack(spacing: 4) {
+                                CameraChip(camera: cam, size: 16)
+                                Text(cam.displayName).font(.ocLabel).foregroundStyle(Gallery.ink)
+                            }
+                        }
+                    }
+                }
+            }
+            Spacer()
+            Button(action: leave) { Label("Back to script", systemImage: "arrow.uturn.forward").padding(.horizontal, 6) }
+                .buttonStyle(QuietButtonStyle(prominent: true))
+                .help("Leave free mode (F): the script continues from where it held")
+        }
+        .padding(.horizontal, Space.l)
+        .frame(height: 56)
+        .background(Gallery.amber.opacity(0.08), in: RoundedRectangle(cornerRadius: Radius.l))
+        .overlay(RoundedRectangle(cornerRadius: Radius.l).strokeBorder(Gallery.amber.opacity(0.5), style: StrokeStyle(lineWidth: 1.5, dash: [5, 4])))
+        .transition(.move(edge: .top).combined(with: .opacity))
+    }
+}
+
+/// Camera down: move a dead camera's next shots to another camera. Asks how many.
+struct CameraDownSheet: View {
+    let show: Show
+    @ObservedObject var engine: EngineController
+    @ObservedObject var model: WorkspaceModel
+    @Environment(\.dismiss) private var dismiss
+    @State private var down: UUID?
+    @State private var replacement: UUID?
+    @State private var count = 1
+
+    var body: some View {
+        let cursor = engine.status.cursor
+        let total = down.map { show.upcomingShotCount(camera: $0, from: cursor) } ?? 0
+        let inSong = down.map { show.upcomingShotCount(camera: $0, from: cursor, sameItemOnly: true) } ?? 0
+        VStack(alignment: .leading, spacing: Space.l) {
+            Text("Camera down").font(.ocTitle).foregroundStyle(Gallery.ink)
+            Text("Move a camera's upcoming shots to another camera. The shot on air is not touched; Undo puts them back.")
+                .font(.ocMeta).foregroundStyle(Gallery.dim).fixedSize(horizontal: false, vertical: true)
+            PropertyRow(label: "Down") { cameraPicker($down) }
+            PropertyRow(label: "Move to") { cameraPicker($replacement, excluding: down) }
+            PropertyRow(label: "Shots") {
+                HStack(spacing: Space.s) {
+                    Stepper(value: $count, in: 0...max(total, 0)) {
+                        Text("\(count)").font(.readout(15, weight: .semibold)).foregroundStyle(Gallery.ink)
+                    }
+                    .disabled(down == nil)
+                    Text("of \(total) upcoming (\(inSong) in this song)").font(.ocMeta).foregroundStyle(Gallery.faint)
+                }
+            }
+            HStack {
+                Button("This song") { count = inSong }.buttonStyle(QuietButtonStyle()).disabled(down == nil)
+                Button("All upcoming") { count = total }.buttonStyle(QuietButtonStyle()).disabled(down == nil)
+                Spacer()
+                Button("Cancel") { dismiss() }.buttonStyle(QuietButtonStyle())
+                Button("Move \(count) \(count == 1 ? "shot" : "shots")") {
+                    if let down, let replacement {
+                        model.edit("Camera Down") { $0.reassignUpcomingShots(from: down, to: replacement, count: count, after: cursor) }
+                    }
+                    dismiss()
+                }
+                .buttonStyle(QuietButtonStyle(prominent: true))
+                .disabled(down == nil || replacement == nil || count == 0)
+                .keyboardShortcut(.defaultAction)
+            }
+        }
+        .padding(Space.xl)
+        .frame(width: 480)
+        .background(Gallery.panel)
+        .preferredColorScheme(.dark)
+        .onChange(of: down) { _, new in
+            guard let new else { return }
+            count = show.upcomingShotCount(camera: new, from: cursor, sameItemOnly: true)
+        }
+        .onAppear {
+            down = show.liveNext(cursor)?.cue.cameraID
+        }
+    }
+
+    private func cameraPicker(_ selection: Binding<UUID?>, excluding: UUID? = nil) -> some View {
+        Picker("", selection: selection) {
+            Text("Choose…").tag(UUID?.none)
+            ForEach(show.sortedCameras.filter { $0.id != excluding }) { cam in
+                Text("\(cam.number)  \(cam.label)").tag(UUID?.some(cam.id))
+            }
+        }
+        .labelsHidden()
+        .frame(maxWidth: 260)
     }
 }

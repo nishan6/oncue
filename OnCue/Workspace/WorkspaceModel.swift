@@ -84,6 +84,9 @@ final class WorkspaceModel: ObservableObject {
     @Published var lockedLanes: Set<TimelineLane> = [] { didSet { persistState() } }
     @Published var cameraManagerOpen = false
     @Published var switcherSetupOpen = false
+    @Published var cameraDownOpen = false
+    /// The log shown in the after-show report.
+    @Published var reportLog: SwitchLog?
     @Published var renamingItemID: UUID?
     @Published var errorMessage: String?
     /// Shot list scrolls here when set (a shot or section id).
@@ -544,7 +547,10 @@ final class WorkspaceModel: ObservableObject {
         let cursor = controller.status.cursor
         let onAir = show.liveNow(cursor)
         controller.shutdown()
+        let log = controller.log
         engine = nil
+        // After a run with cuts or calls, show the report.
+        if !log.entries.isEmpty { reportLog = log }
         if selectedItemID != cursor.itemID { selectedItemID = cursor.itemID }
         if let onAir {
             selectedShotIDs = [onAir.id]

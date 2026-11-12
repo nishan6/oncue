@@ -52,6 +52,7 @@ extension Camera {
         input = try c.value("input", 0)
         ptzID = try c.optional("ptzID")
         color = try c.value("color", "")
+        extraInputs = try c.value("extraInputs", [])
     }
 }
 

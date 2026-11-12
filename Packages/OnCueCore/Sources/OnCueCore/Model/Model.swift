@@ -221,6 +221,8 @@ public struct Camera: Identifiable, Codable, Hashable {
     /// Switcher input (source) number this camera arrives on.
     public var input: Int = 0
     public var ptzID: UUID?
+    /// The same camera on other switchers (split or DA'd to separate outputs).
+    public var extraInputs: [CameraInput] = []
     /// Colour of this camera's shots, as "#RRGGBB". Empty means the default colour for its number.
     public var color: String = ""
 
@@ -232,6 +234,16 @@ public struct Camera: Identifiable, Codable, Hashable {
 
     public var displayName: String { name.trimmingCharacters(in: .whitespaces).isEmpty ? "Cam \(number)" : name }
     public var label: String { operatorName.isEmpty ? displayName : "\(displayName) (\(operatorName))" }
+}
+
+/// A camera's input on an additional switcher.
+public struct CameraInput: Codable, Hashable {
+    public var switcherID: UUID
+    public var input: Int
+    public init(switcherID: UUID, input: Int) {
+        self.switcherID = switcherID
+        self.input = input
+    }
 }
 
 /// Default camera colours: twelve hues that stay distinct from each other on a mid-grey

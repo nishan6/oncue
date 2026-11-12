@@ -69,6 +69,9 @@ struct ShowWorkspaceView: View {
         .sheet(isPresented: $model.switcherSetupOpen) {
             SwitcherSetupView(show: show, model: model)
         }
+        .sheet(item: Binding(get: { model.reportLog.map(ReportBox.init) }, set: { model.reportLog = $0?.log })) { box in
+            ShowReportView(show: show, log: box.log)
+        }
         .alert("Can't do that", isPresented: Binding(get: { model.errorMessage != nil },
                                                       set: { if !$0 { model.errorMessage = nil } })) {
             Button("OK") { model.errorMessage = nil }
@@ -119,4 +122,11 @@ struct EmptyProductionView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Gallery.base)
     }
+}
+
+
+/// Identifiable wrapper so a switch log can drive a sheet.
+struct ReportBox: Identifiable {
+    let log: SwitchLog
+    var id: String { log.fileName + "\(log.entries.count)" }
 }
