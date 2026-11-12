@@ -183,7 +183,7 @@ struct LegacyShowSheet: View {
     }
 
     private func closeWindow() {
-        let doc = NSDocumentController.shared.documents.first { $0.fileURL == originalURL }
+        let doc = NSDocumentController.shared.documents.first { $0.fileURL?.isSameFile(as: originalURL) == true }
         doc?.close()
     }
 }

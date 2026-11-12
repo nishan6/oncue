@@ -62,7 +62,7 @@ final class LibraryModel: ObservableObject {
     var archivedCount: Int { entries.filter(\.archived).count }
 
     func isOpen(_ url: URL) -> Bool {
-        NSDocumentController.shared.documents.contains { $0.fileURL?.standardizedFileURL == url.standardizedFileURL }
+        NSDocumentController.shared.documents.contains { url.isSameFile(as: $0.fileURL) }
     }
 
     private func run(_ what: String, _ body: () throws -> Void) {

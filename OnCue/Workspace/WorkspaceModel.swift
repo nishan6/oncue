@@ -279,7 +279,7 @@ final class WorkspaceModel: ObservableObject {
         saveKeyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
             guard let self, event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command,
                   event.charactersIgnoringModifiers == "s",
-                  NSDocumentController.shared.currentDocument?.fileURL == self.fileURL else { return event }
+                  NSDocumentController.shared.currentDocument?.fileURL?.isSameFile(as: self.fileURL) ?? (self.fileURL == nil) else { return event }
             let stamp = Date().formatted(date: .abbreviated, time: .shortened)
             self.snapshot(name: "Saved \(stamp)", reason: "Saved")
             return event

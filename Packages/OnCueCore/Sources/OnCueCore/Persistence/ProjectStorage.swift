@@ -211,7 +211,11 @@ public enum ProjectLibrary {
         let keys: [URLResourceKey] = [.contentModificationDateKey]
         let urls = (try? FileManager.default.contentsOfDirectory(at: folder, includingPropertiesForKeys: keys,
                                                                     options: [.skipsHiddenFiles])) ?? []
-        return urls.filter { $0.pathExtension == fileExtension }.map { url in
+        // Packages come back from the directory listing with a trailing slash; rebuild each URL the
+        // same way create/rename build theirs, so they compare equal.
+        return urls.filter { $0.pathExtension == fileExtension }
+            .map { folder.appendingPathComponent($0.lastPathComponent) }
+            .map { url in
             let modified = (try? url.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate) ?? Date.distantPast
             var entry = LibraryEntry(url: url, projectID: nil, name: url.deletingPathExtension().lastPathComponent,
                                      artist: "", venue: "", showDate: nil, frameRate: .r25, sceneCount: 0,
@@ -321,5 +325,13 @@ public enum ProjectLibrary {
         f.pinned.remove(key(url))
         f.archived.remove(key(url))
         try saveFlags(f, in: folder)
+    }
+}
+
+extension URL {
+    /// The same file on disk, ignoring a trailing slash, "/./" and "/private" symlink spellings.
+    public func isSameFile(as other: URL?) -> Bool {
+        guard let other else { return false }
+        return resolvingSymlinksInPath().standardizedFileURL.path == other.resolvingSymlinksInPath().standardizedFileURL.path
     }
 }
