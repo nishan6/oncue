@@ -1,0 +1,875 @@
+Building for debugging...
+[0/8] /Users/runner/work/oncue/oncue/Packages/OnCueCore/.build/arm64-apple-macosx/debug/OnCueCorePackageTests.derived/runner.swift
+[0/8] Copying Fixtures
+[0/8] Write sources
+[5/8] Write swift-version--79AA4F9932D1E87A.txt
+[7/33] Emitting module OnCueCore
+[8/44] Compiling OnCueCore TourComparison.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+[9/44] Compiling OnCueCore PDFExports.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+[10/44] Compiling OnCueCore TextExports.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+[11/44] Compiling OnCueCore ItemMedia.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+[12/44] Compiling OnCueCore Model.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+[13/44] Compiling OnCueCore BackupFolder.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+[14/44] Compiling OnCueCore MachineProfile.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+[15/44] Compiling OnCueCore ShowCoding.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+[16/44] Compiling OnCueCore ShowVersions.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+[17/44] Compiling OnCueCore TolerantDecoding.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+[18/44] Compiling OnCueCore CameraPlot.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+[19/44] Compiling OnCueCore CrewPage.swift
+[20/44] Compiling OnCueCore CrewServer.swift
+[21/44] Compiling OnCueCore CrewSnapshot.swift
+[22/44] Compiling OnCueCore ATEMSwitcher.swift
+[23/44] Compiling OnCueCore CompanionClient.swift
+[24/44] Compiling OnCueCore MIDIManager.swift
+[25/44] Compiling OnCueCore OSC.swift
+[26/44] Compiling OnCueCore PTZService.swift
+[27/44] Compiling OnCueCore SwitcherDevice.swift
+[28/44] Compiling OnCueCore DraftScript.swift
+[29/44] Compiling OnCueCore LiveCursor.swift
+[30/44] Compiling OnCueCore SampleShow.swift
+[31/44] Compiling OnCueCore ShowEditing.swift
+[32/44] Compiling OnCueCore SwitcherEditing.swift
+[33/44] Compiling OnCueCore TimelineEditing.swift
+[34/44] Compiling OnCueCore BackupLink.swift
+[35/44] Compiling OnCueCore Controls.swift
+[36/44] Compiling OnCueCore EngineController.swift
+[37/44] Compiling OnCueCore LTC.swift
+[38/44] Compiling OnCueCore PreShowCheck.swift
+[39/44] Compiling OnCueCore RundownTiming.swift
+[40/44] Compiling OnCueCore ShowEngine.swift
+[41/44] Compiling OnCueCore SwitchLog.swift
+[42/44] Compiling OnCueCore Timing.swift
+[43/58] Compiling OnCueCoreTests ExportTests.swift
+[44/58] Compiling OnCueCoreTests MachineProfileTests.swift
+[45/58] Compiling OnCueCoreTests MediaTests.swift
+[46/58] Compiling OnCueCoreTests ModelTests.swift
+[47/58] Compiling OnCueCoreTests PersistenceTests.swift
+[48/58] Compiling OnCueCoreTests PreShowCheckTests.swift
+[49/64] Emitting module OnCueCoreTests
+[50/64] Compiling OnCueCoreTests BackupTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[51/64] Compiling OnCueCoreTests CameraPlotTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[52/64] Compiling OnCueCoreTests ControlsTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[53/64] Compiling OnCueCoreTests CrewTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[54/64] Compiling OnCueCoreTests DraftScriptTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[55/64] Compiling OnCueCoreTests EditingTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[56/64] Compiling OnCueCoreTests EngineTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[57/64] Compiling OnCueCoreTests RundownTimingTests.swift
+[58/64] Compiling OnCueCoreTests ShowControlTests.swift
+[59/64] Compiling OnCueCoreTests TimelineTests.swift
+[60/64] Compiling OnCueCoreTests TourTests.swift
+[61/64] Compiling OnCueCoreTests VersionTests.swift
+[62/64] Compiling OnCueCoreTests resource_bundle_accessor.swift
+[63/66] Emitting module OnCueCorePackageTests
+[64/66] Compiling OnCueCorePackageTests runner.swift
+[64/66] Write Objects.LinkFileList
+[65/66] Linking OnCueCorePackageTests
+Build complete! (34.29s)
+Test Suite 'All tests' started at 2026-11-12 09:07:31.486.
+Test Suite 'OnCueCorePackageTests.xctest' started at 2026-11-12 09:07:31.488.
+Test Suite 'BackupTests' started at 2026-11-12 09:07:31.488.
+Test Case '-[OnCueCoreTests.BackupTests testBackupFollowsWithoutSendingThenTakesOver]' started.
+Test Case '-[OnCueCoreTests.BackupTests testBackupFollowsWithoutSendingThenTakesOver]' passed (0.033 seconds).
+Test Case '-[OnCueCoreTests.BackupTests testFollowIgnoresAnotherShow]' started.
+Test Case '-[OnCueCoreTests.BackupTests testFollowIgnoresAnotherShow]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.BackupTests testLinkOverLocalhost]' started.
+Test Case '-[OnCueCoreTests.BackupTests testLinkOverLocalhost]' passed (0.009 seconds).
+Test Suite 'BackupTests' passed at 2026-11-12 09:07:31.532.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.044 (0.045) seconds
+Test Suite 'CameraPlotTests' started at 2026-11-12 09:07:31.532.
+Test Case '-[OnCueCoreTests.CameraPlotTests testPlaceMoveRotateRemove]' started.
+Test Case '-[OnCueCoreTests.CameraPlotTests testPlaceMoveRotateRemove]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.CameraPlotTests testPlotSurvivesSavingAndOldFiles]' started.
+Test Case '-[OnCueCoreTests.CameraPlotTests testPlotSurvivesSavingAndOldFiles]' passed (0.005 seconds).
+Test Suite 'CameraPlotTests' passed at 2026-11-12 09:07:31.538.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.005 (0.006) seconds
+Test Suite 'ControlsTests' started at 2026-11-12 09:07:31.538.
+Test Case '-[OnCueCoreTests.ControlsTests testAPC40DefaultsMapPadsAndButtons]' started.
+Test Case '-[OnCueCoreTests.ControlsTests testAPC40DefaultsMapPadsAndButtons]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ControlsTests testControllerPerformsTakeCameraAsAManualCut]' started.
+Test Case '-[OnCueCoreTests.ControlsTests testControllerPerformsTakeCameraAsAManualCut]' passed (0.008 seconds).
+Test Case '-[OnCueCoreTests.ControlsTests testMIDILearnReplacesOldBindings]' started.
+Test Case '-[OnCueCoreTests.ControlsTests testMIDILearnReplacesOldBindings]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.ControlsTests testOSCAddresses]' started.
+Test Case '-[OnCueCoreTests.ControlsTests testOSCAddresses]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ControlsTests testPadColorsShowTally]' started.
+Test Case '-[OnCueCoreTests.ControlsTests testPadColorsShowTally]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ControlsTests testTapTempo]' started.
+Test Case '-[OnCueCoreTests.ControlsTests testTapTempo]' passed (0.000 seconds).
+Test Suite 'ControlsTests' passed at 2026-11-12 09:07:31.549.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.010 (0.011) seconds
+Test Suite 'CrewTests' started at 2026-11-12 09:07:31.549.
+Test Case '-[OnCueCoreTests.CrewTests testCommentsFromThePage]' started.
+Test Case '-[OnCueCoreTests.CrewTests testCommentsFromThePage]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.CrewTests testEventStreamSendsStateAndUpdates]' started.
+Test Case '-[OnCueCoreTests.CrewTests testEventStreamSendsStateAndUpdates]' passed (0.385 seconds).
+Test Case '-[OnCueCoreTests.CrewTests testLiveSnapshotTallyAndCountdown]' started.
+Test Case '-[OnCueCoreTests.CrewTests testLiveSnapshotTallyAndCountdown]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.CrewTests testRequestParsingWaitsForTheBody]' started.
+Test Case '-[OnCueCoreTests.CrewTests testRequestParsingWaitsForTheBody]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.CrewTests testReviewSnapshotHasEveryItem]' started.
+Test Case '-[OnCueCoreTests.CrewTests testReviewSnapshotHasEveryItem]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.CrewTests testServerOnLocalhost]' started.
+Test Case '-[OnCueCoreTests.CrewTests testServerOnLocalhost]' passed (0.065 seconds).
+Test Suite 'CrewTests' passed at 2026-11-12 09:07:32.003.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.453 (0.454) seconds
+Test Suite 'DraftScriptTests' started at 2026-11-12 09:07:32.003.
+Test Case '-[OnCueCoreTests.DraftScriptTests testDraftFromEDL]' started.
+Test Case '-[OnCueCoreTests.DraftScriptTests testDraftFromEDL]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.DraftScriptTests testDraftFromSwitchLog]' started.
+Test Case '-[OnCueCoreTests.DraftScriptTests testDraftFromSwitchLog]' passed (0.001 seconds).
+Test Suite 'DraftScriptTests' passed at 2026-11-12 09:07:32.005.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.002 (0.003) seconds
+Test Suite 'EditingTests' started at 2026-11-12 09:07:32.005.
+Test Case '-[OnCueCoreTests.EditingTests testAddRenameDeleteSections]' started.
+Test Case '-[OnCueCoreTests.EditingTests testAddRenameDeleteSections]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testAddShotsAtEndAfterAndInSection]' started.
+Test Case '-[OnCueCoreTests.EditingTests testAddShotsAtEndAfterAndInSection]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testAddSongsAndSegmentsInPlace]' started.
+Test Case '-[OnCueCoreTests.EditingTests testAddSongsAndSegmentsInPlace]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testCamerasNumberingAndDeletion]' started.
+Test Case '-[OnCueCoreTests.EditingTests testCamerasNumberingAndDeletion]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testDragReorderKeepsTimeSlots]' started.
+Test Case '-[OnCueCoreTests.EditingTests testDragReorderKeepsTimeSlots]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testMoveHelperMatchesSwiftUISemantics]' started.
+Test Case '-[OnCueCoreTests.EditingTests testMoveHelperMatchesSwiftUISemantics]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testMovingSectionsCarriesTheirShots]' started.
+Test Case '-[OnCueCoreTests.EditingTests testMovingSectionsCarriesTheirShots]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testNudgeDuplicateEditDelete]' started.
+Test Case '-[OnCueCoreTests.EditingTests testNudgeDuplicateEditDelete]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testOrderBasedItemsStayNumbered]' started.
+Test Case '-[OnCueCoreTests.EditingTests testOrderBasedItemsStayNumbered]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testRenameReorderDuplicateDelete]' started.
+Test Case '-[OnCueCoreTests.EditingTests testRenameReorderDuplicateDelete]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testReorderWithinSectionOnly]' started.
+Test Case '-[OnCueCoreTests.EditingTests testReorderWithinSectionOnly]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testSampleProductionSurvivesSaveAndReopen]' started.
+Test Case '-[OnCueCoreTests.EditingTests testSampleProductionSurvivesSaveAndReopen]' passed (0.007 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testScriptChecks]' started.
+Test Case '-[OnCueCoreTests.EditingTests testScriptChecks]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testTimeBaseConversionKeepsTiming]' started.
+Test Case '-[OnCueCoreTests.EditingTests testTimeBaseConversionKeepsTiming]' passed (0.000 seconds).
+Test Suite 'EditingTests' passed at 2026-11-12 09:07:32.020.
+	 Executed 14 tests, with 0 failures (0 unexpected) in 0.014 (0.015) seconds
+Test Suite 'EngineTests' started at 2026-11-12 09:07:32.020.
+Test Case '-[OnCueCoreTests.EngineTests testATEMHandshakeStateAndCommands]' started.
+Test Case '-[OnCueCoreTests.EngineTests testATEMHandshakeStateAndCommands]' passed (0.119 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testAutoCutTakesShotsAndPreloadsTheNext]' started.
+Test Case '-[OnCueCoreTests.EngineTests testAutoCutTakesShotsAndPreloadsTheNext]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testAutoPreviewIgnoresTheDirectorsCuts]' started.
+Test Case '-[OnCueCoreTests.EngineTests testAutoPreviewIgnoresTheDirectorsCuts]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testAutoPreviewOnlyLoadsPreview]' started.
+Test Case '-[OnCueCoreTests.EngineTests testAutoPreviewOnlyLoadsPreview]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testCamerasWithoutAnInputAreSkippedNotSent]' started.
+Test Case '-[OnCueCoreTests.EngineTests testCamerasWithoutAnInputAreSkippedNotSent]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testControllerDrivesTheSimulatorAndPausesOnAManualCut]' started.
+Test Case '-[OnCueCoreTests.EngineTests testControllerDrivesTheSimulatorAndPausesOnAManualCut]' passed (0.007 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testDisplayModeSendsNothingButFollowsThePlayhead]' started.
+Test Case '-[OnCueCoreTests.EngineTests testDisplayModeSendsNothingButFollowsThePlayhead]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testFastNextThroughAMixDoesNotLookLikeAManualCut]' started.
+Test Case '-[OnCueCoreTests.EngineTests testFastNextThroughAMixDoesNotLookLikeAManualCut]' passed (2.544 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testInternalClockAndRates]' started.
+Test Case '-[OnCueCoreTests.EngineTests testInternalClockAndRates]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testLTCDecodesInvertedAndQuietSignals]' started.
+Test Case '-[OnCueCoreTests.EngineTests testLTCDecodesInvertedAndQuietSignals]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testLTCFollowerUsesTheItemStartOrTheFirstFrame]' started.
+Test Case '-[OnCueCoreTests.EngineTests testLTCFollowerUsesTheItemStartOrTheFirstFrame]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testLTCRoundTrip]' started.
+Test Case '-[OnCueCoreTests.EngineTests testLTCRoundTrip]' passed (0.004 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testManualCutPausesAutoCutUntilResume]' started.
+Test Case '-[OnCueCoreTests.EngineTests testManualCutPausesAutoCutUntilResume]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testMIDIClockFollower]' started.
+Test Case '-[OnCueCoreTests.EngineTests testMIDIClockFollower]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testNextBackTapAndJump]' started.
+Test Case '-[OnCueCoreTests.EngineTests testNextBackTapAndJump]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testSecondsToNextUsesTheTempo]' started.
+Test Case '-[OnCueCoreTests.EngineTests testSecondsToNextUsesTheTempo]' passed (0.000 seconds).
+Test Suite 'EngineTests' passed at 2026-11-12 09:07:34.702.
+	 Executed 16 tests, with 0 failures (0 unexpected) in 2.681 (2.682) seconds
+Test Suite 'ExportTests' started at 2026-11-12 09:07:34.702.
+Test Case '-[OnCueCoreTests.ExportTests testCallSheetsOnePerCamera]' started.
+Test Case '-[OnCueCoreTests.ExportTests testCallSheetsOnePerCamera]' passed (0.277 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testCameraScriptPDF]' started.
+Test Case '-[OnCueCoreTests.ExportTests testCameraScriptPDF]' passed (0.257 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testCSVQuoting]' started.
+Test Case '-[OnCueCoreTests.ExportTests testCSVQuoting]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testMarkerEDL]' started.
+Test Case '-[OnCueCoreTests.ExportTests testMarkerEDL]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testResolveMarkerColour]' started.
+Test Case '-[OnCueCoreTests.ExportTests testResolveMarkerColour]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testScriptCSVHasEveryShot]' started.
+Test Case '-[OnCueCoreTests.ExportTests testScriptCSVHasEveryShot]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testSwitchLogCSV]' started.
+Test Case '-[OnCueCoreTests.ExportTests testSwitchLogCSV]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testSwitchLogEDLFallsBackToTimeOfDay]' started.
+Test Case '-[OnCueCoreTests.ExportTests testSwitchLogEDLFallsBackToTimeOfDay]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testSwitchLogEDLUsesLTC]' started.
+Test Case '-[OnCueCoreTests.ExportTests testSwitchLogEDLUsesLTC]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testTimecodeMath]' started.
+Test Case '-[OnCueCoreTests.ExportTests testTimecodeMath]' passed (0.000 seconds).
+Test Suite 'ExportTests' passed at 2026-11-12 09:07:35.250.
+	 Executed 10 tests, with 0 failures (0 unexpected) in 0.546 (0.547) seconds
+Test Suite 'MachineProfileTests' started at 2026-11-12 09:07:35.250.
+Test Case '-[OnCueCoreTests.MachineProfileTests testCorruptProfileIsKeptAsBackupAndDefaultsUsed]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testCorruptProfileIsKeptAsBackupAndDefaultsUsed]' passed (0.015 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testMissingProfileIsCreatedWithDefaults]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testMissingProfileIsCreatedWithDefaults]' passed (0.007 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testNewerProfileFormatIsNotOverwrittenInPlace]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testNewerProfileFormatIsNotOverwrittenInPlace]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testOpeningAnotherShowDoesNotTouchTheProfile]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testOpeningAnotherShowDoesNotTouchTheProfile]' passed (0.006 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesDoNotMutateShows]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesDoNotMutateShows]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesPersistAcrossLaunches]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesPersistAcrossLaunches]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileMissingFieldsGetDefaults]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileMissingFieldsGetDefaults]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testShowFilesCarryNoMachineSettings]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testShowFilesCarryNoMachineSettings]' passed (0.004 seconds).
+Test Suite 'MachineProfileTests' passed at 2026-11-12 09:07:35.290.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.040 (0.041) seconds
+Test Suite 'MediaTests' started at 2026-11-12 09:07:35.290.
+Test Case '-[OnCueCoreTests.MediaTests testMediaSurvivesSaving]' started.
+Test Case '-[OnCueCoreTests.MediaTests testMediaSurvivesSaving]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.MediaTests testMediaTimeMapping]' started.
+Test Case '-[OnCueCoreTests.MediaTests testMediaTimeMapping]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.MediaTests testWaveformPeaks]' started.
+Test Case '-[OnCueCoreTests.MediaTests testWaveformPeaks]' passed (0.444 seconds).
+Test Suite 'MediaTests' passed at 2026-11-12 09:07:35.736.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.446 (0.446) seconds
+Test Suite 'ModelTests' started at 2026-11-12 09:07:35.736.
+Test Case '-[OnCueCoreTests.ModelTests testBarsPositionsParseAndFormat]' started.
+Test Case '-[OnCueCoreTests.ModelTests testBarsPositionsParseAndFormat]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testCameraLabels]' started.
+Test Case '-[OnCueCoreTests.ModelTests testCameraLabels]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testEnsureShotTracksAddsTrackPerOutput]' started.
+Test Case '-[OnCueCoreTests.ModelTests testEnsureShotTracksAddsTrackPerOutput]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testOrderPositions]' started.
+Test Case '-[OnCueCoreTests.ModelTests testOrderPositions]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testSecondsFromBeats]' started.
+Test Case '-[OnCueCoreTests.ModelTests testSecondsFromBeats]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testSecondsPositionsParseAndFormat]' started.
+Test Case '-[OnCueCoreTests.ModelTests testSecondsPositionsParseAndFormat]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testSectionsAndEnds]' started.
+Test Case '-[OnCueCoreTests.ModelTests testSectionsAndEnds]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testStarterShow]' started.
+Test Case '-[OnCueCoreTests.ModelTests testStarterShow]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testTimecodeHelpers]' started.
+Test Case '-[OnCueCoreTests.ModelTests testTimecodeHelpers]' passed (0.000 seconds).
+Test Suite 'ModelTests' passed at 2026-11-12 09:07:35.738.
+	 Executed 9 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
+Test Suite 'PersistenceTests' started at 2026-11-12 09:07:35.738.
+Test Case '-[OnCueCoreTests.PersistenceTests testCorruptFileOnDiskIsNotModified]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testCorruptFileOnDiskIsNotModified]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testEmptyFileGivesClearError]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testEmptyFileGivesClearError]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testEmptyObjectIsAnEmptyShow]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testEmptyObjectIsAnEmptyShow]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testEncodedFileCarriesCurrentSchemaVersion]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testEncodedFileCarriesCurrentSchemaVersion]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testEveryFieldSurvivesRoundTrip]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testEveryFieldSurvivesRoundTrip]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testFutureSchemaFileIsLeftUntouched]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testFutureSchemaFileIsLeftUntouched]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testFutureSchemaIsRefusedWithClearError]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testFutureSchemaIsRefusedWithClearError]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testGoldenFileResavesAsCurrentSchemaAndReopens]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testGoldenFileResavesAsCurrentSchemaAndReopens]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testGoldenSchema0FileOpens]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testGoldenSchema0FileOpens]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testJSONArrayIsNotAShow]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testJSONArrayIsNotAShow]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testMissingFieldsGetDefaults]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testMissingFieldsGetDefaults]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testMissingFileGivesError]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testMissingFileGivesError]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testNonJSONGivesClearError]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testNonJSONGivesClearError]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testSaveCloseReopenOnDisk]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testSaveCloseReopenOnDisk]' passed (0.005 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testStarterShowRoundTrips]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testStarterShowRoundTrips]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testUnknownEnumValuesFallBackSafely]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testUnknownEnumValuesFallBackSafely]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testWrongValueTypeNamesTheField]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testWrongValueTypeNamesTheField]' passed (0.000 seconds).
+Test Suite 'PersistenceTests' passed at 2026-11-12 09:07:35.760.
+	 Executed 17 tests, with 0 failures (0 unexpected) in 0.021 (0.022) seconds
+Test Suite 'PreShowCheckTests' started at 2026-11-12 09:07:35.760.
+Test Case '-[OnCueCoreTests.PreShowCheckTests testATEMThatAnswersAndOneThatDoesnt]' started.
+Test Case '-[OnCueCoreTests.PreShowCheckTests testATEMThatAnswersAndOneThatDoesnt]' passed (1.502 seconds).
+Test Case '-[OnCueCoreTests.PreShowCheckTests testProblemsAreFound]' started.
+Test Case '-[OnCueCoreTests.PreShowCheckTests testProblemsAreFound]' passed (0.020 seconds).
+Test Case '-[OnCueCoreTests.PreShowCheckTests testPTZOverTCP]' started.
+Test Case '-[OnCueCoreTests.PreShowCheckTests testPTZOverTCP]' passed (2.011 seconds).
+Test Case '-[OnCueCoreTests.PreShowCheckTests testSampleShowOnTheSimulator]' started.
+Test Case '-[OnCueCoreTests.PreShowCheckTests testSampleShowOnTheSimulator]' passed (0.006 seconds).
+Test Suite 'PreShowCheckTests' passed at 2026-11-12 09:07:39.300.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 3.539 (3.539) seconds
+Test Suite 'RundownTimingTests' started at 2026-11-12 09:07:39.300.
+Test Case '-[OnCueCoreTests.RundownTimingTests testAppliesOnlyWhenTimed]' started.
+Test Case '-[OnCueCoreTests.RundownTimingTests testAppliesOnlyWhenTimed]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.RundownTimingTests testDeadlineAcrossMidnight]' started.
+Test Case '-[OnCueCoreTests.RundownTimingTests testDeadlineAcrossMidnight]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.RundownTimingTests testOverrunShowsNegativeRemaining]' started.
+Test Case '-[OnCueCoreTests.RundownTimingTests testOverrunShowsNegativeRemaining]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.RundownTimingTests testOverUnderAndHardOut]' started.
+Test Case '-[OnCueCoreTests.RundownTimingTests testOverUnderAndHardOut]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.RundownTimingTests testRunsFromTheLog]' started.
+Test Case '-[OnCueCoreTests.RundownTimingTests testRunsFromTheLog]' passed (0.000 seconds).
+Test Suite 'RundownTimingTests' passed at 2026-11-12 09:07:39.301.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'SetupEditingTests' started at 2026-11-12 09:07:39.301.
+Test Case '-[OnCueCoreTests.SetupEditingTests testOutputsSwitchersAndTheirTracks]' started.
+Test Case '-[OnCueCoreTests.SetupEditingTests testOutputsSwitchersAndTheirTracks]' passed (0.000 seconds).
+Test Suite 'SetupEditingTests' passed at 2026-11-12 09:07:39.302.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Suite 'ShowControlTests' started at 2026-11-12 09:07:39.302.
+Test Case '-[OnCueCoreTests.ShowControlTests testAnalysisMatchesScriptedShotsToCuts]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testAnalysisMatchesScriptedShotsToCuts]' passed (0.004 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testAuxOutputSetsTheAux]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testAuxOutputSetsTheAux]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testCameraDownMovesOnlyTheRequestedUpcomingShots]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testCameraDownMovesOnlyTheRequestedUpcomingShots]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testControlStopHaltsTheTransport]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testControlStopHaltsTheTransport]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testControlTrackLoadsTheNextItem]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testControlTrackLoadsTheNextItem]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testCuesFireOnceWhenThePlayheadPassesThem]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testCuesFireOnceWhenThePlayheadPassesThem]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testDisplayModeSendsOSCButNotFX]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testDisplayModeSendsOSCButNotFX]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testFreeModeHoldsTheScriptAndSendsNothing]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testFreeModeHoldsTheScriptAndSendsNothing]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testLoopRepeatsTheSectionUntilReleased]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testLoopRepeatsTheSectionUntilReleased]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testMirroringOutputFollowsTheMainCut]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testMirroringOutputFollowsTheMainCut]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testPanicDropsEveryOutputToDisplay]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testPanicDropsEveryOutputToDisplay]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testSeparateOutputWithItsOwnTrackAndMode]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testSeparateOutputWithItsOwnTrackAndMode]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testSubSwitcherRoutesThroughItsFeed]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testSubSwitcherRoutesThroughItsFeed]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testVarietyHintsPreferCamerasOffAirLongest]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testVarietyHintsPreferCamerasOffAirLongest]' passed (0.000 seconds).
+Test Suite 'ShowControlTests' passed at 2026-11-12 09:07:39.312.
+	 Executed 14 tests, with 0 failures (0 unexpected) in 0.010 (0.011) seconds
+Test Suite 'TimelineTests' started at 2026-11-12 09:07:39.313.
+Test Case '-[OnCueCoreTests.TimelineTests testCameraColourDefaultsByNumberAndCanBeChosen]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testCameraColourDefaultsByNumberAndCanBeChosen]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testCameraColourRoundTripsAndIsOptionalInOldFiles]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testCameraColourRoundTripsAndIsOptionalInOldFiles]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testLiveCursorSteppingAndJumping]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testLiveCursorSteppingAndJumping]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testMovingAShotOnTheTimelineReordersTheShotList]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testMovingAShotOnTheTimelineReordersTheShotList]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testOrderItemsGiveEachShotOneStep]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testOrderItemsGiveEachShotOneStep]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testPlannedLengthExtendsTheEnd]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testPlannedLengthExtendsTheEnd]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testRunLength]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testRunLength]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testSampleShowHasEveryTrackKind]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testSampleShowHasEveryTrackKind]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testShotSpansRunToTheNextShotAndTheSongEnd]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testShotSpansRunToTheNextShotAndTheSongEnd]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testSnap]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testSnap]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testTrackCuesAreCreatedOnTheRightTrack]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testTrackCuesAreCreatedOnTheRightTrack]' passed (0.001 seconds).
+Test Suite 'TimelineTests' passed at 2026-11-12 09:07:39.321.
+	 Executed 11 tests, with 0 failures (0 unexpected) in 0.008 (0.009) seconds
+Test Suite 'TourTests' started at 2026-11-12 09:07:39.322.
+Test Case '-[OnCueCoreTests.TourTests testLoadLogsFromFolder]' started.
+Test Case '-[OnCueCoreTests.TourTests testLoadLogsFromFolder]' passed (0.025 seconds).
+Test Case '-[OnCueCoreTests.TourTests testNightsCompared]' started.
+Test Case '-[OnCueCoreTests.TourTests testNightsCompared]' passed (0.004 seconds).
+Test Case '-[OnCueCoreTests.TourTests testOldLogsWithoutTourFieldsStillOpen]' started.
+Test Case '-[OnCueCoreTests.TourTests testOldLogsWithoutTourFieldsStillOpen]' passed (0.016 seconds).
+Test Suite 'TourTests' passed at 2026-11-12 09:07:39.366.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.044 (0.044) seconds
+Test Suite 'VersionTests' started at 2026-11-12 09:07:39.366.
+Test Case '-[OnCueCoreTests.VersionTests testBackupFolder]' started.
+Test Case '-[OnCueCoreTests.VersionTests testBackupFolder]' passed (0.013 seconds).
+Test Case '-[OnCueCoreTests.VersionTests testSaveRestoreAndLimits]' started.
+Test Case '-[OnCueCoreTests.VersionTests testSaveRestoreAndLimits]' passed (0.054 seconds).
+Test Suite 'VersionTests' passed at 2026-11-12 09:07:39.433.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.067 (0.068) seconds
+Test Suite 'OnCueCorePackageTests.xctest' passed at 2026-11-12 09:07:39.433.
+	 Executed 136 tests, with 0 failures (0 unexpected) in 7.937 (7.946) seconds
+Test Suite 'All tests' passed at 2026-11-12 09:07:39.434.
+	 Executed 136 tests, with 0 failures (0 unexpected) in 7.937 (7.948) seconds
+◇ Test run started.
+↳ Testing Library Version: 124.4
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests passed after 0.001 seconds.
