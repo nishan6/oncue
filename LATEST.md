@@ -1,16 +1,16 @@
-# CI results for 3b8d52e
+# CI results for 25d02a5
 
-- Commit: 3b8d52e76da9ae5303f929eae1e19d46c4611151
-- Run: https://github.com/nishan6/oncue/actions/runs/43181626803
-- Date (UTC): 2026-11-12T08:20:03Z
+- Commit: 25d02a5bd3a91f8cddf0c4d4dfedb60550e483c5
+- Run: https://github.com/nishan6/oncue/actions/runs/43181949770
+- Date (UTC): 2026-11-12T08:21:27Z
 
 | Step | Result |
 | --- | --- |
-| Generate project | success (project changed: false) |
+| Generate project | success (project changed: true) |
 | Package tests | failure |
-| App build | success |
-| Launch smoke test | success |
-| Screenshots | success |
+| App build | failure |
+| Launch smoke test | skipped |
+| Screenshots | skipped |
 
 ## Toolchain
 ```
@@ -26,32 +26,37 @@ Version: 2.46.0
 ```
 ## Test summary
 ```
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PreShowCheckTests.swift:43:9: error: overlapping accesses to 'show', but modification requires exclusive access; consider copying to a local variable
-    |         `- error: overlapping accesses to 'show', but modification requires exclusive access; consider copying to a local variable
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PreShowCheckTests.swift:43:9: error: overlapping accesses to 'show', but modification requires exclusive access; consider copying to a local variable
-    |         `- error: overlapping accesses to 'show', but modification requires exclusive access; consider copying to a local variable
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PreShowCheckTests.swift:43:9: error: overlapping accesses to 'show', but modification requires exclusive access; consider copying to a local variable
-    |         `- error: overlapping accesses to 'show', but modification requires exclusive access; consider copying to a local variable
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PreShowCheckTests.swift:43:9: error: overlapping accesses to 'show', but modification requires exclusive access; consider copying to a local variable
-    |         `- error: overlapping accesses to 'show', but modification requires exclusive access; consider copying to a local variable
+error: emit-module command failed with exit code 1 (use -v to see invocation)
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+    |               `- error: type 'Show' does not conform to protocol 'Hashable'
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+    |               `- error: type 'Show' does not conform to protocol 'Hashable'
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+    |               `- error: type 'Show' does not conform to protocol 'Hashable'
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+    |               `- error: type 'Show' does not conform to protocol 'Hashable'
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+    |               `- error: type 'Show' does not conform to protocol 'Hashable'
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+    |               `- error: type 'Show' does not conform to protocol 'Hashable'
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+    |               `- error: type 'Show' does not conform to protocol 'Hashable'
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+    |               `- error: type 'Show' does not conform to protocol 'Hashable'
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+    |               `- error: type 'Show' does not conform to protocol 'Hashable'
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+    |               `- error: type 'Show' does not conform to protocol 'Hashable'
 error: fatalError
 ```
 ## Build result
 ```
-** BUILD SUCCEEDED **
+** BUILD FAILED **
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
 ```
-## Warnings (       1)
+## Warnings (0)
 ```
-2026-11-12 08:19:36.921 appintentsmetadataprocessor[4415:16525] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
 ```
 ## Smoke test
 ```
-[smoke] app launched (pid 4515)
-[smoke] machine profile created at /Users/runner/work/_temp/smoke/profile/MachineProfile.json
-[smoke] new show opened (type com.nishanpani.oncue.show, windows: 1)
-[smoke] saved to /Users/runner/work/_temp/smoke/smoke.oncue
-[smoke] window closed
-[smoke] saved file verified: format 1, 1 item(s), 4 camera(s)
-[smoke] reopened smoke.oncue (windows: 1)
-[smoke] PASS: create, save, close and reopen all succeeded
 ```

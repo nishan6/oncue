@@ -1,0 +1,177 @@
+Building for debugging...
+[0/8] /Users/runner/work/oncue/oncue/Packages/OnCueCore/.build/arm64-apple-macosx/debug/OnCueCorePackageTests.derived/runner.swift
+[0/8] Copying Fixtures
+[0/8] Write sources
+[5/8] Write swift-version--79AA4F9932D1E87A.txt
+error: emit-module command failed with exit code 1 (use -v to see invocation)
+[7/29] Emitting module OnCueCore
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+466 | }
+467 | 
+468 | public struct Show: Codable, Hashable, Identifiable {
+    |               `- error: type 'Show' does not conform to protocol 'Hashable'
+469 |     /// Version of the show file format this build writes. See ShowCoding / ShowMigration.
+470 |     public static let currentSchemaVersion = 1
+    :
+483 |     public var midiBindings: [MIDIBinding] = []
+484 |     public var settings = ShowSettings()
+485 |     public var plot = CameraPlot()
+    |                `- note: stored property type 'CameraPlot' does not conform to protocol 'Hashable', preventing synthesized conformance of 'Show' to 'Hashable'
+486 | 
+487 |     /// Counts shown by the app shell without exposing the internal model types.
+[8/38] Compiling OnCueCore SwitchLog.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+466 | }
+467 | 
+468 | public struct Show: Codable, Hashable, Identifiable {
+    |               `- error: type 'Show' does not conform to protocol 'Hashable'
+469 |     /// Version of the show file format this build writes. See ShowCoding / ShowMigration.
+470 |     public static let currentSchemaVersion = 1
+    :
+483 |     public var midiBindings: [MIDIBinding] = []
+484 |     public var settings = ShowSettings()
+485 |     public var plot = CameraPlot()
+    |                `- note: stored property type 'CameraPlot' does not conform to protocol 'Hashable', preventing synthesized conformance of 'Show' to 'Hashable'
+486 | 
+487 |     /// Counts shown by the app shell without exposing the internal model types.
+[9/38] Compiling OnCueCore Timing.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+466 | }
+467 | 
+468 | public struct Show: Codable, Hashable, Identifiable {
+    |               `- error: type 'Show' does not conform to protocol 'Hashable'
+469 |     /// Version of the show file format this build writes. See ShowCoding / ShowMigration.
+470 |     public static let currentSchemaVersion = 1
+    :
+483 |     public var midiBindings: [MIDIBinding] = []
+484 |     public var settings = ShowSettings()
+485 |     public var plot = CameraPlot()
+    |                `- note: stored property type 'CameraPlot' does not conform to protocol 'Hashable', preventing synthesized conformance of 'Show' to 'Hashable'
+486 | 
+487 |     /// Counts shown by the app shell without exposing the internal model types.
+[10/38] Compiling OnCueCore PDFExports.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+466 | }
+467 | 
+468 | public struct Show: Codable, Hashable, Identifiable {
+    |               `- error: type 'Show' does not conform to protocol 'Hashable'
+469 |     /// Version of the show file format this build writes. See ShowCoding / ShowMigration.
+470 |     public static let currentSchemaVersion = 1
+    :
+483 |     public var midiBindings: [MIDIBinding] = []
+484 |     public var settings = ShowSettings()
+485 |     public var plot = CameraPlot()
+    |                `- note: stored property type 'CameraPlot' does not conform to protocol 'Hashable', preventing synthesized conformance of 'Show' to 'Hashable'
+486 | 
+487 |     /// Counts shown by the app shell without exposing the internal model types.
+[11/38] Compiling OnCueCore TextExports.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+466 | }
+467 | 
+468 | public struct Show: Codable, Hashable, Identifiable {
+    |               `- error: type 'Show' does not conform to protocol 'Hashable'
+469 |     /// Version of the show file format this build writes. See ShowCoding / ShowMigration.
+470 |     public static let currentSchemaVersion = 1
+    :
+483 |     public var midiBindings: [MIDIBinding] = []
+484 |     public var settings = ShowSettings()
+485 |     public var plot = CameraPlot()
+    |                `- note: stored property type 'CameraPlot' does not conform to protocol 'Hashable', preventing synthesized conformance of 'Show' to 'Hashable'
+486 | 
+487 |     /// Counts shown by the app shell without exposing the internal model types.
+[12/38] Compiling OnCueCore Model.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+466 | }
+467 | 
+468 | public struct Show: Codable, Hashable, Identifiable {
+    |               `- error: type 'Show' does not conform to protocol 'Hashable'
+469 |     /// Version of the show file format this build writes. See ShowCoding / ShowMigration.
+470 |     public static let currentSchemaVersion = 1
+    :
+483 |     public var midiBindings: [MIDIBinding] = []
+484 |     public var settings = ShowSettings()
+485 |     public var plot = CameraPlot()
+    |                `- note: stored property type 'CameraPlot' does not conform to protocol 'Hashable', preventing synthesized conformance of 'Show' to 'Hashable'
+486 | 
+487 |     /// Counts shown by the app shell without exposing the internal model types.
+[13/38] Compiling OnCueCore MachineProfile.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+466 | }
+467 | 
+468 | public struct Show: Codable, Hashable, Identifiable {
+    |               `- error: type 'Show' does not conform to protocol 'Hashable'
+469 |     /// Version of the show file format this build writes. See ShowCoding / ShowMigration.
+470 |     public static let currentSchemaVersion = 1
+    :
+483 |     public var midiBindings: [MIDIBinding] = []
+484 |     public var settings = ShowSettings()
+485 |     public var plot = CameraPlot()
+    |                `- note: stored property type 'CameraPlot' does not conform to protocol 'Hashable', preventing synthesized conformance of 'Show' to 'Hashable'
+486 | 
+487 |     /// Counts shown by the app shell without exposing the internal model types.
+[14/38] Compiling OnCueCore ShowCoding.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+466 | }
+467 | 
+468 | public struct Show: Codable, Hashable, Identifiable {
+    |               `- error: type 'Show' does not conform to protocol 'Hashable'
+469 |     /// Version of the show file format this build writes. See ShowCoding / ShowMigration.
+470 |     public static let currentSchemaVersion = 1
+    :
+483 |     public var midiBindings: [MIDIBinding] = []
+484 |     public var settings = ShowSettings()
+485 |     public var plot = CameraPlot()
+    |                `- note: stored property type 'CameraPlot' does not conform to protocol 'Hashable', preventing synthesized conformance of 'Show' to 'Hashable'
+486 | 
+487 |     /// Counts shown by the app shell without exposing the internal model types.
+[15/38] Compiling OnCueCore TolerantDecoding.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+466 | }
+467 | 
+468 | public struct Show: Codable, Hashable, Identifiable {
+    |               `- error: type 'Show' does not conform to protocol 'Hashable'
+469 |     /// Version of the show file format this build writes. See ShowCoding / ShowMigration.
+470 |     public static let currentSchemaVersion = 1
+    :
+483 |     public var midiBindings: [MIDIBinding] = []
+484 |     public var settings = ShowSettings()
+485 |     public var plot = CameraPlot()
+    |                `- note: stored property type 'CameraPlot' does not conform to protocol 'Hashable', preventing synthesized conformance of 'Show' to 'Hashable'
+486 | 
+487 |     /// Counts shown by the app shell without exposing the internal model types.
+[16/38] Compiling OnCueCore CameraPlot.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+466 | }
+467 | 
+468 | public struct Show: Codable, Hashable, Identifiable {
+    |               `- error: type 'Show' does not conform to protocol 'Hashable'
+469 |     /// Version of the show file format this build writes. See ShowCoding / ShowMigration.
+470 |     public static let currentSchemaVersion = 1
+    :
+483 |     public var midiBindings: [MIDIBinding] = []
+484 |     public var settings = ShowSettings()
+485 |     public var plot = CameraPlot()
+    |                `- note: stored property type 'CameraPlot' does not conform to protocol 'Hashable', preventing synthesized conformance of 'Show' to 'Hashable'
+486 | 
+487 |     /// Counts shown by the app shell without exposing the internal model types.
+[17/38] Compiling OnCueCore CrewPage.swift
+[18/38] Compiling OnCueCore CrewServer.swift
+[19/38] Compiling OnCueCore CrewSnapshot.swift
+[20/38] Compiling OnCueCore ATEMSwitcher.swift
+[21/38] Compiling OnCueCore CompanionClient.swift
+[22/38] Compiling OnCueCore MIDIManager.swift
+[23/38] Compiling OnCueCore OSC.swift
+[24/38] Compiling OnCueCore PTZService.swift
+[25/38] Compiling OnCueCore SwitcherDevice.swift
+[26/38] Compiling OnCueCore LiveCursor.swift
+[27/38] Compiling OnCueCore SampleShow.swift
+[28/38] Compiling OnCueCore ShowEditing.swift
+[29/38] Compiling OnCueCore SwitcherEditing.swift
+[30/38] Compiling OnCueCore TimelineEditing.swift
+[31/38] Compiling OnCueCore Controls.swift
+[32/38] Compiling OnCueCore EngineController.swift
+[33/38] Compiling OnCueCore LTC.swift
+[34/38] Compiling OnCueCore PreShowCheck.swift
+[35/38] Compiling OnCueCore RundownTiming.swift
+[36/38] Compiling OnCueCore ShowEngine.swift
+error: fatalError
