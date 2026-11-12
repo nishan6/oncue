@@ -25,7 +25,7 @@ enum EditorMode: String, Codable, CaseIterable, Identifiable {
 /// Timeline tracks: sections, the main output's shots, each separate output's shots, and the
 /// lyrics, notes, FX, control, OSC and PTZ tracks. Each can be hidden (cues are kept) or locked.
 enum TimelineLane: Codable, Identifiable, Hashable {
-    case sections, shots, output(UUID), lyrics, notes, fx, control, osc, ptz
+    case sections, media, shots, output(UUID), lyrics, notes, fx, control, osc, ptz
 
     var id: String {
         if case .output(let id) = self { return "output-\(id.uuidString)" }
@@ -43,12 +43,13 @@ enum TimelineLane: Codable, Identifiable, Hashable {
         case .control: return "Control"
         case .osc: return "OSC"
         case .ptz: return "PTZ"
+        case .media: return "Media"
         }
     }
 
     var trackKind: TrackKind? {
         switch self {
-        case .sections: return nil
+        case .sections, .media: return nil
         case .shots, .output: return .shots
         case .lyrics: return .lyrics
         case .notes: return .notes
@@ -114,6 +115,8 @@ final class WorkspaceModel: ObservableObject {
     @Published var engine: EngineController? { didSet { crew.follow(engine) } }
     /// The crew page for this window.
     let crew = CrewController()
+    /// Song audio or PGM video under the timeline.
+    let media = MediaPlayer()
     /// Operator monitor windows (Live Mode only).
     let monitors = MonitorWindows()
     var isLive: Bool { engine != nil }

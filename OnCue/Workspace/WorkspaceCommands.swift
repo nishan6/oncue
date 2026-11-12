@@ -87,6 +87,11 @@ struct WorkspaceCommands: Commands {
                 .keyboardShortcut("-", modifiers: .command)
             Button("Actual Size") { workspace?.zoom = 1 }
                 .keyboardShortcut("0", modifiers: .command)
+            Divider()
+            Button("Play or Pause Media") {
+                if let w = workspace, w.engine == nil, let item = w.show.item(w.selectedItemID), item.media != nil { w.media.toggle(item) }
+            }
+            .keyboardShortcut(.space, modifiers: .option)
             }
             .disabled(workspace == nil)
         }

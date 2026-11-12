@@ -54,11 +54,14 @@ enum TimelineLayout {
     static let tail: CGFloat = 260
 
     static let outputLane: CGFloat = 60
+    static let mediaLane: CGFloat = 56
 
     /// The tracks shown for an item: separate outputs with their own track, then the script tracks.
     /// OSC and PTZ appear once the show has targets or cameras for them (or cues on them).
     static func lanes(for item: RundownItem, show: Show) -> [TimelineLane] {
-        var all: [TimelineLane] = [.sections, .shots]
+        var all: [TimelineLane] = [.sections]
+        if item.media != nil { all.append(.media) }
+        all.append(.shots)
         for output in show.outputs.dropFirst() where !output.mirrorMain {
             all.append(.output(output.id))
         }
@@ -74,6 +77,7 @@ enum TimelineLayout {
         if lane == .shots { return shotHeight }
         if hidden { return hiddenLane }
         if case .output = lane { return outputLane }
+        if lane == .media { return mediaLane }
         return lane == .sections ? sections : cueLane
     }
 
@@ -97,6 +101,7 @@ extension TimelineLane {
         case .control: return "forward.end.alt"
         case .osc: return "antenna.radiowaves.left.and.right"
         case .ptz: return "camera.metering.center.weighted"
+        case .media: return "waveform"
         }
     }
 
@@ -110,6 +115,7 @@ extension TimelineLane {
         case .control: return Color(hex: "#C7A3F0")
         case .osc: return Color(hex: "#F0A3C4")
         case .ptz: return Color(hex: "#A3E0B5")
+        case .media: return Gallery.next
         }
     }
 }
@@ -307,6 +313,7 @@ struct TimelineToolbar: View {
 
     var body: some View {
         HStack(spacing: Space.s) {
+            MediaControls(item: item, model: model, player: model.media)
             Label(snapText, systemImage: "rectangle.split.3x1")
                 .labelStyle(.titleAndIcon)
                 .font(.ocMeta)
@@ -550,6 +557,7 @@ struct TimelineCanvas: View {
                 }
             }
             SelectionMarker(position: selectedPosition(spans), metrics: metrics, height: totalHeight)
+            MediaPlayhead(item: item, player: model.media, metrics: metrics, height: totalHeight)
         }
         .frame(width: width, alignment: .topLeading)
         .background(Gallery.hairline)
@@ -574,6 +582,8 @@ struct TimelineCanvas: View {
                 ShotLane(show: show, item: item, spans: show.shotSpans(forItem: item.id, outputID: outputID), metrics: metrics,
                          width: width, height: TimelineLayout.outputLane, locked: locked, model: model, focus: focus,
                          outputID: outputID)
+            case .media:
+                MediaLane(item: item, player: model.media, metrics: metrics, width: width)
             case .lyrics, .notes, .fx, .control, .osc, .ptz:
                 CueLane(kind: lane.trackKind ?? .notes, lane: lane, show: show, item: item, metrics: metrics, width: width,
                         locked: locked, model: model, focus: focus)
