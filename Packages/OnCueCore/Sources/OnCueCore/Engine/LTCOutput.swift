@@ -96,7 +96,12 @@ public final class LTCOutput {
         switch mode {
         case .timeOfDay, .off:
             let c = Calendar.current.dateComponents([.hour, .minute, .second, .nanosecond], from: Date())
-            return Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+            let hours: Int = c.hour ?? 0
+            let minutes: Int = c.minute ?? 0
+            let secs: Int = c.second ?? 0
+            let whole: Int = hours * 3600 + minutes * 60 + secs
+            let fraction: Double = Double(c.nanosecond ?? 0) / 1e9
+            return Double(whole) + fraction
         case .song:
             lock.lock()
             let a = anchor
