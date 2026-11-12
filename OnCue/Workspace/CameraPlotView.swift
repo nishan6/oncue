@@ -86,7 +86,7 @@ struct CameraPlotView: View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 2) {
-                    ForEach(show.sortedCameras) { cam in
+                    ForEach(show.sortedCameras.filter { $0.kind == .camera }) { cam in
                         let marker = plot.marker(cam.id)
                         Button { selected = cam.id } label: {
                             HStack(spacing: Space.s) {

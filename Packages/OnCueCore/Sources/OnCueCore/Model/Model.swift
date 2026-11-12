@@ -262,6 +262,12 @@ public struct Camera: Identifiable, Codable, Hashable {
     public var extraInputs: [CameraInput] = []
     /// Colour of this camera's shots, as "#RRGGBB". Empty means the default colour for its number.
     public var color: String = ""
+    /// Cameras, and the other sources a shot can take: switcher internals (black, bars, colour
+    /// generators, media players, SuperSource, M/E outputs), NDI sources and playback or
+    /// graphics server channels. All arrive on a switcher input.
+    public var kind: SourceKind = .camera
+    /// NDI source name ("STUDIO-PC (Slides)"), for NDI sources.
+    public var ndiName: String = ""
 
     /// The colour actually used: the chosen one, or the palette colour for the camera number.
     public var resolvedColor: String {
@@ -739,4 +745,46 @@ public enum TimeFormat {
         if d.timeIntervalSinceNow < -12 * 3600 { d = d.addingTimeInterval(24 * 3600) }
         return d
     }
+}
+
+public enum SourceKind: String, Codable, CaseIterable, Identifiable {
+    case camera, internalSource, ndi, playback, graphics
+    public var id: String { rawValue }
+    public var label: String {
+        switch self {
+        case .camera: return "Camera"
+        case .internalSource: return "Switcher internal"
+        case .ndi: return "NDI source"
+        case .playback: return "Playback server"
+        case .graphics: return "Graphics server"
+        }
+    }
+    public var plural: String {
+        switch self {
+        case .camera: return "Cameras"
+        case .internalSource: return "Switcher internals"
+        case .ndi: return "NDI sources"
+        case .playback: return "Playback servers"
+        case .graphics: return "Graphics servers"
+        }
+    }
+}
+
+/// ATEM internal sources and their source numbers (from Blackmagic's ATEM protocol): what a
+/// shot sends to cut to black, bars, a colour generator, a media player, SuperSource or an M/E.
+public struct InternalSourcePreset: Identifiable, Hashable {
+    public var id: Int { input }
+    public let name: String
+    public let input: Int
+
+    public static let atem: [InternalSourcePreset] = [
+        .init(name: "Black", input: 0), .init(name: "Colour bars", input: 1000),
+        .init(name: "Colour 1", input: 2001), .init(name: "Colour 2", input: 2002),
+        .init(name: "Media player 1", input: 3010), .init(name: "Media player 1 key", input: 3011),
+        .init(name: "Media player 2", input: 3020), .init(name: "Media player 2 key", input: 3021),
+        .init(name: "SuperSource", input: 6000),
+        .init(name: "Clean feed 1", input: 7001), .init(name: "Clean feed 2", input: 7002),
+        .init(name: "M/E 1 program", input: 10010), .init(name: "M/E 1 preview", input: 10011),
+        .init(name: "M/E 2 program", input: 10020), .init(name: "M/E 2 preview", input: 10021),
+    ]
 }

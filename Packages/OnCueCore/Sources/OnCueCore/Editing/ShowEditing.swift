@@ -269,6 +269,40 @@ extension Show {
         return cam.id
     }
 
+    /// A source other than a camera. It is numbered from 100 up so camera numbers (and the
+    /// number keys) stay for cameras; renumber it like a camera if you prefer.
+    @discardableResult
+    public mutating func addSource(kind: SourceKind, name: String, input: Int, ndiName: String = "") -> UUID {
+        if kind == .camera { return addCamera() }
+        let used = Set(cameras.map(\.number))
+        var n = 100
+        while used.contains(n) { n += 1 }
+        var source = Camera(number: n, switcherID: mainOutput?.switcherID ?? switchers.first?.id, input: input)
+        source.kind = kind
+        source.name = name
+        source.ndiName = ndiName
+        cameras.append(source)
+        return source.id
+    }
+
+    /// Keys and DSKs the script uses, and how many cues use each ("DSK 1", "Key 2").
+    public func keyUsage() -> [(name: String, cues: Int)] {
+        var counts: [String: Int] = [:]
+        for item in items {
+            for track in item.tracks where track.kind == .fx {
+                for cue in track.cues {
+                    guard let a = cue.fxAction else { continue }
+                    switch a {
+                    case .dskOn, .dskOff, .dskAuto: counts["DSK \(cue.fxIndex + 1)", default: 0] += 1
+                    case .keyOn, .keyOff: counts["Upstream key \(cue.fxIndex + 1)", default: 0] += 1
+                    default: break
+                    }
+                }
+            }
+        }
+        return counts.keys.sorted().map { ($0, counts[$0]!) }
+    }
+
     public mutating func updateCamera(_ id: UUID, _ change: (inout Camera) -> Void) {
         guard let i = cameras.firstIndex(where: { $0.id == id }) else { return }
         let number = cameras[i].number
@@ -382,7 +416,8 @@ extension Show {
     /// Cameras not used by any shot in this song or segment.
     public func unusedCameras(inItem id: UUID) -> [Camera] {
         let used = Set(shotRows(forItem: id).compactMap(\.cue.cameraID))
-        return sortedCameras.filter { !used.contains($0.id) }
+        // Black, bars and other sources are not "unused cameras".
+        return sortedCameras.filter { $0.kind == .camera && !used.contains($0.id) }
     }
 
     /// Where a new shot goes: after a given shot, at the end of a section, or at the end.

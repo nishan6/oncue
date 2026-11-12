@@ -213,7 +213,7 @@ extension Show {
         var last: [UUID: Date] = [:]
         for cut in log.cuts { if let cam = cut.cameraID { last[cam] = cut.date } }
         return sortedCameras
-            .filter { $0.id != onAir && $0.input > 0 }
+            .filter { $0.id != onAir && $0.input > 0 && $0.kind == .camera }
             .sorted { a, b in
                 let la = last[a.id] ?? .distantPast, lb = last[b.id] ?? .distantPast
                 return la == lb ? a.number < b.number : la < lb

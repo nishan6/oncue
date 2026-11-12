@@ -53,6 +53,8 @@ extension Camera {
         ptzID = try c.optional("ptzID")
         color = try c.value("color", "")
         extraInputs = try c.value("extraInputs", [])
+        kind = try c.enumValue("kind", .camera)
+        ndiName = try c.value("ndiName", "")
     }
 }
 

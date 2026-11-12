@@ -528,39 +528,63 @@ struct MediaPanel: View {
 
 // MARK: - Sources panel
 
-/// The cameras as a table: number, colour, name, operator and switcher input.
+/// Cameras and every other source a shot can take, grouped by kind, plus the keys and DSKs the
+/// script uses.
 struct SourcesPanel: View {
     let show: Show
     @ObservedObject var model: WorkspaceModel
+    @State private var adding: SourceKind?
+    @State private var newName = ""
+    @State private var newInput = ""
+    @State private var newNDI = ""
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             DeckPanelTitle(title: "Sources") {
-                IconButton(symbol: "plus", help: "New camera") { model.addCamera() }
+                Menu {
+                    Button("New Camera") { model.addCamera() }
+                    Menu("Switcher Internal") {
+                        ForEach(InternalSourcePreset.atem) { preset in
+                            Button("\(preset.name)  (\(preset.input))") {
+                                model.edit("New Source") { $0.addSource(kind: .internalSource, name: preset.name, input: preset.input) }
+                            }
+                            .disabled(show.cameras.contains { $0.kind == .internalSource && $0.input == preset.input })
+                        }
+                        Divider()
+                        Button("Other…") { begin(.internalSource) }
+                    }
+                    Button("NDI Source…") { begin(.ndi) }
+                    Button("Playback Server Channel…") { begin(.playback) }
+                    Button("Graphics Server Channel…") { begin(.graphics) }
+                } label: { Image(systemName: "plus") }
+                .menuStyle(.borderlessButton)
+                .fixedSize()
+                .help("Add a camera or another source")
                 Button("Manage…") { model.cameraManagerOpen = true }
                     .buttonStyle(QuietButtonStyle())
                     .help("Names, operators, colours and inputs (⌥⌘C)")
             }
-            HStack(spacing: Space.s) {
-                Text("#").frame(width: 30, alignment: .leading)
-                Text("Name").frame(maxWidth: .infinity, alignment: .leading)
-                Text("Operator").frame(maxWidth: .infinity, alignment: .leading)
-                Text("Input").frame(width: 40, alignment: .trailing)
-            }
-            .font(.ocMeta).foregroundStyle(Deck.faint)
-            .padding(.horizontal, Space.l)
-            .padding(.bottom, Space.xs)
             ScrollView {
-                VStack(spacing: 1) {
-                    ForEach(show.sortedCameras) { cam in
-                        HStack(spacing: Space.s) {
-                            CameraChip(camera: cam, size: 20).frame(width: 30, alignment: .leading)
-                            Text(cam.displayName).font(.ocBody).foregroundStyle(Deck.ink).lineLimit(1)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Text(cam.operatorName.isEmpty ? "–" : cam.operatorName).font(.ocBody).foregroundStyle(Deck.dim).lineLimit(1)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Text(cam.input > 0 ? "\(cam.input)" : "–").font(.readout(12)).foregroundStyle(Deck.dim)
-                                .frame(width: 40, alignment: .trailing)
+                VStack(alignment: .leading, spacing: 1) {
+                    ForEach(SourceKind.allCases) { kind in
+                        let sources = show.sortedCameras.filter { $0.kind == kind }
+                        if !sources.isEmpty || kind == .camera {
+                            header(kind.plural, count: sources.count)
+                            ForEach(sources) { row($0) }
+                        }
+                    }
+                    let keys = show.keyUsage()
+                    header("Keys and DSKs", count: keys.count)
+                    if keys.isEmpty {
+                        Text("No key or DSK cues yet. Add them on the FX track.").font(.ocMeta).foregroundStyle(Deck.faint)
+                            .padding(.horizontal, Space.l).padding(.vertical, Space.s)
+                    }
+                    ForEach(keys, id: \.name) { key in
+                        HStack {
+                            Image(systemName: "square.on.square").foregroundStyle(Deck.dim).frame(width: 30, alignment: .leading)
+                            Text(key.name).font(.ocBody).foregroundStyle(Deck.ink)
+                            Spacer()
+                            Text("\(key.cues) \(key.cues == 1 ? "cue" : "cues")").font(.ocMeta).foregroundStyle(Deck.faint)
                         }
                         .padding(.horizontal, Space.l)
                         .frame(height: 30)
@@ -568,6 +592,60 @@ struct SourcesPanel: View {
                     }
                 }
             }
+        }
+        .alert("New \(adding?.label.lowercased() ?? "source")", isPresented: Binding(get: { adding != nil }, set: { if !$0 { adding = nil } })) {
+            TextField("Name", text: $newName)
+            if adding == .ndi { TextField("NDI name, e.g. STUDIO-PC (Slides)", text: $newNDI) }
+            TextField("Switcher input it arrives on", text: $newInput)
+            Button("Add") { add() }
+            Button("Cancel", role: .cancel) { adding = nil }
+        } message: {
+            Text(adding == .ndi ? "NDI reaches the switcher through an input (an NDI decoder, vMix or OBS): enter that input number." : "The switcher input number this source arrives on.")
+        }
+    }
+
+    private func begin(_ kind: SourceKind) {
+        newName = ""
+        newInput = ""
+        newNDI = ""
+        adding = kind
+    }
+
+    private func add() {
+        guard let kind = adding else { return }
+        adding = nil
+        let name = newName.trimmingCharacters(in: .whitespaces)
+        let input = Int(newInput.trimmingCharacters(in: .whitespaces)) ?? 0
+        let ndi = newNDI.trimmingCharacters(in: .whitespaces)
+        model.edit("New Source") { $0.addSource(kind: kind, name: name.isEmpty ? (ndi.isEmpty ? kind.label : ndi) : name, input: input, ndiName: ndi) }
+    }
+
+    private func header(_ title: String, count: Int) -> some View {
+        HStack {
+            Text(title.uppercased()).font(.ocTag).tracking(0.6).foregroundStyle(Deck.faint)
+            Spacer()
+            Text("\(count)").font(.ocMeta).foregroundStyle(Deck.faint)
+        }
+        .padding(.horizontal, Space.l).padding(.top, Space.m).padding(.bottom, Space.xs)
+    }
+
+    private func row(_ cam: Camera) -> some View {
+        HStack(spacing: Space.s) {
+            CameraChip(camera: cam, size: 20).frame(width: 30, alignment: .leading)
+            VStack(alignment: .leading, spacing: 0) {
+                Text(cam.displayName).font(.ocBody).foregroundStyle(Deck.ink).lineLimit(1)
+                let sub = cam.kind == .camera ? cam.operatorName : cam.ndiName
+                if !sub.isEmpty { Text(sub).font(.ocMeta).foregroundStyle(Deck.faint).lineLimit(1) }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            Text(cam.kind == .camera || cam.input > 0 || cam.kind == .internalSource ? "in \(cam.input)" : "no input")
+                .font(.readout(11)).foregroundStyle(cam.input > 0 || cam.kind == .internalSource ? Deck.dim : Deck.warn)
+        }
+        .padding(.horizontal, Space.l)
+        .frame(height: 34)
+        .background(Deck.row)
+        .contextMenu {
+            Button("Delete…") { model.cameraManagerOpen = true }
         }
     }
 }
