@@ -1,12 +1,12 @@
-# CI results for 17a1eed
+# CI results for 3b8d52e
 
-- Commit: 17a1eedf246ad266ec15da07e5e389e787dc1ae8
-- Run: https://github.com/nishan6/oncue/actions/runs/43163323559
-- Date (UTC): 2026-11-12T05:47:33Z
+- Commit: 3b8d52e76da9ae5303f929eae1e19d46c4611151
+- Run: https://github.com/nishan6/oncue/actions/runs/43181626803
+- Date (UTC): 2026-11-12T08:20:03Z
 
 | Step | Result |
 | --- | --- |
-| Generate project | success (project changed: true) |
+| Generate project | success (project changed: false) |
 | Package tests | failure |
 | App build | success |
 | Launch smoke test | success |
@@ -42,11 +42,11 @@ error: fatalError
 ```
 ## Warnings (       1)
 ```
-2026-11-12 05:47:08.880 appintentsmetadataprocessor[6244:22437] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+2026-11-12 08:19:36.921 appintentsmetadataprocessor[4415:16525] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
 ```
 ## Smoke test
 ```
-[smoke] app launched (pid 6261)
+[smoke] app launched (pid 4515)
 [smoke] machine profile created at /Users/runner/work/_temp/smoke/profile/MachineProfile.json
 [smoke] new show opened (type com.nishanpani.oncue.show, windows: 1)
 [smoke] saved to /Users/runner/work/_temp/smoke/smoke.oncue
