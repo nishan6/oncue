@@ -104,7 +104,6 @@ public enum TempoDetector {
             let d = a - 2 * b + c
             if d < 0 { period += 0.5 * (a - c) / d }
         }
-        let bpm = 60 * frameRate / period
 
         // Phase: the offset whose beat train collects the most onset.
         var bestPhase = 0
@@ -119,11 +118,68 @@ public enum TempoDetector {
             }
             if s > phaseValue { phaseValue = s; bestPhase = phase }
         }
+
+        // Refine: find the actual onset peak near each predicted beat and fit a straight line
+        // through them. The autocorrelation period is only close, and a small period error
+        // adds up over a song and drags the first beat off the grid; the fit removes that.
+        var phase = Double(bestPhase)
+        let fit = refineBeatGrid(onset: onset, phase: phase, period: period)
+        if let fit { period = fit.period; phase = fit.phase }
+        let bpm = 60 * frameRate / period
+
         // Frame k's energy covers samples k·hop ..< k·hop + window, so an attack at time T shows
         // as the rise into the frame whose window first reaches past it.
-        let firstBeat = max(0, (Double(bestPhase * hop) + Double(window - hop)) / sampleRate)
+        let firstBeat = max(0, (phase * Double(hop) + Double(window - hop)) / sampleRate)
 
         let confidence = zero > 0 ? min(1, max(0, scores[best] / zero)) : 0
         return TempoEstimate(bpm: (bpm * 100).rounded() / 100, firstBeat: firstBeat, confidence: confidence)
+    }
+
+    /// Least-squares line through the onset peaks nearest each predicted beat (in onset frames).
+    /// Returns nil when too few beats stand out to trust a fit.
+    static func refineBeatGrid(onset: [Double], phase: Double, period: Double) -> (phase: Double, period: Double)? {
+        guard period > 1, let peak = onset.max(), peak > 0 else { return nil }
+        let threshold = 0.3 * peak
+        var beats: [Double] = []
+        var positions: [Double] = []
+        var n = 0
+        while true {
+            let centre = phase + Double(n) * period
+            if centre >= Double(onset.count) { break }
+            let lo = max(0, Int((centre - period / 4).rounded()))
+            let hi = min(onset.count - 1, Int((centre + period / 4).rounded()))
+            if hi > lo {
+                var k = lo
+                for j in lo...hi where onset[j] > onset[k] { k = j }
+                if onset[k] >= threshold {
+                    var p = Double(k)
+                    if k > 0, k + 1 < onset.count {
+                        let a = onset[k - 1], b = onset[k], c = onset[k + 1]
+                        let d = a - 2 * b + c
+                        if d < 0 { p += 0.5 * (a - c) / d }
+                    }
+                    beats.append(Double(n))
+                    positions.append(p)
+                }
+            }
+            n += 1
+        }
+        guard beats.count >= 4 else { return nil }
+        let count = Double(beats.count)
+        let meanN = beats.reduce(0, +) / count
+        let meanP = positions.reduce(0, +) / count
+        var sxy: Double = 0
+        var sxx: Double = 0
+        for (x, y) in zip(beats, positions) {
+            sxy += (x - meanN) * (y - meanP)
+            sxx += (x - meanN) * (x - meanN)
+        }
+        guard sxx > 0 else { return nil }
+        let slope = sxy / sxx
+        guard slope > 1 else { return nil }
+        var start = meanP - slope * meanN
+        while start - slope >= 0 { start -= slope }
+        while start < 0 { start += slope }
+        return (start, slope)
     }
 }

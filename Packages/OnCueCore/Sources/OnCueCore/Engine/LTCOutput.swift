@@ -55,7 +55,9 @@ public struct LTCGenerator {
     /// The LTC frame for a time (seconds since midnight), wrapping at 24 hours.
     public static func frame(at seconds: Double, fps: Double) -> LTCFrame {
         let f = max(fps.rounded(), 1)
-        let total = Int((max(seconds, 0) * f).rounded(.down)) % Int(86_400 * f)
+        // A tiny allowance so a time that should land exactly on a frame (e.g. 7199.8 s at 25 fps)
+        // is not rounded down to the frame before by floating-point error.
+        let total = Int((max(seconds, 0) * f + 1e-6).rounded(.down)) % Int(86_400 * f)
         let ff = total % Int(f), s = total / Int(f)
         return LTCFrame(hours: s / 3600, minutes: (s % 3600) / 60, seconds: s % 60, frames: ff)
     }
