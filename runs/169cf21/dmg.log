@@ -1,0 +1,18 @@
+OnCue 0.1.0 (1), signing identity: -
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+/Users/runner/work/oncue/oncue/OnCue/Workspace/MediaPlayer.swift:134:36: warning: 'isPlayable' was deprecated in macOS 13.0: Use load(.isPlayable) instead
+** BUILD SUCCEEDED **
+build/Release/Build/Products/Release/OnCue.app: valid on disk
+build/Release/Build/Products/Release/OnCue.app: satisfies its Designated Requirement
+Signature=adhoc
+TeamIdentifier=not set
+Runtime Version=15.5.0
+hdiutil: verify: checksum of "/Users/runner/work/_temp/dist/OnCue-0.1.0-1.dmg" is VALID
+Made /Users/runner/work/_temp/dist/OnCue-0.1.0-1.dmg (3.2M)
+total 6536
+drwxr-xr-x   3 runner  staff       96 Nov 12 15:27 .
+drwxr-xr-x  15 runner  staff      480 Nov 12 15:27 ..
+-rw-r--r--@  1 runner  staff  3344780 Nov 12 15:27 OnCue-0.1.0-1.dmg
