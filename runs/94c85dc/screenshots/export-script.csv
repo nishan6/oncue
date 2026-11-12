@@ -1,0 +1,40 @@
+Item,Kind,Output,Shot,Position,Section,Camera,Camera name,Operator,Transition,Description,Operator note,Length (s)
+Neon Skyline,Song,Program,1,1.1,Intro,1,Wide,Arjun,Mix,"Wide, lights up",Hold for the reveal,7.50
+Neon Skyline,Song,Program,2,5.1,Intro,5,Jib,Rohan,Cut,Jib push in,"Slow, land on the vocalist",7.50
+Neon Skyline,Song,Program,3,9.1,Verse 1,2,Centre,Meera,Cut,"Vocals, mid",,7.50
+Neon Skyline,Song,Program,4,13.1,Verse 1,3,Stage left,Kabir,Cut,"Guitar, tight on hands",,7.50
+Neon Skyline,Song,Program,5,17.1,Verse 1,2,Centre,Meera,Cut,"Vocals, close",Hold eyeline,7.50
+Neon Skyline,Song,Program,6,21.1,Verse 1,6,Drums,Isha,Cut,"Drums, overhead",,7.50
+Neon Skyline,Song,Program,7,25.1,Pre-chorus,7,Steadicam,Dev,Mix,Steadicam orbit,"Clockwise, start stage left",7.50
+Neon Skyline,Song,Program,8,29.1,Pre-chorus,4,Stage right,Sana,Cut,"Keys, mid",,7.50
+Neon Skyline,Song,Program,9,33.1,Chorus,1,Wide,Arjun,Cut,"Wide, chorus hit",,3.75
+Neon Skyline,Song,Program,10,35.1,Chorus,8,Crowd,Tara,Cut,"Crowd, hands up",,3.75
+Neon Skyline,Song,Program,11,37.1,Chorus,2,Centre,Meera,Cut,"Vocals, close",,7.50
+Neon Skyline,Song,Program,12,41.1,Chorus,5,Jib,Rohan,Mix,Jib high wide,,15.00
+Neon Skyline,Song,Program,13,49.1,Verse 2,3,Stage left,Kabir,Cut,"Guitar solo, tight",Follow the neck,15.00
+Neon Skyline,Song,Program,14,57.1,Verse 2,2,Centre,Meera,Cut,"Vocals, mid",,15.00
+Neon Skyline,Song,Program,15,65.1,Chorus 2,1,Wide,Arjun,Cut,Wide,,7.50
+Neon Skyline,Song,Program,16,69.1,Chorus 2,8,Crowd,Tara,Cut,Crowd,,7.50
+Neon Skyline,Song,Program,17,73.1,Chorus 2,5,Jib,Rohan,Mix,Jib sweep,,15.00
+Neon Skyline,Song,Program,18,81.1,Outro,2,Centre,Meera,Cut,"Vocals, close, final line",,7.50
+Neon Skyline,Song,Program,19,85.1,Outro,1,Wide,Arjun,Mix,"Wide, blackout",Hold to black,
+Monsoon Letters,Song,Program,1,1.1,Intro,5,Jib,Rohan,Mix,Jib descending,Very slow,15.00
+Monsoon Letters,Song,Program,2,7.1,Intro,2,Centre,Meera,Mix,"Vocals, close",,15.00
+Monsoon Letters,Song,Program,3,13.1,Verse,7,Steadicam,Dev,Mix,"Steadicam, side profile",,10.00
+Monsoon Letters,Song,Program,4,17.1,Chorus,1,Wide,Arjun,Mix,"Wide, warm wash",,15.00
+Monsoon Letters,Song,Program,5,23.1,Chorus,2,Centre,Meera,Mix,"Vocals, extreme close",Only if she closes her eyes,15.00
+Monsoon Letters,Song,Program,6,29.1,Bridge,8,Crowd,Tara,Mix,"Crowd, phone lights",,15.00
+Monsoon Letters,Song,Program,7,35.1,Final chorus,3,Stage left,Kabir,Mix,"Guitar, soft focus",,15.00
+Monsoon Letters,Song,Program,8,41.1,Final chorus,2,Centre,Meera,Mix,"Vocals, close",,
+Crowd talk break,Segment,Program,1,0:00.0,Welcome,2,Centre,Meera,Cut,"Vocals, mid, talking",,20.00
+Crowd talk break,Segment,Program,2,0:20.0,Welcome,8,Crowd,Tara,Cut,Crowd reaction,,20.00
+Crowd talk break,Segment,Program,3,0:40.0,Welcome,1,Wide,Arjun,Cut,Wide,,20.00
+Crowd talk break,Segment,Program,4,1:00.0,Band intros,3,Stage left,Kabir,Cut,"Guitarist, intro",,15.00
+Crowd talk break,Segment,Program,5,1:15.0,Band intros,6,Drums,Isha,Cut,"Drummer, intro",,15.00
+Crowd talk break,Segment,Program,6,1:30.0,Band intros,4,Stage right,Sana,Cut,"Keys, intro",,20.00
+Crowd talk break,Segment,Program,7,1:50.0,Band intros,2,Centre,Meera,Cut,"Vocals, mid",,
+Encore: Homecoming,Song,Program,1,#1,,1,Wide,Arjun,Cut,Wide,,
+Encore: Homecoming,Song,Program,2,#2,,2,Centre,Meera,Cut,"Vocals, close",,
+Encore: Homecoming,Song,Program,3,#3,,8,Crowd,Tara,Cut,Crowd singing,,
+Encore: Homecoming,Song,Program,4,#4,,5,Jib,Rohan,Cut,Jib over the crowd,,
+Encore: Homecoming,Song,Program,5,#5,,1,Wide,Arjun,Cut,"Wide, confetti",,

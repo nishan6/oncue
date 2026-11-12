@@ -1,0 +1,559 @@
+Building for debugging...
+[0/8] /Users/runner/work/oncue/oncue/Packages/OnCueCore/.build/arm64-apple-macosx/debug/OnCueCorePackageTests.derived/runner.swift
+[0/8] Copying Fixtures
+[2/8] Write sources
+[5/8] Write swift-version--79AA4F9932D1E87A.txt
+[7/30] Compiling OnCueCore SampleShow.swift
+[8/30] Compiling OnCueCore ShowEditing.swift
+[9/30] Compiling OnCueCore SwitcherEditing.swift
+[10/30] Compiling OnCueCore TimelineEditing.swift
+[11/30] Compiling OnCueCore Controls.swift
+[12/30] Compiling OnCueCore EngineController.swift
+[13/30] Compiling OnCueCore LTC.swift
+[14/30] Compiling OnCueCore PreShowCheck.swift
+[15/30] Compiling OnCueCore RundownTiming.swift
+[16/30] Compiling OnCueCore ShowEngine.swift
+[17/30] Emitting module OnCueCore
+[18/30] Compiling OnCueCore CrewPage.swift
+[19/30] Compiling OnCueCore CrewServer.swift
+[20/30] Compiling OnCueCore CrewSnapshot.swift
+[21/30] Compiling OnCueCore ATEMSwitcher.swift
+[22/30] Compiling OnCueCore CompanionClient.swift
+[23/30] Compiling OnCueCore MIDIManager.swift
+[24/30] Compiling OnCueCore OSC.swift
+[25/30] Compiling OnCueCore PTZService.swift
+[26/30] Compiling OnCueCore SwitcherDevice.swift
+[27/30] Compiling OnCueCore DraftScript.swift
+[28/30] Compiling OnCueCore LiveCursor.swift
+[29/40] Compiling OnCueCore SwitchLog.swift
+[30/40] Compiling OnCueCore Timing.swift
+[31/40] Compiling OnCueCore TourComparison.swift
+[32/40] Compiling OnCueCore PDFExports.swift
+[33/40] Compiling OnCueCore TextExports.swift
+[34/40] Compiling OnCueCore Model.swift
+[35/40] Compiling OnCueCore MachineProfile.swift
+[36/40] Compiling OnCueCore ShowCoding.swift
+[37/40] Compiling OnCueCore TolerantDecoding.swift
+[38/40] Compiling OnCueCore CameraPlot.swift
+[39/52] Emitting module OnCueCoreTests
+[40/57] Compiling OnCueCoreTests ExportTests.swift
+[41/57] Compiling OnCueCoreTests MachineProfileTests.swift
+[42/57] Compiling OnCueCoreTests ModelTests.swift
+[43/57] Compiling OnCueCoreTests PersistenceTests.swift
+[44/57] Compiling OnCueCoreTests PreShowCheckTests.swift
+[45/57] Compiling OnCueCoreTests CameraPlotTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[46/57] Compiling OnCueCoreTests ControlsTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[47/57] Compiling OnCueCoreTests CrewTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[48/57] Compiling OnCueCoreTests DraftScriptTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[49/57] Compiling OnCueCoreTests EditingTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[50/57] Compiling OnCueCoreTests EngineTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[51/57] Compiling OnCueCoreTests RundownTimingTests.swift
+[52/57] Compiling OnCueCoreTests ShowControlTests.swift
+[53/57] Compiling OnCueCoreTests TimelineTests.swift
+[54/57] Compiling OnCueCoreTests TourTests.swift
+[55/57] Compiling OnCueCoreTests resource_bundle_accessor.swift
+[56/59] Compiling OnCueCorePackageTests runner.swift
+[57/59] Emitting module OnCueCorePackageTests
+[57/59] Write Objects.LinkFileList
+[58/59] Linking OnCueCorePackageTests
+Build complete! (43.93s)
+Test Suite 'All tests' started at 2026-11-12 08:31:23.354.
+Test Suite 'OnCueCorePackageTests.xctest' started at 2026-11-12 08:31:23.359.
+Test Suite 'CameraPlotTests' started at 2026-11-12 08:31:23.359.
+Test Case '-[OnCueCoreTests.CameraPlotTests testPlaceMoveRotateRemove]' started.
+Test Case '-[OnCueCoreTests.CameraPlotTests testPlaceMoveRotateRemove]' passed (0.004 seconds).
+Test Case '-[OnCueCoreTests.CameraPlotTests testPlotSurvivesSavingAndOldFiles]' started.
+Test Case '-[OnCueCoreTests.CameraPlotTests testPlotSurvivesSavingAndOldFiles]' passed (0.006 seconds).
+Test Suite 'CameraPlotTests' passed at 2026-11-12 08:31:23.368.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.010 (0.010) seconds
+Test Suite 'ControlsTests' started at 2026-11-12 08:31:23.369.
+Test Case '-[OnCueCoreTests.ControlsTests testAPC40DefaultsMapPadsAndButtons]' started.
+Test Case '-[OnCueCoreTests.ControlsTests testAPC40DefaultsMapPadsAndButtons]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ControlsTests testControllerPerformsTakeCameraAsAManualCut]' started.
+Test Case '-[OnCueCoreTests.ControlsTests testControllerPerformsTakeCameraAsAManualCut]' passed (0.032 seconds).
+Test Case '-[OnCueCoreTests.ControlsTests testMIDILearnReplacesOldBindings]' started.
+Test Case '-[OnCueCoreTests.ControlsTests testMIDILearnReplacesOldBindings]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ControlsTests testOSCAddresses]' started.
+Test Case '-[OnCueCoreTests.ControlsTests testOSCAddresses]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.ControlsTests testPadColorsShowTally]' started.
+Test Case '-[OnCueCoreTests.ControlsTests testPadColorsShowTally]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ControlsTests testTapTempo]' started.
+Test Case '-[OnCueCoreTests.ControlsTests testTapTempo]' passed (0.000 seconds).
+Test Suite 'ControlsTests' passed at 2026-11-12 08:31:23.402.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.033 (0.034) seconds
+Test Suite 'CrewTests' started at 2026-11-12 08:31:23.402.
+Test Case '-[OnCueCoreTests.CrewTests testCommentsFromThePage]' started.
+Test Case '-[OnCueCoreTests.CrewTests testCommentsFromThePage]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.CrewTests testEventStreamSendsStateAndUpdates]' started.
+Test Case '-[OnCueCoreTests.CrewTests testEventStreamSendsStateAndUpdates]' passed (0.456 seconds).
+Test Case '-[OnCueCoreTests.CrewTests testLiveSnapshotTallyAndCountdown]' started.
+Test Case '-[OnCueCoreTests.CrewTests testLiveSnapshotTallyAndCountdown]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.CrewTests testRequestParsingWaitsForTheBody]' started.
+Test Case '-[OnCueCoreTests.CrewTests testRequestParsingWaitsForTheBody]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.CrewTests testReviewSnapshotHasEveryItem]' started.
+Test Case '-[OnCueCoreTests.CrewTests testReviewSnapshotHasEveryItem]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.CrewTests testServerOnLocalhost]' started.
+Test Case '-[OnCueCoreTests.CrewTests testServerOnLocalhost]' passed (0.057 seconds).
+Test Suite 'CrewTests' passed at 2026-11-12 08:31:23.918.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.515 (0.516) seconds
+Test Suite 'DraftScriptTests' started at 2026-11-12 08:31:23.918.
+Test Case '-[OnCueCoreTests.DraftScriptTests testDraftFromEDL]' started.
+Test Case '-[OnCueCoreTests.DraftScriptTests testDraftFromEDL]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.DraftScriptTests testDraftFromSwitchLog]' started.
+Test Case '-[OnCueCoreTests.DraftScriptTests testDraftFromSwitchLog]' passed (0.001 seconds).
+Test Suite 'DraftScriptTests' passed at 2026-11-12 08:31:23.920.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.001 (0.002) seconds
+Test Suite 'EditingTests' started at 2026-11-12 08:31:23.920.
+Test Case '-[OnCueCoreTests.EditingTests testAddRenameDeleteSections]' started.
+Test Case '-[OnCueCoreTests.EditingTests testAddRenameDeleteSections]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testAddShotsAtEndAfterAndInSection]' started.
+Test Case '-[OnCueCoreTests.EditingTests testAddShotsAtEndAfterAndInSection]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testAddSongsAndSegmentsInPlace]' started.
+Test Case '-[OnCueCoreTests.EditingTests testAddSongsAndSegmentsInPlace]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testCamerasNumberingAndDeletion]' started.
+Test Case '-[OnCueCoreTests.EditingTests testCamerasNumberingAndDeletion]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testDragReorderKeepsTimeSlots]' started.
+Test Case '-[OnCueCoreTests.EditingTests testDragReorderKeepsTimeSlots]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testMoveHelperMatchesSwiftUISemantics]' started.
+Test Case '-[OnCueCoreTests.EditingTests testMoveHelperMatchesSwiftUISemantics]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testMovingSectionsCarriesTheirShots]' started.
+Test Case '-[OnCueCoreTests.EditingTests testMovingSectionsCarriesTheirShots]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testNudgeDuplicateEditDelete]' started.
+Test Case '-[OnCueCoreTests.EditingTests testNudgeDuplicateEditDelete]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testOrderBasedItemsStayNumbered]' started.
+Test Case '-[OnCueCoreTests.EditingTests testOrderBasedItemsStayNumbered]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testRenameReorderDuplicateDelete]' started.
+Test Case '-[OnCueCoreTests.EditingTests testRenameReorderDuplicateDelete]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testReorderWithinSectionOnly]' started.
+Test Case '-[OnCueCoreTests.EditingTests testReorderWithinSectionOnly]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testSampleProductionSurvivesSaveAndReopen]' started.
+Test Case '-[OnCueCoreTests.EditingTests testSampleProductionSurvivesSaveAndReopen]' passed (0.008 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testScriptChecks]' started.
+Test Case '-[OnCueCoreTests.EditingTests testScriptChecks]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testTimeBaseConversionKeepsTiming]' started.
+Test Case '-[OnCueCoreTests.EditingTests testTimeBaseConversionKeepsTiming]' passed (0.000 seconds).
+Test Suite 'EditingTests' passed at 2026-11-12 08:31:23.936.
+	 Executed 14 tests, with 0 failures (0 unexpected) in 0.015 (0.016) seconds
+Test Suite 'EngineTests' started at 2026-11-12 08:31:23.936.
+Test Case '-[OnCueCoreTests.EngineTests testATEMHandshakeStateAndCommands]' started.
+Test Case '-[OnCueCoreTests.EngineTests testATEMHandshakeStateAndCommands]' passed (0.114 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testAutoCutTakesShotsAndPreloadsTheNext]' started.
+Test Case '-[OnCueCoreTests.EngineTests testAutoCutTakesShotsAndPreloadsTheNext]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testAutoPreviewIgnoresTheDirectorsCuts]' started.
+Test Case '-[OnCueCoreTests.EngineTests testAutoPreviewIgnoresTheDirectorsCuts]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testAutoPreviewOnlyLoadsPreview]' started.
+Test Case '-[OnCueCoreTests.EngineTests testAutoPreviewOnlyLoadsPreview]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testCamerasWithoutAnInputAreSkippedNotSent]' started.
+Test Case '-[OnCueCoreTests.EngineTests testCamerasWithoutAnInputAreSkippedNotSent]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testControllerDrivesTheSimulatorAndPausesOnAManualCut]' started.
+Test Case '-[OnCueCoreTests.EngineTests testControllerDrivesTheSimulatorAndPausesOnAManualCut]' passed (0.005 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testDisplayModeSendsNothingButFollowsThePlayhead]' started.
+Test Case '-[OnCueCoreTests.EngineTests testDisplayModeSendsNothingButFollowsThePlayhead]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testFastNextThroughAMixDoesNotLookLikeAManualCut]' started.
+Test Case '-[OnCueCoreTests.EngineTests testFastNextThroughAMixDoesNotLookLikeAManualCut]' passed (2.545 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testInternalClockAndRates]' started.
+Test Case '-[OnCueCoreTests.EngineTests testInternalClockAndRates]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testLTCDecodesInvertedAndQuietSignals]' started.
+Test Case '-[OnCueCoreTests.EngineTests testLTCDecodesInvertedAndQuietSignals]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testLTCFollowerUsesTheItemStartOrTheFirstFrame]' started.
+Test Case '-[OnCueCoreTests.EngineTests testLTCFollowerUsesTheItemStartOrTheFirstFrame]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testLTCRoundTrip]' started.
+Test Case '-[OnCueCoreTests.EngineTests testLTCRoundTrip]' passed (0.006 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testManualCutPausesAutoCutUntilResume]' started.
+Test Case '-[OnCueCoreTests.EngineTests testManualCutPausesAutoCutUntilResume]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testMIDIClockFollower]' started.
+Test Case '-[OnCueCoreTests.EngineTests testMIDIClockFollower]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testNextBackTapAndJump]' started.
+Test Case '-[OnCueCoreTests.EngineTests testNextBackTapAndJump]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testSecondsToNextUsesTheTempo]' started.
+Test Case '-[OnCueCoreTests.EngineTests testSecondsToNextUsesTheTempo]' passed (0.000 seconds).
+Test Suite 'EngineTests' passed at 2026-11-12 08:31:26.619.
+	 Executed 16 tests, with 0 failures (0 unexpected) in 2.682 (2.683) seconds
+Test Suite 'ExportTests' started at 2026-11-12 08:31:26.619.
+Test Case '-[OnCueCoreTests.ExportTests testCallSheetsOnePerCamera]' started.
+Test Case '-[OnCueCoreTests.ExportTests testCallSheetsOnePerCamera]' passed (0.148 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testCameraScriptPDF]' started.
+Test Case '-[OnCueCoreTests.ExportTests testCameraScriptPDF]' passed (0.223 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testCSVQuoting]' started.
+Test Case '-[OnCueCoreTests.ExportTests testCSVQuoting]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testMarkerEDL]' started.
+Test Case '-[OnCueCoreTests.ExportTests testMarkerEDL]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testResolveMarkerColour]' started.
+Test Case '-[OnCueCoreTests.ExportTests testResolveMarkerColour]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testScriptCSVHasEveryShot]' started.
+Test Case '-[OnCueCoreTests.ExportTests testScriptCSVHasEveryShot]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testSwitchLogCSV]' started.
+Test Case '-[OnCueCoreTests.ExportTests testSwitchLogCSV]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testSwitchLogEDLFallsBackToTimeOfDay]' started.
+Test Case '-[OnCueCoreTests.ExportTests testSwitchLogEDLFallsBackToTimeOfDay]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testSwitchLogEDLUsesLTC]' started.
+Test Case '-[OnCueCoreTests.ExportTests testSwitchLogEDLUsesLTC]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testTimecodeMath]' started.
+Test Case '-[OnCueCoreTests.ExportTests testTimecodeMath]' passed (0.000 seconds).
+Test Suite 'ExportTests' passed at 2026-11-12 08:31:27.003.
+	 Executed 10 tests, with 0 failures (0 unexpected) in 0.383 (0.384) seconds
+Test Suite 'MachineProfileTests' started at 2026-11-12 08:31:27.003.
+Test Case '-[OnCueCoreTests.MachineProfileTests testCorruptProfileIsKeptAsBackupAndDefaultsUsed]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testCorruptProfileIsKeptAsBackupAndDefaultsUsed]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testMissingProfileIsCreatedWithDefaults]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testMissingProfileIsCreatedWithDefaults]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testNewerProfileFormatIsNotOverwrittenInPlace]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testNewerProfileFormatIsNotOverwrittenInPlace]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testOpeningAnotherShowDoesNotTouchTheProfile]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testOpeningAnotherShowDoesNotTouchTheProfile]' passed (0.005 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesDoNotMutateShows]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesDoNotMutateShows]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesPersistAcrossLaunches]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesPersistAcrossLaunches]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileMissingFieldsGetDefaults]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileMissingFieldsGetDefaults]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testShowFilesCarryNoMachineSettings]' started.
+Test Case '-[OnCueCoreTests.MachineProfileTests testShowFilesCarryNoMachineSettings]' passed (0.008 seconds).
+Test Suite 'MachineProfileTests' passed at 2026-11-12 08:31:27.026.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.023 (0.024) seconds
+Test Suite 'ModelTests' started at 2026-11-12 08:31:27.027.
+Test Case '-[OnCueCoreTests.ModelTests testBarsPositionsParseAndFormat]' started.
+Test Case '-[OnCueCoreTests.ModelTests testBarsPositionsParseAndFormat]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testCameraLabels]' started.
+Test Case '-[OnCueCoreTests.ModelTests testCameraLabels]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testEnsureShotTracksAddsTrackPerOutput]' started.
+Test Case '-[OnCueCoreTests.ModelTests testEnsureShotTracksAddsTrackPerOutput]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testOrderPositions]' started.
+Test Case '-[OnCueCoreTests.ModelTests testOrderPositions]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testSecondsFromBeats]' started.
+Test Case '-[OnCueCoreTests.ModelTests testSecondsFromBeats]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testSecondsPositionsParseAndFormat]' started.
+Test Case '-[OnCueCoreTests.ModelTests testSecondsPositionsParseAndFormat]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testSectionsAndEnds]' started.
+Test Case '-[OnCueCoreTests.ModelTests testSectionsAndEnds]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testStarterShow]' started.
+Test Case '-[OnCueCoreTests.ModelTests testStarterShow]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testTimecodeHelpers]' started.
+Test Case '-[OnCueCoreTests.ModelTests testTimecodeHelpers]' passed (0.000 seconds).
+Test Suite 'ModelTests' passed at 2026-11-12 08:31:27.030.
+	 Executed 9 tests, with 0 failures (0 unexpected) in 0.003 (0.003) seconds
+Test Suite 'PersistenceTests' started at 2026-11-12 08:31:27.030.
+Test Case '-[OnCueCoreTests.PersistenceTests testCorruptFileOnDiskIsNotModified]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testCorruptFileOnDiskIsNotModified]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testEmptyFileGivesClearError]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testEmptyFileGivesClearError]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testEmptyObjectIsAnEmptyShow]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testEmptyObjectIsAnEmptyShow]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testEncodedFileCarriesCurrentSchemaVersion]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testEncodedFileCarriesCurrentSchemaVersion]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testEveryFieldSurvivesRoundTrip]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testEveryFieldSurvivesRoundTrip]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testFutureSchemaFileIsLeftUntouched]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testFutureSchemaFileIsLeftUntouched]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testFutureSchemaIsRefusedWithClearError]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testFutureSchemaIsRefusedWithClearError]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testGoldenFileResavesAsCurrentSchemaAndReopens]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testGoldenFileResavesAsCurrentSchemaAndReopens]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testGoldenSchema0FileOpens]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testGoldenSchema0FileOpens]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testJSONArrayIsNotAShow]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testJSONArrayIsNotAShow]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testMissingFieldsGetDefaults]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testMissingFieldsGetDefaults]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testMissingFileGivesError]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testMissingFileGivesError]' passed (0.005 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testNonJSONGivesClearError]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testNonJSONGivesClearError]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testSaveCloseReopenOnDisk]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testSaveCloseReopenOnDisk]' passed (0.006 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testStarterShowRoundTrips]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testStarterShowRoundTrips]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testUnknownEnumValuesFallBackSafely]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testUnknownEnumValuesFallBackSafely]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testWrongValueTypeNamesTheField]' started.
+Test Case '-[OnCueCoreTests.PersistenceTests testWrongValueTypeNamesTheField]' passed (0.000 seconds).
+Test Suite 'PersistenceTests' passed at 2026-11-12 08:31:27.054.
+	 Executed 17 tests, with 0 failures (0 unexpected) in 0.023 (0.024) seconds
+Test Suite 'PreShowCheckTests' started at 2026-11-12 08:31:27.054.
+Test Case '-[OnCueCoreTests.PreShowCheckTests testATEMThatAnswersAndOneThatDoesnt]' started.
+Test Case '-[OnCueCoreTests.PreShowCheckTests testATEMThatAnswersAndOneThatDoesnt]' passed (1.529 seconds).
+Test Case '-[OnCueCoreTests.PreShowCheckTests testProblemsAreFound]' started.
+Test Case '-[OnCueCoreTests.PreShowCheckTests testProblemsAreFound]' passed (0.016 seconds).
+Test Case '-[OnCueCoreTests.PreShowCheckTests testPTZOverTCP]' started.
+Test Case '-[OnCueCoreTests.PreShowCheckTests testPTZOverTCP]' passed (2.102 seconds).
+Test Case '-[OnCueCoreTests.PreShowCheckTests testSampleShowOnTheSimulator]' started.
+Test Case '-[OnCueCoreTests.PreShowCheckTests testSampleShowOnTheSimulator]' passed (0.006 seconds).
+Test Suite 'PreShowCheckTests' passed at 2026-11-12 08:31:30.708.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 3.653 (3.654) seconds
+Test Suite 'RundownTimingTests' started at 2026-11-12 08:31:30.708.
+Test Case '-[OnCueCoreTests.RundownTimingTests testAppliesOnlyWhenTimed]' started.
+Test Case '-[OnCueCoreTests.RundownTimingTests testAppliesOnlyWhenTimed]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.RundownTimingTests testDeadlineAcrossMidnight]' started.
+Test Case '-[OnCueCoreTests.RundownTimingTests testDeadlineAcrossMidnight]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.RundownTimingTests testOverrunShowsNegativeRemaining]' started.
+Test Case '-[OnCueCoreTests.RundownTimingTests testOverrunShowsNegativeRemaining]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.RundownTimingTests testOverUnderAndHardOut]' started.
+Test Case '-[OnCueCoreTests.RundownTimingTests testOverUnderAndHardOut]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.RundownTimingTests testRunsFromTheLog]' started.
+Test Case '-[OnCueCoreTests.RundownTimingTests testRunsFromTheLog]' passed (0.000 seconds).
+Test Suite 'RundownTimingTests' passed at 2026-11-12 08:31:30.709.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'SetupEditingTests' started at 2026-11-12 08:31:30.709.
+Test Case '-[OnCueCoreTests.SetupEditingTests testOutputsSwitchersAndTheirTracks]' started.
+Test Case '-[OnCueCoreTests.SetupEditingTests testOutputsSwitchersAndTheirTracks]' passed (0.001 seconds).
+Test Suite 'SetupEditingTests' passed at 2026-11-12 08:31:30.710.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'ShowControlTests' started at 2026-11-12 08:31:30.710.
+Test Case '-[OnCueCoreTests.ShowControlTests testAnalysisMatchesScriptedShotsToCuts]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testAnalysisMatchesScriptedShotsToCuts]' passed (0.004 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testAuxOutputSetsTheAux]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testAuxOutputSetsTheAux]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testCameraDownMovesOnlyTheRequestedUpcomingShots]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testCameraDownMovesOnlyTheRequestedUpcomingShots]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testControlStopHaltsTheTransport]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testControlStopHaltsTheTransport]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testControlTrackLoadsTheNextItem]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testControlTrackLoadsTheNextItem]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testCuesFireOnceWhenThePlayheadPassesThem]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testCuesFireOnceWhenThePlayheadPassesThem]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testDisplayModeSendsOSCButNotFX]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testDisplayModeSendsOSCButNotFX]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testFreeModeHoldsTheScriptAndSendsNothing]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testFreeModeHoldsTheScriptAndSendsNothing]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testLoopRepeatsTheSectionUntilReleased]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testLoopRepeatsTheSectionUntilReleased]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testMirroringOutputFollowsTheMainCut]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testMirroringOutputFollowsTheMainCut]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testPanicDropsEveryOutputToDisplay]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testPanicDropsEveryOutputToDisplay]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testSeparateOutputWithItsOwnTrackAndMode]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testSeparateOutputWithItsOwnTrackAndMode]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testSubSwitcherRoutesThroughItsFeed]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testSubSwitcherRoutesThroughItsFeed]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testVarietyHintsPreferCamerasOffAirLongest]' started.
+Test Case '-[OnCueCoreTests.ShowControlTests testVarietyHintsPreferCamerasOffAirLongest]' passed (0.001 seconds).
+Test Suite 'ShowControlTests' passed at 2026-11-12 08:31:30.720.
+	 Executed 14 tests, with 0 failures (0 unexpected) in 0.010 (0.011) seconds
+Test Suite 'TimelineTests' started at 2026-11-12 08:31:30.720.
+Test Case '-[OnCueCoreTests.TimelineTests testCameraColourDefaultsByNumberAndCanBeChosen]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testCameraColourDefaultsByNumberAndCanBeChosen]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testCameraColourRoundTripsAndIsOptionalInOldFiles]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testCameraColourRoundTripsAndIsOptionalInOldFiles]' passed (0.004 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testLiveCursorSteppingAndJumping]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testLiveCursorSteppingAndJumping]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testMovingAShotOnTheTimelineReordersTheShotList]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testMovingAShotOnTheTimelineReordersTheShotList]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testOrderItemsGiveEachShotOneStep]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testOrderItemsGiveEachShotOneStep]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testPlannedLengthExtendsTheEnd]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testPlannedLengthExtendsTheEnd]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testRunLength]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testRunLength]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testSampleShowHasEveryTrackKind]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testSampleShowHasEveryTrackKind]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testShotSpansRunToTheNextShotAndTheSongEnd]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testShotSpansRunToTheNextShotAndTheSongEnd]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testSnap]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testSnap]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testTrackCuesAreCreatedOnTheRightTrack]' started.
+Test Case '-[OnCueCoreTests.TimelineTests testTrackCuesAreCreatedOnTheRightTrack]' passed (0.000 seconds).
+Test Suite 'TimelineTests' passed at 2026-11-12 08:31:30.732.
+	 Executed 11 tests, with 0 failures (0 unexpected) in 0.012 (0.012) seconds
+Test Suite 'TourTests' started at 2026-11-12 08:31:30.732.
+Test Case '-[OnCueCoreTests.TourTests testLoadLogsFromFolder]' started.
+Test Case '-[OnCueCoreTests.TourTests testLoadLogsFromFolder]' passed (0.019 seconds).
+Test Case '-[OnCueCoreTests.TourTests testNightsCompared]' started.
+Test Case '-[OnCueCoreTests.TourTests testNightsCompared]' passed (0.004 seconds).
+Test Case '-[OnCueCoreTests.TourTests testOldLogsWithoutTourFieldsStillOpen]' started.
+Test Case '-[OnCueCoreTests.TourTests testOldLogsWithoutTourFieldsStillOpen]' passed (0.019 seconds).
+Test Suite 'TourTests' passed at 2026-11-12 08:31:30.774.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.041 (0.041) seconds
+Test Suite 'OnCueCorePackageTests.xctest' passed at 2026-11-12 08:31:30.774.
+	 Executed 128 tests, with 0 failures (0 unexpected) in 7.407 (7.415) seconds
+Test Suite 'All tests' passed at 2026-11-12 08:31:30.774.
+	 Executed 128 tests, with 0 failures (0 unexpected) in 7.407 (7.420) seconds
+◇ Test run started.
+↳ Testing Library Version: 124.4
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests passed after 0.001 seconds.

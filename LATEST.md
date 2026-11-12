@@ -1,8 +1,8 @@
-# CI results for ab15621
+# CI results for 94c85dc
 
-- Commit: ab156211ba74d9927fb3b201ba32ee6c4544bee8
-- Run: https://github.com/nishan6/oncue/actions/runs/43183053748
-- Date (UTC): 2026-11-12T08:30:01Z
+- Commit: 94c85dcb6ec982ac1a78668aa034b0c6cfae74d4
+- Run: https://github.com/nishan6/oncue/actions/runs/43183293129
+- Date (UTC): 2026-11-12T08:34:45Z
 
 | Step | Result |
 | --- | --- |
@@ -26,28 +26,28 @@ Version: 2.46.0
 ```
 ## Test summary
 ```
-Test Case '-[OnCueCoreTests.PersistenceTests testStarterShowRoundTrips]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testStarterShowRoundTrips]' passed (0.003 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testUnknownEnumValuesFallBackSafely]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testWrongValueTypeNamesTheField]' passed (0.000 seconds).
-Test Suite 'PersistenceTests' passed at 2026-11-12 08:27:55.624.
-	 Executed 17 tests, with 0 failures (0 unexpected) in 0.009 (0.009) seconds
-Test Case '-[OnCueCoreTests.PreShowCheckTests testATEMThatAnswersAndOneThatDoesnt]' passed (1.548 seconds).
-Test Case '-[OnCueCoreTests.PreShowCheckTests testProblemsAreFound]' passed (0.007 seconds).
-Test Case '-[OnCueCoreTests.PreShowCheckTests testPTZOverTCP]' passed (2.195 seconds).
-Test Case '-[OnCueCoreTests.PreShowCheckTests testSampleShowOnTheSimulator]' passed (0.004 seconds).
-Test Suite 'PreShowCheckTests' passed at 2026-11-12 08:27:59.378.
-	 Executed 4 tests, with 0 failures (0 unexpected) in 3.754 (3.754) seconds
+Test Suite 'PersistenceTests' passed at 2026-11-12 08:31:27.054.
+	 Executed 17 tests, with 0 failures (0 unexpected) in 0.023 (0.024) seconds
+Test Case '-[OnCueCoreTests.PreShowCheckTests testATEMThatAnswersAndOneThatDoesnt]' passed (1.529 seconds).
+Test Case '-[OnCueCoreTests.PreShowCheckTests testProblemsAreFound]' passed (0.016 seconds).
+Test Case '-[OnCueCoreTests.PreShowCheckTests testPTZOverTCP]' passed (2.102 seconds).
+Test Case '-[OnCueCoreTests.PreShowCheckTests testSampleShowOnTheSimulator]' passed (0.006 seconds).
+Test Suite 'PreShowCheckTests' passed at 2026-11-12 08:31:30.708.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 3.653 (3.654) seconds
 Test Case '-[OnCueCoreTests.RundownTimingTests testAppliesOnlyWhenTimed]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.RundownTimingTests testDeadlineAcrossMidnight]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.RundownTimingTests testOverrunShowsNegativeRemaining]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.RundownTimingTests testOverUnderAndHardOut]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.RundownTimingTests testRunsFromTheLog]' passed (0.000 seconds).
-Test Suite 'RundownTimingTests' passed at 2026-11-12 08:27:59.379.
+Test Suite 'RundownTimingTests' passed at 2026-11-12 08:31:30.709.
 	 Executed 5 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
-Test Case '-[OnCueCoreTests.SetupEditingTests testOutputsSwitchersAndTheirTracks]' passed (0.000 seconds).
-Test Suite 'SetupEditingTests' passed at 2026-11-12 08:27:59.380.
-	 Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
-Test Case '-[OnCueCoreTests.ShowControlTests testAnalysisMatchesScriptedShotsToCuts]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.SetupEditingTests testOutputsSwitchersAndTheirTracks]' passed (0.001 seconds).
+Test Suite 'SetupEditingTests' passed at 2026-11-12 08:31:30.710.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Case '-[OnCueCoreTests.ShowControlTests testAnalysisMatchesScriptedShotsToCuts]' passed (0.004 seconds).
 Test Case '-[OnCueCoreTests.ShowControlTests testAuxOutputSetsTheAux]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ShowControlTests testCameraDownMovesOnlyTheRequestedUpcomingShots]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ShowControlTests testControlStopHaltsTheTransport]' passed (0.000 seconds).
@@ -56,16 +56,16 @@ Test Case '-[OnCueCoreTests.ShowControlTests testCuesFireOnceWhenThePlayheadPass
 Test Case '-[OnCueCoreTests.ShowControlTests testDisplayModeSendsOSCButNotFX]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ShowControlTests testFreeModeHoldsTheScriptAndSendsNothing]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ShowControlTests testLoopRepeatsTheSectionUntilReleased]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.ShowControlTests testMirroringOutputFollowsTheMainCut]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testMirroringOutputFollowsTheMainCut]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.ShowControlTests testPanicDropsEveryOutputToDisplay]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ShowControlTests testSeparateOutputWithItsOwnTrackAndMode]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ShowControlTests testSubSwitcherRoutesThroughItsFeed]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.ShowControlTests testVarietyHintsPreferCamerasOffAirLongest]' passed (0.000 seconds).
-Test Suite 'ShowControlTests' passed at 2026-11-12 08:27:59.388.
-	 Executed 14 tests, with 0 failures (0 unexpected) in 0.007 (0.008) seconds
+Test Case '-[OnCueCoreTests.ShowControlTests testVarietyHintsPreferCamerasOffAirLongest]' passed (0.001 seconds).
+Test Suite 'ShowControlTests' passed at 2026-11-12 08:31:30.720.
+	 Executed 14 tests, with 0 failures (0 unexpected) in 0.010 (0.011) seconds
 Test Case '-[OnCueCoreTests.TimelineTests testCameraColourDefaultsByNumberAndCanBeChosen]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.TimelineTests testCameraColourRoundTripsAndIsOptionalInOldFiles]' passed (0.001 seconds).
-Test Case '-[OnCueCoreTests.TimelineTests testLiveCursorSteppingAndJumping]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testCameraColourRoundTripsAndIsOptionalInOldFiles]' passed (0.004 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testLiveCursorSteppingAndJumping]' passed (0.003 seconds).
 Test Case '-[OnCueCoreTests.TimelineTests testMovingAShotOnTheTimelineReordersTheShotList]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.TimelineTests testOrderItemsGiveEachShotOneStep]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.TimelineTests testPlannedLengthExtendsTheEnd]' passed (0.000 seconds).
@@ -74,17 +74,17 @@ Test Case '-[OnCueCoreTests.TimelineTests testSampleShowHasEveryTrackKind]' pass
 Test Case '-[OnCueCoreTests.TimelineTests testShotSpansRunToTheNextShotAndTheSongEnd]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.TimelineTests testSnap]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.TimelineTests testTrackCuesAreCreatedOnTheRightTrack]' passed (0.000 seconds).
-Test Suite 'TimelineTests' passed at 2026-11-12 08:27:59.394.
-	 Executed 11 tests, with 0 failures (0 unexpected) in 0.006 (0.007) seconds
-Test Case '-[OnCueCoreTests.TourTests testLoadLogsFromFolder]' passed (0.016 seconds).
-Test Case '-[OnCueCoreTests.TourTests testNightsCompared]' passed (0.003 seconds).
-Test Case '-[OnCueCoreTests.TourTests testOldLogsWithoutTourFieldsStillOpen]' passed (0.015 seconds).
-Test Suite 'TourTests' passed at 2026-11-12 08:27:59.428.
-	 Executed 3 tests, with 0 failures (0 unexpected) in 0.034 (0.034) seconds
-Test Suite 'OnCueCorePackageTests.xctest' passed at 2026-11-12 08:27:59.428.
-	 Executed 126 tests, with 0 failures (0 unexpected) in 7.143 (7.147) seconds
-Test Suite 'All tests' passed at 2026-11-12 08:27:59.428.
-	 Executed 126 tests, with 0 failures (0 unexpected) in 7.143 (7.148) seconds
+Test Suite 'TimelineTests' passed at 2026-11-12 08:31:30.732.
+	 Executed 11 tests, with 0 failures (0 unexpected) in 0.012 (0.012) seconds
+Test Case '-[OnCueCoreTests.TourTests testLoadLogsFromFolder]' passed (0.019 seconds).
+Test Case '-[OnCueCoreTests.TourTests testNightsCompared]' passed (0.004 seconds).
+Test Case '-[OnCueCoreTests.TourTests testOldLogsWithoutTourFieldsStillOpen]' passed (0.019 seconds).
+Test Suite 'TourTests' passed at 2026-11-12 08:31:30.774.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.041 (0.041) seconds
+Test Suite 'OnCueCorePackageTests.xctest' passed at 2026-11-12 08:31:30.774.
+	 Executed 128 tests, with 0 failures (0 unexpected) in 7.407 (7.415) seconds
+Test Suite 'All tests' passed at 2026-11-12 08:31:30.774.
+	 Executed 128 tests, with 0 failures (0 unexpected) in 7.407 (7.420) seconds
 ✔ Test run with 0 tests passed after 0.001 seconds.
 ```
 ## Build result
@@ -93,11 +93,11 @@ Test Suite 'All tests' passed at 2026-11-12 08:27:59.428.
 ```
 ## Warnings (       1)
 ```
-2026-11-12 08:29:42.905 appintentsmetadataprocessor[3416:13868] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+2026-11-12 08:34:16.372 appintentsmetadataprocessor[5881:20352] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
 ```
 ## Smoke test
 ```
-[smoke] app launched (pid 3434)
+[smoke] app launched (pid 5900)
 [smoke] machine profile created at /Users/runner/work/_temp/smoke/profile/MachineProfile.json
 [smoke] new show opened (type com.nishanpani.oncue.show, windows: 1)
 [smoke] saved to /Users/runner/work/_temp/smoke/smoke.oncue
