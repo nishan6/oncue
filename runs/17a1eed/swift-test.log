@@ -1,0 +1,203 @@
+Building for debugging...
+[0/8] /Users/runner/work/oncue/oncue/Packages/OnCueCore/.build/arm64-apple-macosx/debug/OnCueCorePackageTests.derived/runner.swift
+[1/8] Write sources
+[2/8] Copying Fixtures
+[5/8] Write swift-version--79AA4F9932D1E87A.txt
+[7/27] Emitting module OnCueCore
+[8/36] Compiling OnCueCore CrewPage.swift
+[9/36] Compiling OnCueCore CrewServer.swift
+[10/36] Compiling OnCueCore CrewSnapshot.swift
+[11/36] Compiling OnCueCore ATEMSwitcher.swift
+[12/36] Compiling OnCueCore CompanionClient.swift
+[13/36] Compiling OnCueCore MIDIManager.swift
+[14/36] Compiling OnCueCore OSC.swift
+[15/36] Compiling OnCueCore PTZService.swift
+[16/36] Compiling OnCueCore SwitcherDevice.swift
+[17/36] Compiling OnCueCore ShowEngine.swift
+[18/36] Compiling OnCueCore SwitchLog.swift
+[19/36] Compiling OnCueCore Timing.swift
+[20/36] Compiling OnCueCore PDFExports.swift
+[21/36] Compiling OnCueCore TextExports.swift
+[22/36] Compiling OnCueCore Model.swift
+[23/36] Compiling OnCueCore MachineProfile.swift
+[24/36] Compiling OnCueCore ShowCoding.swift
+[25/36] Compiling OnCueCore TolerantDecoding.swift
+[26/36] Compiling OnCueCore LiveCursor.swift
+[27/36] Compiling OnCueCore SampleShow.swift
+[28/36] Compiling OnCueCore ShowEditing.swift
+[29/36] Compiling OnCueCore SwitcherEditing.swift
+[30/36] Compiling OnCueCore TimelineEditing.swift
+[31/36] Compiling OnCueCore Controls.swift
+[32/36] Compiling OnCueCore EngineController.swift
+[33/36] Compiling OnCueCore LTC.swift
+[34/36] Compiling OnCueCore PreShowCheck.swift
+[35/45] Compiling OnCueCoreTests ExportTests.swift
+[36/45] Compiling OnCueCoreTests MachineProfileTests.swift
+[37/45] Compiling OnCueCoreTests ModelTests.swift
+[38/45] Compiling OnCueCoreTests PersistenceTests.swift
+[39/49] Emitting module OnCueCoreTests
+[40/49] Compiling OnCueCoreTests ControlsTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[41/49] Compiling OnCueCoreTests CrewTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[42/49] Compiling OnCueCoreTests EditingTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[43/49] Compiling OnCueCoreTests EngineTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[44/49] Compiling OnCueCoreTests PreShowCheckTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PreShowCheckTests.swift:43:9: error: overlapping accesses to 'show', but modification requires exclusive access; consider copying to a local variable
+ 41 |         show.addShot(inItem: song, cameraID: nil, at: 200)
+ 42 |         show.updateCamera(show.sortedCameras[1].id) { $0.input = 0 }
+ 43 |         show.updateCamera(show.sortedCameras[2].id) { $0.input = show.sortedCameras[0].input }
+    |         |                                                        `- note: conflicting access is here
+    |         `- error: overlapping accesses to 'show', but modification requires exclusive access; consider copying to a local variable
+ 44 |         show.updateItem(song) { $0.syncMode = .midiClock }
+ 45 |         var p = profile()
+[45/49] Compiling OnCueCoreTests ShowControlTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PreShowCheckTests.swift:43:9: error: overlapping accesses to 'show', but modification requires exclusive access; consider copying to a local variable
+ 41 |         show.addShot(inItem: song, cameraID: nil, at: 200)
+ 42 |         show.updateCamera(show.sortedCameras[1].id) { $0.input = 0 }
+ 43 |         show.updateCamera(show.sortedCameras[2].id) { $0.input = show.sortedCameras[0].input }
+    |         |                                                        `- note: conflicting access is here
+    |         `- error: overlapping accesses to 'show', but modification requires exclusive access; consider copying to a local variable
+ 44 |         show.updateItem(song) { $0.syncMode = .midiClock }
+ 45 |         var p = profile()
+[46/49] Compiling OnCueCoreTests TimelineTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PreShowCheckTests.swift:43:9: error: overlapping accesses to 'show', but modification requires exclusive access; consider copying to a local variable
+ 41 |         show.addShot(inItem: song, cameraID: nil, at: 200)
+ 42 |         show.updateCamera(show.sortedCameras[1].id) { $0.input = 0 }
+ 43 |         show.updateCamera(show.sortedCameras[2].id) { $0.input = show.sortedCameras[0].input }
+    |         |                                                        `- note: conflicting access is here
+    |         `- error: overlapping accesses to 'show', but modification requires exclusive access; consider copying to a local variable
+ 44 |         show.updateItem(song) { $0.syncMode = .midiClock }
+ 45 |         var p = profile()
+[47/49] Compiling OnCueCoreTests resource_bundle_accessor.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/PreShowCheckTests.swift:43:9: error: overlapping accesses to 'show', but modification requires exclusive access; consider copying to a local variable
+ 41 |         show.addShot(inItem: song, cameraID: nil, at: 200)
+ 42 |         show.updateCamera(show.sortedCameras[1].id) { $0.input = 0 }
+ 43 |         show.updateCamera(show.sortedCameras[2].id) { $0.input = show.sortedCameras[0].input }
+    |         |                                                        `- note: conflicting access is here
+    |         `- error: overlapping accesses to 'show', but modification requires exclusive access; consider copying to a local variable
+ 44 |         show.updateItem(song) { $0.syncMode = .midiClock }
+ 45 |         var p = profile()
+error: fatalError
