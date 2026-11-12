@@ -22,6 +22,7 @@ enum ScreenshotRun {
         ("Live at the Arena (split).oncue", "workspace-split.png"),
         ("Live at the Arena (list).oncue", "workspace-list.png"),
         ("Live at the Arena (live).oncue", "live-mode.png"),
+        ("Live at the Arena (compact).oncue", "workspace-compact.png"),
     ]
 
     private static func openShows() {
@@ -46,9 +47,15 @@ enum ScreenshotRun {
         WorkspaceModel.seedState(showID: live.id, itemID: live.items[0].id, shotIDs: [], editor: .timeline)
         WorkspaceModel.openLive[live.id] = 5
 
+        // A smaller window: the timeline on the segment, with a shot selected.
+        let compact = Show.sample()
+        let seg = compact.items[2].id
+        WorkspaceModel.seedState(showID: compact.id, itemID: seg,
+                                 shotIDs: [compact.shotRows(forItem: seg)[3].id], editor: .timeline)
+
         let urls = shots.map { folder.appendingPathComponent($0.file) }
         do {
-            for (show, url) in zip([timeline, split, list, live], urls) { try ShowFileIO.write(show, to: url) }
+            for (show, url) in zip([timeline, split, list, live, compact], urls) { try ShowFileIO.write(show, to: url) }
         } catch {
             return finish("could not write sample shows: \(error.localizedDescription)", ok: false)
         }
@@ -57,18 +64,20 @@ enum ScreenshotRun {
             open(urls[1]) {
                 open(urls[2]) {
                     open(urls[3]) {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 4) { capture() }
+                        open(urls[4], size: NSSize(width: 1180, height: 760)) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 4) { capture() }
+                        }
                     }
                 }
             }
         }
     }
 
-    private static func open(_ url: URL, then next: @escaping () -> Void) {
+    private static func open(_ url: URL, size: NSSize = NSSize(width: 1440, height: 900), then next: @escaping () -> Void) {
         NSDocumentController.shared.openDocument(withContentsOf: url, display: true) { doc, _, error in
             if let error { return finish("open failed: \(error.localizedDescription)", ok: false) }
             if let window = doc?.windowControllers.first?.window {
-                window.setFrame(NSRect(x: 40, y: 40, width: 1440, height: 900), display: true)
+                window.setFrame(NSRect(x: 40, y: 40, width: size.width, height: size.height), display: true)
             }
             next()
         }

@@ -139,7 +139,7 @@ struct NowNextPanels: View {
                           timeWarning: (remaining ?? 0) < 0,
                           emptyText: "End of \(item?.kind == .segment ? "segment" : "song")")
         }
-        .frame(height: 260)
+        .frame(height: 290)
     }
 }
 
@@ -163,75 +163,117 @@ struct LiveShotPanel: View {
     var body: some View {
         let camera = show.camera(row?.cue.cameraID)
         let accent = role.color
-        VStack(alignment: .leading, spacing: Space.m) {
-            HStack(alignment: .firstTextBaseline, spacing: Space.s) {
-                TallyTag(state: role, live: true).scaleEffect(1.25, anchor: .leading).padding(.trailing, 8)
+        VStack(alignment: .leading, spacing: 0) {
+            // Role bar: tally tag, role, shot reference, clock.
+            HStack(alignment: .center, spacing: Space.s) {
+                TallyTag(state: role, live: true)
                 Text(role == .current ? "NOW" : "NEXT")
-                    .font(.system(size: 13, weight: .heavy))
-                    .tracking(1.5)
+                    .font(.system(size: 15, weight: .heavy))
+                    .tracking(2)
                     .foregroundStyle(accent)
                 if let row {
-                    Text("Shot \(row.number)").font(.ocLabel).foregroundStyle(Gallery.faint)
-                    if let item { Text(item.format(row.cue.at)).font(.readout(11)).foregroundStyle(Gallery.faint) }
+                    Text("Shot \(row.number)").font(.system(size: 13, weight: .medium)).foregroundStyle(Gallery.dim)
+                    if let item {
+                        Text(item.format(row.cue.at)).font(.readout(13)).foregroundStyle(Gallery.faint)
+                    }
                 }
                 Spacer()
                 if let timeValue {
                     VStack(alignment: .trailing, spacing: 0) {
-                        Text(timeLabel).font(.system(size: 10, weight: .medium)).foregroundStyle(Gallery.faint)
+                        Text(timeLabel).font(.system(size: 11, weight: .medium)).foregroundStyle(Gallery.faint)
                         Text(timeValue)
-                            .font(.system(size: 26, weight: .semibold).monospacedDigit())
+                            .font(.system(size: 30, weight: .semibold).monospacedDigit())
                             .foregroundStyle(timeWarning ? Gallery.amber : Gallery.ink)
+                            .contentTransition(.numericText())
                     }
                 } else if !timeLabel.isEmpty {
-                    Text(timeLabel).font(.ocLabel).foregroundStyle(Gallery.faint)
+                    Text(timeLabel).font(.system(size: 12, weight: .medium)).foregroundStyle(Gallery.faint)
                 }
             }
+            .frame(height: 48)
+
             if let row {
-                HStack(alignment: .center, spacing: Space.l) {
-                    CameraChip(camera: camera, missing: row.cue.cameraID != nil && camera == nil, size: 92)
-                    VStack(alignment: .leading, spacing: 4) {
+                HStack(alignment: .center, spacing: Space.l + 4) {
+                    LiveCameraBlock(camera: camera, missing: row.cue.cameraID != nil && camera == nil)
+                    VStack(alignment: .leading, spacing: 6) {
                         Text(camera?.displayName ?? "No camera")
-                            .font(.system(size: 26, weight: .semibold))
+                            .font(.system(size: 34, weight: .bold))
                             .foregroundStyle(camera == nil ? Gallery.amber : Gallery.ink)
                             .lineLimit(1)
+                            .minimumScaleFactor(0.7)
                         if let op = camera?.operatorName, !op.isEmpty {
-                            Text(op).font(.system(size: 14, weight: .medium)).foregroundStyle(Gallery.dim)
+                            Text(op).font(.system(size: 16, weight: .medium)).foregroundStyle(Gallery.dim)
                         }
                         if !row.cue.text.isEmpty {
-                            Text(row.cue.text).font(.system(size: 17)).foregroundStyle(Gallery.ink).lineLimit(2)
+                            Text(row.cue.text)
+                                .font(.system(size: 20, weight: .medium))
+                                .foregroundStyle(Gallery.ink)
+                                .lineLimit(2)
+                                .padding(.top, 2)
                         }
                         if !row.cue.note.isEmpty {
-                            Text(row.cue.note).font(.system(size: 13).italic()).foregroundStyle(Gallery.dim).lineLimit(2)
+                            Text(row.cue.note).font(.system(size: 14).italic()).foregroundStyle(Gallery.dim).lineLimit(2)
                         }
                     }
                     Spacer(minLength: 0)
                 }
-                Spacer(minLength: 0)
+                .frame(maxHeight: .infinity)
                 HStack(spacing: Space.s) {
                     Pill(text: row.cue.transition == .cut ? "CUT" : "MIX",
                          color: row.cue.transition == .cut ? Gallery.dim : Gallery.selection,
                          filled: row.cue.transition == .auto)
                     if let length = row.lengthSeconds {
-                        Text(String(format: "%.1f s planned", length)).font(.readout(11)).foregroundStyle(Gallery.faint)
+                        Text(String(format: "%.1f s planned", length)).font(.readout(12)).foregroundStyle(Gallery.faint)
+                    }
+                    Spacer()
+                    if let section = item?.sections.first(where: { $0.id == row.sectionID }) {
+                        Text(section.name).font(.system(size: 12, weight: .medium)).foregroundStyle(Gallery.faint)
                     }
                 }
             } else {
                 Spacer()
-                Text(emptyText).font(.system(size: 17, weight: .medium)).foregroundStyle(Gallery.faint)
+                Text(emptyText).font(.system(size: 18, weight: .medium)).foregroundStyle(Gallery.faint)
                 Spacer()
             }
         }
-        .padding(Space.l + 4)
+        .padding(.horizontal, Space.xl)
+        .padding(.bottom, Space.l)
+        .padding(.top, Space.xs)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .background(LivePalette.panel, in: RoundedRectangle(cornerRadius: Radius.l))
-        .overlay(alignment: .leading) {
+        .background(
+            LinearGradient(colors: [accent.opacity(row == nil ? 0 : 0.10), LivePalette.panel.opacity(0)],
+                           startPoint: .top, endPoint: .center)
+        )
+        .background(LivePalette.panel, in: RoundedRectangle(cornerRadius: Radius.l + 2))
+        .clipShape(RoundedRectangle(cornerRadius: Radius.l + 2))
+        .overlay(RoundedRectangle(cornerRadius: Radius.l + 2)
+            .strokeBorder(row == nil ? Gallery.hairline : accent.opacity(0.85), lineWidth: role == .next ? 3 : 2))
+        .animation(.easeOut(duration: 0.15), value: row?.id)
+    }
+}
+
+/// The camera on a NOW / NEXT card: its colour, the number large enough to read across a gallery.
+struct LiveCameraBlock: View {
+    let camera: Camera?
+    let missing: Bool
+
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: Radius.l)
+                .fill(camera?.swiftUIColor ?? Gallery.key)
             if let camera {
-                Rectangle().fill(camera.swiftUIColor).frame(width: 5)
-                    .clipShape(UnevenRoundedRectangle(topLeadingRadius: Radius.l, bottomLeadingRadius: Radius.l))
+                Text("\(camera.number)")
+                    .font(.cameraNumeral(58))
+                    .foregroundStyle(camera.inkColor)
+                    .minimumScaleFactor(0.5)
+                    .padding(.horizontal, 6)
+            } else {
+                Image(systemName: missing ? "exclamationmark" : "questionmark")
+                    .font(.system(size: 40, weight: .bold))
+                    .foregroundStyle(Gallery.amber)
             }
         }
-        .overlay(RoundedRectangle(cornerRadius: Radius.l)
-            .strokeBorder(row == nil ? Gallery.hairline : accent.opacity(role == .next ? 0.9 : 0.75), lineWidth: role == .next ? 2.5 : 2))
+        .frame(width: 128, height: 112)
     }
 }
 
@@ -244,7 +286,7 @@ struct UpcomingStrip: View {
     var body: some View {
         let upcoming = show.liveUpcoming(cursor, limit: 6)
         VStack(alignment: .leading, spacing: Space.s) {
-            Text("After next").font(.ocLabel).foregroundStyle(Gallery.dim)
+            Text("After next").sectionLabel()
             if upcoming.isEmpty {
                 Text("Nothing after next in this \(show.item(cursor.itemID)?.kind == .segment ? "segment" : "song").")
                     .font(.ocMeta).foregroundStyle(Gallery.faint)
@@ -285,14 +327,14 @@ struct LiveCameraGrid: View {
         let pvw = show.liveNext(cursor)?.cue.cameraID
         VStack(alignment: .leading, spacing: Space.s) {
             HStack {
-                Text("Cameras").font(.ocLabel).foregroundStyle(Gallery.dim)
+                Text("Cameras").sectionLabel()
                 Spacer()
                 Text("Tally follows the script position").font(.ocMeta).foregroundStyle(Gallery.faint)
             }
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: Space.s)], alignment: .leading, spacing: Space.s) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 128), spacing: Space.s)], alignment: .leading, spacing: Space.s) {
                 ForEach(show.sortedCameras) { cam in
                     SourceButton(camera: cam, tally: cam.id == pgm ? .current : (cam.id == pvw ? .next : .off),
-                                 live: true, width: 150, height: 52)
+                                 live: true, width: 128, height: 66, numeral: 24)
                 }
             }
         }
@@ -311,11 +353,19 @@ struct LiveControls: View {
         let now = show.liveNow(cursor)
         VStack(alignment: .leading, spacing: Space.l) {
             Button { model.liveAdvance() } label: {
-                VStack(spacing: 2) {
-                    Text("NEXT").font(.system(size: 22, weight: .heavy)).tracking(2)
-                    Text("Space").font(.ocMeta).opacity(0.7)
+                VStack(spacing: 6) {
+                    Text("NEXT").font(.system(size: 24, weight: .heavy)).tracking(3)
+                    if let next = show.liveNext(cursor) {
+                        let cam = show.camera(next.cue.cameraID)
+                        HStack(spacing: 6) {
+                            CameraChip(camera: cam, size: 18)
+                            Text(cam?.displayName ?? "No camera").font(.system(size: 12, weight: .semibold))
+                        }
+                        .foregroundStyle(Gallery.ink)
+                    }
+                    Text("Space").font(.system(size: 10.5, weight: .medium)).foregroundStyle(Gallery.faint)
                 }
-                .frame(maxWidth: .infinity, minHeight: 84)
+                .frame(maxWidth: .infinity, minHeight: 112)
             }
             .buttonStyle(LiveKeyStyle(color: Gallery.next))
             .disabled(show.liveNext(cursor) == nil)
@@ -331,7 +381,7 @@ struct LiveControls: View {
 
             if let item, !item.sections.isEmpty {
                 VStack(alignment: .leading, spacing: Space.xs) {
-                    Text("Sections").font(.ocLabel).foregroundStyle(Gallery.dim)
+                    Text("Sections").sectionLabel()
                     ScrollView {
                         VStack(spacing: 2) {
                             ForEach(item.sortedSections) { section in
@@ -361,7 +411,7 @@ struct LiveControls: View {
             }
             Spacer(minLength: 0)
             VStack(alignment: .leading, spacing: Space.xs) {
-                Text("Running order").font(.ocLabel).foregroundStyle(Gallery.dim)
+                Text("Running order").sectionLabel()
                 HStack(spacing: Space.s) {
                     Button { model.liveMoveItem(by: -1) } label: { Label("Previous", systemImage: "backward.end") }
                         .help("Previous song or segment (⌘[)")

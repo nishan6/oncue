@@ -31,6 +31,8 @@ struct InspectorView: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .animation(.easeOut(duration: 0.14), value: model.selectedShotIDs)
+            .animation(.easeOut(duration: 0.14), value: model.selectedCueID)
         }
         .background(Gallery.panel)
     }

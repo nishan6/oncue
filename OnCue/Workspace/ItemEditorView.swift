@@ -15,7 +15,7 @@ struct ItemEditorView: View {
         let rows = groups.flatMap(\.rows)
         VStack(spacing: 0) {
             ItemHeaderView(item: item, rows: rows, runLength: show.runLength(forItem: item.id), model: model)
-            Rectangle().fill(Gallery.hairline).frame(height: 1)
+            VStack(spacing: 0) {
             switch model.editorMode {
             case .timeline:
                 GeometryReader { geo in
@@ -30,13 +30,15 @@ struct ItemEditorView: View {
                 ShotListView(show: show, item: item, groups: groups, rows: rows, model: model)
             case .list:
                 SectionStripView(item: item, rows: rows, model: model)
-                Rectangle().fill(Gallery.hairline).frame(height: 1)
                 ShotListView(show: show, item: item, groups: groups, rows: rows, model: model)
             }
-            Rectangle().fill(Gallery.hairline).frame(height: 1)
+            }
+            .transition(.opacity)
+            .id(model.editorMode)
             CameraPaletteView(show: show, model: model)
         }
         .background(Gallery.base)
+        .animation(.easeOut(duration: 0.16), value: model.editorMode)
     }
 }
 
@@ -330,7 +332,7 @@ struct ShotListView: View {
             .listStyle(.inset)
             .scrollContentBackground(.hidden)
             .background(Gallery.base)
-            .environment(\.defaultMinListRowHeight, 34)
+            .environment(\.defaultMinListRowHeight, 44)
             .overlay {
                 if rows.isEmpty {
                     VStack(spacing: Space.s) {
@@ -465,8 +467,8 @@ struct SectionHeaderView: View {
                 .help("Move or delete this section. Its shots move with it; deleting keeps the shots.")
             }
         }
-        .padding(.vertical, Space.xs)
-        .overlay(alignment: .bottom) { Rectangle().fill(Gallery.hairline).frame(height: 1) }
+        .padding(.top, Space.s)
+        .padding(.bottom, Space.xxs)
     }
 
     private var positionHint: String {
@@ -487,10 +489,6 @@ struct ShotRowView: View {
 
     var body: some View {
         HStack(spacing: Space.m) {
-            RoundedRectangle(cornerRadius: 1)
-                .fill(camera?.swiftUIColor ?? Gallery.key)
-                .frame(width: 3, height: 26)
-
             Text(String(format: "%02d", row.number))
                 .font(.readout(11))
                 .foregroundStyle(Gallery.faint)
@@ -501,7 +499,7 @@ struct ShotRowView: View {
                 .foregroundStyle(Gallery.dim)
                 .frame(width: 52, alignment: .leading)
 
-            CameraChip(camera: camera, missing: row.cue.cameraID != nil && camera == nil, size: 24)
+            CameraChip(camera: camera, missing: row.cue.cameraID != nil && camera == nil, size: 26)
 
             VStack(alignment: .leading, spacing: 0) {
                 Text(camera?.displayName ?? (row.cue.cameraID == nil ? "No camera" : "Deleted camera"))
@@ -537,10 +535,10 @@ struct ShotRowView: View {
                     .help(row.issues.map(\.message).joined(separator: "\n"))
             }
 
-            Text(row.lengthSeconds.map { String(format: "%.1fs", $0) } ?? "")
-                .font(.readout(11))
+            Text(row.lengthSeconds.map { String(format: "%.1f s", $0) } ?? "NEXT")
+                .font(.readout(11.5, weight: .medium))
                 .foregroundStyle(Gallery.dim)
-                .frame(width: 44, alignment: .trailing)
+                .frame(width: 50, alignment: .trailing)
 
             Button {
                 model.setTransition(row.cue.transition == .cut ? .auto : .cut, for: [row.id])
@@ -553,7 +551,14 @@ struct ShotRowView: View {
             .buttonStyle(.plain)
             .help("Click to switch between cut and mix (⌥⌘T)")
         }
-        .padding(.vertical, Space.xs)
+        .padding(.vertical, 6)
+        .padding(.horizontal, Space.xs)
+        .background(alignment: .leading) {
+            RoundedRectangle(cornerRadius: 1.5)
+                .fill(camera?.swiftUIColor ?? Gallery.key)
+                .frame(width: 3)
+                .padding(.vertical, 7)
+        }
     }
 }
 
@@ -568,7 +573,7 @@ struct CameraPaletteView: View {
     var body: some View {
         HStack(alignment: .center, spacing: Space.m) {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Cameras").font(.ocHeading).foregroundStyle(Gallery.ink)
+                Text("Sources").font(.ocHeading).foregroundStyle(Gallery.ink)
                 Text(model.selectedShotIDs.isEmpty ? "Click adds a shot" : "⌥-click adds a shot")
                     .font(.ocMeta)
                     .foregroundStyle(Gallery.faint)
@@ -579,7 +584,7 @@ struct CameraPaletteView: View {
                 }
                 .padding(.leading, -5)
             }
-            .frame(width: 128, alignment: .leading)
+            .frame(width: 118, alignment: .leading)
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: Space.s) {
                     ForEach(show.sortedCameras) { cam in
@@ -597,68 +602,87 @@ struct CameraPaletteView: View {
         }
         .padding(.horizontal, Space.l)
         .padding(.vertical, Space.s)
-        .frame(height: 76)
+        .frame(height: 82)
         .background(Gallery.panel)
     }
 }
 
-/// One camera as a source button: colour chip with the number, name, operator and tally tag.
-/// Without an action it is a display (Live Mode's camera grid).
+/// One camera as a source key: the number in the camera's colour, name, operator, a colour bar
+/// along the bottom, and a labelled tally tag. Without an action it is a display (Live Mode).
 struct SourceButton: View {
     let camera: Camera
     let tally: TallyState
     var live = false
-    var width: CGFloat = 138
-    var height: CGFloat = 48
+    var width: CGFloat = 116
+    var height: CGFloat = 58
+    var numeral: CGFloat = 20
     var action: (() -> Void)? = nil
     @State private var hovering = false
+    @State private var pressed = false
 
     var body: some View {
         Group {
             if let action {
                 Button(action: action) { face }
-                    .buttonStyle(.plain)
+                    .buttonStyle(SourcePressStyle(pressed: $pressed))
                     .onHover { hovering = $0 }
             } else {
                 face
             }
         }
         .animation(.easeOut(duration: 0.12), value: hovering)
+        .animation(.easeOut(duration: 0.15), value: tally)
         .help(camera.operatorName.isEmpty ? "Camera \(camera.number), \(camera.displayName)"
               : "Camera \(camera.number), \(camera.displayName), operated by \(camera.operatorName)")
     }
 
     private var face: some View {
-        HStack(spacing: Space.s) {
-            CameraChip(camera: camera, size: min(30, height - 16))
-            VStack(alignment: .leading, spacing: 1) {
-                Text(camera.displayName)
-                    .font(.ocBodyStrong)
-                    .foregroundStyle(Gallery.ink)
-                    .lineLimit(1)
-                Text(camera.operatorName.isEmpty ? " " : camera.operatorName)
-                    .font(.ocMeta)
-                    .foregroundStyle(Gallery.faint)
-                    .lineLimit(1)
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                Text("\(camera.number)")
+                    .font(.cameraNumeral(numeral))
+                    .foregroundStyle(camera.swiftUIColor)
+                Spacer(minLength: 0)
+                TallyTag(state: tally, live: live)
             }
             Spacer(minLength: 0)
+            Text(camera.displayName)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(Gallery.ink)
+                .lineLimit(1)
+            Text(camera.operatorName.isEmpty ? " " : camera.operatorName)
+                .font(.system(size: 10.5))
+                .foregroundStyle(Gallery.faint)
+                .lineLimit(1)
         }
-        .padding(.horizontal, Space.s)
-        .frame(width: width, height: height)
+        .padding(.horizontal, 9)
+        .padding(.top, 6)
+        .padding(.bottom, 8)
+        .frame(width: width, height: height, alignment: .topLeading)
         .background(background, in: RoundedRectangle(cornerRadius: Radius.m))
-        .overlay(RoundedRectangle(cornerRadius: Radius.m)
-            .strokeBorder(tally == .off ? Gallery.hairline : tally.color, lineWidth: tally == .off ? 1 : 2))
-        .overlay(alignment: .topTrailing) {
-            TallyTag(state: tally, live: live).padding(5)
+        .overlay(alignment: .bottom) {
+            Rectangle().fill(camera.swiftUIColor).frame(height: 3)
+                .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: Radius.m, bottomTrailingRadius: Radius.m))
         }
+        .overlay(RoundedRectangle(cornerRadius: Radius.m)
+            .strokeBorder(tally == .off ? Color.white.opacity(hovering ? 0.12 : 0.05) : tally.color, lineWidth: tally == .off ? 1 : 2))
+        .scaleEffect(pressed ? 0.97 : 1)
         .contentShape(Rectangle())
     }
 
     private var background: Color {
         switch tally {
-        case .current: return Gallery.tally.opacity(0.16)
-        case .next: return Gallery.next.opacity(0.10)
+        case .current: return Gallery.tally.opacity(0.17)
+        case .next: return Gallery.next.opacity(0.11)
         case .off: return hovering ? Gallery.key : Gallery.raised
         }
+    }
+}
+
+private struct SourcePressStyle: ButtonStyle {
+    @Binding var pressed: Bool
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .onChange(of: configuration.isPressed) { _, p in pressed = p }
     }
 }

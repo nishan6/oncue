@@ -16,18 +16,18 @@ enum Gallery {
     static let well = Color(hex: "#0F1012")       // timeline lanes
     static let base = Color(hex: "#141518")       // window base, editor canvas
     static let canvas = base
-    static let panel = Color(hex: "#191A1E")      // sidebar, inspector, headers
+    static let panel = Color(hex: "#1A1B1F")      // sidebar, inspector, headers
     static let raised = Color(hex: "#212228")     // controls, fields
     static let key = Color(hex: "#2A2C33")        // buttons, pressed fields
     static let hover = Color.white.opacity(0.05)
     static let pressed = Color.white.opacity(0.09)
-    static let hairline = Color.white.opacity(0.07)
+    static let hairline = Color.white.opacity(0.06)
     static let divider = Color.white.opacity(0.10)
 
     // Text.
     static let ink = Color(hex: "#F1F1F3")
-    static let dim = Color(hex: "#A1A3AC")
-    static let faint = Color(hex: "#6A6D77")
+    static let dim = Color(hex: "#B0B3BC")
+    static let faint = Color(hex: "#80838E")
 
     // Meaning.
     static let tally = Color(hex: "#F0313A")      // program
@@ -51,6 +51,13 @@ enum Space {
     static let m: CGFloat = 12
     static let l: CGFloat = 16
     static let xl: CGFloat = 24
+}
+
+/// Section label inside panels: small, medium weight, slightly tracked. Never uppercase.
+extension Text {
+    func sectionLabel() -> some View {
+        self.font(.system(size: 11, weight: .semibold)).tracking(0.2).foregroundStyle(Gallery.faint)
+    }
 }
 
 /// Corner radii: small for blocks and fields, medium for text areas, large for sheets.
@@ -93,17 +100,17 @@ extension Font {
     /// Window-level titles (Live Mode, empty states).
     static let ocDisplay = Font.system(size: 26, weight: .semibold)
     /// Song and segment titles.
-    static let ocTitle = Font.system(size: 19, weight: .semibold)
+    static let ocTitle = Font.system(size: 20, weight: .semibold)
     /// Panel and inspector headings.
-    static let ocHeading = Font.system(size: 13, weight: .semibold)
+    static let ocHeading = Font.system(size: 13.5, weight: .semibold)
     /// Primary content: shot descriptions, item names.
     static let ocBody = Font.system(size: 13, weight: .regular)
     static let ocBodyStrong = Font.system(size: 13, weight: .medium)
     /// Metadata and secondary labels.
-    static let ocMeta = Font.system(size: 11, weight: .regular)
-    static let ocLabel = Font.system(size: 11, weight: .medium)
+    static let ocMeta = Font.system(size: 11.5, weight: .regular)
+    static let ocLabel = Font.system(size: 11.5, weight: .medium)
     /// Small tags (CUT, MIX, PGM).
-    static let ocTag = Font.system(size: 9.5, weight: .bold)
+    static let ocTag = Font.system(size: 9.5, weight: .heavy)
 
     /// Camera numerals: heavy and wide, OnCue's signature.
     static func cameraNumeral(_ size: CGFloat) -> Font {
@@ -390,14 +397,14 @@ struct InspectorGroup<Content: View>: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Space.s) {
             if let title {
-                Text(title).font(.ocLabel).foregroundStyle(Gallery.dim)
+                Text(title).sectionLabel()
             }
             content
         }
         .padding(.horizontal, Space.l)
-        .padding(.vertical, Space.m)
+        .padding(.top, Space.m)
+        .padding(.bottom, Space.xs)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .overlay(alignment: .bottom) { Rectangle().fill(Gallery.hairline).frame(height: 1) }
     }
 }
 
@@ -427,7 +434,7 @@ struct PanelHeader<Trailing: View>: View {
 
     var body: some View {
         HStack(spacing: Space.s) {
-            Text(title).font(.ocLabel).foregroundStyle(Gallery.dim)
+            Text(title).sectionLabel()
             Spacer()
             trailing
         }

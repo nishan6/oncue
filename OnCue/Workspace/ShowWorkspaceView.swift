@@ -19,11 +19,14 @@ struct ShowWorkspaceView: View {
             Group {
                 if let item = show.item(model.selectedItemID) {
                     ItemEditorView(show: show, item: item, model: model)
+                        .id(item.id)
+                        .transition(.opacity)
                 } else {
                     EmptyProductionView(model: model, hasItems: !show.items.isEmpty)
                 }
             }
             .frame(minWidth: 560)
+            .animation(.easeOut(duration: 0.14), value: model.selectedItemID)
         }
         .inspector(isPresented: $model.showInspector) {
             InspectorView(show: show, model: model)

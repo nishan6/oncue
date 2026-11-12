@@ -45,11 +45,11 @@ struct TimelineMetrics {
 }
 
 enum TimelineLayout {
-    static let headerWidth: CGFloat = 124
-    static let toolbar: CGFloat = 30
-    static let ruler: CGFloat = 24
+    static let headerWidth: CGFloat = 132
+    static let toolbar: CGFloat = 34
+    static let ruler: CGFloat = 28
     static let sections: CGFloat = 30
-    static let cueLane: CGFloat = 30
+    static let cueLane: CGFloat = 32
     static let hiddenLane: CGFloat = 16
     static let tail: CGFloat = 260
 
@@ -298,17 +298,23 @@ struct TimelineToolbar: View {
                 .foregroundStyle(Gallery.faint)
                 .help("Double-click a track to add. Drag a block to move it; drag a shot's right edge to trim. Double-click a block to edit it. Type a camera number to set it; ← and → step through shots.")
             Spacer(minLength: Space.s)
-            IconButton(symbol: "minus", help: "Zoom out (⌘-)", size: 20) { model.changeZoom(by: 1 / 1.4) }
-            Slider(value: Binding(get: { log2(model.zoom) }, set: { model.zoom = pow(2, $0) }), in: log2(0.15)...log2(6))
-                .controlSize(.mini)
-                .frame(width: 110)
-                .help("Zoom")
-            IconButton(symbol: "plus", help: "Zoom in (⌘=)", size: 20) { model.changeZoom(by: 1.4) }
-            Text("\(Int((model.zoom * 100).rounded()))%")
-                .font(.readout(10))
-                .foregroundStyle(Gallery.faint)
-                .frame(width: 36, alignment: .trailing)
-            Button("Fit", action: fit)
+            HStack(spacing: 2) {
+                IconButton(symbol: "minus.magnifyingglass", help: "Zoom out (⌘-)", size: 22) { model.changeZoom(by: 1 / 1.4) }
+                Slider(value: Binding(get: { log2(model.zoom) }, set: { model.zoom = pow(2, $0) }), in: log2(0.15)...log2(6))
+                    .controlSize(.mini)
+                    .frame(width: 104)
+                    .help("Zoom")
+                IconButton(symbol: "plus.magnifyingglass", help: "Zoom in (⌘=)", size: 22) { model.changeZoom(by: 1.4) }
+                Text("\(Int((model.zoom * 100).rounded()))%")
+                    .font(.readout(10.5))
+                    .foregroundStyle(Gallery.faint)
+                    .frame(width: 38, alignment: .trailing)
+                    .padding(.trailing, 4)
+            }
+            .padding(.horizontal, 3)
+            .frame(height: 26)
+            .background(Gallery.raised, in: Capsule())
+            Button { fit() } label: { Label("Fit", systemImage: "arrow.left.and.right") }
                 .buttonStyle(QuietButtonStyle())
                 .help("Fit the whole song or segment in the window")
         }
@@ -526,12 +532,13 @@ struct RulerLane: View {
         Canvas { context, size in
             for mark in RulerMark.marks(item: item, metrics: metrics, width: size.width) {
                 var tick = Path()
-                tick.move(to: CGPoint(x: mark.x + 0.5, y: size.height - (mark.major ? 9 : 4)))
+                let length: CGFloat = mark.label != nil ? 12 : (mark.major ? 7 : 4)
+                tick.move(to: CGPoint(x: mark.x + 0.5, y: size.height - length))
                 tick.addLine(to: CGPoint(x: mark.x + 0.5, y: size.height))
-                context.stroke(tick, with: .color(mark.major ? Gallery.dim : Gallery.faint), lineWidth: 1)
+                context.stroke(tick, with: .color(mark.label != nil ? Gallery.dim : Color.white.opacity(mark.major ? 0.28 : 0.16)), lineWidth: 1)
                 if let label = mark.label {
-                    let text = Text(label).font(.readout(10, weight: .semibold)).foregroundStyle(Gallery.dim)
-                    context.draw(text, at: CGPoint(x: mark.x + 4, y: 8), anchor: .leading)
+                    let text = Text(label).font(.readout(10.5, weight: .semibold)).foregroundStyle(Gallery.dim)
+                    context.draw(text, at: CGPoint(x: mark.x + 4, y: 10), anchor: .leading)
                 }
             }
         }
@@ -759,77 +766,102 @@ struct ShotBlock: View {
 
     var body: some View {
         let cue = span.row.cue
+        let tint = camera?.swiftUIColor ?? Gallery.key
         let ink = camera?.inkColor ?? Gallery.ink
         let mix = cue.transition == .auto
-        ZStack(alignment: .topLeading) {
-            Rectangle().fill(camera?.swiftUIColor ?? Gallery.key)
-            if mix {
-                MixRamp()
-                    .fill(Color.black.opacity(0.3))
-                    .frame(width: min(20, width * 0.4), height: min(20, height * 0.5))
-            }
-            VStack(alignment: .leading, spacing: 2) {
-                HStack(alignment: .firstTextBaseline, spacing: 5) {
-                    Text(camera.map { "\($0.number)" } ?? "?")
-                        .font(.cameraNumeral(numeralSize))
-                        .foregroundStyle(camera == nil ? Gallery.amber : ink)
-                    if width > 96, let camera {
-                        Text(camera.displayName)
-                            .font(.umd(11))
-                            .lineLimit(1)
-                            .opacity(0.85)
-                    }
-                    Spacer(minLength: 0)
-                    if !span.row.issues.isEmpty {
-                        Circle().fill(Gallery.amber).frame(width: 7, height: 7)
-                            .overlay(Circle().strokeBorder(Color.black.opacity(0.4), lineWidth: 1))
-                    }
-                }
-                if height > 54, width > 44, !cue.text.isEmpty {
-                    Text(cue.text)
+        let compact = width < 46
+        let strip: CGFloat = height >= 46 ? 22 : height
+        VStack(alignment: .leading, spacing: 0) {
+            // Label strip in the camera colour: number and name, like a clip label.
+            HStack(spacing: 5) {
+                Text(camera.map { "\($0.number)" } ?? "?")
+                    .font(.cameraNumeral(12))
+                    .foregroundStyle(camera == nil ? Gallery.amber : ink)
+                if !compact, let camera {
+                    Text(camera.displayName)
                         .font(.system(size: 11, weight: .semibold))
-                        .lineLimit(height > 110 ? 3 : 1)
-                }
-                if height > 96, width > 70, !cue.note.isEmpty {
-                    Text(cue.note)
-                        .font(.system(size: 10).italic())
-                        .lineLimit(2)
-                        .opacity(0.75)
+                        .foregroundStyle(ink.opacity(0.88))
+                        .lineLimit(1)
                 }
                 Spacer(minLength: 0)
-                if width > 40 {
-                    HStack(spacing: 4) {
-                        Text(duration).font(.readout(10, weight: .semibold))
-                        Spacer(minLength: 0)
-                        if width > 80 {
-                            Text(String(format: "#%02d", span.row.number)).font(.readout(10)).opacity(0.7)
-                        }
-                    }
+                if mix, width > 64 {
+                    Text("MIX").font(.ocTag).tracking(0.4).foregroundStyle(ink.opacity(0.75))
+                }
+                if !span.row.issues.isEmpty, width > 30 {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundStyle(ink.opacity(0.9))
                 }
             }
-            .foregroundStyle(ink)
-            .padding(.leading, mix ? 9 : 6)
-            .padding(.trailing, 6)
-            .padding(.vertical, 4)
-        }
-        .frame(width: max(width - 1, 3), height: height)
-        .overlay(Color.white.opacity(hovering && !selected ? 0.08 : 0))
-        .clipShape(RoundedRectangle(cornerRadius: 3))
-        .onHover { hovering = $0 }
-        .overlay(alignment: .bottom) {
-            if isNext {
-                Rectangle().fill(Gallery.next).frame(height: 4).clipShape(RoundedRectangle(cornerRadius: 1))
+            .padding(.horizontal, compact ? 3 : 6)
+            .frame(maxWidth: .infinity, alignment: compact ? .center : .leading)
+            .frame(height: strip)
+            .background(tint)
+            .overlay(alignment: .topLeading) {
+                if mix {
+                    MixRamp().fill(Color.black.opacity(0.22)).frame(width: min(12, width * 0.3), height: strip)
+                }
+            }
+
+            if height >= 46 {
+                ZStack(alignment: .bottomTrailing) {
+                    if height > 96, width > 80, let camera {
+                        Text("\(camera.number)")
+                            .font(.cameraNumeral(min(height * 0.4, 60)))
+                            .foregroundStyle(tint.opacity(0.22))
+                            .padding(.trailing, 6)
+                            .padding(.bottom, 16)
+                    }
+                    VStack(alignment: .leading, spacing: 3) {
+                        if width > 44, !cue.text.isEmpty {
+                            Text(cue.text)
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundStyle(Gallery.ink)
+                                .lineLimit(height > 130 ? 3 : (height > 74 ? 2 : 1))
+                        }
+                        if height > 104, width > 70, !cue.note.isEmpty {
+                            Text(cue.note)
+                                .font(.system(size: 11).italic())
+                                .foregroundStyle(Gallery.dim)
+                                .lineLimit(2)
+                        }
+                        Spacer(minLength: 0)
+                        if width > 40 {
+                            HStack(spacing: 4) {
+                                Text(duration).font(.readout(10.5, weight: .semibold)).foregroundStyle(Gallery.dim)
+                                Spacer(minLength: 0)
+                                if width > 84 {
+                                    Text(String(format: "#%02d", span.row.number)).font(.readout(10)).foregroundStyle(Gallery.faint)
+                                }
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 5)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                }
+                .background(tint.opacity(hovering ? 0.34 : 0.24))
+                .background(Gallery.well)
             }
         }
-        .overlay(RoundedRectangle(cornerRadius: 3).strokeBorder(Color.white, lineWidth: selected ? 2 : 0))
-        .overlay(RoundedRectangle(cornerRadius: 5).inset(by: -2).stroke(Gallery.selection, lineWidth: selected ? 2 : 0))
+        .frame(width: max(width - 2, 3), height: height)
+        .clipShape(RoundedRectangle(cornerRadius: Radius.s))
+        .overlay(RoundedRectangle(cornerRadius: Radius.s).strokeBorder(tint.opacity(selected ? 0 : 0.5), lineWidth: 1))
+        .overlay(alignment: .bottom) {
+            if isNext {
+                Rectangle().fill(Gallery.next).frame(height: 3)
+                    .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: Radius.s, bottomTrailingRadius: Radius.s))
+            }
+        }
+        .overlay(RoundedRectangle(cornerRadius: Radius.s).strokeBorder(Color.white, lineWidth: selected ? 1.5 : 0))
+        .overlay(RoundedRectangle(cornerRadius: Radius.s + 2).inset(by: -2.5).stroke(Gallery.selection, lineWidth: selected ? 2 : 0))
+        .shadow(color: selected ? Gallery.selection.opacity(0.35) : .clear, radius: 8)
+        .onHover { hovering = $0 }
+        .animation(.easeOut(duration: 0.12), value: hovering)
+        .animation(.easeOut(duration: 0.16), value: selected)
+        .animation(.easeOut(duration: 0.18), value: camera?.id)
         .frame(width: max(width - 1, 3), alignment: .leading)
         .help(help)
-    }
-
-    private var numeralSize: CGFloat {
-        let byHeight = min(max(height * 0.28, 15), 34)
-        return width < 30 ? min(byHeight, 13) : byHeight
     }
 
     private var duration: String {
@@ -936,12 +968,12 @@ struct SectionLane: View {
                     model.addSection(at: Show.snap(metrics.position(value.location.x), for: item))
                 })
                 .onTapGesture { model.clearSelection(); focus() }
-            ForEach(spans) { span in block(span) }
+            ForEach(Array(spans.enumerated()), id: \.element.id) { k, span in block(span, shade: k % 2 == 0 ? 0.055 : 0.03) }
         }
         .frame(width: width, height: TimelineLayout.sections, alignment: .topLeading)
     }
 
-    private func block(_ span: SectionSpan) -> some View {
+    private func block(_ span: SectionSpan, shade: Double) -> some View {
         let x = metrics.x(span.start)
         let w = max(metrics.x(span.end) - x, 8)
         let dx = drag?.id == span.id ? metrics.dragOffset(from: span.start, dx: drag!.dx) : 0
@@ -949,7 +981,7 @@ struct SectionLane: View {
                               set: { if !$0, model.editingSectionID == span.id { model.editingSectionID = nil } })
         return HStack(spacing: 6) {
             Text(span.section.name)
-                .font(.ocLabel)
+                .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(Gallery.ink)
                 .lineLimit(1)
             if w > 110 {
@@ -959,8 +991,8 @@ struct SectionLane: View {
         }
         .padding(.horizontal, Space.s)
         .frame(width: max(w - 1, 4), height: TimelineLayout.sections, alignment: .leading)
-        .background(Color.white.opacity(0.035))
-        .overlay(alignment: .leading) { Rectangle().fill(Gallery.ink.opacity(0.55)).frame(width: 2) }
+        .background(Color.white.opacity(shade))
+        .overlay(alignment: .leading) { Rectangle().fill(Gallery.ink.opacity(0.7)).frame(width: 2) }
         .popover(isPresented: editing, arrowEdge: .bottom) {
             SectionQuickEditor(section: span.section, model: model)
         }
