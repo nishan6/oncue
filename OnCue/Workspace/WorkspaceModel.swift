@@ -98,6 +98,8 @@ final class WorkspaceModel: ObservableObject {
             persistState()
         }
     }
+    /// Shot inspector page: Info, Index or Reviews.
+    @Published var inspectorTab: InspectorTab = .info
     @Published var selectedShotIDs: Set<UUID> = [] {
         didSet {
             if !selectedShotIDs.isEmpty, selectedCueID != nil { selectedCueID = nil }
@@ -729,6 +731,14 @@ final class WorkspaceModel: ObservableObject {
     func updateShot(_ shotID: UUID, _ actionName: String, _ change: @escaping (inout Cue) -> Void) {
         guard let id = selectedItemID else { return }
         edit(actionName) { $0.updateCue(shotID, inItem: id) { change(&$0) } }
+    }
+
+    /// One undo step that changes several shots in the selected song or segment.
+    func updateShots(_ ids: Set<UUID>, _ actionName: String, _ change: @escaping (inout Cue) -> Void) {
+        guard let itemID = selectedItemID, !ids.isEmpty else { return }
+        edit(actionName) { show in
+            for id in ids { show.updateCue(id, inItem: itemID) { change(&$0) } }
+        }
     }
 
     func setShotPosition(_ shotID: UUID, text: String) -> Bool {

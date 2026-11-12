@@ -174,6 +174,31 @@ private struct ShotInspector: View {
             }
             .overlay(alignment: .bottom) { Rectangle().fill(Gallery.hairline).frame(height: 1) }
 
+            Picker("", selection: $model.inspectorTab) {
+                ForEach(InspectorTab.allCases) { tab in
+                    if tab == .reviews, !row.cue.reviews.isEmpty {
+                        Text("Reviews (\(row.cue.reviews.filter { !$0.resolved }.count))").tag(tab)
+                    } else {
+                        Text(tab.label).tag(tab)
+                    }
+                }
+            }
+            .labelsHidden()
+            .pickerStyle(.segmented)
+            .padding(.horizontal, Space.l)
+            .padding(.top, Space.m)
+
+            switch model.inspectorTab {
+            case .info: info(camera: camera, missing: missing)
+            case .index: ShotIndexView(show: show, item: item, rows: show.shotRows(forItem: item.id), model: model)
+            case .reviews: ShotReviewsView(row: row, model: model)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func info(camera: Camera?, missing: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
             InspectorGroup(title: "Camera") {
                 CameraField(show: show, camera: camera, missing: missing) { id in
                     if let id { model.useCamera(id, newShot: false) } else {
@@ -195,17 +220,10 @@ private struct ShotInspector: View {
                         .foregroundStyle(Gallery.ink)
                         .padding(.leading, 5)
                 }
-                PropertyRow(label: "Transition") {
-                    Picker("Transition", selection: Binding(get: { row.cue.transition },
-                                                             set: { model.setTransition($0, for: [row.id]) })) {
-                        Text("Cut").tag(TransitionKind.cut)
-                        Text("Mix").tag(TransitionKind.auto)
-                    }
-                    .labelsHidden()
-                    .pickerStyle(.segmented)
-                    .frame(maxWidth: 150)
-                }
+                TransitionEditor(cues: [row.cue], ids: [row.id], model: model)
             }
+
+            ShotDetailsGroup(cues: [row.cue], ids: [row.id], model: model)
 
             InspectorGroup(title: "Description") {
                 CommitTextArea(placeholder: "What the audience sees", value: row.cue.text) { text in
@@ -285,12 +303,9 @@ private struct MultiShotInspector: View {
                 }
             }
             InspectorGroup(title: "Transition for all") {
-                HStack(spacing: Space.s) {
-                    Button("All cuts") { model.setTransition(.cut) }
-                    Button("All mixes") { model.setTransition(.auto) }
-                }
-                .buttonStyle(QuietButtonStyle())
+                TransitionEditor(cues: rows.map(\.cue), ids: Set(rows.map(\.id)), model: model)
             }
+            ShotDetailsGroup(cues: rows.map(\.cue), ids: Set(rows.map(\.id)), model: model)
             HStack(spacing: Space.s) {
                 Button { model.duplicateSelectedShots() } label: { Label("Duplicate", systemImage: "plus.square.on.square") }
                     .buttonStyle(QuietButtonStyle())

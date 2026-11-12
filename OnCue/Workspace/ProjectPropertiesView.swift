@@ -30,14 +30,19 @@ struct ProjectPropertiesView: View {
             }
             Picker("", selection: $tab) {
                 Text("Scene defaults").tag(0)
+                Text("Shots").tag(2)
                 Text("Roles").tag(1)
             }
             .pickerStyle(.segmented)
             .labelsHidden()
-            .frame(width: 260)
+            .frame(width: 330)
 
             Group {
-                if tab == 0 { sceneDefaults } else { roles }
+                switch tab {
+                case 0: sceneDefaults
+                case 2: ShotVocabularyEditor(vocab: $draft.properties.shots, countdown: $draft.properties.countdown)
+                default: roles
+                }
             }
             .padding(Space.m)
             .frame(maxWidth: .infinity, minHeight: 280, alignment: .topLeading)
@@ -69,7 +74,7 @@ struct ProjectPropertiesView: View {
             }
         }
         .padding(Space.l)
-        .frame(width: 620)
+        .frame(width: 680)
         .background(Gallery.panel)
         .preferredColorScheme(.dark)
         .onAppear {
