@@ -478,15 +478,15 @@ public final class ShowEngine {
     /// Cut (or mix, or aux) an output to a shot, routing through sub-switchers.
     private func cutCommands(output: OutputConfig, shot: ShotRow, now: Double) -> [EngineCommand] {
         guard mode(of: output.id) == .cut, let switcherID = output.switcherID,
-              let route = route(shot.cue.cameraID, to: switcherID) else { return [] }
-        var commands: [EngineCommand] = route.feeds.map { .program(switcher: $0.switcher, input: $0.input) }
+              let shotRoute = route(shot.cue.cameraID, to: switcherID) else { return [] }
+        var commands: [EngineCommand] = shotRoute.feeds.map { .program(switcher: $0.switcher, input: $0.input) }
         switch output.bus {
         case .aux:
-            commands.append(.aux(switcher: switcherID, aux: output.auxIndex, input: route.input))
+            commands.append(.aux(switcher: switcherID, aux: output.auxIndex, input: shotRoute.input))
         case .program:
             let mix = shot.cue.transition == .auto
-            commands += [.preview(switcher: switcherID, input: route.input), mix ? .auto(switcher: switcherID) : .cut(switcher: switcherID)]
-            expected.append((switcherID, route.input, now + 10))
+            commands += [.preview(switcher: switcherID, input: shotRoute.input), mix ? .auto(switcher: switcherID) : .cut(switcher: switcherID)]
+            expected.append((switcherID, shotRoute.input, now + 10))
         }
         return commands
     }
@@ -494,14 +494,14 @@ public final class ShowEngine {
     /// Puts the next shot on a switcher's preview. A shot on a sub-switcher that is not on air goes
     /// straight to that sub-switcher's program, so the main preview shows it.
     private func previewCommands(for row: ShotRow?, on switcherID: UUID, after current: ShotRow?) -> [EngineCommand] {
-        guard let row, let route = route(row.cue.cameraID, to: switcherID) else { return [] }
+        guard let row, let nextRoute = route(row.cue.cameraID, to: switcherID) else { return [] }
         let onAirRoute = route(current?.cue.cameraID, to: switcherID)
-        if let lowest = route.feeds.first, onAirRoute?.input == route.input {
+        if let lowest = nextRoute.feeds.first, onAirRoute?.input == nextRoute.input {
             // Same sub-switcher feed is on air: prepare the camera on the sub-switcher's own preview.
             return [.preview(switcher: lowest.switcher, input: lowest.input)]
         }
-        let feeds: [EngineCommand] = route.feeds.map { .program(switcher: $0.switcher, input: $0.input) }
-        return feeds + [.preview(switcher: switcherID, input: route.input)]
+        let feeds: [EngineCommand] = nextRoute.feeds.map { .program(switcher: $0.switcher, input: $0.input) }
+        return feeds + [.preview(switcher: switcherID, input: nextRoute.input)]
     }
 
     /// Puts the next scripted shots on preview (Auto preview and Auto cut).
@@ -528,10 +528,13 @@ public final class ShowEngine {
         guard let item, !freeMode else { return [] }
         var commands: [EngineCommand] = []
         let automation = automationOn && mode != .display
-        let cues = item.tracks.filter { !$0.muted && $0.kind != .shots }
-            .flatMap { track in track.cues.map { (track, $0) } }
-            .filter { $0.1.at > from + 1e-9 && $0.1.at <= to + 1e-9 }
-            .sorted { $0.1.at < $1.1.at }
+        var cues: [(Track, Cue)] = []
+        for track in item.tracks where !track.muted && track.kind != .shots {
+            for cue in track.cues where cue.at > from + 1e-9 && cue.at <= to + 1e-9 {
+                cues.append((track, cue))
+            }
+        }
+        cues.sort { $0.1.at < $1.1.at }
         for (track, cue) in cues {
             switch track.kind {
             case .fx:
