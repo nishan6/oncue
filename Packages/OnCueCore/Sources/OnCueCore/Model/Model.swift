@@ -485,6 +485,8 @@ public struct Show: Codable, Hashable, Identifiable {
     public var midiBindings: [MIDIBinding] = []
     public var settings = ShowSettings()
     public var plot = CameraPlot()
+    /// Named versions kept inside the file (see ShowVersions).
+    public var versions: [ShowVersion] = []
 
     /// Counts shown by the app shell without exposing the internal model types.
     public var cameraCount: Int { cameras.count }

@@ -38,6 +38,8 @@ public struct MachineProfile: Codable, Equatable {
 
     // Files
     public var logFolder: String = ""
+    /// A folder (iCloud Drive, a NAS, a USB drive) that gets a copy of every show as it changes.
+    public var backupFolder: String = ""
 
     public init() {}
 
@@ -62,6 +64,7 @@ public struct MachineProfile: Codable, Equatable {
         backupRole = try c.value("backupRole", "off")
         primaryHost = try c.value("primaryHost", "")
         logFolder = try c.value("logFolder", "")
+        backupFolder = try c.value("backupFolder", "")
     }
 }
 

@@ -126,6 +126,26 @@ final class WorkspaceModel: ObservableObject {
     @Published var plotOpen = false
     @Published var tourOpen = false
     @Published var draftSource: DraftSource?
+    @Published var versionsOpen = false
+    @Published var backupError: String?
+    private var backupWork: DispatchWorkItem?
+
+    /// Copies the show to this Mac's backup folder a few seconds after changes settle.
+    func scheduleBackup(_ show: Show) {
+        let folder = MachineProfileStore().profile.backupFolder
+        guard !folder.isEmpty else { return }
+        backupWork?.cancel()
+        let work = DispatchWorkItem { [weak self] in
+            do {
+                try ShowBackup.write(show, to: URL(fileURLWithPath: folder, isDirectory: true))
+                self?.backupError = nil
+            } catch {
+                self?.backupError = "Backup to \(folder) failed: \(error.localizedDescription)"
+            }
+        }
+        backupWork = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + 8, execute: work)
+    }
     @Published var cameraDownOpen = false
     /// The log shown in the after-show report.
     @Published var reportLog: SwitchLog?
@@ -596,6 +616,10 @@ final class WorkspaceModel: ObservableObject {
     func enterLive() {
         guard let id = selectedItemID ?? show.items.first?.id else { return }
         editingCueID = nil
+        // A version of the script as it went live, kept in the file (skipped when unchanged).
+        let stamp = Date().formatted(date: .abbreviated, time: .shortened)
+        let night = show.settings.nightLabel
+        edit("Version Before Live") { $0.saveVersion(name: "Before Live" + (night.isEmpty ? ", \(stamp)" : ", \(night)"), automatic: true) }
         let controller = EngineController(show: show, itemID: id, profile: MachineProfileStore().profile)
         controller.connectSwitcher()
         engine = controller

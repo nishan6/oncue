@@ -82,6 +82,9 @@ struct ShowWorkspaceView: View {
         .sheet(isPresented: $model.tourOpen) {
             TourView(show: show, model: model)
         }
+        .sheet(isPresented: $model.versionsOpen) {
+            VersionsView(show: show, model: model)
+        }
         .sheet(item: $model.draftSource) { source in
             DraftScriptView(show: show, source: source, model: model)
         }
@@ -104,6 +107,7 @@ struct ShowWorkspaceView: View {
             model.validateSelection()
             model.engine?.update(show: newShow)
             model.crew.showChanged(newShow)
+            model.scheduleBackup(newShow)
         }
         .onDisappear { model.crew.stop() }
     }

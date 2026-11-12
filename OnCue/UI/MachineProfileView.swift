@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 import OnCueCore
 
 /// Settings window: this Mac's hardware profile (never stored in shows).
@@ -70,8 +71,31 @@ struct MachineProfileView: View {
                 field("Crew page interface", \.crewInterface, prompt: "en0")
             }
             Section("Backup") {
-                field("Role (off, primary, backup)", \.backupRole, prompt: "off")
-                field("Primary Mac address", \.primaryHost, prompt: "192.168.10.20")
+                HStack {
+                    TextField("Backup folder", text: .constant(machine.profile.backupFolder.isEmpty ? "Off" : machine.profile.backupFolder))
+                        .disabled(true)
+                    Button("Choose…") {
+                        let panel = NSOpenPanel()
+                        panel.canChooseDirectories = true
+                        panel.canChooseFiles = false
+                        panel.canCreateDirectories = true
+                        panel.prompt = "Back Up Here"
+                        if panel.runModal() == .OK, let url = panel.url { machine.update { $0.backupFolder = url.path } }
+                    }
+                    if !machine.profile.backupFolder.isEmpty {
+                        Button("Off") { machine.update { $0.backupFolder = "" } }
+                    }
+                }
+                Text("Every show is copied here a few seconds after each change, with the last 30 copies kept. iCloud Drive, a NAS or a USB drive all work.")
+                    .font(.footnote).foregroundStyle(.secondary)
+                Picker("This Mac in Live Mode", selection: Binding(get: { machine.profile.backupRole }, set: { v in machine.update { $0.backupRole = v } })) {
+                    Text("Runs the show").tag("off")
+                    Text("Main, with a backup Mac following").tag("primary")
+                    Text("Backup, following the main Mac").tag("backup")
+                }
+                if machine.profile.backupRole == "backup" {
+                    field("Main Mac address", \.primaryHost, prompt: "192.168.10.20")
+                }
             }
             if let error = machine.saveError {
                 Text(error).foregroundStyle(.red)
