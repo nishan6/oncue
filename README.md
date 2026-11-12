@@ -4,7 +4,7 @@ A native macOS app (Swift / SwiftUI, macOS 14+, Apple Silicon) for scripting the
 
 The product requirements are in the OnCue PRD.
 
-**Current state:** the scripting workspace and the show engine. **Phase 1:** a working show scripting workspace. Create a production, build the running order of songs and segments, add sections, configure cameras, and script shots with timing, transitions and notes. Everything saves to the show file, and each show reopens where you left it. There is no live show engine yet: OnCue does not drive switchers, follow MIDI or LTC, or serve the crew page.
+**Current state:** every V1 item in the PRD is built and covered by tests, but **none of it has been tested against real hardware yet**: ATEM, Companion, MIDI clock, LTC, PTZ, OSC and a second Mac have only been exercised against stand-ins (a simulated switcher, a stand-in ATEM on localhost, generated LTC and MIDI clock, local TCP and HTTP servers).
 
 ## Using the workspace
 
@@ -16,17 +16,36 @@ The product requirements are in the OnCue PRD.
 - **Inspector** (right): the selected shot or shots, lyric, note or FX cue, or the song or segment.
 - **Cameras** (Production > Cameras): colour, number, name, the operator for this show, and the switcher input.
 
-- **Live Mode** (⌘L or the Live button): the script as a gallery display. NOW (PGM) and NEXT (PVW) with camera, operator, description and note; the shots after next; the camera grid with labelled tally; section jumps and song changes. NEXT (Space or →) takes the next shot and back (←) steps back; the clock shows how long the shot has been on air and, where the script has timing, how long until the next is planned. Esc leaves Live Mode and selects the shot that was on air.
+- **Live Mode** (⌘L or the Live button): the script as a gallery display. NOW (PGM) and NEXT (PVW) with camera, operator, description and note; the shots after next; the camera grid with labelled tally; section jumps and song changes. NEXT (Space or →) takes the next shot and back (←) steps back; the clock shows how long the shot has been on air and, where the script has timing, how long until the next is planned. Leaving Live Mode (⌘L or Exit) selects the shot that was on air; Esc is panic, not exit.
 
 ### Show engine (Live Mode)
 
 - **Switcher mode** (in Live Mode): **Display** shows the calls only; **Preview** puts the next shot's camera on preview and you cut; **Cut** cuts (or mixes) on the script and preloads the next shot. Live Mode always starts in Display, so nothing is sent until you choose.
 - **Manual cut pauses automation**: in Cut mode, if the program changes to something OnCue did not send, automation pauses (amber banner) and OnCue keeps following the script without sending anything. **Resume** (R) puts the next shot on preview and carries on.
 - **Timing per song or segment** ("Live follows" in the header): Section taps (T; OnCue runs at the tempo between taps), NEXT, MIDI clock (Ableton Start starts the song; Song Position is followed), LTC (an audio input; "LTC start" is the song's first frame, or empty for the first frame after GO), or OnCue's own clock from GO (Return).
-- **Switcher** (Production > Switcher…, ⌥⌘S): ATEM (IP address and M/E, UDP 9910), Companion, or the built-in simulator. Cameras reach the switcher on the inputs set under Cameras; cameras without an input are skipped.
+- **Switchers** (Production > Show Setup…, ⌥⌘S): ATEM (IP address and M/E, UDP 9910), Companion, or the built-in simulator. Cameras reach the switcher on the inputs set under Cameras; cameras without an input are skipped.
 - **This Mac** (Settings): MIDI clock source, LTC audio input and channel.
 
-Not built yet: FX, control, OSC and PTZ cues do not run; only the main output is driven (sub-switchers and separate outputs come next); Companion's per-input button mapping is not editable yet.
+- **Several switchers and outputs** (Show Setup, ⌥⌘S): a main switcher, sub-switchers feeding it, separate outputs with their own shots track, aux buses, outputs mirroring the main one, and per-input Companion buttons for switchers OnCue can't talk to directly.
+- **Cues**: FX (macros, DSK, keyers, fade to black), control (load next song, wait), OSC to Resolume, Disguise, CasparCG or a lighting desk, and PTZ presets (Panasonic, VISCA, ATEM macros or Companion).
+- **Controls**: keyboard, Akai APC40 mkII (with pad tally), any MIDI controller by MIDI learn, Stream Deck through Companion (OSC in, custom variables out).
+- **Free mode** (F), **loop a section** (L), **camera down** (move a dead camera's coming shots to another), **panic** (Esc: everything drops to display only).
+- **Rundown timing**: songs and segments with a planned length or a hard out show elapsed, left or over, the hard out countdown, the show over or under, and whether the next hard out will be made.
+- **Operator monitors** (Show Setup › Monitors): gallery, camera tally, shotlist and countdown views, full screen on the chosen displays while in Live Mode.
+- **Backup Mac** (Settings › Backup): the main Mac serves its position and the show on TCP 9123; the backup follows without sending anything and can take over.
+- **Switch log and report**: every cut and call is logged (with LTC when present) in `Documents/OnCue Logs`; leaving Live Mode shows Director Stats and scripted vs actual.
+
+### Around the show
+
+- **Crew page** (toolbar phone button): a page phones open on the local network (QR code). Operators pick their camera and see their tally, a countdown to their next shot and what's coming; outside Live Mode it's a script review where they can comment on shots.
+- **Pre-show check** (⌥⌘K): switchers answer and have every camera's input, every shot has a camera, timing and controller devices are connected, PTZ heads answer, the log folder is writable. Picture on each input isn't reported by switchers, so it isn't claimed.
+- **Camera plot** (⌥⌘P): cameras placed and turned on an imported venue plan or a grid, with position names and lenses; export as PNG.
+- **Exports** (⇧⌘E): camera script PDF, call sheets per camera PDF, script CSV, shot markers EDL for Resolve. From a show report: program cuts as an EDL for conforming ISO recordings, and the switch log as CSV.
+- **Draft script** from a switch log or an EDL: new songs next to the originals with the cuts as shots.
+- **Media under the timeline**: song audio or a PGM recording with its waveform; scrub, play (⌥Space), set where the song starts, float the video.
+- **Tour**: name tonight; nights compared show-wide and per song from their logs, with who was on each camera.
+- **Versions** inside the show file (named, and one each time Live Mode starts), plus copies to a backup folder (Settings).
+
 
 | Action | Keys |
 | --- | --- |
@@ -43,10 +62,15 @@ Not built yet: FX, control, OSC and PTZ cues do not run; only the main output is
 | Timeline / timeline and list / list | ⌘1 / ⌘2 / ⌘3 |
 | Zoom in / out / actual size | ⌘= / ⌘- / ⌘0 |
 | Previous / next shot (timeline) | ← / → |
-| Live Mode on / off | ⌘L (Esc leaves) |
+| Live Mode on / off | ⌘L |
 | Live: NEXT / back | Space or → / ← |
 | Live: GO / stop, tap section, resume | Return, T, R |
-| Switcher settings | ⌥⌘S |
+| Show Setup | ⌥⌘S |
+| Pre-show check / camera plot / export | ⌥⌘K / ⌥⌘P / ⇧⌘E |
+| Play or pause media | ⌥Space |
+| Live: free mode, loop, cut, auto, tap tempo | F, L, C, A, B |
+| Live: camera to preview | its number |
+| Live: panic (display only) | Esc |
 | Undo / redo | ⌘Z / ⇧⌘Z |
 
 ## Project structure
@@ -121,7 +145,15 @@ xcodebuild -project OnCue.xcodeproj -scheme OnCue -configuration Debug -derivedD
 open build/DerivedData/Build/Products/Debug/OnCue.app
 ```
 
-The app is ad-hoc signed by default, so it builds without an Apple developer team. For distribution, set your team and a "Developer ID Application" certificate (DMG packaging is a later phase).
+The app is ad-hoc signed by default, so it builds without an Apple developer team.
+
+## Packaging a DMG
+
+```
+scripts/package-dmg.sh            # Release build, ad-hoc signed, dist/OnCue-<version>-<build>.dmg
+```
+
+For a DMG that opens on any Mac, set `SIGN_IDENTITY` ("Developer ID Application: …") and `TEAM_ID`, plus notary credentials (`NOTARY_KEY_PATH`, `NOTARY_KEY_ID`, `NOTARY_ISSUER`, or `NOTARY_APPLE_ID` and `NOTARY_PASSWORD`); the script then signs with the hardened runtime, notarizes and staples. CI builds the DMG on every push (kept as a workflow artifact for 30 days) and, for a tag like `v0.2.0`, publishes a GitHub release with it. To sign in CI, add the repository secrets `DEVELOPER_ID_P12` (base64 of the exported certificate), `DEVELOPER_ID_P12_PASSWORD`, `SIGN_IDENTITY`, `TEAM_ID`, `NOTARY_APPLE_ID` and `NOTARY_PASSWORD`.
 
 ## Tests
 
@@ -143,5 +175,6 @@ CI (`.github/workflows/build.yml`) runs all of the above on a macOS runner for e
 - **Device types in OnCueCore are internal.** The model and editing API are public.
 - **Schema 0 files lose their per-Mac settings on open**: MIDI ports, LTC device, crew interface and the like. This is deliberate, so a show from another Mac cannot overwrite this Mac's hardware setup. Re-enter them in Settings.
 - **Machine-profile enums are stored as text** (`backupRole`, `companionVersion`) to keep the profile independent of the show model's enums.
-- **The device integrations (ATEM, Companion, OSC, PTZ, MIDI) are unchanged** from the initial commit, apart from the compile fix in `SwitcherDevice.swift`. They are still untested on hardware, and audit items C7–C12 are not started.
-- **Monitor configurations stay in the show file**, including their screen names, which are per-Mac. To revisit when operator monitors are built.
+- **The device integrations (ATEM, Companion, OSC, PTZ, MIDI, LTC) are untested on hardware.** They are tested against stand-ins only.
+- **Monitor configurations stay in the show file**, including their display names, which are per-Mac. A monitor whose display isn't connected opens as an ordinary window.
+- **Plan images and named versions are stored inside the show file**, so a show with many versions or a large plan grows (plans are scaled to 2400 px JPEG; versions are compressed).
