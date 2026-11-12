@@ -16,7 +16,7 @@ struct ShowSetupView: View {
     }
 
     enum Tab: String, CaseIterable, Identifiable {
-        case switchers = "Switchers", outputs = "Outputs", osc = "OSC targets", ptz = "PTZ cameras", monitors = "Monitors", controls = "Controls"
+        case switchers = "Switchers", outputs = "Outputs", osc = "OSC", ptz = "PTZ", monitors = "Monitors", controls = "Controls"
         var id: String { rawValue }
     }
 
