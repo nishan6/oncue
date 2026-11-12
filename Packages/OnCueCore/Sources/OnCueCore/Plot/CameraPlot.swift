@@ -36,7 +36,7 @@ public struct PlotMarker: Codable, Hashable, Identifiable {
 
 /// The camera plot: a venue plan (an image the person imports, or a plain grid) with every camera's
 /// position and direction, to share with the crew and keep with the show.
-public struct CameraPlot: Codable, Equatable {
+public struct CameraPlot: Codable, Hashable {
     public var markers: [PlotMarker] = []
     /// The venue plan image (PNG or JPEG), when one was imported.
     public var background: Data?

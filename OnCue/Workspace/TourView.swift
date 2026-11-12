@@ -72,7 +72,11 @@ struct TourView: View {
             HStack(alignment: .bottom, spacing: 0) {
                 Color.clear.frame(width: labelWidth, height: 1)
                 ForEach(tour.nights) { night in
-                    Button { model.reportLog = night.log; dismiss() } label: {
+                    Button {
+                        dismiss()
+                        let log = night.log
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { model.reportLog = log }
+                    } label: {
                         VStack(alignment: .leading, spacing: 1) {
                             Text(night.log.nightName).font(.ocLabel).foregroundStyle(Gallery.ink).lineLimit(1)
                             Text(night.log.started.formatted(date: .abbreviated, time: .shortened)).font(.ocMeta).foregroundStyle(Gallery.faint)
