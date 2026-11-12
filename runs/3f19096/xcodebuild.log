@@ -1,0 +1,290 @@
+Command line invocation:
+    /Applications/Xcode_16.4.app/Contents/Developer/usr/bin/xcodebuild -project OnCue.xcodeproj -scheme OnCue -configuration Debug -destination platform=macOS,arch=arm64 -derivedDataPath build/DerivedData build
+
+Resolve Package Graph
+
+
+Resolved source packages:
+  OnCueCore: /Users/runner/work/oncue/oncue/Packages/OnCueCore
+
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (3 targets)
+    Target 'OnCue' in project 'OnCue'
+        ➜ Explicit dependency on target 'OnCueCore' in project 'OnCueCore'
+    Target 'OnCueCore' in project 'OnCueCore'
+        ➜ Explicit dependency on target 'OnCueCore' in project 'OnCueCore'
+    Target 'OnCueCore' in project 'OnCueCore' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: 83e9472c476722a089237652110d1878
+Build description path: /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/XCBuildData/83e9472c476722a089237652110d1878.xcbuilddata
+CreateBuildDirectory /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    builtin-create-build-directory /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products
+
+CreateBuildDirectory /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    builtin-create-build-directory /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex
+
+ClangStatCache /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk /Users/runner/work/oncue/oncue/build/DerivedData/SDKStatCaches.noindex/macosx15.5-24F74-a403186ba963133a54a0e0cacd566b0b.sdkstatcache
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -o /Users/runner/work/oncue/oncue/build/DerivedData/SDKStatCaches.noindex/macosx15.5-24F74-a403186ba963133a54a0e0cacd566b0b.sdkstatcache
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue-5961719cd045435316b5c2f1594b42a3-VFS/all-product-headers.yaml
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue-5961719cd045435316b5c2f1594b42a3-VFS/all-product-headers.yaml
+
+CreateBuildDirectory /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    builtin-create-build-directory /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug
+
+CreateBuildDirectory /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/EagerLinkingTBDs/Debug
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    builtin-create-build-directory /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/EagerLinkingTBDs/Debug
+
+CreateBuildDirectory /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/PackageFrameworks
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    builtin-create-build-directory /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/PackageFrameworks
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/OnCueCore.modulemap (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/Packages/OnCueCore
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/OnCueCore.modulemap
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/OnCueCore.DependencyStaticMetadataFileList (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/Packages/OnCueCore
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/OnCueCore.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/OnCueCore.DependencyMetadataFileList (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/Packages/OnCueCore
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/OnCueCore.DependencyMetadataFileList
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore_const_extract_protocols.json (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/Packages/OnCueCore
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore_const_extract_protocols.json
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore.SwiftFileList (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/Packages/OnCueCore
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore.SwiftFileList
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore.SwiftConstValuesFileList (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/Packages/OnCueCore
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore.SwiftConstValuesFileList
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore.LinkFileList (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/Packages/OnCueCore
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore.LinkFileList
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore-OutputFileMap.json (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/Packages/OnCueCore
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore-OutputFileMap.json
+
+Copy /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/GeneratedModuleMaps/OnCueCore.modulemap /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/OnCueCore.modulemap (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/Packages/OnCueCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/OnCueCore.modulemap /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/GeneratedModuleMaps
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue.hmap (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue.hmap
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue.DependencyStaticMetadataFileList (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue.DependencyMetadataFileList (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue.DependencyMetadataFileList
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-project-headers.hmap (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-project-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-own-target-headers.hmap (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-own-target-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-generated-files.hmap (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-generated-files.hmap
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-all-target-headers.hmap (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-all-target-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-all-non-framework-target-headers.hmap (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-all-non-framework-target-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-DebugDylibPath-normal-arm64.txt (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-DebugDylibPath-normal-arm64.txt
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-DebugDylibInstallName-normal-arm64.txt (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-DebugDylibInstallName-normal-arm64.txt
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue_const_extract_protocols.json (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue_const_extract_protocols.json
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue.SwiftFileList (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue.SwiftFileList
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue.SwiftConstValuesFileList (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue.SwiftConstValuesFileList
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue.LinkFileList (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue.LinkFileList
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue-OutputFileMap.json (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue-OutputFileMap.json
+
+WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/DerivedSources/Entitlements.plist (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/DerivedSources/Entitlements.plist
+
+MkDir /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/MacOS (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    /bin/mkdir -p /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/MacOS
+
+MkDir /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    /bin/mkdir -p /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents
+
+MkDir /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    /bin/mkdir -p /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app
+
+SwiftDriver OnCueCore normal arm64 com.apple.xcode.tools.swift.compiler (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    builtin-SwiftDriver -- /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name OnCueCore -Onone -enforce-exclusivity\=checked @/Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore.SwiftFileList -DSWIFT_PACKAGE -DDEBUG -DXcode -plugin-path /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -target arm64-apple-macos14.0 -g -module-cache-path /Users/runner/work/oncue/oncue/build/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/runner/work/oncue/oncue/build/DerivedData/Index.noindex/DataStore -swift-version 5 -I /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug -I /Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug -F /Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j3 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/runner/work/oncue/oncue/build/DerivedData/SDKStatCaches.noindex/macosx15.5-24F74-a403186ba963133a54a0e0cacd566b0b.sdkstatcache -output-file-map /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/runner/work/oncue/oncue/build/DerivedData/ModuleCache.noindex/Session.modulevalidation -package-name oncuecore -Xcc -I/Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore_const_extract_protocols.json -Xcc -I/Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/include -Xcc -I/Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/DerivedSources-normal/arm64 -Xcc -I/Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/DerivedSources/arm64 -Xcc -I/Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/DerivedSources -Xcc -DSWIFT_PACKAGE -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore-Swift.h -working-directory /Users/runner/work/oncue/oncue/OnCue.xcodeproj -experimental-emit-module-separately -disable-cmo
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ OnCueCore (in target 'OnCueCore' from project 'OnCueCore')
+
+EmitSwiftModule normal arm64 (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:468:15: error: type 'Show' does not conform to protocol 'Hashable'
+public struct Show: Codable, Hashable, Identifiable {
+              ^
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift:485:16: note: stored property type 'CameraPlot' does not conform to protocol 'Hashable', preventing synthesized conformance of 'Show' to 'Hashable'
+    public var plot = CameraPlot()
+               ^
+
+Failed frontend command:
+/Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -emit-module -experimental-skip-non-inlinable-function-bodies-without-types /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Crew/CrewPage.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Crew/CrewServer.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Crew/CrewSnapshot.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Devices/ATEMSwitcher.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Devices/CompanionClient.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Devices/MIDIManager.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Devices/OSC.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Devices/PTZService.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Devices/SwitcherDevice.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/LiveCursor.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/SampleShow.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/ShowEditing.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/SwitcherEditing.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/Controls.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/EngineController.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTC.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/PreShowCheck.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/RundownTiming.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/ShowEngine.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/SwitchLog.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/Timing.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Export/PDFExports.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Export/TextExports.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Persistence/MachineProfile.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Persistence/ShowCoding.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Persistence/TolerantDecoding.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Plot/CameraPlot.swift -target arm64-apple-macos14.0 -Xllvm -aarch64-use-tbi -enable-objc-interop -stack-check -sdk /Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -I /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug -I /Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug -F /Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -no-color-diagnostics -enable-testing -g -debug-info-format\=dwarf -dwarf-version\=4 -module-cache-path /Users/runner/work/oncue/oncue/build/DerivedData/ModuleCache.noindex -swift-version 5 -enforce-exclusivity\=checked -Onone -D SWIFT_PACKAGE -D DEBUG -D Xcode -serialize-debugging-options -const-gather-protocols-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore_const_extract_protocols.json -enable-experimental-feature DebugDescriptionMacro -empty-abi-descriptor -plugin-path /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -validate-clang-modules-once -clang-build-session-file /Users/runner/work/oncue/oncue/build/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -working-directory -Xcc /Users/runner/work/oncue/oncue/OnCue.xcodeproj -resource-dir /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift -enable-anonymous-context-mangled-names -file-compilation-dir /Users/runner/work/oncue/oncue/OnCue.xcodeproj -Xcc -ivfsstatcache -Xcc /Users/runner/work/oncue/oncue/build/DerivedData/SDKStatCaches.noindex/macosx15.5-24F74-a403186ba963133a54a0e0cacd566b0b.sdkstatcache -Xcc -I/Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/swift-overrides.hmap -Xcc -I/Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/include -Xcc -I/Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/DerivedSources-normal/arm64 -Xcc -I/Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/DerivedSources/arm64 -Xcc -I/Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/DerivedSources -Xcc -DSWIFT_PACKAGE -Xcc -DDEBUG\=1 -module-name OnCueCore -package-name oncuecore -frontend-parseable-output -disable-clang-spi -target-sdk-version 15.5 -target-sdk-name macosx15.5 -external-plugin-path /Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/swift/host/plugins\#/Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/bin/swift-plugin-server -external-plugin-path /Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/local/lib/swift/host/plugins\#/Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/bin/swift-plugin-server -in-process-plugin-server-path /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/libSwiftInProcPluginServer.dylib -plugin-path /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins -plugin-path /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/local/lib/swift/host/plugins -emit-module-doc-path /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore.swiftdoc -emit-module-source-info-path /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore.swiftsourceinfo -emit-objc-header-path /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore-Swift.h -serialize-diagnostics-path /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore-master-emit-module.dia -emit-dependencies-path /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore-master-emit-module.d -o /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore.swiftmodule -emit-abi-descriptor-path /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore.abi.json
+SwiftCompile normal arm64 Compiling\ SampleShow.swift,\ ShowEditing.swift,\ SwitcherEditing.swift,\ TimelineEditing.swift,\ Controls.swift,\ EngineController.swift,\ LTC.swift,\ PreShowCheck.swift,\ RundownTiming.swift,\ ShowEngine.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/SampleShow.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/ShowEditing.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/SwitcherEditing.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/Controls.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/EngineController.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTC.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/PreShowCheck.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/RundownTiming.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/ShowEngine.swift (in target 'OnCueCore' from project 'OnCueCore')
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/SampleShow.swift (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/ShowEditing.swift (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/SwitcherEditing.swift (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/Controls.swift (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/EngineController.swift (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTC.swift (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/PreShowCheck.swift (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/RundownTiming.swift (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/ShowEngine.swift (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    
+
+SwiftCompile normal arm64 Compiling\ SwitchLog.swift,\ Timing.swift,\ PDFExports.swift,\ TextExports.swift,\ Model.swift,\ MachineProfile.swift,\ ShowCoding.swift,\ TolerantDecoding.swift,\ CameraPlot.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/SwitchLog.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/Timing.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Export/PDFExports.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Export/TextExports.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Persistence/MachineProfile.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Persistence/ShowCoding.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Persistence/TolerantDecoding.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Plot/CameraPlot.swift (in target 'OnCueCore' from project 'OnCueCore')
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/SwitchLog.swift (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/Timing.swift (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Export/PDFExports.swift (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Export/TextExports.swift (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Model/Model.swift (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Persistence/MachineProfile.swift (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Persistence/ShowCoding.swift (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Persistence/TolerantDecoding.swift (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Plot/CameraPlot.swift (in target 'OnCueCore' from project 'OnCueCore')
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    
+
+SwiftCompile normal arm64 Compiling\ CrewPage.swift,\ CrewServer.swift,\ CrewSnapshot.swift,\ ATEMSwitcher.swift,\ CompanionClient.swift,\ MIDIManager.swift,\ OSC.swift,\ PTZService.swift,\ SwitcherDevice.swift,\ LiveCursor.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Crew/CrewPage.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Crew/CrewServer.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Crew/CrewSnapshot.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Devices/ATEMSwitcher.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Devices/CompanionClient.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Devices/MIDIManager.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Devices/OSC.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Devices/PTZService.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Devices/SwitcherDevice.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/LiveCursor.swift (in target 'OnCueCore' from project 'OnCueCore')
+Command SwiftCompile failed with a nonzero exit code
+
+note: Disabling hardened runtime with ad-hoc codesigning. (in target 'OnCue' from project 'OnCue')
+** BUILD FAILED **
+
+
+The following build commands failed:
+	EmitSwiftModule normal arm64 (in target 'OnCueCore' from project 'OnCueCore')
+	SwiftEmitModule normal arm64 Emitting\ module\ for\ OnCueCore (in target 'OnCueCore' from project 'OnCueCore')
+	SwiftCompile normal arm64 Compiling\ CrewPage.swift,\ CrewServer.swift,\ CrewSnapshot.swift,\ ATEMSwitcher.swift,\ CompanionClient.swift,\ MIDIManager.swift,\ OSC.swift,\ PTZService.swift,\ SwitcherDevice.swift,\ LiveCursor.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Crew/CrewPage.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Crew/CrewServer.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Crew/CrewSnapshot.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Devices/ATEMSwitcher.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Devices/CompanionClient.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Devices/MIDIManager.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Devices/OSC.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Devices/PTZService.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Devices/SwitcherDevice.swift /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/LiveCursor.swift (in target 'OnCueCore' from project 'OnCueCore')
+	Building project OnCue with scheme OnCue and configuration Debug
+(4 failures)
