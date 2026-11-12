@@ -35,6 +35,7 @@
 		DFCBB724D1778AD58419C225 /* WorkspaceCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6B5BE5447057E4B979ADD1 /* WorkspaceCommands.swift */; };
 		E5A5BCB2B9C660EB80B45BDB /* CameraPlotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE647BFC3E5C1940BC7B5648 /* CameraPlotView.swift */; };
 		F48FFE50FA2982B8FFE58A50 /* DraftScriptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3AE142ACE33618B209DDAA /* DraftScriptView.swift */; };
+		FF346D9BFE9CC63A31F28F73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B10BC9EB431086231F21FF83 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +59,7 @@
 		AD9250067025E369E6EAD1D4 /* OnCueCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = OnCueCore; path = Packages/OnCueCore; sourceTree = SOURCE_ROOT; };
 		ADF717A9AA87D0F24DA3FB3E /* LiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveView.swift; sourceTree = "<group>"; };
 		AE93C49E05A47DAEC508FA0D /* OnCue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnCue.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B10BC9EB431086231F21FF83 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B8BECE970407DFA7EC43B7CE /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		CE647BFC3E5C1940BC7B5648 /* CameraPlotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPlotView.swift; sourceTree = "<group>"; };
 		DF6AAA1B35A6655F52406962 /* InspectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorView.swift; sourceTree = "<group>"; };
@@ -145,6 +147,14 @@
 			path = UI;
 			sourceTree = "<group>";
 		};
+		DAD5C2AB5FE7F60CB7777761 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B10BC9EB431086231F21FF83 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		DFDCEA17FDB0F42F72D65880 = {
 			isa = PBXGroup;
 			children = (
@@ -158,6 +168,7 @@
 			isa = PBXGroup;
 			children = (
 				7B2758E19F059E2DE788E5C0 /* App */,
+				DAD5C2AB5FE7F60CB7777761 /* Resources */,
 				CE0BC7E7F0794EFDE7052FF2 /* UI */,
 				24D552B3D224933213946720 /* Workspace */,
 			);
@@ -172,6 +183,7 @@
 			buildConfigurationList = 3DB47D25AAF5D854ABF0C099 /* Build configuration list for PBXNativeTarget "OnCue" */;
 			buildPhases = (
 				A8971E2702FD3B2898E56B42 /* Sources */,
+				404DE97B3018B1EF35657E3A /* Resources */,
 				A7D3E36E059AB7BEA8A29235 /* Frameworks */,
 			);
 			buildRules = (
@@ -222,6 +234,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		404DE97B3018B1EF35657E3A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF346D9BFE9CC63A31F28F73 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A8971E2702FD3B2898E56B42 /* Sources */ = {
