@@ -112,7 +112,9 @@ extension SwitchLog {
         func frames(_ entry: SwitchLogEntry) -> Int {
             if useLTC, let tc = entry.timecode, let f = EDLTimecode.parse(tc, fps: fps) { return f }
             let c = calendar.dateComponents([.hour, .minute, .second, .nanosecond], from: entry.date)
-            let seconds = Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+            let h: Int = c.hour ?? 0, m: Int = c.minute ?? 0, sec: Int = c.second ?? 0, ns: Int = c.nanosecond ?? 0
+            let whole: Int = h * 3600 + m * 60 + sec
+            let seconds: Double = Double(whole) + Double(ns) / 1e9
             return EDLTimecode.frames(seconds: seconds, fps: fps)
         }
         let finish = end ?? entries.map(\.date).max()
@@ -120,7 +122,7 @@ extension SwitchLog {
         var event = 0
         for (k, cut) in cuts.enumerated() {
             let a = frames(cut)
-            var b: Int
+            let b: Int
             if k + 1 < cuts.count {
                 b = frames(cuts[k + 1])
             } else if let finish, finish > cut.date {
