@@ -62,9 +62,49 @@ struct ItemHeaderView: View {
                     }
                     .frame(maxWidth: 520, alignment: .leading)
                 }
-                HStack(alignment: .top, spacing: Space.m) {
-                    MetaItem(label: "Timing") { TimingMenu(item: item, model: model) }
-                    MetaItem(label: "Live follows") { SyncMenu(item: item, model: model) }
+                // On a 13-inch screen the fields go on two lines rather than squeezing or hiding.
+                ViewThatFits(in: .horizontal) {
+                    HStack(alignment: .top, spacing: Space.m) { timingFields; lengthFields }
+                    VStack(alignment: .leading, spacing: Space.s) {
+                        HStack(alignment: .top, spacing: Space.m) { timingFields }
+                        HStack(alignment: .top, spacing: Space.m) { lengthFields }
+                    }
+                }
+            }
+            Spacer(minLength: Space.m)
+            HStack(spacing: Space.l) {
+                Stat(value: "\(rows.count)", label: rows.count == 1 ? "shot" : "shots")
+                if let runLength { Stat(value: clockText(runLength), label: "runs") }
+            }
+            .fixedSize()
+            Picker("View", selection: $model.editorMode) {
+                ForEach(EditorMode.allCases) { mode in
+                    Image(systemName: mode.symbol).help(mode.label).tag(mode)
+                }
+            }
+            .labelsHidden()
+            .pickerStyle(.segmented)
+            .fixedSize()
+            .help("Timeline, timeline and list, or list (⌘1, ⌘2, ⌘3)")
+            Button {
+                model.enterLive()
+            } label: {
+                Label("Live", systemImage: "dot.radiowaves.left.and.right")
+            }
+            .buttonStyle(QuietButtonStyle(prominent: true))
+            .fixedSize()
+            .disabled(rows.isEmpty)
+            .help("Run this script in Live Mode (⌘L)")
+        }
+        .padding(.horizontal, Space.l)
+        .padding(.vertical, Space.m)
+        .fixedSize(horizontal: false, vertical: true)
+        .background(Gallery.panel)
+    }
+
+    @ViewBuilder private var timingFields: some View {
+                    MetaItem(label: "Timing") { TimingMenu(item: item, model: model).fixedSize() }
+                    MetaItem(label: "Live follows") { SyncMenu(item: item, model: model).fixedSize() }
                     if (item.syncMode == .ltc || item.syncMode == .mtc) && item.timeBase != .order {
                         MetaItem(label: "LTC start") {
                             CommitField(placeholder: "First frame", value: item.ltcStart, font: .readout(13), width: 96) { text in
@@ -84,7 +124,7 @@ struct ItemHeaderView: View {
                                     model.updateItem("Change Tempo") { $0.bpm = v }
                                     return true
                                 }
-                                Text("BPM").font(.ocMeta).foregroundStyle(Gallery.faint)
+                                Text("BPM").font(.ocMeta).foregroundStyle(Gallery.faint).fixedSize()
                             }
                         }
                         MetaItem(label: "Meter") {
@@ -98,6 +138,9 @@ struct ItemHeaderView: View {
                             }
                         }
                     }
+    }
+
+    @ViewBuilder private var lengthFields: some View {
                     MetaItem(label: "Planned length") {
                         CommitField(placeholder: "m:ss", value: item.plannedDuration > 0 ? clockText(item.plannedDuration) : "",
                                     font: .readout(13), width: 52) { text in
@@ -118,34 +161,6 @@ struct ItemHeaderView: View {
                             return true
                         }
                     }
-                }
-            }
-            Spacer(minLength: Space.m)
-            HStack(spacing: Space.l) {
-                Stat(value: "\(rows.count)", label: rows.count == 1 ? "shot" : "shots")
-                if let runLength { Stat(value: clockText(runLength), label: "runs") }
-            }
-            Picker("View", selection: $model.editorMode) {
-                ForEach(EditorMode.allCases) { mode in
-                    Image(systemName: mode.symbol).help(mode.label).tag(mode)
-                }
-            }
-            .labelsHidden()
-            .pickerStyle(.segmented)
-            .fixedSize()
-            .help("Timeline, timeline and list, or list (⌘1, ⌘2, ⌘3)")
-            Button {
-                model.enterLive()
-            } label: {
-                Label("Live", systemImage: "dot.radiowaves.left.and.right")
-            }
-            .buttonStyle(QuietButtonStyle(prominent: true))
-            .disabled(rows.isEmpty)
-            .help("Run this script in Live Mode (⌘L)")
-        }
-        .padding(.horizontal, Space.l)
-        .padding(.vertical, Space.m)
-        .background(Gallery.panel)
     }
 }
 
