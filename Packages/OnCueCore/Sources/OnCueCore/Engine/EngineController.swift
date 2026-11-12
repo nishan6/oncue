@@ -118,6 +118,23 @@ public final class EngineController: ObservableObject {
     private var lastVariables: [String: String] = [:]
     private var lastVariablePush: Double = 0
 
+    // Trigger Routes and timecode chase
+    private var triggerRouter = TriggerRouter(routes: [])
+    private let artNet = ArtNetListener()
+    private var chase = ChaseSettings()
+    /// The chase position at the last timecode frame, for freewheeling through dropouts.
+    private var lastChase: (position: Double, time: Double)?
+    /// Timecode chase paused from a trigger: timecode is ignored and the position holds.
+    public private(set) var chasePaused = false
+    /// Running on OnCue's own clock because timecode dropped out.
+    public private(set) var freewheeling = false
+    /// Song N from a trigger value (program change, MSC or OSC cue number), set by the app.
+    public var resolveItem: ((Double?) -> UUID?)?
+    /// "Mark a note": the app files a rehearsal note on the shot on air.
+    public var onMarkNote: ((_ itemID: UUID, _ shotID: UUID?, _ text: String) -> Void)?
+    /// Every trigger that arrived, and the routes it fired (for the Trigger Routes monitor).
+    public var onTrigger: ((TriggerEvent, [TriggerMatch]) -> Void)?
+
     public init(show: Show, itemID: UUID, profile: MachineProfile, logFolder: URL? = nil) {
         self.profile = profile
         engine = ShowEngine(show: show, itemID: itemID, mode: .display)
@@ -398,8 +415,10 @@ public final class EngineController: ObservableObject {
     private func handleLTC(_ seconds: Double) {
         let now = Self.now
         lastLTC = (seconds, now)
-        guard timingKind == .ltc, let item = engine.item, engine.transport == .running else { return }
+        guard timingKind == .ltc, let item = engine.item, engine.transport == .running, !chasePaused else { return }
         let p = ltcFollower.position(forTimecode: seconds, item: item, fps: engine.show.settings.ltcFPS)
+        lastChase = (p, now)
+        freewheeling = false
         if !following { run(engine.setPosition(raw: p, now: now), publishNow: false) }
     }
 
@@ -407,8 +426,10 @@ public final class EngineController: ObservableObject {
     private func handleMTC(_ seconds: Double) {
         let now = Self.now
         lastLTC = (seconds, now)
-        guard timingKind == .mtc, let item = engine.item, engine.transport == .running else { return }
+        guard timingKind == .mtc, let item = engine.item, engine.transport == .running, !chasePaused else { return }
         let p = ltcFollower.position(forTimecode: seconds, item: item, fps: engine.show.settings.ltcFPS)
+        lastChase = (p, now)
+        freewheeling = false
         if !following { run(engine.setPosition(raw: p, now: now), publishNow: false) }
     }
 
@@ -446,6 +467,16 @@ public final class EngineController: ObservableObject {
             let raw = clock.advance(now: now, rate: rate)
             if engine.transport == .running {
                 if !following { run(engine.setPosition(raw: raw, now: now), publishNow: false) }
+            }
+        }
+        if timingKind == .ltc || timingKind == .mtc, engine.transport == .running, !chasePaused, !following,
+           let last = lastChase, let item = engine.item {
+            if let p = chase.freewheelPosition(last: last, now: now, rate: TimingMath.rate(for: item),
+                                               end: engine.show.itemEnd(forItem: item.id)) {
+                freewheeling = true
+                run(engine.setPosition(raw: p, now: now), publishNow: false)
+            } else {
+                freewheeling = false
             }
         }
         processPending(now)
@@ -660,7 +691,7 @@ public final class EngineController: ObservableObject {
             freeMode: engine.freeMode, loopSectionID: engine.loopSectionID,
             takenAt: takenDate,
             // Only a moving timing source gives a real countdown; otherwise Live shows the plan.
-            secondsToNext: (engine.transport == .running && kind != .manual && signal && !engine.freeMode) ? engine.secondsToNext() : nil,
+            secondsToNext: (engine.transport == .running && kind != .manual && (signal || freewheeling) && !engine.freeMode) ? engine.secondsToNext() : nil,
             timing: kind, timingSignal: signal,
             tempo: kind == .midiClock ? midiFollower.tempo : (tempoOverride ?? engine.item?.bpm),
             timecode: timecode, switchers: switchers, hints: hints,
@@ -714,6 +745,15 @@ public final class EngineController: ObservableObject {
                 }
             }
             guard let self else { return }
+            var firstValue: Double?
+            if let first = args.first {
+                switch first {
+                case .int(let v): firstValue = Double(v)
+                case .float(let v): firstValue = Double(v)
+                default: break
+                }
+            }
+            if self.handleTrigger(TriggerEvent(kind: .osc, address: address, value: firstValue)) { return }
             if address == "/oncue/time" || address == "/oncue/beat" {
                 var value: Double?
                 if let first = args.first {
@@ -841,4 +881,92 @@ public final class EngineController: ObservableObject {
     func tickForTesting() { tick() }
     /// For tests: a connected switcher device.
     func deviceForTesting(_ id: UUID) -> SwitcherDevice? { devices[id] }
+}
+
+// MARK: - Trigger Routes
+
+extension EngineController {
+    /// The project's routes and chase settings. Starts the MIDI and Art-Net listening the routes need.
+    public func configureTriggers(routes: [TriggerRoute], chase: ChaseSettings) {
+        triggerRouter.update(routes: routes)
+        self.chase = chase
+        let enabled = routes.filter(\.enabled)
+        let needsMIDI = enabled.contains { [.midiNote, .midiCC, .midiProgram, .msc].contains($0.input.kind) }
+        if needsMIDI { ensureMIDI() }
+        midi?.listenForTriggers = needsMIDI
+        midi?.onTrigger = { [weak self] event in _ = self?.handleTrigger(event) }
+        var watched: [Int: Set<Int>] = [:]
+        for r in enabled where r.input.kind == .artNet { watched[r.input.universe, default: []].insert(r.input.number) }
+        artNet.watched = watched
+        artNet.onEvent = { [weak self] event in _ = self?.handleTrigger(event) }
+        if watched.isEmpty { artNet.stop() } else { artNet.start() }
+    }
+
+    /// Runs the routes an incoming message matches. Returns true if any fired.
+    @discardableResult
+    public func handleTrigger(_ event: TriggerEvent) -> Bool {
+        let matches = triggerRouter.match(event)
+        onTrigger?(event, matches)
+        for m in matches { perform(m.route.action, value: m.value, source: event) }
+        return !matches.isEmpty
+    }
+
+    public var artNetError: String? { artNet.lastError }
+
+    /// One route's action. Also used by "Test" in Trigger Routes.
+    public func perform(_ action: TriggerAction, value: Double?, source: TriggerEvent? = nil) {
+        let now = Self.now
+        switch action.kind {
+        case .command:
+            let camera = action.cameraNumber > 0 ? action.cameraNumber : Int((value ?? 0).rounded())
+            perform(action.command, camera: camera)
+        case .jumpToItem:
+            let id = action.target == .fixed ? action.itemID : resolveItem?(value)
+            if let id { load(itemID: id) }
+        case .jumpToSection:
+            if action.target == .fixed, let id = action.sectionID {
+                if let item = engine.show.items.first(where: { $0.sections.contains { $0.id == id } }), item.id != engine.cursor.itemID {
+                    load(itemID: item.id)
+                }
+                jump(toSection: id)
+            } else if let n = value.map({ Int($0.rounded()) }), n >= 1, let item = engine.item {
+                let sections = item.sortedSections
+                if n <= sections.count { jump(toSection: sections[n - 1].id) }
+            }
+        case .fireCue:
+            if action.target == .fixed, let id = action.cueID { jump(toCue: id) }
+            else if let n = value.map({ Int($0.rounded()) }), n >= 1, let item = engine.item {
+                let rows = engine.show.shotRows(forItem: item.id)
+                if n <= rows.count { jump(toCue: rows[n - 1].id) }
+            }
+        case .goLive: go()
+        case .stopLive: stop()
+        case .holdLive:
+            if engine.pause == nil { engine.pauseAutomation(reason: "Held from a trigger"); publish() }
+            else { resume() }
+        case .pauseChase: chasePaused = true; freewheeling = false; publish()
+        case .resumeChase: chasePaused = false; lastChase = nil; publish()
+        case .toggleChase:
+            chasePaused.toggle()
+            if !chasePaused { lastChase = nil }
+            freewheeling = false
+            publish()
+        case .markNote:
+            let text = action.noteText.isEmpty ? "Marked from \(source?.summary ?? "a trigger")" : action.noteText
+            onMarkNote?(engine.cursor.itemID, engine.onAir?.cue.id, text)
+        }
+        _ = now
+    }
+
+    /// Jumps the show to a shot or cue so it fires now: loads its song if needed, then moves the
+    /// position (and the internal clock) to it.
+    public func jump(toCue id: UUID) {
+        guard let item = engine.show.items.first(where: { $0.tracks.contains { $0.cues.contains { $0.id == id } } }),
+              let cue = item.tracks.flatMap(\.cues).first(where: { $0.id == id }) else { return }
+        if item.id != engine.cursor.itemID { load(itemID: item.id) }
+        let now = Self.now
+        if timingKind == .internalClock || timingKind == .taps { clock.start(at: cue.at, now: now) }
+        engine.syncRaw(cue.at)
+        run(engine.setPosition(raw: cue.at, now: now))
+    }
 }

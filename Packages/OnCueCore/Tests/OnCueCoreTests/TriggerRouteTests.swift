@@ -138,3 +138,65 @@ final class FreewheelTests: XCTestCase {
         XCTAssertNil(s.freewheelPosition(last: (10, 100), now: 110, rate: 1, end: 64))
     }
 }
+
+final class EngineTriggerTests: XCTestCase {
+    private func osc(_ address: String, _ action: TriggerAction) -> TriggerRoute {
+        var input = TriggerInput(kind: .osc)
+        input.address = address
+        return TriggerRoute(name: address, input: input, action: action)
+    }
+
+    func testRoutesDriveTheEngine() {
+        var show = Show.starter()
+        let song = show.items[0].id
+        var second = RundownItem(title: "Second")
+        second.timeBase = .seconds
+        show.items.append(second)
+        for k in 0..<3 { show.addShot(inItem: song, cameraID: show.sortedCameras[k].id, at: Double(k * 4)) }
+        let controller = EngineController(show: show, itemID: song, profile: MachineProfile(),
+                                          logFolder: FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString))
+        defer { controller.shutdown() }
+        controller.connectSwitcher()
+
+        var jump = TriggerAction(kind: .jumpToItem)
+        jump.target = .fromValue
+        var note = TriggerAction(kind: .markNote)
+        note.noteText = "Late cut"
+        controller.resolveItem = { value in value == 2 ? second.id : nil }
+        var marked: [String] = []
+        controller.onMarkNote = { _, _, text in marked.append(text) }
+        controller.configureTriggers(routes: [
+            osc("/ma/song", jump),
+            osc("/pedal/note", note),
+            osc("/pedal/chase", TriggerAction(kind: .toggleChase)),
+        ], chase: ChaseSettings())
+
+        XCTAssertTrue(controller.handleTrigger(TriggerEvent(kind: .osc, address: "/ma/song", value: 2)))
+        XCTAssertEqual(controller.status.itemID, second.id)
+        XCTAssertFalse(controller.handleTrigger(TriggerEvent(kind: .osc, address: "/nothing")))
+
+        controller.handleTrigger(TriggerEvent(kind: .osc, address: "/pedal/note"))
+        XCTAssertEqual(marked, ["Late cut"])
+
+        controller.handleTrigger(TriggerEvent(kind: .osc, address: "/pedal/chase"))
+        XCTAssertTrue(controller.chasePaused)
+        controller.handleTrigger(TriggerEvent(kind: .osc, address: "/pedal/chase"))
+        XCTAssertFalse(controller.chasePaused)
+    }
+
+    func testFireCueJumpsToTheShot() {
+        var show = Show.starter()
+        let song = show.items[0].id
+        var ids: [UUID] = []
+        for k in 0..<3 { if let id = show.addShot(inItem: song, cameraID: show.sortedCameras[k].id, at: Double(k * 4)) { ids.append(id) } }
+        let controller = EngineController(show: show, itemID: song, profile: MachineProfile(),
+                                          logFolder: FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString))
+        defer { controller.shutdown() }
+        controller.connectSwitcher()
+        controller.go()
+        var fire = TriggerAction(kind: .fireCue)
+        fire.cueID = ids[2]
+        controller.perform(fire, value: nil)
+        XCTAssertEqual(controller.engine.onAir?.id, ids[2])
+    }
+}

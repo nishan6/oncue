@@ -26,6 +26,12 @@ final class MIDIManager {
     private var mtc = MTCDecoder()
     var onControl: ((_ channel: Int, _ number: Int, _ isCC: Bool, _ value: Int) -> Void)?
     var onDevicesChanged: (() -> Void)?
+    /// Notes, CC, program changes and MIDI Show Control from any source, for Trigger Routes.
+    var onTrigger: ((TriggerEvent) -> Void)?
+    /// Listen to every MIDI source for Trigger Routes (Ableton, a grandMA3, a pedal…).
+    var listenForTriggers = false {
+        didSet { if listenForTriggers != oldValue { reconnect() } }
+    }
 
     private(set) var sources: [MIDIEndpointInfo] = []
     private(set) var destinations: [MIDIEndpointInfo] = []
@@ -42,6 +48,7 @@ final class MIDIManager {
 
     private static let clockTag = 1
     private static let controllerTag = 2
+    private static let triggerTag = 4
 
     init() {
         MIDIClientCreateWithBlock("OnCue" as CFString, &client) { [weak self] _ in
@@ -86,6 +93,7 @@ final class MIDIManager {
             var tag = 0
             if !clockName.isEmpty && s.name == clockName { tag |= Self.clockTag }
             if !controllerName.isEmpty && s.name == controllerName { tag |= Self.controllerTag }
+            if listenForTriggers { tag |= Self.triggerTag }
             guard tag != 0 else { continue }
             MIDIPortConnectSource(inPort, s.ref, UnsafeMutableRawPointer(bitPattern: tag))
             connected.append(s.ref)
@@ -168,6 +176,9 @@ final class MIDIManager {
                 let start = i
                 while i < bytes.count && bytes[i] != 0xF7 { i += 1 }
                 if tag & Self.clockTag != 0, i < bytes.count, let t = mtc.fullFrame(Array(bytes[start...i])) { emitTimecode(t) }
+                if tag & Self.triggerTag != 0, i < bytes.count, let msc = MSCParser.parse(Array(bytes[start...i])) {
+                    emitTrigger(TriggerEvent(kind: .msc, value: msc.1, msc: msc.0))
+                }
                 i += 1
                 continue
             }
@@ -193,13 +204,29 @@ final class MIDIManager {
                         self.onControl?(ch, d1, isCC, value)
                     }
                 }
+                if tag & Self.triggerTag != 0 {
+                    let value = kind == 0x80 ? 0 : d2
+                    emitTrigger(TriggerEvent(kind: kind == 0xB0 ? .midiCC : .midiNote, channel: ch + 1, number: d1,
+                                             value: Double(value)))
+                }
                 i = dataStart + 2
-            case 0xC0, 0xD0:
+            case 0xC0:
+                guard dataStart < bytes.count else { return }
+                if tag & Self.triggerTag != 0 {
+                    // Program 0 is "program 1" on most devices: OnCue counts from 1.
+                    emitTrigger(TriggerEvent(kind: .midiProgram, channel: ch + 1, value: Double(Int(bytes[dataStart]) + 1)))
+                }
+                i = dataStart + 1
+            case 0xD0:
                 i = dataStart + 1
             default:
                 i = dataStart + 2
             }
         }
+    }
+
+    private func emitTrigger(_ event: TriggerEvent) {
+        DispatchQueue.main.async { self.onTrigger?(event) }
     }
 
     private func emitTimecode(_ seconds: Double) {
