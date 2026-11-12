@@ -245,6 +245,29 @@ public final class ShowEngine {
         setPosition(raw: p + offset, now: now)
     }
 
+    /// Backup Mac: adopt the main Mac's place in the show. Returns what the main Mac would have
+    /// sent (the controller drops it while following), so the cues it passed count as fired.
+    public func follow(itemID: UUID, index: Int, position p: Double, transport t: EngineTransport,
+                       freeMode f: Bool, loopSectionID l: UUID?, now: Double) -> [EngineCommand] {
+        var out: [EngineCommand] = []
+        if cursor.itemID != itemID {
+            guard show.item(itemID) != nil else { return [] }
+            out += load(itemID: itemID, now: now)
+        }
+        freeMode = f
+        loopSectionID = l
+        if t == .running {
+            transport = .running
+            let target = rows.indices.contains(index) ? max(p, rows[index].cue.at) : p
+            out += jumpPlayhead(to: target, now: now)
+        } else {
+            transport = t
+            position = p
+            offset = lastRaw - p
+        }
+        return out
+    }
+
     /// NEXT: take the next shot now, moving the playhead to it.
     public func next(now: Double) -> [EngineCommand] {
         let target = cursor.index + 1

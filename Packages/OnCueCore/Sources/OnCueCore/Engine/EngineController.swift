@@ -56,6 +56,10 @@ public struct EngineStatus: Equatable {
     public var hints: [UUID]
     public var logFile: String?
     public var cutCount: Int
+    /// Backup Mac: following the main Mac (sends nothing until it takes over).
+    public var following: Bool = false
+    /// Backup Mac: the link to the main Mac is up.
+    public var mainLinked: Bool = false
 
     public var cursor: LiveCursor { LiveCursor(itemID: itemID, index: index) }
     public var mainSwitcher: SwitcherLiveStatus? { switchers.first }
@@ -361,20 +365,20 @@ public final class EngineController: ObservableObject {
         }
         let moved = midiFollower.handle(clockEvent)
         guard timingKind == .midiClock, let item = engine.item else { return }
-        switch clockEvent {
-        case .start:
+        switch following ? nil : clockEvent {
+        case .start?:
             engine.rewind()
             engine.syncRaw(0)
             run(engine.start(now: now))
-        case .resume:
+        case .resume?:
             if engine.transport != .running { run(engine.start(now: now)) }
-        case .stop:
+        case .stop?:
             engine.stop()
         default:
             break
         }
         if moved {
-            run(engine.setPosition(raw: TimingMath.position(beats: midiFollower.beats, for: item), now: now), publishNow: false)
+            if !following { run(engine.setPosition(raw: TimingMath.position(beats: midiFollower.beats, for: item), now: now), publishNow: false) }
         }
     }
 
@@ -383,7 +387,7 @@ public final class EngineController: ObservableObject {
         lastLTC = (seconds, now)
         guard timingKind == .ltc, let item = engine.item, engine.transport == .running else { return }
         let p = ltcFollower.position(forTimecode: seconds, item: item, fps: engine.show.settings.ltcFPS)
-        run(engine.setPosition(raw: p, now: now), publishNow: false)
+        if !following { run(engine.setPosition(raw: p, now: now), publishNow: false) }
     }
 
     // MARK: - Clock and commands
@@ -401,7 +405,7 @@ public final class EngineController: ObservableObject {
             if let tempo = tempoOverride, item.timeBase == .bars { rate = tempo / 60 }
             let raw = clock.advance(now: now, rate: rate)
             if engine.transport == .running {
-                run(engine.setPosition(raw: raw, now: now), publishNow: false)
+                if !following { run(engine.setPosition(raw: raw, now: now), publishNow: false) }
             }
         }
         processPending(now)
@@ -412,7 +416,7 @@ public final class EngineController: ObservableObject {
 
     private func run(_ commands: [EngineCommand], publishNow: Bool = true) {
         let itemBefore = engine.cursor.itemID
-        pending += commands
+        if !following { pending += commands }
         recordTakes()
         processPending(Self.now)
         if engine.cursor.itemID != itemBefore { prepareTiming() }
@@ -469,6 +473,71 @@ public final class EngineController: ObservableObject {
         case .ptz(let cameraID, let preset):
             if let cam = engine.show.ptz(cameraID) { ptz.recall(cam, preset: preset) }
         }
+    }
+
+    // MARK: - Backup Mac
+
+    private var following = false
+    private var mainLinked = false
+    private var mainModes: [String: String] = [:]
+
+    /// Backup Mac: follow the main Mac; nothing is sent to switchers, OSC or PTZ until takeOver().
+    public func startFollowing() {
+        following = true
+        publish()
+    }
+
+    public func follow(_ s: BackupState) {
+        guard following, s.showID == engine.show.id else { return }
+        let t: EngineTransport = s.transport == "running" ? .running : (s.transport == "stopped" ? .stopped : .standby)
+        let itemBefore = engine.cursor.itemID
+        _ = engine.follow(itemID: s.itemID, index: s.index, position: s.position, transport: t,
+                          freeMode: s.freeMode, loopSectionID: s.loopSectionID, now: Self.now)
+        mainModes = s.modes
+        recordTakes()
+        if engine.cursor.itemID != itemBefore { prepareTiming() }
+        publish()
+    }
+
+    public func setMainLinked(_ linked: Bool) {
+        mainLinked = linked
+        publish()
+    }
+
+    /// The backup Mac takes the show: it starts sending, in the modes the main Mac was using.
+    public func takeOver() {
+        guard following else { return }
+        following = false
+        for (key, value) in mainModes {
+            if let id = UUID(uuidString: key), let mode = OutputMode(rawValue: value) { run(engine.setMode(mode, for: id), publishNow: false) }
+        }
+        // Carry on from the main Mac's position with this Mac's own timing source.
+        let now = Self.now
+        switch timingKind {
+        case .internalClock, .taps:
+            if engine.transport == .running { clock.start(at: engine.position, now: now) } else { clock.jump(to: engine.position, now: now) }
+            engine.syncRaw(clock.position)
+        case .midiClock:
+            if let item = engine.item { engine.syncRaw(TimingMath.position(beats: midiFollower.beats, for: item)) }
+        case .ltc, .manual:
+            break
+        }
+        publish()
+    }
+
+    /// Main Mac: where the show is, for the backup Macs.
+    public var backupState: BackupState {
+        let t: String
+        switch engine.transport {
+        case .running: t = "running"
+        case .stopped: t = "stopped"
+        case .standby: t = "standby"
+        }
+        var modes: [String: String] = [:]
+        for (k, v) in engine.modes { modes[k.uuidString] = v.rawValue }
+        return BackupState(showID: engine.show.id, itemID: engine.cursor.itemID, index: engine.cursor.index,
+                           position: engine.position, transport: t, modes: modes, freeMode: engine.freeMode,
+                           loopSectionID: engine.loopSectionID, sentAt: Date())
     }
 
     // MARK: - Switch log
@@ -553,7 +622,8 @@ public final class EngineController: ObservableObject {
             timing: kind, timingSignal: signal,
             tempo: kind == .midiClock ? midiFollower.tempo : (tempoOverride ?? engine.item?.bpm),
             timecode: timecode, switchers: switchers, hints: hints,
-            logFile: logURL?.lastPathComponent, cutCount: log.cuts.count)
+            logFile: logURL?.lastPathComponent, cutCount: log.cuts.count,
+            following: following, mainLinked: mainLinked)
         if new != status { status = new }
         updateLEDs()
         pushCompanionVariables(now: now)
