@@ -10,7 +10,7 @@ struct ShowSetupView: View {
     @State private var tab: Tab = .switchers
 
     enum Tab: String, CaseIterable, Identifiable {
-        case switchers = "Switchers", outputs = "Outputs", osc = "OSC targets", ptz = "PTZ cameras"
+        case switchers = "Switchers", outputs = "Outputs", osc = "OSC targets", ptz = "PTZ cameras", controls = "Controls"
         var id: String { rawValue }
     }
 
@@ -39,6 +39,7 @@ struct ShowSetupView: View {
                     case .outputs: outputsTab
                     case .osc: oscTab
                     case .ptz: ptzTab
+                    case .controls: ControlsSetup(show: show, model: model)
                     }
                 }
                 .padding(Space.l)
@@ -462,5 +463,79 @@ struct CompanionButtonField: View {
                 return true
             }
         }
+    }
+}
+
+
+/// MIDI controller mapping with MIDI learn (APC40 mkII defaults).
+struct ControlsSetup: View {
+    let show: Show
+    @ObservedObject var model: WorkspaceModel
+    @State private var learning: (ControlCommand, Int)?
+    @State private var session: MIDILearnSession?
+
+    var body: some View {
+        let source = MachineProfileStore().profile.controllerSource
+        VStack(alignment: .leading, spacing: Space.m) {
+            Text(source.isEmpty ? "Choose the controller in Settings (This Mac) to use MIDI learn."
+                 : "Controller: \(source). Click Learn, then press the pad, button or knob.")
+                .font(.ocMeta).foregroundStyle(source.isEmpty ? Gallery.amber : Gallery.dim)
+            HStack {
+                Button("Reset to APC40 mkII layout") { model.edit("Reset Controls") { $0.resetMIDIBindingsToAPC40() } }
+                    .buttonStyle(QuietButtonStyle())
+                Spacer()
+                if learning != nil {
+                    Text("Waiting for a press…").font(.ocLabel).foregroundStyle(Gallery.amber)
+                    Button("Cancel") { stopLearning() }.buttonStyle(QuietButtonStyle())
+                }
+            }
+            Text("Actions").sectionLabel()
+            ForEach(ControlCommand.allCases.filter { !$0.needsCamera }) { command in
+                row(command, camera: 0, title: command.label)
+            }
+            Text("Cameras").sectionLabel().padding(.top, Space.s)
+            ForEach(show.sortedCameras) { cam in
+                row(.takeCamera, camera: cam.number, title: "Take camera \(cam.number) · \(cam.displayName)")
+            }
+        }
+        .onDisappear { stopLearning() }
+    }
+
+    private func row(_ command: ControlCommand, camera: Int, title: String) -> some View {
+        let binding = show.midiBindings.first { $0.command == command && $0.cameraNumber == camera }
+        let isLearning = learning.map { $0.0 == command && $0.1 == camera } ?? false
+        return HStack(spacing: Space.s) {
+            Text(title).font(.ocBody).foregroundStyle(Gallery.ink).frame(maxWidth: .infinity, alignment: .leading)
+            Text(binding.map { "\($0.isCC ? "CC" : "Note") \($0.number) · ch \($0.channel + 1)" } ?? "Not mapped")
+                .font(.readout(11)).foregroundStyle(binding == nil ? Gallery.faint : Gallery.dim)
+                .frame(width: 130, alignment: .trailing)
+            Button(isLearning ? "Press…" : "Learn") { startLearning(command, camera: camera) }
+                .buttonStyle(QuietButtonStyle(prominent: isLearning))
+            IconButton(symbol: "xmark", help: "Remove this mapping") {
+                model.edit("Remove Control") { $0.removeMIDIBinding(command, camera: camera) }
+            }
+            .opacity(binding == nil ? 0.3 : 1)
+            .disabled(binding == nil)
+        }
+        .padding(.vertical, 2)
+    }
+
+    private func startLearning(_ command: ControlCommand, camera: Int) {
+        let source = MachineProfileStore().profile.controllerSource
+        guard !source.isEmpty else { model.errorMessage = "Choose the controller in Settings (This Mac) first."; return }
+        learning = (command, camera)
+        let s = MIDILearnSession(source: source)
+        s.onMessage = { channel, number, isCC in
+            guard let target = learning else { return }
+            model.edit("Map Control") { $0.setMIDIBinding(target.0, camera: target.1, channel: channel, number: number, isCC: isCC) }
+            stopLearning()
+        }
+        session = s
+    }
+
+    private func stopLearning() {
+        session?.onMessage = nil
+        session = nil
+        learning = nil
     }
 }

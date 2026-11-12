@@ -66,22 +66,19 @@ public struct SwitchLog: Codable, Equatable {
     public func encoded() throws -> Data {
         let e = JSONEncoder()
         e.outputFormatting = [.prettyPrinted, .sortedKeys]
-        let f = Self.formatter()
         e.dateEncodingStrategy = .custom { date, encoder in
             var c = encoder.singleValueContainer()
-            try c.encode(f.string(from: date))
+            try c.encode(Self.formatter().string(from: date))
         }
         return try e.encode(self)
     }
 
     public static func decode(_ data: Data) throws -> SwitchLog {
         let d = JSONDecoder()
-        let withFraction = formatter()
-        let plain = ISO8601DateFormatter()
         d.dateDecodingStrategy = .custom { decoder in
             let c = try decoder.singleValueContainer()
             let text = try c.decode(String.self)
-            if let date = withFraction.date(from: text) ?? plain.date(from: text) { return date }
+            if let date = formatter().date(from: text) ?? ISO8601DateFormatter().date(from: text) { return date }
             throw DecodingError.dataCorruptedError(in: c, debugDescription: "Not a date: \(text)")
         }
         return try d.decode(SwitchLog.self, from: data)

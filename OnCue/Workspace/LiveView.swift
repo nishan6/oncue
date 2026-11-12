@@ -16,6 +16,8 @@ struct LiveView: View {
     @ObservedObject var engine: EngineController
     @ObservedObject var model: WorkspaceModel
     @FocusState private var focused: Bool
+    @State private var typed = ""
+    @State private var typedAt = Date.distantPast
 
     var body: some View {
         let status = engine.status
@@ -56,12 +58,29 @@ struct LiveView: View {
             if status.transport == .running { engine.stop() } else { engine.go() }
             return .handled
         }
-        .onKeyPress(characters: CharacterSet(charactersIn: "tTrRfFlL")) { press in
+        .onKeyPress(characters: CharacterSet(charactersIn: "tTrRfFlLcCaAbB")) { press in
             switch press.characters.lowercased() {
             case "t": engine.tap()
             case "r": engine.resume()
             case "f": engine.setFreeMode(!status.freeMode)
+            case "c": engine.perform(.take)
+            case "a": engine.perform(.auto)
+            case "b": engine.perform(.tapBeat)
             default: engine.toggleLoop()
+            }
+            return .handled
+        }
+        .onKeyPress(characters: .decimalDigits) { press in
+            // Camera numbers go to preview ("1" then "2" quickly = camera 12); C cuts, A mixes.
+            let now = Date()
+            if now.timeIntervalSince(typedAt) > 0.8 { typed = "" }
+            typedAt = now
+            typed += press.characters
+            if let n = Int(typed), show.camera(number: n) != nil {
+                engine.perform(.previewCamera, camera: n)
+            } else if let n = Int(press.characters), show.camera(number: n) != nil {
+                typed = press.characters
+                engine.perform(.previewCamera, camera: n)
             }
             return .handled
         }

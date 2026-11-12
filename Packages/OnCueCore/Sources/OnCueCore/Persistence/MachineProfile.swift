@@ -28,6 +28,8 @@ public struct MachineProfile: Codable, Equatable {
     public var companionPort: Int = 8000
     /// "v3" or "v2" (see CompanionVersion).
     public var companionVersion: String = "v3"
+    /// Push Live status to Companion custom variables (for Stream Deck key text and colours).
+    public var companionVariables: Bool = false
 
     // Backup
     /// "off", "primary" or "backup" (see BackupRole).
@@ -56,6 +58,7 @@ public struct MachineProfile: Codable, Equatable {
         companionHost = try c.value("companionHost", "127.0.0.1")
         companionPort = try c.value("companionPort", 8000)
         companionVersion = try c.value("companionVersion", "v3")
+        companionVariables = try c.value("companionVariables", false)
         backupRole = try c.value("backupRole", "off")
         primaryHost = try c.value("primaryHost", "")
         logFolder = try c.value("logFolder", "")

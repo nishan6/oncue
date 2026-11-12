@@ -39,6 +39,17 @@ final class CompanionClient {
         }.resume()
     }
 
+    /// Sets a Companion 3 custom variable (Stream Deck keys can show it): POST
+    /// /api/custom-variable/<name>/value?value=<value>. Companion 2 has no such API.
+    func setVariable(_ name: String, _ value: String) {
+        guard version == .v3, var components = URLComponents(string: "\(base)/api/custom-variable/\(name)/value") else { return }
+        components.queryItems = [URLQueryItem(name: "value", value: value)]
+        guard let url = components.url else { return }
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        session.dataTask(with: req).resume()
+    }
+
     /// Reachability check used by the pre-show check and the status bar.
     func ping(_ done: @escaping (Bool) -> Void) {
         guard let url = URL(string: base) else { done(false); return }

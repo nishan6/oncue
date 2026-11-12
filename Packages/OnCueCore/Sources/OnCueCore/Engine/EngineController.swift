@@ -103,6 +103,13 @@ public final class EngineController: ObservableObject {
     private var logURL: URL?
     private var logDirty = false
     private var lastLogSave: Double = 0
+    private let oscControl = OSCControlListener()
+    private var tapTempo = TapTempo()
+    /// Tempo from tap tempo, overriding the item's tempo for the internal clock until the item changes.
+    public private(set) var tempoOverride: Double?
+    private var ledCache: [Int: Int] = [:]
+    private var lastVariables: [String: String] = [:]
+    private var lastVariablePush: Double = 0
 
     public init(show: Show, itemID: UUID, profile: MachineProfile, logFolder: URL? = nil) {
         self.profile = profile
@@ -123,6 +130,7 @@ public final class EngineController: ObservableObject {
             if let id { self.devices[id]?.runMacro(index) }
         }
         prepareTiming()
+        setupControls()
         startTimer()
         publish()
     }
@@ -150,8 +158,11 @@ public final class EngineController: ObservableObject {
             device.disconnect()
         }
         devices.removeAll()
+        clearLEDs()
         midi?.onClock = nil
+        midi?.onControl = nil
         midi = nil
+        oscControl.stop()
         ltcInput?.stop()
         ltcInput = nil
     }
@@ -176,16 +187,10 @@ public final class EngineController: ObservableObject {
     private func prepareTiming() {
         clock.stop()
         ltcFollower.reset()
+        tempoOverride = nil
         switch timingKind {
         case .midiClock:
-            if midi == nil {
-                let m = MIDIManager()
-                m.configure(clockSource: profile.midiClockSource,
-                            controllerSource: profile.controllerSource,
-                            controllerDestination: profile.controllerDestination)
-                m.onClock = { [weak self] event in self?.handleMIDI(event) }
-                midi = m
-            }
+            ensureMIDI()
         case .ltc:
             if ltcInput == nil {
                 let input = LTCInput(deviceUID: profile.ltcDeviceUID, channel: profile.ltcChannel,
@@ -389,7 +394,9 @@ public final class EngineController: ObservableObject {
     private func tick() {
         let now = Self.now
         if (timingKind == .internalClock || timingKind == .taps), clock.running, let item = engine.item {
-            let raw = clock.advance(now: now, rate: TimingMath.rate(for: item))
+            var rate = TimingMath.rate(for: item)
+            if let tempo = tempoOverride, item.timeBase == .bars { rate = tempo / 60 }
+            let raw = clock.advance(now: now, rate: rate)
             if engine.transport == .running {
                 run(engine.setPosition(raw: raw, now: now), publishNow: false)
             }
@@ -541,16 +548,158 @@ public final class EngineController: ObservableObject {
             // Only a moving timing source gives a real countdown; otherwise Live shows the plan.
             secondsToNext: (engine.transport == .running && kind != .manual && signal && !engine.freeMode) ? engine.secondsToNext() : nil,
             timing: kind, timingSignal: signal,
-            tempo: kind == .midiClock ? midiFollower.tempo : engine.item?.bpm,
+            tempo: kind == .midiClock ? midiFollower.tempo : (tempoOverride ?? engine.item?.bpm),
             timecode: timecode, switchers: switchers, hints: hints,
             logFile: logURL?.lastPathComponent, cutCount: log.cuts.count)
         if new != status { status = new }
+        updateLEDs()
+        pushCompanionVariables(now: now)
     }
 
     /// Main switcher first, then the others in show order.
     private func orderedSwitchers(_ show: Show) -> [SwitcherConfig] {
         let main = show.mainOutput?.switcherID
         return show.switchers.filter { $0.id == main } + show.switchers.filter { $0.id != main }
+    }
+
+    // MARK: - Controls (APC40 / MIDI, Companion OSC, keyboard)
+
+    /// One MIDI connection for clock and controller (and the controller's LEDs).
+    private func ensureMIDI() {
+        guard midi == nil else { return }
+        let m = MIDIManager()
+        m.configure(clockSource: profile.midiClockSource,
+                    controllerSource: profile.controllerSource,
+                    controllerDestination: profile.controllerDestination)
+        m.onClock = { [weak self] event in self?.handleMIDI(event) }
+        m.onControl = { [weak self] channel, number, isCC, value in
+            guard let self, let binding = ControlMapping.binding(for: channel, number: number, isCC: isCC, value: value,
+                                                                  in: self.engine.show.midiBindings) else { return }
+            self.perform(binding.command, camera: binding.cameraNumber)
+        }
+        midi = m
+        ledCache.removeAll()
+    }
+
+    private func setupControls() {
+        if !profile.controllerSource.isEmpty || !profile.controllerDestination.isEmpty { ensureMIDI() }
+        oscControl.onCommand = { [weak self] address, args in
+            var number: Int?
+            if let first = args.first {
+                switch first {
+                case .int(let v): number = Int(v)
+                case .float(let v): number = Int(v)
+                default: break
+                }
+            }
+            guard let self, let parsed = ControlMapping.command(fromOSC: address, intArgument: number) else { return }
+            self.perform(parsed.0, camera: parsed.1)
+        }
+        if profile.oscControlPort > 0 { oscControl.start(port: profile.oscControlPort) }
+    }
+
+    /// Runs a control action from a MIDI controller, Companion / Stream Deck, or the keyboard.
+    public func perform(_ command: ControlCommand, camera: Int = 0) {
+        switch command {
+        case .go: go()
+        case .stop: stop()
+        case .next: next()
+        case .previous: back()
+        case .take: manualTransition(mix: false)
+        case .auto: manualTransition(mix: true)
+        case .tapSection: tap()
+        case .prevSection: previousSection()
+        case .tapBeat: tapBeat()
+        case .loopToggle: toggleLoop()
+        case .panic: panic()
+        case .resume: resume()
+        case .freeModeToggle: setFreeMode(!engine.freeMode)
+        case .modeDisplay: setMode(.display)
+        case .modePreview: setMode(.preview)
+        case .modeCut: setMode(.cut)
+        case .nextItem: moveItem(by: 1)
+        case .prevItem: moveItem(by: -1)
+        case .previewCamera: manualCamera(camera, take: false)
+        case .takeCamera: manualCamera(camera, take: true)
+        }
+    }
+
+    /// The director's own cut or mix on the main switcher (in Auto cut this pauses automation).
+    private func manualTransition(mix: Bool) {
+        guard let s = engine.show.mainOutput?.switcherID, let d = device(s) else { return }
+        if mix { d.auto() } else { d.cut() }
+    }
+
+    /// Puts a camera on the main switcher's preview (through sub-switchers), and cuts if `take`.
+    private func manualCamera(_ number: Int, take: Bool) {
+        guard let s = engine.show.mainOutput?.switcherID, let camera = engine.show.camera(number: number),
+              let route = engine.route(camera.id, to: s), let d = device(s) else { return }
+        for feed in route.feeds { device(feed.switcher)?.setProgram(feed.input) }
+        d.setPreview(route.input)
+        if take { d.cut() }
+    }
+
+    private func previousSection() {
+        guard let item = engine.item else { return }
+        let sections = item.sortedSections
+        guard let current = sections.lastIndex(where: { $0.at <= engine.position + 1e-6 }) else { return }
+        let target = current > 0 && engine.position - sections[current].at < 0.5 ? sections[current - 1] : sections[current]
+        jump(toSection: target.id)
+    }
+
+    private func tapBeat() {
+        if let bpm = tapTempo.tap(at: Self.now) {
+            tempoOverride = bpm
+            publish()
+        }
+    }
+
+    private func updateLEDs() {
+        guard profile.apcLEDs, let midi, !profile.controllerDestination.isEmpty else { return }
+        let main = status.mainSwitcher
+        let show = engine.show
+        let program = main?.program.flatMap { show.camera(input: $0, switcherID: main?.id)?.id } ?? engine.onAir?.cue.cameraID
+        let preview = main?.preview.flatMap { show.camera(input: $0, switcherID: main?.id)?.id } ?? engine.next?.cue.cameraID
+        for (note, color) in ControlMapping.padColors(show: show, bindings: show.midiBindings, program: program, preview: preview) {
+            if ledCache[note] != color.rawValue {
+                midi.sendNote(channel: 0, note: note, velocity: color.rawValue)
+                ledCache[note] = color.rawValue
+            }
+        }
+    }
+
+    private func clearLEDs() {
+        guard let midi else { return }
+        for note in ledCache.keys { midi.sendNote(channel: 0, note: note, velocity: 0) }
+        ledCache.removeAll()
+    }
+
+    /// Live status as Companion custom variables, for Stream Deck keys:
+    /// oncue_now, oncue_next (camera numbers), oncue_now_name, oncue_next_name, oncue_mode,
+    /// oncue_countdown, oncue_item, oncue_section, oncue_paused, oncue_free.
+    private func pushCompanionVariables(now: Double) {
+        guard profile.companionVariables, now - lastVariablePush > 0.25 else { return }
+        lastVariablePush = now
+        let show = engine.show
+        let onAir = show.camera(engine.onAir?.cue.cameraID)
+        let next = show.camera(engine.next?.cue.cameraID)
+        let section = engine.item?.section(at: engine.position)?.name ?? ""
+        let values: [String: String] = [
+            "oncue_now": onAir.map { "\($0.number)" } ?? "",
+            "oncue_next": next.map { "\($0.number)" } ?? "",
+            "oncue_now_name": onAir?.displayName ?? "",
+            "oncue_next_name": next?.displayName ?? "",
+            "oncue_mode": engine.mode.label,
+            "oncue_countdown": status.secondsToNext.map { String(format: "%.1f", $0) } ?? "",
+            "oncue_item": engine.item?.title ?? "",
+            "oncue_section": section,
+            "oncue_paused": engine.isPaused ? "1" : "0",
+            "oncue_free": engine.freeMode ? "1" : "0",
+        ]
+        for (name, value) in values where lastVariables[name] != value {
+            companion.setVariable(name, value)
+            lastVariables[name] = value
+        }
     }
 
     /// For tests: drive the clock without the timer.
