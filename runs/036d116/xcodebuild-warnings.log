@@ -1,0 +1,2 @@
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/SwitchLog.swift:84:60: warning: implicit capture of 'plain' requires that 'ISO8601DateFormatter' conforms to 'Sendable'; this is an error in the Swift 6 language mode
+2026-11-12 05:01:13.135 appintentsmetadataprocessor[9241:29781] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
