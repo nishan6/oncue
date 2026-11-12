@@ -4,7 +4,7 @@ A native macOS app (Swift / SwiftUI, macOS 14+, Apple Silicon) for scripting the
 
 The product requirements are in the OnCue PRD.
 
-**Current state (Phase 1):** a working show scripting workspace. Create a production, build the running order of songs and segments, add sections, configure cameras, and script shots with timing, transitions and notes. Everything saves to the show file, and each show reopens where you left it. There is no live show engine yet: OnCue does not drive switchers, follow MIDI or LTC, or serve the crew page.
+**Current state:** the scripting workspace and the show engine. **Phase 1:** a working show scripting workspace. Create a production, build the running order of songs and segments, add sections, configure cameras, and script shots with timing, transitions and notes. Everything saves to the show file, and each show reopens where you left it. There is no live show engine yet: OnCue does not drive switchers, follow MIDI or LTC, or serve the crew page.
 
 ## Using the workspace
 
@@ -18,7 +18,15 @@ The product requirements are in the OnCue PRD.
 
 - **Live Mode** (⌘L or the Live button): the script as a gallery display. NOW (PGM) and NEXT (PVW) with camera, operator, description and note; the shots after next; the camera grid with labelled tally; section jumps and song changes. NEXT (Space or →) takes the next shot and back (←) steps back; the clock shows how long the shot has been on air and, where the script has timing, how long until the next is planned. Esc leaves Live Mode and selects the shot that was on air.
 
-FX cues are part of the script only; they run on the switcher once the show engine is built. Live Mode is manual and display-only for the same reason: its status bar says so (timing: manual NEXT, switcher: not connected).
+### Show engine (Live Mode)
+
+- **Switcher mode** (in Live Mode): **Display** shows the calls only; **Preview** puts the next shot's camera on preview and you cut; **Cut** cuts (or mixes) on the script and preloads the next shot. Live Mode always starts in Display, so nothing is sent until you choose.
+- **Manual cut pauses automation**: in Cut mode, if the program changes to something OnCue did not send, automation pauses (amber banner) and OnCue keeps following the script without sending anything. **Resume** (R) puts the next shot on preview and carries on.
+- **Timing per song or segment** ("Live follows" in the header): Section taps (T; OnCue runs at the tempo between taps), NEXT, MIDI clock (Ableton Start starts the song; Song Position is followed), LTC (an audio input; "LTC start" is the song's first frame, or empty for the first frame after GO), or OnCue's own clock from GO (Return).
+- **Switcher** (Production > Switcher…, ⌥⌘S): ATEM (IP address and M/E, UDP 9910), Companion, or the built-in simulator. Cameras reach the switcher on the inputs set under Cameras; cameras without an input are skipped.
+- **This Mac** (Settings): MIDI clock source, LTC audio input and channel.
+
+Not built yet: FX, control, OSC and PTZ cues do not run; only the main output is driven (sub-switchers and separate outputs come next); Companion's per-input button mapping is not editable yet.
 
 | Action | Keys |
 | --- | --- |
@@ -37,6 +45,8 @@ FX cues are part of the script only; they run on the switcher once the show engi
 | Previous / next shot (timeline) | ← / → |
 | Live Mode on / off | ⌘L (Esc leaves) |
 | Live: NEXT / back | Space or → / ← |
+| Live: GO / stop, tap section, resume | Return, T, R |
+| Switcher settings | ⌥⌘S |
 | Undo / redo | ⌘Z / ⇧⌘Z |
 
 ## Project structure
@@ -63,6 +73,11 @@ oncue/
         ShowEditing.swift       every edit the workspace makes (running order, sections, cameras, shots)
         TimelineEditing.swift   timeline spans, snapping, lyrics/notes/FX cues
         LiveCursor.swift        Live Mode position: NEXT, back, section jumps, song changes
+      Engine/
+        ShowEngine.swift        playhead, shot taking, Display/Preview/Cut, manual-cut pause
+        Timing.swift            MIDI clock follower, internal clock, LTC follower
+        LTC.swift               LTC decoder/encoder, audio input, input device list
+        EngineController.swift  runs the engine: switcher, MIDI, LTC, clock, command order
         SampleShow.swift        sample production used by tests and CI screenshots
       Persistence/
         ShowCoding.swift        encode/decode, schema version check, migration, file IO, errors

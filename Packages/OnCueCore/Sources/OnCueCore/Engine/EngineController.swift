@@ -384,7 +384,9 @@ public final class EngineController: ObservableObject {
         let new = EngineStatus(
             itemID: engine.cursor.itemID, index: engine.cursor.index, position: engine.position,
             transport: engine.transport, mode: engine.mode, pauseReason: engine.pause?.reason,
-            takenAt: takenDate, secondsToNext: engine.transport == .running ? engine.secondsToNext() : nil,
+            takenAt: takenDate,
+            // Only a moving timing source gives a real countdown; otherwise Live shows the plan.
+            secondsToNext: (engine.transport == .running && kind != .manual && signal) ? engine.secondsToNext() : nil,
             timing: kind, timingSignal: signal,
             tempo: kind == .midiClock ? midiFollower.tempo : engine.item?.bpm,
             timecode: timecode,
