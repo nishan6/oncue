@@ -8,13 +8,15 @@ The product requirements are in the OnCue PRD.
 
 ## Using the workspace
 
-- **Running order** (left): songs and segments. Drag to reorder; right-click to rename, duplicate or delete.
-- **Header**: title, timing (bars and beats, seconds, or NEXT order), tempo, beats per bar, planned length and hard out.
-- **Section strip**: the song structure, sized by length. Click a block to jump to it. Drag a block onto another to move that section, with its shots, before it.
-- **Shot list**: shots grouped by section. Drag to reorder within a section: the time slots stay and the shots move between them. Edit descriptions and notes inline, and click CUT/MIX to switch the transition.
+- **Running order** (left): songs and segments, each with a strip of its shots in camera colours. Drag to reorder; right-click to rename, duplicate or delete.
+- **Header**: title, timing (bars and beats, seconds, or NEXT order), tempo, beats per bar, planned length and hard out, and the view switch: timeline, timeline and list, or list.
+- **Timeline**: a shared ruler with the Sections, Vision (the main output's shots), Lyrics, Notes and FX tracks. Each camera has its own colour; a shot block shows the camera number, name, description, note and length, and a corner ramp when it mixes in. Double-click a track to add; drag a block to move it (snapped to the beat, half second or step); drag a shot's right edge to trim; double-click a block to edit it in place. Tracks can be hidden (their cues are kept) or locked. Left and right arrows step through the shots.
+- **Shot list**: shots grouped by section. Drag to reorder within a section: the time slots stay and the shots move between them.
 - **Camera keys** (bottom): red is the selected shot's camera, green is the next shot's camera. Click a key to set the camera on the selected shots; Option-click adds a new shot.
-- **Inspector** (right): the full properties of the selected shot or shots, or of the song or segment when no shot is selected.
-- **Cameras** (Production > Cameras): numbers, names, the operator for this show, and the switcher input.
+- **Inspector** (right): the selected shot or shots, lyric, note or FX cue, or the song or segment.
+- **Cameras** (Production > Cameras): colour, number, name, the operator for this show, and the switcher input.
+
+FX cues are part of the script only; they run on the switcher once the show engine is built.
 
 | Action | Keys |
 | --- | --- |
@@ -25,9 +27,12 @@ The product requirements are in the OnCue PRD.
 | Duplicate shot | ⌘D |
 | Move shot up / down | ⌥⌘↑ / ⌥⌘↓ |
 | Switch cut or mix | ⌥⌘T |
-| Delete shot | Delete or ⌘Delete |
+| Delete shot or cue | Delete or ⌘Delete |
 | Previous / next song | ⌘[ / ⌘] |
 | Cameras / inspector | ⌥⌘C / ⌥⌘I |
+| Timeline / timeline and list / list | ⌘1 / ⌘2 / ⌘3 |
+| Zoom in / out / actual size | ⌘= / ⌘- / ⌘0 |
+| Previous / next shot (timeline) | ← / → |
 | Undo / redo | ⌘Z / ⇧⌘Z |
 
 ## Project structure
@@ -52,6 +57,7 @@ oncue/
       Model/Model.swift         show model: cameras, switchers, outputs, items, sections, tracks, cues...
       Editing/
         ShowEditing.swift       every edit the workspace makes (running order, sections, cameras, shots)
+        TimelineEditing.swift   timeline spans, snapping, lyrics/notes/FX cues
         SampleShow.swift        sample production used by tests and CI screenshots
       Persistence/
         ShowCoding.swift        encode/decode, schema version check, migration, file IO, errors
