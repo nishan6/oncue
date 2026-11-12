@@ -39,7 +39,7 @@ struct LiveView: View {
             .padding(Space.xl)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             Rectangle().fill(Gallery.hairline).frame(width: 1)
-            LiveControls(show: show, item: item, engine: engine)
+            LiveControls(show: show, item: item, engine: engine, model: model)
                 .frame(width: 290)
         }
         .background(LivePalette.base)
@@ -534,6 +534,7 @@ struct LiveControls: View {
     let show: Show
     let item: RundownItem?
     @ObservedObject var engine: EngineController
+    @ObservedObject var model: WorkspaceModel
 
     var body: some View {
         let status = engine.status

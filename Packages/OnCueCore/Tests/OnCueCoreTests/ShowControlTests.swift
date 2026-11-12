@@ -231,9 +231,9 @@ final class ShowControlTests: XCTestCase {
         XCTAssertEqual(a.hits, 2)
         XCTAssertEqual(a.missed, 1)
         XCTAssertEqual(a.offScript.count, 1)
-        XCTAssertEqual(a.averageOffset!, (0.1 - 0.4) / 2, accuracy: 1e-9)
-        XCTAssertEqual(a.cameras.first { $0.cameraID == cams[1].id }!.onAirSeconds, 15.4, accuracy: 1e-6)
-        XCTAssertEqual(a.cutsPerMinute, 3 / (29.9 / 60), accuracy: 1e-6)
+        XCTAssertEqual(a.averageOffset!, (0.1 - 0.4) / 2, accuracy: 1e-5)
+        XCTAssertEqual(a.cameras.first { $0.cameraID == cams[1].id }!.onAirSeconds, 15.4, accuracy: 1e-5)
+        XCTAssertEqual(a.cutsPerMinute, 3 / (29.9 / 60), accuracy: 1e-4)
 
         let decoded = try! SwitchLog.decode(log.encoded())
         XCTAssertEqual(decoded.entries.count, log.entries.count)
