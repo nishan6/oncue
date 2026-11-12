@@ -118,10 +118,6 @@ enum ScreenshotRun {
                 }
             }
         }
-        if let i = show.itemIndex(opener) {
-            show.items[i].tracks.append(Track(kind: .calls, name: "Cues"))
-            show.items[i].tracks.append(Track(kind: .player, name: "Media Player Control"))
-        }
         if let c = show.addTrackCue(.calls, inItem: opener, at: 15, text: "LX 12 GO") {
             show.updateCue(c, inItem: opener) { $0.callRole = "Lights" }
         }

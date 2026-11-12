@@ -333,8 +333,15 @@ extension Show {
         let cues = track.cues.sorted { $0.at < $1.at }
         let cameraIDs = Set(cameras.map(\.id))
         let timed = item.timeBase != .order
+        // Sections sorted once and walked alongside the sorted shots (large scripts have
+        // thousands of shots; looking the section up per shot was the slow part).
+        let sections = item.sortedSections
+        var sectionIndex = -1
         var rows: [ShotRow] = []
+        rows.reserveCapacity(cues.count)
         for (k, cue) in cues.enumerated() {
+            while sectionIndex + 1 < sections.count, sections[sectionIndex + 1].at <= cue.at + 1e-9 { sectionIndex += 1 }
+            let sectionID = sectionIndex >= 0 ? sections[sectionIndex].id : nil
             let next = k + 1 < cues.count ? cues[k + 1].at : nil
             let length = (timed && next != nil) ? item.seconds(for: next! - cue.at) : nil
             var issues: [ScriptIssue] = []
@@ -350,7 +357,7 @@ extension Show {
             if let length, length < settings.minShotSeconds {
                 issues.append(ScriptIssue(kind: .tooShort, message: String(format: "Shorter than %.1f s", settings.minShotSeconds)))
             }
-            rows.append(ShotRow(cue: cue, number: k + 1, sectionID: item.section(at: cue.at)?.id,
+            rows.append(ShotRow(cue: cue, number: k + 1, sectionID: sectionID,
                                 lengthSeconds: length, issues: issues))
         }
         return rows
@@ -359,13 +366,15 @@ extension Show {
     public func shotGroups(forItem id: UUID) -> [ShotGroup] {
         guard let item = item(id) else { return [] }
         let rows = shotRows(forItem: id)
+        var bySection: [UUID?: [ShotRow]] = [:]
+        for row in rows { bySection[row.sectionID, default: []].append(row) }
         var groups: [ShotGroup] = []
-        let before = rows.filter { $0.sectionID == nil }
+        let before = bySection[nil] ?? []
         if !before.isEmpty || item.sections.isEmpty {
             groups.append(ShotGroup(section: nil, rows: before))
         }
         for s in item.sortedSections {
-            groups.append(ShotGroup(section: s, rows: rows.filter { $0.sectionID == s.id }))
+            groups.append(ShotGroup(section: s, rows: bySection[s.id] ?? []))
         }
         return groups
     }
