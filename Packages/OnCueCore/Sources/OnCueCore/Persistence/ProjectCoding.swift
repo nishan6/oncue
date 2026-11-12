@@ -126,7 +126,6 @@ extension ChaseSettings {
         self.init()
         freewheel = try c.enumValue("freewheel", .untilSongEnd)
         freewheelSeconds = try c.value("freewheelSeconds", 5.0)
-        preRollSeconds = try c.value("preRollSeconds", 0.0)
     }
 }
 

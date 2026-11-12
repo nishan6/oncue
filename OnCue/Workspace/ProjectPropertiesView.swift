@@ -32,16 +32,18 @@ struct ProjectPropertiesView: View {
             Picker("", selection: $tab) {
                 Text("Scene defaults").tag(0)
                 Text("Shots").tag(2)
+                Text("Timecode").tag(3)
                 Text("Roles").tag(1)
             }
             .pickerStyle(.segmented)
             .labelsHidden()
-            .frame(width: 330)
+            .frame(width: 420)
 
             Group {
                 switch tab {
                 case 0: sceneDefaults
                 case 2: ShotVocabularyEditor(vocab: $draft.properties.shots, countdown: $draft.properties.countdown)
+                case 3: chaseSettings
                 default: roles
                 }
             }
@@ -175,6 +177,25 @@ struct ProjectPropertiesView: View {
                     Spacer()
                 }
             }
+        }
+    }
+
+    private var chaseSettings: some View {
+        let chase = $draft.properties.chase
+        return VStack(alignment: .leading, spacing: Space.m) {
+            Text("When the timecode OnCue follows drops out mid-song").font(.ocMeta).foregroundStyle(Gallery.dim)
+            Picker("", selection: chase.freewheel) {
+                ForEach(FreewheelMode.allCases) { Text($0.label).tag($0) }
+            }
+            .pickerStyle(.radioGroup)
+            .labelsHidden()
+            if draft.properties.chase.freewheel == .forSeconds {
+                Stepper(value: chase.freewheelSeconds, in: 1...60, step: 1) {
+                    Text("Keep running for \(Int(draft.properties.chase.freewheelSeconds)) s, then hold").font(.readout(12))
+                }
+            }
+            Text("Freewheeling, OnCue runs on its own clock from the last frame it read, at the song's tempo, and never past the song's end. When timecode comes back, OnCue follows it again. A trigger route can pause chase on purpose (Show › Trigger Routes).")
+                .font(.ocMeta).foregroundStyle(Gallery.faint).fixedSize(horizontal: false, vertical: true)
         }
     }
 

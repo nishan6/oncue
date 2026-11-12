@@ -377,9 +377,6 @@ public enum FreewheelMode: String, Codable, CaseIterable, Identifiable {
 public struct ChaseSettings: Codable, Hashable {
     public var freewheel: FreewheelMode = .untilSongEnd
     public var freewheelSeconds: Double = 5
-    /// Seconds of timecode before a song's start that OnCue already treats as the song (lets a
-    /// count-in or a click lead in without OnCue waiting at bar 1).
-    public var preRollSeconds: Double = 0
     public init() {}
 
     /// How long timecode can be silent before OnCue counts it as a dropout.
