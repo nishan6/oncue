@@ -43,6 +43,36 @@ enum Gallery {
     static let fx = Color(hex: "#7FD0E4")
 }
 
+/// The workspace shell: near-black frame, flat panels, solid colour-coded track headers.
+enum Deck {
+    static let base = Color(hex: "#0C0D0F")       // viewer, timeline canvas
+    static let bar = Color(hex: "#121316")        // top bar, rail
+    static let row = Color(hex: "#18191D")        // rows in side panels
+    static let key = Color(hex: "#24262C")        // buttons
+    static let keyHover = Color(hex: "#2E3038")
+    static let seam = Color.white.opacity(0.08)
+
+    static let ink = Color(hex: "#F2F3F5")
+    static let dim = Color(hex: "#A9ADB8")
+    static let faint = Color(hex: "#717582")
+
+    static let accent = Color(hex: "#7C6CFF")     // rail selection, panel icons
+    static let live = Color(hex: "#E5322D")       // LIVE on
+    static let warn = Color(hex: "#FFB020")
+
+    /// Solid track header fills by track type.
+    static let trackSections = Color(hex: "#3C3F48")
+    static let trackVision = Color(hex: "#C2302B")
+    static let trackOutput = Color(hex: "#A8432E")
+    static let trackMedia = Color(hex: "#2F8A4E")
+    static let trackLyrics = Color(hex: "#5B47C2")
+    static let trackNotes = Color(hex: "#A07A22")
+    static let trackFX = Color(hex: "#2C6FB0")
+    static let trackControl = Color(hex: "#4338B0")
+    static let trackOSC = Color(hex: "#A33E73")
+    static let trackPTZ = Color(hex: "#23877A")
+}
+
 /// Spacing scale (points).
 enum Space {
     static let xxs: CGFloat = 2

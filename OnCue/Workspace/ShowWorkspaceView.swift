@@ -12,33 +12,15 @@ struct ShowWorkspaceView: View {
     var body: some View {
         let show = document.show
         ZStack {
-        NavigationSplitView {
-            RunningOrderView(show: show, model: model)
-                .navigationSplitViewColumnWidth(min: 220, ideal: 270, max: 400)
-        } detail: {
-            Group {
-                if let item = show.item(model.selectedItemID) {
-                    ItemEditorView(show: show, item: item, model: model)
-                        .id(item.id)
-                        .transition(.opacity)
-                } else {
-                    EmptyProductionView(model: model, hasItems: !show.items.isEmpty)
-                }
-            }
-            .frame(minWidth: 560)
-            .animation(.easeOut(duration: 0.14), value: model.selectedItemID)
-        }
-        .inspector(isPresented: $model.showInspector) {
-            InspectorView(show: show, model: model)
-                .inspectorColumnWidth(min: 280, ideal: 320, max: 460)
-        }
+        WorkspaceShell(show: show, model: model)
+            .frame(minWidth: 980, minHeight: 640)
         if let engine = model.engine {
             LiveView(show: show, engine: engine, model: model)
                 .transition(.opacity)
         }
         }
         .animation(.easeOut(duration: 0.18), value: model.isLive)
-        .toolbarBackground(model.isLive ? LivePalette.base : Gallery.panel, for: .windowToolbar)
+        .toolbarBackground(model.isLive ? LivePalette.base : Deck.bar, for: .windowToolbar)
         .toolbarBackground(model.isLive ? .visible : .automatic, for: .windowToolbar)
         .toolbar {
             ToolbarItem(placement: .navigation) {
@@ -47,20 +29,11 @@ struct ShowWorkspaceView: View {
                 }
             }
             ToolbarItemGroup(placement: .primaryAction) {
-                CrewPageButton(crew: model.crew)
+                // Edit mode keeps its controls in the top bar and the rail; Live Mode keeps its
+                // status here.
                 if let engine = model.engine {
+                    CrewPageButton(crew: model.crew)
                     LiveToolbarStatus(show: show, engine: engine, model: model)
-                } else {
-                Button { model.addSong() } label: { Label("New Song", systemImage: "music.note.list") }
-                    .help("New song (⌥⌘N)")
-                Button { model.addSegment() } label: { Label("New Segment", systemImage: "rectangle.split.3x1") }
-                    .help("New segment (⌥⇧⌘N)")
-                Button { model.cameraManagerOpen = true } label: { Label("Cameras", systemImage: "video") }
-                    .help("Cameras (⌥⌘C)")
-                Button { model.enterLive() } label: { Label("Live Mode", systemImage: "dot.radiowaves.left.and.right") }
-                    .help("Live Mode (⌘L)")
-                Button { model.showInspector.toggle() } label: { Label("Inspector", systemImage: "sidebar.right") }
-                    .help("Show or hide the inspector (⌥⌘I)")
                 }
             }
         }
@@ -97,9 +70,9 @@ struct ShowWorkspaceView: View {
         } message: {
             Text(model.errorMessage ?? "")
         }
-        .background(Gallery.base)
+        .background(Deck.base)
         .preferredColorScheme(.dark)
-        .tint(Gallery.steel)
+        .tint(Deck.accent)
         .focusedSceneObject(model)
         .onAppear { model.attach(document: $document, undoManager: undoManager) }
         .onChange(of: show.id) { _, _ in model.attach(document: $document, undoManager: undoManager) }
