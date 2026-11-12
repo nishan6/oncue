@@ -1,5 +1,6 @@
 import SwiftUI
 import AppKit
+import AVFoundation
 import OnCueCore
 
 /// `OnCue --screenshots <folder>`: writes the sample production to disk, opens it in two real
@@ -28,8 +29,12 @@ enum ScreenshotRun {
 
     private static func openShows() {
         // Timeline: the opener, shot 6 selected (blue ring; the next shot carries a green bar).
-        let timeline = Show.sample()
+        var timeline = Show.sample()
         let song = timeline.items[0].id
+        // A generated song file under the timeline, so the media lane is in the picture.
+        if let audio = makeDemoAudio(seconds: timeline.runLength(forItem: song) ?? 60) {
+            timeline.updateItem(song) { $0.media = ItemMedia(path: audio.path, kind: .audio, offset: 0) }
+        }
         WorkspaceModel.seedState(showID: timeline.id, itemID: song,
                                  shotIDs: [timeline.shotRows(forItem: song)[5].id], editor: .timeline)
 
@@ -167,5 +172,25 @@ enum ScreenshotRun {
         if let cg = renderer.cgImage, let png = NSBitmapImageRep(cgImage: cg).representation(using: .png, properties: [:]) {
             try? png.write(to: folder.appendingPathComponent("export-plot.png"))
         }
+    }
+
+    /// A WAV with a pulsing, swelling tone: drum-like hits on every beat at 120 BPM.
+    private static func makeDemoAudio(seconds: Double) -> URL? {
+        let url = folder.appendingPathComponent("demo-song.wav")
+        guard let format = AVAudioFormat(standardFormatWithSampleRate: 22_050, channels: 1),
+              let file = try? AVAudioFile(forWriting: url, settings: format.settings) else { return nil }
+        let frames = AVAudioFrameCount(seconds * 22_050)
+        guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frames) else { return nil }
+        buffer.frameLength = frames
+        let out = buffer.floatChannelData![0]
+        for i in 0..<Int(frames) {
+            let t = Double(i) / 22_050
+            let beat = t.truncatingRemainder(dividingBy: 0.5)
+            let hit = exp(-beat * 18)
+            let swell = 0.35 + 0.3 * sin(t / seconds * .pi * 3).magnitude
+            out[i] = Float((hit * 0.6 + swell * 0.4) * sin(t * 2 * .pi * 110) * 0.9)
+        }
+        try? file.write(from: buffer)
+        return url
     }
 }
