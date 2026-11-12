@@ -47,6 +47,8 @@ public struct SwitchLog: Codable, Equatable {
     /// Tour mode: the night's label, and who was on each camera (camera number -> operator).
     public var night: String = ""
     public var operators: [String: String] = [:]
+    /// Recordings OnCue started during this run (to match the files afterwards).
+    public var recordings: [RecordingMark] = []
     public var entries: [SwitchLogEntry] = []
 
     public init(showID: UUID, showName: String, started: Date, machine: String = "", night: String = "", operators: [String: String] = [:]) {
@@ -58,7 +60,7 @@ public struct SwitchLog: Codable, Equatable {
         self.operators = operators
     }
 
-    private enum CodingKeys: String, CodingKey { case showID, showName, started, machine, night, operators, entries }
+    private enum CodingKeys: String, CodingKey { case showID, showName, started, machine, night, operators, recordings, entries }
 
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
@@ -68,6 +70,7 @@ public struct SwitchLog: Codable, Equatable {
         machine = try c.decodeIfPresent(String.self, forKey: .machine) ?? ""
         night = try c.decodeIfPresent(String.self, forKey: .night) ?? ""
         operators = try c.decodeIfPresent([String: String].self, forKey: .operators) ?? [:]
+        recordings = try c.decodeIfPresent([RecordingMark].self, forKey: .recordings) ?? []
         entries = try c.decodeIfPresent([SwitchLogEntry].self, forKey: .entries) ?? []
     }
 

@@ -11,6 +11,10 @@ struct SwitcherState: Equatable {
     var modelName = ""
     /// Program/preview are known only from our own commands (Companion has no read-back).
     var assumed = false
+    /// Built-in recording (ATEM Mini Pro / Extreme / Constellation): nil until the switcher reports it.
+    var recording: Bool?
+    var recordingIssue: String?
+    var recordingFilename = ""
 }
 
 /// Common interface for every switcher OnCue can drive. All methods are called on the main thread;
@@ -33,6 +37,12 @@ protocol SwitcherDevice: AnyObject {
     func autoDSK(_ index: Int)
     func setKeyer(_ index: Int, onAir: Bool)
     func fadeToBlack()
+    /// Built-in recording; switchers without it ignore this.
+    func setRecording(_ on: Bool, iso: Bool, filename: String?)
+}
+
+extension SwitcherDevice {
+    func setRecording(_ on: Bool, iso: Bool, filename: String?) {}
 }
 
 /// Factory.

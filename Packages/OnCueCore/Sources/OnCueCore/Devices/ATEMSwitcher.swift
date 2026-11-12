@@ -72,6 +72,21 @@ final class ATEMSwitcher: SwitcherDevice {
     func setKeyer(_ index: Int, onAir: Bool) { send("CKOn", [me, UInt8(clamping: index), onAir ? 1 : 0, 0]) }
     func fadeToBlack() { send("FtbA", [me, 0x02, 0, 0]) }
 
+    /// Recording on ATEM models that record (Mini Pro and up): the file name (CRMS, name flag),
+    /// ISO of every input (ISOi), then record or stop (RcTM). As in the atem-connection library.
+    func setRecording(_ on: Bool, iso: Bool, filename: String?) {
+        if on {
+            if let filename, !filename.isEmpty {
+                var payload = [UInt8](repeating: 0, count: 144)
+                payload[0] = 0x01
+                for (k, b) in Array(filename.utf8.prefix(127)).enumerated() { payload[1 + k] = b }
+                send("CRMS", payload)
+            }
+            send("ISOi", [iso ? 1 : 0, 0, 0, 0])
+        }
+        send("RcTM", [on ? 1 : 0, 0, 0, 0])
+    }
+
     // MARK: Connection
 
     private func open(host: String) {
@@ -227,6 +242,19 @@ final class ATEMSwitcher: SwitcherDevice {
                 if d[0] == me { shadow.inTransition = d[1] & 1 != 0; changed = true }
             case "AuxS" where d.count >= 4:
                 shadow.aux[Int(d[0])] = u16(d, 2); changed = true
+            case "RTMS" where d.count >= 2:
+                // Status flags: 1 recording, 128 stopping; errors 4 full, 8 media error, 16 unformatted, 32 dropping frames, 0 no media.
+                let status = u16(d, 0)
+                shadow.recording = status & 1 != 0
+                if status & 4 != 0 { shadow.recordingIssue = "Disk full" }
+                else if status & 8 != 0 { shadow.recordingIssue = "Disk error" }
+                else if status & 16 != 0 { shadow.recordingIssue = "Disk not formatted" }
+                else if status & 32 != 0 { shadow.recordingIssue = "Dropping frames" }
+                else if status & 2 == 0 { shadow.recordingIssue = "No disk" }
+                else { shadow.recordingIssue = nil }
+                changed = true
+            case "RMSu" where d.count >= 128:
+                shadow.recordingFilename = str(d, 0, 128); changed = true
             case "InCm":
                 if !initDone { initDone = true; shadow.connected = true; changed = true }
             default:

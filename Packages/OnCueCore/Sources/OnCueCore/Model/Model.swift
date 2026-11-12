@@ -490,6 +490,8 @@ public struct Show: Codable, Hashable, Identifiable {
     public var midiBindings: [MIDIBinding] = []
     public var settings = ShowSettings()
     public var plot = CameraPlot()
+    /// What records the rehearsal or show (ATEM, HyperDeck, or through Companion).
+    public var recorders: [RecorderConfig] = []
     /// Named versions kept inside the file (see ShowVersions).
     public var versions: [ShowVersion] = []
 

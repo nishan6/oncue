@@ -272,6 +272,7 @@ extension Show {
         midiBindings = try c.value("midiBindings", [])
         settings = try c.value("settings", ShowSettings())
         plot = try c.value("plot", CameraPlot())
+        recorders = try c.value("recorders", [])
         versions = try c.value("versions", [])
     }
 }
