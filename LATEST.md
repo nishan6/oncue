@@ -1,8 +1,8 @@
-# CI results for 8bc8be9
+# CI results for 5ade4b5
 
-- Commit: 8bc8be9a22611101431d12011ae2c8086dfea18b
-- Run: https://github.com/nishan6/oncue/actions/runs/43192984127
-- Date (UTC): 2026-11-12T09:38:59Z
+- Commit: 5ade4b5b12e22312d5b1104465b5c6afb49c3a05
+- Run: https://github.com/nishan6/oncue/actions/runs/43191648181
+- Date (UTC): 2026-11-12T09:45:27Z
 
 | Step | Result |
 | --- | --- |
@@ -58,7 +58,7 @@ error: fatalError
 ## Build result
 ```
 ** BUILD FAILED **
-/Users/runner/work/oncue/oncue/OnCue/Workspace/MediaPlayer.swift:263:47: error: 'TempoEstimate' initializer is inaccessible due to 'internal' protection level
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
 ```
 ## Warnings (0)
 ```
