@@ -114,7 +114,10 @@ public final class EngineController: ObservableObject {
     public init(show: Show, itemID: UUID, profile: MachineProfile, logFolder: URL? = nil) {
         self.profile = profile
         engine = ShowEngine(show: show, itemID: itemID, mode: .display)
-        log = SwitchLog(showID: show.id, showName: show.name, started: Date(), machine: profile.machineName)
+        var crew: [String: String] = [:]
+        for cam in show.cameras where !cam.operatorName.isEmpty { crew["\(cam.number)"] = cam.operatorName }
+        log = SwitchLog(showID: show.id, showName: show.name, started: Date(), machine: profile.machineName,
+                        night: show.settings.nightLabel, operators: crew)
         status = EngineStatus(itemID: itemID, index: -1, position: 0, transport: .standby, modes: engine.modes,
                               pauseReason: nil, freeMode: false, loopSectionID: nil, takenAt: nil, secondsToNext: nil,
                               timing: .manual, timingSignal: false, tempo: nil, timecode: nil,

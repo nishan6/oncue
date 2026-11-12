@@ -32,6 +32,7 @@ struct WorkspaceCommands: Commands {
             }
             Button("Camera Plot…") { workspace?.plotOpen = true }
                 .keyboardShortcut("p", modifiers: [.command, .option])
+            Button("Tour…") { workspace?.tourOpen = true }
             Button("Pre-show Check…") { workspace?.preShowCheckOpen = true }
                 .keyboardShortcut("k", modifiers: [.command, .option])
             Button("Export…") { workspace?.exportOpen = true }

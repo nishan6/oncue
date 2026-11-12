@@ -249,6 +249,7 @@ extension ShowSettings {
         unusedCameraMinutes = try c.value("unusedCameraMinutes", 10.0)
         manualCutWindow = try c.value("manualCutWindow", 0.4)
         monitors = try c.value("monitors", [])
+        nightLabel = try c.value("nightLabel", "")
     }
 }
 

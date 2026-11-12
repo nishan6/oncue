@@ -44,13 +44,36 @@ public struct SwitchLog: Codable, Equatable {
     public var showName: String
     public var started: Date
     public var machine: String
+    /// Tour mode: the night's label, and who was on each camera (camera number -> operator).
+    public var night: String = ""
+    public var operators: [String: String] = [:]
     public var entries: [SwitchLogEntry] = []
 
-    public init(showID: UUID, showName: String, started: Date, machine: String = "") {
+    public init(showID: UUID, showName: String, started: Date, machine: String = "", night: String = "", operators: [String: String] = [:]) {
         self.showID = showID
         self.showName = showName
         self.started = started
         self.machine = machine
+        self.night = night
+        self.operators = operators
+    }
+
+    private enum CodingKeys: String, CodingKey { case showID, showName, started, machine, night, operators, entries }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        showID = try c.decode(UUID.self, forKey: .showID)
+        showName = try c.decodeIfPresent(String.self, forKey: .showName) ?? ""
+        started = try c.decode(Date.self, forKey: .started)
+        machine = try c.decodeIfPresent(String.self, forKey: .machine) ?? ""
+        night = try c.decodeIfPresent(String.self, forKey: .night) ?? ""
+        operators = try c.decodeIfPresent([String: String].self, forKey: .operators) ?? [:]
+        entries = try c.decodeIfPresent([SwitchLogEntry].self, forKey: .entries) ?? []
+    }
+
+    /// The night's name for comparisons: its label, else the date.
+    public var nightName: String {
+        night.isEmpty ? started.formatted(date: .abbreviated, time: .shortened) : night
     }
 
     public var cuts: [SwitchLogEntry] { entries.filter { $0.kind == .cut } }

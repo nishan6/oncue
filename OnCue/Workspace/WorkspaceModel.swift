@@ -124,6 +124,7 @@ final class WorkspaceModel: ObservableObject {
     @Published var exportOpen = false
     @Published var preShowCheckOpen = false
     @Published var plotOpen = false
+    @Published var tourOpen = false
     @Published var cameraDownOpen = false
     /// The log shown in the after-show report.
     @Published var reportLog: SwitchLog?
