@@ -113,7 +113,62 @@ enum ScreenshotRun {
                 print("[screenshots] could not save \(name): \(error.localizedDescription)")
             }
         }
-        finish("saved \(saved) of \(windows.count) window(s)", ok: saved > 0)
+        let windowsMessage = "saved \(saved) of \(windows.count) window(s)"
+        captureSheets { sheets in
+            finish(windowsMessage + ", \(sheets) sheet(s)", ok: saved > 0)
+        }
+    }
+
+    /// The sheets and Settings, each hosted in its own window with a sample show, captured the same way.
+    private static var sheetWindows: [NSWindow] = []
+    private static var sheetModel: WorkspaceModel?
+
+    private static func captureSheets(done: @escaping (Int) -> Void) {
+        var show = Show.sample()
+        show.addOSCTarget(name: "Resolume")
+        show.addMonitor(name: "Backstage", kind: .gallery)
+        let riser = show.addMonitor(name: "Camera riser", kind: .cameras)
+        let firstThree = show.sortedCameras.prefix(3).map(\.id)
+        show.updateMonitor(riser) { $0.cameraIDs = firstThree }
+        show.settings.nightLabel = "Night 2, Pune"
+        show.saveVersion(name: "After rehearsal")
+        show.renameItem(show.items[1].id, to: show.items[1].title + " ")
+        show.saveVersion(name: "Before Live, Night 1", automatic: true)
+        let model = WorkspaceModel()
+        model.attach(document: .constant(ShowDocument(show: show)), undoManager: nil)
+        sheetModel = model
+        let sheets: [(String, AnyView, NSSize)] = [
+            ("sheet-show-setup.png", AnyView(ShowSetupView(show: show, model: model, tab: .monitors)), NSSize(width: 860, height: 640)),
+            ("sheet-preshow-check.png", AnyView(PreShowCheckView(show: show, model: model)), NSSize(width: 640, height: 620)),
+            ("sheet-export.png", AnyView(ExportView(show: show, model: model)), NSSize(width: 480, height: 470)),
+            ("sheet-tour.png", AnyView(TourView(show: show, model: model)), NSSize(width: 980, height: 640)),
+            ("sheet-versions.png", AnyView(VersionsView(show: show, model: model)), NSSize(width: 560, height: 520)),
+            ("sheet-settings.png", AnyView(MachineProfileView().environmentObject(MachineProfileModel())), NSSize(width: 540, height: 680)),
+        ]
+        for (k, (_, view, size)) in sheets.enumerated() {
+            let w = NSWindow(contentRect: NSRect(x: 40 + k * 20, y: 40 + k * 20, width: size.width, height: size.height),
+                             styleMask: [.titled], backing: .buffered, defer: false)
+            w.isReleasedWhenClosed = false
+            w.contentView = NSHostingView(rootView: view.frame(width: size.width, height: size.height))
+            w.orderFront(nil)
+            sheetWindows.append(w)
+        }
+        // Let the pre-show check and the tour's log scan finish.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+            var saved = 0
+            for (w, sheet) in zip(sheetWindows, sheets) {
+                guard let view = w.contentView else { continue }
+                view.layoutSubtreeIfNeeded()
+                guard let rep = view.bitmapImageRepForCachingDisplay(in: view.bounds) else { continue }
+                view.cacheDisplay(in: view.bounds, to: rep)
+                if let png = rep.representation(using: .png, properties: [:]),
+                   (try? png.write(to: folder.appendingPathComponent(sheet.0))) != nil {
+                    saved += 1
+                    print("[screenshots] saved \(sheet.0)")
+                }
+            }
+            done(saved)
+        }
     }
 
     private static func finish(_ message: String, ok: Bool) {

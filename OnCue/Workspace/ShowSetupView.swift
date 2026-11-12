@@ -7,7 +7,13 @@ struct ShowSetupView: View {
     let show: Show
     @ObservedObject var model: WorkspaceModel
     @Environment(\.dismiss) private var dismiss
-    @State private var tab: Tab = .switchers
+    @State private var tab: Tab
+
+    init(show: Show, model: WorkspaceModel, tab: Tab = .switchers) {
+        self.show = show
+        self.model = model
+        _tab = State(initialValue: tab)
+    }
 
     enum Tab: String, CaseIterable, Identifiable {
         case switchers = "Switchers", outputs = "Outputs", osc = "OSC targets", ptz = "PTZ cameras", monitors = "Monitors", controls = "Controls"
