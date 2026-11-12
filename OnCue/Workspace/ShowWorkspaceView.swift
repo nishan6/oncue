@@ -57,24 +57,13 @@ struct ShowWorkspaceView: View {
         .sheet(isPresented: $model.tourOpen) {
             TourView(show: show, model: model)
         }
-        .sheet(isPresented: $model.versionsOpen) {
-            VersionsView(project: document.project, model: model)
-        }
-        .sheet(isPresented: $model.projectPropertiesOpen) {
-            ProjectPropertiesView(project: document.project, model: model)
-        }
+        .modifier(ProjectSheets(project: document.project, model: model))
         .sheet(item: Binding(get: { model.newSceneKind.map(SceneKindBox.init) }, set: { model.newSceneKind = $0?.kind })) { box in
             NewSceneSheet(kind: box.kind, project: document.project, show: show, model: model)
         }
         .sheet(item: Binding(get: { model.legacyShow.map(LegacyBox.init) }, set: { _ in })) { box in
             LegacyShowSheet(show: box.show, originalURL: fileURL, model: model)
                 .interactiveDismissDisabled()
-        }
-        .sheet(isPresented: $model.triggerRoutesOpen) {
-            TriggerRoutesView(project: document.project, model: model)
-        }
-        .sheet(isPresented: $model.moveAllOpen) {
-            MoveAllSheet(item: model.selectedItem, start: model.moveAllStart, model: model)
         }
         .alert("Renumber the scenes?", isPresented: $model.renumberPromptOpen) {
             Button("Renumber") { model.renumberScenes() }
@@ -187,4 +176,26 @@ struct NoticeBanner: View {
 struct ReportBox: Identifiable {
     let log: SwitchLog
     var id: String { log.fileName + "\(log.entries.count)" }
+}
+
+/// Project-wide sheets, kept out of the workspace body so it type-checks quickly.
+private struct ProjectSheets: ViewModifier {
+    let project: Project
+    @ObservedObject var model: WorkspaceModel
+
+    func body(content: Content) -> some View {
+        content
+            .sheet(isPresented: $model.versionsOpen) {
+                VersionsView(project: project, model: model)
+            }
+            .sheet(isPresented: $model.projectPropertiesOpen) {
+                ProjectPropertiesView(project: project, model: model)
+            }
+            .sheet(isPresented: $model.triggerRoutesOpen) {
+                TriggerRoutesView(project: project, model: model)
+            }
+            .sheet(isPresented: $model.moveAllOpen) {
+                MoveAllSheet(item: model.selectedItem, start: model.moveAllStart, model: model)
+            }
+    }
 }

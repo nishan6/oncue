@@ -22,7 +22,7 @@ final class MediaPoolTests: XCTestCase {
         if let c = show.addTrackCue(.player, inItem: item, at: 0) {
             show.updateCue(c, inItem: item) { $0.clip = "Intro loop" }
         }
-        p.apply(show, playlist: nil)
+        p.apply(show, playlist: p.playlists[0].id)
         let clip = p.media.first { $0.name == "Intro loop" }!
         XCTAssertEqual(p.mediaUsage(clip).count, 1)
         XCTAssertEqual(p.mediaUsage(p.media[0]).first?.place, .itemMedia)
