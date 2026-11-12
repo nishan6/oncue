@@ -615,6 +615,9 @@ struct LiveControls: View {
                     model.cameraDownOpen = true
                 }
             }
+            if !show.settings.monitors.isEmpty {
+                MonitorsToggle(windows: model.monitors, model: model, engine: engine, show: show)
+            }
             Button { engine.panic() } label: {
                 Label("Display only (Esc)", systemImage: "exclamationmark.octagon")
                     .font(.system(size: 12, weight: .semibold))
@@ -931,6 +934,23 @@ struct LiveRundownStrip: View {
         VStack(alignment: .leading, spacing: 1) {
             Text(label).font(.ocMeta).foregroundStyle(Gallery.faint).lineLimit(1)
             Text(value).font(.readout(20, weight: .semibold)).foregroundStyle(color).lineLimit(1)
+        }
+    }
+}
+
+
+/// Opens or closes the operator monitors set up in Show Setup › Monitors.
+struct MonitorsToggle: View {
+    @ObservedObject var windows: MonitorWindows
+    let model: WorkspaceModel
+    let engine: EngineController
+    let show: Show
+
+    var body: some View {
+        ToolToggle(title: windows.isOpen ? "Monitors on" : "Monitors (\(show.settings.monitors.count))", symbol: "display.2",
+                   on: windows.isOpen, color: Gallery.selection,
+                   help: "Show the crew views on the displays chosen in Show Setup") {
+            if windows.isOpen { windows.close() } else { windows.open(model: model, engine: engine, show: show) }
         }
     }
 }

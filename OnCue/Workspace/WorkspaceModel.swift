@@ -113,6 +113,8 @@ final class WorkspaceModel: ObservableObject {
     @Published var engine: EngineController? { didSet { crew.follow(engine) } }
     /// The crew page for this window.
     let crew = CrewController()
+    /// Operator monitor windows (Live Mode only).
+    let monitors = MonitorWindows()
     var isLive: Bool { engine != nil }
     /// Used by the screenshot run: shows that open straight into Live Mode at a shot index.
     static var openLive: [UUID: Int] = [:]
@@ -602,6 +604,7 @@ final class WorkspaceModel: ObservableObject {
         guard let controller = engine else { return }
         let cursor = controller.status.cursor
         let onAir = show.liveNow(cursor)
+        monitors.close()
         controller.shutdown()
         let log = controller.log
         engine = nil

@@ -10,7 +10,7 @@ struct ShowSetupView: View {
     @State private var tab: Tab = .switchers
 
     enum Tab: String, CaseIterable, Identifiable {
-        case switchers = "Switchers", outputs = "Outputs", osc = "OSC targets", ptz = "PTZ cameras", controls = "Controls"
+        case switchers = "Switchers", outputs = "Outputs", osc = "OSC targets", ptz = "PTZ cameras", monitors = "Monitors", controls = "Controls"
         var id: String { rawValue }
     }
 
@@ -39,6 +39,7 @@ struct ShowSetupView: View {
                     case .outputs: outputsTab
                     case .osc: oscTab
                     case .ptz: ptzTab
+                    case .monitors: MonitorsSetup(show: show, model: model)
                     case .controls: ControlsSetup(show: show, model: model)
                     }
                 }
@@ -537,5 +538,81 @@ struct ControlsSetup: View {
         session?.onMessage = nil
         session = nil
         learning = nil
+    }
+}
+
+
+/// Operator monitors: crew views opened on this Mac's extra displays (HDMI to the monitors at
+/// camera positions or backstage) while in Live Mode.
+struct MonitorsSetup: View {
+    let show: Show
+    @ObservedObject var model: WorkspaceModel
+    @State private var screens = NSScreen.screens.map(\.localizedName)
+
+    var body: some View {
+        Text("Crew views shown full screen on this Mac's other displays during Live Mode. Open them from Live Mode with Monitors.")
+            .font(.ocMeta).foregroundStyle(Gallery.dim).fixedSize(horizontal: false, vertical: true)
+        ForEach(show.settings.monitors) { monitor in
+            VStack(alignment: .leading, spacing: Space.s) {
+                HStack(spacing: Space.s) {
+                    CommitField(placeholder: "Name", value: monitor.name, font: .ocBodyStrong, width: 180) { text in
+                        guard !text.isEmpty else { return false }
+                        model.edit("Rename Monitor") { $0.updateMonitor(monitor.id) { $0.name = text } }
+                        return true
+                    }
+                    Picker("Shows", selection: Binding(get: { monitor.kind }, set: { k in model.edit("Change Monitor View") { $0.updateMonitor(monitor.id) { $0.kind = k } } })) {
+                        ForEach(MonitorKind.allCases) { Text($0.label).tag($0) }
+                    }
+                    .labelsHidden()
+                    .frame(width: 250)
+                    Spacer()
+                    IconButton(symbol: "trash", help: "Delete this monitor") { model.edit("Delete Monitor") { $0.deleteMonitor(monitor.id) } }
+                }
+                HStack(spacing: Space.s) {
+                    Text("Display").font(.ocMeta).foregroundStyle(Gallery.dim)
+                    Picker("Display", selection: Binding(get: { monitor.screenName }, set: { n in model.edit("Change Monitor Display") { $0.updateMonitor(monitor.id) { $0.screenName = n } } })) {
+                        Text("A window on this screen").tag("")
+                        ForEach(Array(Set(screens + [monitor.screenName]).filter { !$0.isEmpty }).sorted(), id: \.self) { name in
+                            Text(screens.contains(name) ? name : "\(name) (not connected)").tag(name)
+                        }
+                    }
+                    .labelsHidden()
+                    .frame(width: 260)
+                }
+                if monitor.kind == .cameras {
+                    HStack(spacing: 4) {
+                        Text("Cameras").font(.ocMeta).foregroundStyle(Gallery.dim)
+                        ForEach(show.sortedCameras) { cam in
+                            let on = monitor.cameraIDs.contains(cam.id)
+                            Button {
+                                model.edit(on ? "Remove Camera from Monitor" : "Add Camera to Monitor") { s in
+                                    s.updateMonitor(monitor.id) { m in
+                                        if on { m.cameraIDs.removeAll { $0 == cam.id } } else { m.cameraIDs.append(cam.id) }
+                                    }
+                                }
+                            } label: {
+                                Text("\(cam.number)")
+                                    .font(.readout(12, weight: .bold))
+                                    .frame(width: 26, height: 22)
+                                    .foregroundStyle(on ? Gallery.well : Gallery.dim)
+                                    .background(on ? cam.swiftUIColor : Gallery.key, in: RoundedRectangle(cornerRadius: 4))
+                            }
+                            .buttonStyle(.plain)
+                            .help(cam.displayName)
+                        }
+                    }
+                }
+            }
+            .padding(Space.s)
+            .background(Gallery.raised, in: RoundedRectangle(cornerRadius: Radius.m))
+        }
+        Button {
+            let name = "Monitor \(show.settings.monitors.count + 1)"
+            model.edit("Add Monitor") { $0.addMonitor(name: name, kind: .gallery) }
+        } label: {
+            Label("Monitor", systemImage: "plus")
+        }
+        .buttonStyle(QuietButtonStyle())
+        .onAppear { screens = NSScreen.screens.map(\.localizedName) }
     }
 }

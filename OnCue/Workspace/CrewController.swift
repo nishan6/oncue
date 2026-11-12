@@ -120,7 +120,7 @@ final class CrewController: ObservableObject {
         }
         lastSent = Date()
         let status = engine?.status
-        let moving = status.map { $0.transport == .running && ($0.timingSignal || $0.timing == .internalClock) } ?? false
+        let moving = status?.positionMoving ?? false
         server.update(show.crewSnapshot(status: status, position: status?.position, running: moving, scriptVersion: scriptVersion))
     }
 }

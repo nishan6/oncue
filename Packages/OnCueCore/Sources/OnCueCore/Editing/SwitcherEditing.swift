@@ -87,3 +87,30 @@ extension Show {
         }
     }
 }
+
+// MARK: - Operator monitors
+
+extension Show {
+    @discardableResult
+    public mutating func addMonitor(name: String, kind: MonitorKind) -> UUID {
+        let m = MonitorConfig(name: name, kind: kind)
+        settings.monitors.append(m)
+        return m.id
+    }
+
+    public mutating func updateMonitor(_ id: UUID, _ change: (inout MonitorConfig) -> Void) {
+        guard let i = settings.monitors.firstIndex(where: { $0.id == id }) else { return }
+        change(&settings.monitors[i])
+    }
+
+    public mutating func deleteMonitor(_ id: UUID) {
+        settings.monitors.removeAll { $0.id == id }
+    }
+}
+
+extension EngineStatus {
+    /// True while a timing source is actually moving the position, so countdowns can be shown.
+    public var positionMoving: Bool {
+        transport == .running && (timingSignal || timing == .internalClock)
+    }
+}
