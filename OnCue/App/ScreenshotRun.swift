@@ -53,6 +53,8 @@ enum ScreenshotRun {
         WorkspaceModel.seedState(showID: compact.id, itemID: seg,
                                  shotIDs: [compact.shotRows(forItem: seg)[3].id], editor: .timeline)
 
+        renderExports(Show.sample())
+
         let urls = shots.map { folder.appendingPathComponent($0.file) }
         do {
             for (show, url) in zip([timeline, split, list, live, compact], urls) { try ShowFileIO.write(show, to: url) }
@@ -112,5 +114,34 @@ enum ScreenshotRun {
         print("[screenshots] \(ok ? "PASS" : "FAIL"): \(message)")
         fflush(stdout)
         exit(ok ? 0 : 1)
+    }
+
+    /// The printable exports of the sample show: the PDFs themselves and their first pages as PNGs.
+    private static func renderExports(_ show: Show) {
+        let exports: [(String, Data)] = [
+            ("export-camera-script", show.cameraScriptPDF(paper: .a4)),
+            ("export-call-sheets", show.callSheetsPDF(paper: .a4)),
+        ]
+        for (name, data) in exports {
+            try? data.write(to: folder.appendingPathComponent(name + ".pdf"))
+            guard let provider = CGDataProvider(data: data as CFData), let doc = CGPDFDocument(provider),
+                  let page = doc.page(at: 1) else { continue }
+            let box = page.getBoxRect(.mediaBox)
+            let scale: CGFloat = 2
+            guard let ctx = CGContext(data: nil, width: Int(box.width * scale), height: Int(box.height * scale), bitsPerComponent: 8,
+                                      bytesPerRow: 0, space: CGColorSpace(name: CGColorSpace.sRGB)!,
+                                      bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { continue }
+            ctx.setFillColor(CGColor(gray: 1, alpha: 1))
+            ctx.fill(CGRect(x: 0, y: 0, width: box.width * scale, height: box.height * scale))
+            ctx.scaleBy(x: scale, y: scale)
+            ctx.drawPDFPage(page)
+            guard let image = ctx.makeImage() else { continue }
+            let rep = NSBitmapImageRep(cgImage: image)
+            try? rep.representation(using: .png, properties: [:])?.write(to: folder.appendingPathComponent(name + ".png"))
+        }
+        try? show.scriptCSV().write(to: folder.appendingPathComponent("export-script.csv"), atomically: true, encoding: .utf8)
+        if let edl = show.markerEDL(itemID: show.items[0].id, fps: 25) {
+            try? edl.write(to: folder.appendingPathComponent("export-markers.edl"), atomically: true, encoding: .utf8)
+        }
     }
 }

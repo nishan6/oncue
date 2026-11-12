@@ -119,6 +119,7 @@ final class WorkspaceModel: ObservableObject {
     @Published var lockedLanes: Set<TimelineLane> = [] { didSet { persistState() } }
     @Published var cameraManagerOpen = false
     @Published var switcherSetupOpen = false
+    @Published var exportOpen = false
     @Published var cameraDownOpen = false
     /// The log shown in the after-show report.
     @Published var reportLog: SwitchLog?

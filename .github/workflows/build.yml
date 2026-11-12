@@ -81,6 +81,7 @@ jobs:
           "$APP/Contents/MacOS/OnCue" --screenshots "$SHOTS" 2>&1 | tee ci-logs/screenshots.log
           mkdir -p ci-logs/screenshots
           cp "$SHOTS"/*.png ci-logs/screenshots/ 2>/dev/null || true
+          cp "$SHOTS"/export-* ci-logs/screenshots/ 2>/dev/null || true
           screencapture -x ci-logs/screenshots/full-screen-after.png 2>/dev/null || true
           grep -q "PASS:" ci-logs/screenshots.log
 

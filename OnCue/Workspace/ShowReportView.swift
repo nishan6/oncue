@@ -19,6 +19,24 @@ struct ShowReportView: View {
                                      log.machine.isEmpty ? "" : log.machine])
                 }
                 Spacer()
+                Menu {
+                    ForEach([24, 25, 30, 50, 60], id: \.self) { fps in
+                        Button("EDL at \(fps) fps") {
+                            FileSaver.save(Data(log.edl(show: show, fps: fps).utf8), name: "\(log.showName) – Program cuts",
+                                           type: UTType(filenameExtension: "edl") ?? .plainText, model: nil)
+                        }
+                    }
+                    Divider()
+                    Button("Switch log (CSV)") {
+                        FileSaver.save(Data(log.csv(show: show).utf8), name: "\(log.showName) – Switch log",
+                                       type: .commaSeparatedText, model: nil)
+                    }
+                } label: {
+                    Text("Export")
+                }
+                .menuStyle(.borderlessButton)
+                .fixedSize()
+                .help("The program cuts as an EDL for conforming ISO recordings, or every logged event as a spreadsheet")
                 Button("Done") { dismiss() }
                     .buttonStyle(QuietButtonStyle(prominent: true))
                     .keyboardShortcut(.defaultAction)

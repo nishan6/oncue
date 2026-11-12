@@ -30,6 +30,8 @@ struct WorkspaceCommands: Commands {
             Button("Open Switch Log…") {
                 SwitchLogPicker.choose { workspace?.reportLog = $0 } failure: { workspace?.errorMessage = $0 }
             }
+            Button("Export…") { workspace?.exportOpen = true }
+                .keyboardShortcut("e", modifiers: [.command, .shift])
             Divider()
             Button("Show Setup…") { workspace?.switcherSetupOpen = true }
                 .keyboardShortcut("s", modifiers: [.command, .option])
