@@ -40,7 +40,8 @@ final class PreShowCheckTests: XCTestCase {
         let song = show.items[0].id
         show.addShot(inItem: song, cameraID: nil, at: 200)
         show.updateCamera(show.sortedCameras[1].id) { $0.input = 0 }
-        show.updateCamera(show.sortedCameras[2].id) { $0.input = show.sortedCameras[0].input }
+        let firstInput = show.sortedCameras[0].input
+        show.updateCamera(show.sortedCameras[2].id) { $0.input = firstInput }
         show.updateItem(song) { $0.syncMode = .midiClock }
         var p = profile()
         p.midiClockSource = "Ableton Push"
