@@ -1,0 +1,541 @@
+Building for debugging...
+[0/8] /Users/runner/work/oncue/oncue/Packages/OnCueCore/.build/arm64-apple-macosx/debug/OnCueCorePackageTests.derived/runner.swift
+[1/8] Write sources
+[3/8] Copying Fixtures
+[4/8] Write sources
+[5/8] Write swift-version--79AA4F9932D1E87A.txt
+[7/35] Emitting module OnCueCore
+[8/48] Compiling OnCueCore TourComparison.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[9/48] Compiling OnCueCore PDFExports.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[10/48] Compiling OnCueCore TextExports.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[11/48] Compiling OnCueCore ItemMedia.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[12/48] Compiling OnCueCore TempoDetector.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[13/48] Compiling OnCueCore Model.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[14/48] Compiling OnCueCore BackupFolder.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[15/48] Compiling OnCueCore MachineProfile.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[16/48] Compiling OnCueCore ShowCoding.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[17/48] Compiling OnCueCore ShowVersions.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[18/48] Compiling OnCueCore TolerantDecoding.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[19/48] Compiling OnCueCore CameraPlot.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[20/48] Compiling OnCueCore Recorders.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[21/48] Compiling OnCueCore CrewPage.swift
+[22/48] Compiling OnCueCore CrewServer.swift
+[23/48] Compiling OnCueCore CrewSnapshot.swift
+[24/48] Compiling OnCueCore ATEMSwitcher.swift
+[25/48] Compiling OnCueCore CompanionClient.swift
+[26/48] Compiling OnCueCore MIDIManager.swift
+[27/48] Compiling OnCueCore OSC.swift
+[28/48] Compiling OnCueCore PTZService.swift
+[29/48] Compiling OnCueCore SwitcherDevice.swift
+[30/48] Compiling OnCueCore DraftScript.swift
+[31/48] Compiling OnCueCore LiveCursor.swift
+[32/48] Compiling OnCueCore SampleShow.swift
+[33/48] Compiling OnCueCore ShowEditing.swift
+[34/48] Compiling OnCueCore SwitcherEditing.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 97 |         case .timeOfDay, .off:
+ 98 |             let c = Calendar.current.dateComponents([.hour, .minute, .second, .nanosecond], from: Date())
+ 99 |             return Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+100 |         case .song:
+101 |             lock.lock()
+[35/48] Compiling OnCueCore TimelineEditing.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 97 |         case .timeOfDay, .off:
+ 98 |             let c = Calendar.current.dateComponents([.hour, .minute, .second, .nanosecond], from: Date())
+ 99 |             return Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+100 |         case .song:
+101 |             lock.lock()
+[36/48] Compiling OnCueCore BackupLink.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 97 |         case .timeOfDay, .off:
+ 98 |             let c = Calendar.current.dateComponents([.hour, .minute, .second, .nanosecond], from: Date())
+ 99 |             return Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+100 |         case .song:
+101 |             lock.lock()
+[37/48] Compiling OnCueCore Controls.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 97 |         case .timeOfDay, .off:
+ 98 |             let c = Calendar.current.dateComponents([.hour, .minute, .second, .nanosecond], from: Date())
+ 99 |             return Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+100 |         case .song:
+101 |             lock.lock()
+[38/48] Compiling OnCueCore EngineController.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 97 |         case .timeOfDay, .off:
+ 98 |             let c = Calendar.current.dateComponents([.hour, .minute, .second, .nanosecond], from: Date())
+ 99 |             return Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+100 |         case .song:
+101 |             lock.lock()
+[39/48] Compiling OnCueCore LTC.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 97 |         case .timeOfDay, .off:
+ 98 |             let c = Calendar.current.dateComponents([.hour, .minute, .second, .nanosecond], from: Date())
+ 99 |             return Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+100 |         case .song:
+101 |             lock.lock()
+[40/48] Compiling OnCueCore LTCOutput.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 97 |         case .timeOfDay, .off:
+ 98 |             let c = Calendar.current.dateComponents([.hour, .minute, .second, .nanosecond], from: Date())
+ 99 |             return Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+100 |         case .song:
+101 |             lock.lock()
+[41/48] Compiling OnCueCore MTC.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 97 |         case .timeOfDay, .off:
+ 98 |             let c = Calendar.current.dateComponents([.hour, .minute, .second, .nanosecond], from: Date())
+ 99 |             return Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+100 |         case .song:
+101 |             lock.lock()
+[42/48] Compiling OnCueCore PreShowCheck.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 97 |         case .timeOfDay, .off:
+ 98 |             let c = Calendar.current.dateComponents([.hour, .minute, .second, .nanosecond], from: Date())
+ 99 |             return Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+100 |         case .song:
+101 |             lock.lock()
+[43/48] Compiling OnCueCore RundownTiming.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 97 |         case .timeOfDay, .off:
+ 98 |             let c = Calendar.current.dateComponents([.hour, .minute, .second, .nanosecond], from: Date())
+ 99 |             return Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+100 |         case .song:
+101 |             lock.lock()
+[44/48] Compiling OnCueCore ShowEngine.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 97 |         case .timeOfDay, .off:
+ 98 |             let c = Calendar.current.dateComponents([.hour, .minute, .second, .nanosecond], from: Date())
+ 99 |             return Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+100 |         case .song:
+101 |             lock.lock()
+[45/48] Compiling OnCueCore SwitchLog.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 97 |         case .timeOfDay, .off:
+ 98 |             let c = Calendar.current.dateComponents([.hour, .minute, .second, .nanosecond], from: Date())
+ 99 |             return Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+100 |         case .song:
+101 |             lock.lock()
+[46/48] Compiling OnCueCore Timing.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Engine/LTCOutput.swift:99:20: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 97 |         case .timeOfDay, .off:
+ 98 |             let c = Calendar.current.dateComponents([.hour, .minute, .second, .nanosecond], from: Date())
+ 99 |             return Double((c.hour ?? 0) * 3600 + (c.minute ?? 0) * 60 + (c.second ?? 0)) + Double(c.nanosecond ?? 0) / 1e9
+    |                    `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+100 |         case .song:
+101 |             lock.lock()
+error: fatalError
