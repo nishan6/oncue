@@ -15,6 +15,8 @@
 		3BD326E7A74A91ACF15FAF8D /* MachineProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A77E84C1FEBE7E5718BDEE /* MachineProfileView.swift */; };
 		40DEA88FD61358EE4EA96A11 /* ExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328850312120FD1B1C6560EF /* ExportView.swift */; };
 		47E1145DAAEAC694243CB9E6 /* ShowReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48FA70076F2227771D2E1F4 /* ShowReportView.swift */; };
+		5B72572D5DF6C6B0D23857CC /* MediaPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04636F0E36A443DF6B007A8A /* MediaPlayer.swift */; };
+		5C780713810E4455334F55A1 /* VersionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203EB89D07949FF4E67E4F9E /* VersionsView.swift */; };
 		62CE901F8A87192D4B57F698 /* WorkspaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB7D5C8765F425171804B664 /* WorkspaceModel.swift */; };
 		66C2206864ADAA19F7AE3CFD /* CrewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF100B54F968642D24C4FD5 /* CrewController.swift */; };
 		675AE418F5CA08A9DE0DDEF3 /* OnCueApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780AE26026DBAFD2B65DEF9D /* OnCueApp.swift */; };
@@ -23,22 +25,30 @@
 		86701766F106877478C0200B /* ShowDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FC41C44C1F7695F918F07D /* ShowDocument.swift */; };
 		9359AEE688E11C34223B81D7 /* CueFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31634D4D0419A3ABC588A840 /* CueFields.swift */; };
 		AE6AE7C6777F266F9A225BD4 /* OnCueCore in Frameworks */ = {isa = PBXBuildFile; productRef = B336DDE3611B72052511C115 /* OnCueCore */; };
+		B200E7829DD875E6C9BDCACF /* OperatorMonitors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436F3C2EC9AD5E27AF28ABFD /* OperatorMonitors.swift */; };
 		B684D8B1BFB1C4569341263E /* SmokeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3D28E021667A79D4C7536F /* SmokeTest.swift */; };
 		B8BC7C5723E59E56C4356C17 /* LiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF717A9AA87D0F24DA3FB3E /* LiveView.swift */; };
 		C036634E351DC13626E804B4 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43054B8BF76BCAA9784343FB /* TimelineView.swift */; };
+		CCEB121471F8F032D328C817 /* TourView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19227E556C3A76A6CB3E128 /* TourView.swift */; };
 		DEA5FB5A2DDAE3F44C1AD85B /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8BECE970407DFA7EC43B7CE /* Theme.swift */; };
 		DFC71F7CBE23DF1F9EDC5B86 /* RunningOrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7CD1AE74643E8E7E7A69FD /* RunningOrderView.swift */; };
 		DFCBB724D1778AD58419C225 /* WorkspaceCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6B5BE5447057E4B979ADD1 /* WorkspaceCommands.swift */; };
+		E5A5BCB2B9C660EB80B45BDB /* CameraPlotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE647BFC3E5C1940BC7B5648 /* CameraPlotView.swift */; };
+		F48FFE50FA2982B8FFE58A50 /* DraftScriptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3AE142ACE33618B209DDAA /* DraftScriptView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		04636F0E36A443DF6B007A8A /* MediaPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayer.swift; sourceTree = "<group>"; };
 		05FC41C44C1F7695F918F07D /* ShowDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDocument.swift; sourceTree = "<group>"; };
 		0C39235BF555BFD93EA0270B /* ScreenshotRun.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotRun.swift; sourceTree = "<group>"; };
 		1F3D28E021667A79D4C7536F /* SmokeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmokeTest.swift; sourceTree = "<group>"; };
+		203EB89D07949FF4E67E4F9E /* VersionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionsView.swift; sourceTree = "<group>"; };
 		31634D4D0419A3ABC588A840 /* CueFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CueFields.swift; sourceTree = "<group>"; };
 		328850312120FD1B1C6560EF /* ExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportView.swift; sourceTree = "<group>"; };
 		3BF100B54F968642D24C4FD5 /* CrewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrewController.swift; sourceTree = "<group>"; };
 		43054B8BF76BCAA9784343FB /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
+		436F3C2EC9AD5E27AF28ABFD /* OperatorMonitors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperatorMonitors.swift; sourceTree = "<group>"; };
+		6D3AE142ACE33618B209DDAA /* DraftScriptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftScriptView.swift; sourceTree = "<group>"; };
 		6E6B5BE5447057E4B979ADD1 /* WorkspaceCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceCommands.swift; sourceTree = "<group>"; };
 		71DA87E37B8723563B71C8E9 /* CameraManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManagerView.swift; sourceTree = "<group>"; };
 		780AE26026DBAFD2B65DEF9D /* OnCueApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnCueApp.swift; sourceTree = "<group>"; };
@@ -49,7 +59,9 @@
 		ADF717A9AA87D0F24DA3FB3E /* LiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveView.swift; sourceTree = "<group>"; };
 		AE93C49E05A47DAEC508FA0D /* OnCue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnCue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8BECE970407DFA7EC43B7CE /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		CE647BFC3E5C1940BC7B5648 /* CameraPlotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPlotView.swift; sourceTree = "<group>"; };
 		DF6AAA1B35A6655F52406962 /* InspectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorView.swift; sourceTree = "<group>"; };
+		E19227E556C3A76A6CB3E128 /* TourView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourView.swift; sourceTree = "<group>"; };
 		E271F3E9BE490209AD047BE0 /* ItemEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemEditorView.swift; sourceTree = "<group>"; };
 		EC7CD1AE74643E8E7E7A69FD /* RunningOrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningOrderView.swift; sourceTree = "<group>"; };
 		F6A77E84C1FEBE7E5718BDEE /* MachineProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineProfileView.swift; sourceTree = "<group>"; };
@@ -73,18 +85,24 @@
 			isa = PBXGroup;
 			children = (
 				71DA87E37B8723563B71C8E9 /* CameraManagerView.swift */,
+				CE647BFC3E5C1940BC7B5648 /* CameraPlotView.swift */,
 				3BF100B54F968642D24C4FD5 /* CrewController.swift */,
 				31634D4D0419A3ABC588A840 /* CueFields.swift */,
+				6D3AE142ACE33618B209DDAA /* DraftScriptView.swift */,
 				328850312120FD1B1C6560EF /* ExportView.swift */,
 				DF6AAA1B35A6655F52406962 /* InspectorView.swift */,
 				E271F3E9BE490209AD047BE0 /* ItemEditorView.swift */,
 				ADF717A9AA87D0F24DA3FB3E /* LiveView.swift */,
+				04636F0E36A443DF6B007A8A /* MediaPlayer.swift */,
+				436F3C2EC9AD5E27AF28ABFD /* OperatorMonitors.swift */,
 				8627F4EB520DBB4D480F1496 /* PreShowCheckView.swift */,
 				EC7CD1AE74643E8E7E7A69FD /* RunningOrderView.swift */,
 				A48FA70076F2227771D2E1F4 /* ShowReportView.swift */,
 				A1F559336BED9E808C8D2BE3 /* ShowSetupView.swift */,
 				F7F5424FF571E4C3F1A31568 /* ShowWorkspaceView.swift */,
 				43054B8BF76BCAA9784343FB /* TimelineView.swift */,
+				E19227E556C3A76A6CB3E128 /* TourView.swift */,
+				203EB89D07949FF4E67E4F9E /* VersionsView.swift */,
 				6E6B5BE5447057E4B979ADD1 /* WorkspaceCommands.swift */,
 				FB7D5C8765F425171804B664 /* WorkspaceModel.swift */,
 			);
@@ -211,14 +229,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				0947F8491CB412955A65C6EE /* CameraManagerView.swift in Sources */,
+				E5A5BCB2B9C660EB80B45BDB /* CameraPlotView.swift in Sources */,
 				66C2206864ADAA19F7AE3CFD /* CrewController.swift in Sources */,
 				9359AEE688E11C34223B81D7 /* CueFields.swift in Sources */,
+				F48FFE50FA2982B8FFE58A50 /* DraftScriptView.swift in Sources */,
 				40DEA88FD61358EE4EA96A11 /* ExportView.swift in Sources */,
 				7CCED2FF9F4F02B6087CF920 /* InspectorView.swift in Sources */,
 				848009FB351D646A30816EF9 /* ItemEditorView.swift in Sources */,
 				B8BC7C5723E59E56C4356C17 /* LiveView.swift in Sources */,
 				3BD326E7A74A91ACF15FAF8D /* MachineProfileView.swift in Sources */,
+				5B72572D5DF6C6B0D23857CC /* MediaPlayer.swift in Sources */,
 				675AE418F5CA08A9DE0DDEF3 /* OnCueApp.swift in Sources */,
+				B200E7829DD875E6C9BDCACF /* OperatorMonitors.swift in Sources */,
 				32E9B7C6AD4E6C3210FC5F7C /* PreShowCheckView.swift in Sources */,
 				DFC71F7CBE23DF1F9EDC5B86 /* RunningOrderView.swift in Sources */,
 				29FC616B3A78E7E956D34F8E /* ScreenshotRun.swift in Sources */,
@@ -229,6 +251,8 @@
 				B684D8B1BFB1C4569341263E /* SmokeTest.swift in Sources */,
 				DEA5FB5A2DDAE3F44C1AD85B /* Theme.swift in Sources */,
 				C036634E351DC13626E804B4 /* TimelineView.swift in Sources */,
+				CCEB121471F8F032D328C817 /* TourView.swift in Sources */,
+				5C780713810E4455334F55A1 /* VersionsView.swift in Sources */,
 				DFCBB724D1778AD58419C225 /* WorkspaceCommands.swift in Sources */,
 				62CE901F8A87192D4B57F698 /* WorkspaceModel.swift in Sources */,
 			);
