@@ -35,6 +35,10 @@ struct WorkspaceCommands: Commands {
             Button("Tour…") { workspace?.tourOpen = true }
             Button("Pre-show Check…") { workspace?.preShowCheckOpen = true }
                 .keyboardShortcut("k", modifiers: [.command, .option])
+            Menu("Draft Script") {
+                Button("From Switch Log…") { if let w = workspace { DraftSource.chooseLog(model: w) } }
+                Button("From EDL…") { if let w = workspace { DraftSource.chooseEDL(model: w) } }
+            }
             Button("Export…") { workspace?.exportOpen = true }
                 .keyboardShortcut("e", modifiers: [.command, .shift])
             Divider()

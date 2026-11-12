@@ -82,6 +82,9 @@ struct ShowWorkspaceView: View {
         .sheet(isPresented: $model.tourOpen) {
             TourView(show: show, model: model)
         }
+        .sheet(item: $model.draftSource) { source in
+            DraftScriptView(show: show, source: source, model: model)
+        }
         .sheet(item: Binding(get: { model.reportLog.map(ReportBox.init) }, set: { model.reportLog = $0?.log })) { box in
             ShowReportView(show: show, log: box.log)
         }
