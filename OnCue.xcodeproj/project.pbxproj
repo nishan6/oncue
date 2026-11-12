@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07699FB08AB39E0CF79200AE /* SwitcherSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBFB89B4686A1AED8DEA0D /* SwitcherSetupView.swift */; };
 		0947F8491CB412955A65C6EE /* CameraManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71DA87E37B8723563B71C8E9 /* CameraManagerView.swift */; };
 		158CF70841DBC471B81E8345 /* ShowWorkspaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F5424FF571E4C3F1A31568 /* ShowWorkspaceView.swift */; };
 		29FC616B3A78E7E956D34F8E /* ScreenshotRun.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C39235BF555BFD93EA0270B /* ScreenshotRun.swift */; };
@@ -37,6 +38,7 @@
 		ADF717A9AA87D0F24DA3FB3E /* LiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveView.swift; sourceTree = "<group>"; };
 		AE93C49E05A47DAEC508FA0D /* OnCue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnCue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8BECE970407DFA7EC43B7CE /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		C4BBFB89B4686A1AED8DEA0D /* SwitcherSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitcherSetupView.swift; sourceTree = "<group>"; };
 		DF6AAA1B35A6655F52406962 /* InspectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorView.swift; sourceTree = "<group>"; };
 		E271F3E9BE490209AD047BE0 /* ItemEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemEditorView.swift; sourceTree = "<group>"; };
 		EC7CD1AE74643E8E7E7A69FD /* RunningOrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningOrderView.swift; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 				ADF717A9AA87D0F24DA3FB3E /* LiveView.swift */,
 				EC7CD1AE74643E8E7E7A69FD /* RunningOrderView.swift */,
 				F7F5424FF571E4C3F1A31568 /* ShowWorkspaceView.swift */,
+				C4BBFB89B4686A1AED8DEA0D /* SwitcherSetupView.swift */,
 				43054B8BF76BCAA9784343FB /* TimelineView.swift */,
 				6E6B5BE5447057E4B979ADD1 /* WorkspaceCommands.swift */,
 				FB7D5C8765F425171804B664 /* WorkspaceModel.swift */,
@@ -203,6 +206,7 @@
 				86701766F106877478C0200B /* ShowDocument.swift in Sources */,
 				158CF70841DBC471B81E8345 /* ShowWorkspaceView.swift in Sources */,
 				B684D8B1BFB1C4569341263E /* SmokeTest.swift in Sources */,
+				07699FB08AB39E0CF79200AE /* SwitcherSetupView.swift in Sources */,
 				DEA5FB5A2DDAE3F44C1AD85B /* Theme.swift in Sources */,
 				C036634E351DC13626E804B4 /* TimelineView.swift in Sources */,
 				DFCBB724D1778AD58419C225 /* WorkspaceCommands.swift in Sources */,
