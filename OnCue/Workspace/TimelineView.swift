@@ -260,6 +260,7 @@ struct TimelineEditorView: View {
                     let units = max(end - metrics.origin, 1)
                     model.zoom = min(max(Double(available) / (Double(TimelineMetrics.baseUnit(for: item)) * units), 0.15), 6)
                 }
+                ScrollView(.vertical) {
                 HStack(alignment: .top, spacing: 0) {
                     TrackHeaderColumn(show: show, item: item, lanes: lanes, shotHeight: shotHeight, model: model)
                     Rectangle().fill(Gallery.hairline).frame(width: 1)
@@ -276,6 +277,8 @@ struct TimelineEditorView: View {
                         scroll(to: uuid, metrics: metrics)
                     }
                 }
+                }
+                .scrollIndicators(.automatic)
                 Spacer(minLength: 0)
             }
         }

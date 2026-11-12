@@ -24,10 +24,18 @@ struct ItemEditorView: View {
                                        shotHeight: min(max(geo.size.height - chrome - 8, 84), 300))
                 }
             case .split:
-                TimelineEditorView(show: show, item: item, model: model, shotHeight: Self.splitShotHeight)
-                    .frame(height: TimelineLayout.chromeHeight(for: item, show: show, hidden: model.hiddenLanes) + Self.splitShotHeight + 6)
-                Rectangle().fill(Gallery.hairline).frame(height: 1)
-                ShotListView(show: show, item: item, groups: groups, rows: rows, model: model)
+                // The timeline takes what it needs up to 60% of the height; the shot list always
+                // keeps the rest, and the lanes scroll when there are more than fit.
+                GeometryReader { geo in
+                    let full = TimelineLayout.chromeHeight(for: item, show: show, hidden: model.hiddenLanes) + Self.splitShotHeight + 6
+                    let height = min(full, max(geo.size.height * 0.6, 200))
+                    VStack(spacing: 0) {
+                        TimelineEditorView(show: show, item: item, model: model, shotHeight: Self.splitShotHeight)
+                            .frame(height: height)
+                        Rectangle().fill(Gallery.hairline).frame(height: 1)
+                        ShotListView(show: show, item: item, groups: groups, rows: rows, model: model)
+                    }
+                }
             case .list:
                 SectionStripView(item: item, rows: rows, model: model)
                 ShotListView(show: show, item: item, groups: groups, rows: rows, model: model)
