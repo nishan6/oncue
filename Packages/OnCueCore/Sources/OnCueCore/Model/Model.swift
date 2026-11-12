@@ -275,7 +275,13 @@ public enum CameraPalette {
 }
 
 public struct CompanionButton: Codable, Hashable {
-    public init() {}
+    public init(page: Int = 1, row: Int = 0, column: Int = 0, bank: Int = 1, enabled: Bool = false) {
+        self.page = page
+        self.row = row
+        self.column = column
+        self.bank = bank
+        self.enabled = enabled
+    }
     public var page: Int = 1
     public var row: Int = 0
     public var column: Int = 0
@@ -285,7 +291,11 @@ public struct CompanionButton: Codable, Hashable {
 }
 
 public struct CompanionInputButtons: Codable, Hashable, Identifiable {
-    public init(input: Int) { self.input = input }
+    public init(input: Int, preview: CompanionButton = CompanionButton(), program: CompanionButton = CompanionButton()) {
+        self.input = input
+        self.preview = preview
+        self.program = program
+    }
     public var id: Int { input }
     public var input: Int
     public var preview = CompanionButton()
