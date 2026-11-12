@@ -246,8 +246,7 @@ public enum SceneTrackKind: String, Codable, CaseIterable, Identifiable {
         }
     }
 
-    /// The timeline lane this becomes today. Arrangement and Audio are built into every scene;
-    /// Cues and Media Player Control have no lane until Phase 2.
+    /// The timeline lane this becomes. Arrangement and Audio are built into every scene.
     public var trackKind: TrackKind? {
         switch self {
         case .edit: return .shots
@@ -257,7 +256,9 @@ public enum SceneTrackKind: String, Codable, CaseIterable, Identifiable {
         case .lyrics: return .lyrics
         case .notes: return .notes
         case .showControl: return .control
-        case .arrangement, .audio, .cues, .mediaPlayer: return nil
+        case .cues: return .calls
+        case .mediaPlayer: return .player
+        case .arrangement, .audio: return nil
         }
     }
 

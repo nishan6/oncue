@@ -31,7 +31,7 @@ enum EditorMode: String, Codable, CaseIterable, Identifiable {
 /// Timeline tracks: sections, the main output's shots, each separate output's shots, and the
 /// lyrics, notes, FX, control, OSC and PTZ tracks. Each can be hidden (cues are kept) or locked.
 enum TimelineLane: Codable, Identifiable, Hashable {
-    case sections, media, shots, output(UUID), lyrics, notes, fx, control, osc, ptz
+    case sections, media, shots, output(UUID), lyrics, notes, fx, control, osc, ptz, calls, player
 
     var id: String {
         if case .output(let id) = self { return "output-\(id.uuidString)" }
@@ -50,6 +50,8 @@ enum TimelineLane: Codable, Identifiable, Hashable {
         case .osc: return "OSC"
         case .ptz: return "PTZ"
         case .media: return "Media"
+        case .calls: return "Cues"
+        case .player: return "Players"
         }
     }
 
@@ -63,6 +65,8 @@ enum TimelineLane: Codable, Identifiable, Hashable {
         case .control: return .control
         case .osc: return .osc
         case .ptz: return .ptz
+        case .calls: return .calls
+        case .player: return .player
         }
     }
 
@@ -82,6 +86,8 @@ enum TimelineLane: Codable, Identifiable, Hashable {
         case .ptz: return .ptz
         case .shots: return .shots
         case .notes: return .notes
+        case .calls: return .calls
+        case .player: return .player
         }
     }
 }
@@ -645,6 +651,8 @@ final class WorkspaceModel: ObservableObject {
         case .control: name = "New Control Cue"
         case .osc: name = "New OSC Cue"
         case .ptz: name = "New PTZ Cue"
+        case .calls: name = "New Cue"
+        case .player: name = "New Player Cue"
         default: name = "New Note"
         }
         edit(name) { newID = $0.addTrackCue(kind, inItem: id, at: position) }
@@ -847,7 +855,7 @@ final class WorkspaceModel: ObservableObject {
         let night = show.settings.nightLabel
         snapshot(name: "Before Live" + (night.isEmpty ? ", \(stamp)" : ", \(night)"), reason: "Before Live")
         let profile = MachineProfileStore().profile
-        let controller = EngineController(show: show, itemID: id, profile: profile)
+        let controller = EngineController(show: show.forLive(project.properties.shots), itemID: id, profile: profile)
         controller.connectSwitcher()
         engine = controller
         startBackupLink(controller, role: BackupRole(rawValue: profile.backupRole) ?? .off, primaryHost: profile.primaryHost)

@@ -130,6 +130,7 @@ extension Show {
         case .control: cue.controlAction = .loadNext
         case .osc: cue.oscTargetID = oscTargets.first?.id
         case .ptz: cue.ptzCameraID = ptzCameras.first?.id
+        case .player: cue.playerAction = .play
         default: break
         }
         items[i].tracks[t].cues.append(cue)

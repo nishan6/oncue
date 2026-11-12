@@ -150,6 +150,11 @@ extension Cue {
         subjects = try c.value("subjects", [])
         shotStatus = try c.value("shotStatus", ShotVocabulary.defaultStatusKey)
         reviews = try c.value("reviews", [])
+        callRole = try c.value("callRole", "")
+        playerAction = try c.optionalEnum("playerAction")
+        playerName = try c.value("playerName", "")
+        clip = try c.value("clip", "")
+        jumpTo = try c.value("jumpTo", 0.0)
     }
 }
 

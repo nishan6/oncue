@@ -87,6 +87,10 @@ public enum BusKind: String, Codable, CaseIterable, Identifiable {
 
 public enum TrackKind: String, Codable, CaseIterable, Identifiable {
     case shots, fx, control, osc, ptz, lyrics, notes
+    /// Calls to departments: "LX 14 GO", optionally for one role.
+    case calls
+    /// Media player commands: load, play, pause, stop, loop, jump.
+    case player
     public var id: String { rawValue }
     public var label: String {
         switch self {
@@ -97,6 +101,36 @@ public enum TrackKind: String, Codable, CaseIterable, Identifiable {
         case .ptz: return "PTZ presets"
         case .lyrics: return "Lyrics"
         case .notes: return "Notes"
+        case .calls: return "Cues"
+        case .player: return "Media Player Control"
+        }
+    }
+}
+
+/// What a Media Player Control cue asks a player to do.
+public enum PlayerAction: String, Codable, CaseIterable, Identifiable {
+    case load, play, pause, stop, loopOn, loopOff, jump
+    public var id: String { rawValue }
+    public var label: String {
+        switch self {
+        case .load: return "Load (cue up)"
+        case .play: return "Play"
+        case .pause: return "Pause"
+        case .stop: return "Stop"
+        case .loopOn: return "Loop on"
+        case .loopOff: return "Loop off"
+        case .jump: return "Jump to time"
+        }
+    }
+    public var short: String {
+        switch self {
+        case .load: return "LOAD"
+        case .play: return "PLAY"
+        case .pause: return "PAUSE"
+        case .stop: return "STOP"
+        case .loopOn: return "LOOP ON"
+        case .loopOff: return "LOOP OFF"
+        case .jump: return "JUMP"
         }
     }
 }
@@ -386,6 +420,15 @@ public struct Cue: Identifiable, Codable, Hashable {
     // PTZ
     public var ptzCameraID: UUID?
     public var ptzPreset: Int = 1
+    // Cues (calls): `text` is the call, `callRole` the department ("" = everyone).
+    public var callRole: String = ""
+    // Media Player Control
+    public var playerAction: PlayerAction?
+    /// Which player, as you name it ("MP1", "Playback A").
+    public var playerName: String = ""
+    public var clip: String = ""
+    /// Jump target in seconds into the clip.
+    public var jumpTo: Double = 0
 }
 
 public struct Track: Identifiable, Codable, Hashable {

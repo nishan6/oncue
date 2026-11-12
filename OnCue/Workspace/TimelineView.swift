@@ -68,6 +68,10 @@ enum TimelineLayout {
         if item.kind == .song { all.append(.lyrics) }
         all += [.notes, .fx, .control]
         let has: (TrackKind) -> Bool = { kind in item.tracks.contains { $0.kind == kind && !$0.cues.isEmpty } }
+        // Cues and Media Player Control appear when the scene has the track (from the project's
+        // default tracks) or has cues on it.
+        if item.tracks.contains(where: { $0.kind == .calls }) { all.append(.calls) }
+        if item.tracks.contains(where: { $0.kind == .player }) { all.append(.player) }
         if !show.oscTargets.isEmpty || has(.osc) { all.append(.osc) }
         if !show.ptzCameras.isEmpty || has(.ptz) { all.append(.ptz) }
         return all
@@ -102,6 +106,8 @@ extension TimelineLane {
         case .osc: return "antenna.radiowaves.left.and.right"
         case .ptz: return "camera.metering.center.weighted"
         case .media: return "waveform"
+        case .calls: return "megaphone"
+        case .player: return "play.rectangle"
         }
     }
 
@@ -116,6 +122,8 @@ extension TimelineLane {
         case .osc: return Color(hex: "#F0A3C4")
         case .ptz: return Color(hex: "#A3E0B5")
         case .media: return Gallery.next
+        case .calls: return Color(hex: "#F2C46D")
+        case .player: return Color(hex: "#7FD3E8")
         }
     }
 
@@ -132,6 +140,8 @@ extension TimelineLane {
         case .osc: return Deck.trackOSC
         case .ptz: return Deck.trackPTZ
         case .media: return Deck.trackMedia
+        case .calls: return Color(hex: "#6B5521")
+        case .player: return Color(hex: "#1F5866")
         }
     }
 }
@@ -645,7 +655,7 @@ struct TimelineCanvas: View {
                          outputID: outputID)
             case .media:
                 MediaLane(item: item, player: model.media, metrics: metrics, width: width)
-            case .lyrics, .notes, .fx, .control, .osc, .ptz:
+            case .lyrics, .notes, .fx, .control, .osc, .ptz, .calls, .player:
                 CueLane(kind: lane.trackKind ?? .notes, lane: lane, show: show, item: item, metrics: metrics, width: width,
                         locked: locked, model: model, focus: focus)
             }

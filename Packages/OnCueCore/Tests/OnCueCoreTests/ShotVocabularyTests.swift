@@ -101,3 +101,25 @@ final class ShotVocabularyTests: XCTestCase {
         XCTAssertEqual(back.properties.countdown.standbySeconds, 3)
     }
 }
+
+final class LiveScriptTests: XCTestCase {
+    func testCutShotsAreLeftOutOfLiveOnly() {
+        var show = Show.starter()
+        guard let itemIndex = show.items.indices.first,
+              let t = show.items[itemIndex].tracks.firstIndex(where: { $0.kind == .shots }) else { return XCTFail("no shots track") }
+        var keep = Cue(at: 0)
+        keep.shotStatus = "confirmed"
+        var drop = Cue(at: 4)
+        drop.shotStatus = "cut"
+        var custom = Cue(at: 8)
+        var vocab = ShotVocabulary()
+        let parked = ShotStatusTerm.custom("Parked", role: .cut)
+        vocab.statuses.append(parked)
+        custom.shotStatus = parked.key
+        show.items[itemIndex].tracks[t].cues = [keep, drop, custom]
+
+        let live = show.forLive(vocab)
+        XCTAssertEqual(live.items[itemIndex].tracks[t].cues.map(\.id), [keep.id])
+        XCTAssertEqual(show.items[itemIndex].tracks[t].cues.count, 3, "the script itself keeps every shot")
+    }
+}

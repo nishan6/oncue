@@ -16,9 +16,11 @@ struct CueFields: View {
             case .control: controlFields
             case .osc: oscFields
             case .ptz: ptzFields
+            case .calls: callFields
+            case .player: playerFields
             default: EmptyView()
             }
-            PropertyRow(label: kind == .lyrics ? "Lyric" : (kind == .notes ? "Note" : "Label")) {
+            PropertyRow(label: kind == .lyrics ? "Lyric" : (kind == .notes ? "Note" : (kind == .calls ? "Call" : "Label"))) {
                 CommitField(placeholder: placeholder, value: cue.text, font: .ocBody) { text in
                     model.updateCue(cue.id, "Edit Cue") { $0.text = text }
                     return true
@@ -98,6 +100,60 @@ struct CueFields: View {
         }
     }
 
+    // MARK: Cues (calls)
+
+    @ViewBuilder private var callFields: some View {
+        PropertyRow(label: "For") {
+            Picker("For", selection: Binding(get: { cue.callRole }, set: { r in model.updateCue(cue.id, "Change Cue Role") { $0.callRole = r } })) {
+                Text("Everyone").tag("")
+                ForEach(model.project.properties.roles) { Text($0.name).tag($0.name) }
+                if !cue.callRole.isEmpty, !model.project.properties.roles.contains(where: { $0.name == cue.callRole }) {
+                    Text(cue.callRole).tag(cue.callRole)
+                }
+            }
+            .labelsHidden()
+            .frame(maxWidth: 200)
+        }
+    }
+
+    // MARK: Media Player Control
+
+    @ViewBuilder private var playerFields: some View {
+        let action = cue.playerAction ?? .play
+        PropertyRow(label: "Action") {
+            Picker("Action", selection: Binding(get: { action }, set: { a in model.updateCue(cue.id, "Change Player Action") { $0.playerAction = a } })) {
+                ForEach(PlayerAction.allCases) { Text($0.label).tag($0) }
+            }
+            .labelsHidden()
+            .frame(maxWidth: 200)
+        }
+        PropertyRow(label: "Player") {
+            CommitField(placeholder: "e.g. MP1", value: cue.playerName, font: .ocBody) { text in
+                model.updateCue(cue.id, "Change Player") { $0.playerName = text.trimmingCharacters(in: .whitespaces) }
+                return true
+            }
+        }
+        if action == .load || action == .play {
+            PropertyRow(label: "Clip") {
+                CommitField(placeholder: "Clip name or number", value: cue.clip, font: .ocBody) { text in
+                    model.updateCue(cue.id, "Change Clip") { $0.clip = text.trimmingCharacters(in: .whitespaces) }
+                    return true
+                }
+            }
+        }
+        if action == .jump {
+            PropertyRow(label: "To") {
+                CommitField(placeholder: "0:00", value: TimeFormat.mmss(cue.jumpTo), font: .readout(13), width: 70) { text in
+                    guard let v = TimeFormat.parseSeconds(text), v >= 0 else { return false }
+                    model.updateCue(cue.id, "Change Jump Time") { $0.jumpTo = v }
+                    return true
+                }
+            }
+        }
+        Text("Scripted and shown in Live Mode. Not sent to a player yet: player connections come with hardware testing.")
+            .font(.ocMeta).foregroundStyle(Gallery.faint).fixedSize(horizontal: false, vertical: true)
+    }
+
     // MARK: OSC
 
     @ViewBuilder private var oscFields: some View {
@@ -162,6 +218,7 @@ struct CueFields: View {
         case .lyrics: return "Lyric line"
         case .fx: return "e.g. band name lower third"
         case .notes: return "Note for the gallery"
+        case .calls: return "e.g. LX 14 GO"
         default: return "Optional label"
         }
     }
@@ -178,6 +235,8 @@ extension TrackKind {
         case .ptz: return "PTZ cue"
         case .shots: return "Shot"
         case .notes: return "Note"
+        case .calls: return "Cue"
+        case .player: return "Player cue"
         }
     }
 }
@@ -208,6 +267,15 @@ extension Show {
             return "\(cam) · preset \(cue.ptzPreset)" + suffix
         case .lyrics:
             return cue.text.isEmpty ? "Lyric" : cue.text
+        case .calls:
+            let call = cue.text.isEmpty ? "Cue" : cue.text
+            return cue.callRole.isEmpty ? call : "\(cue.callRole.uppercased()) · \(call)"
+        case .player:
+            let action = cue.playerAction ?? .play
+            var parts = [cue.playerName.isEmpty ? "Player" : cue.playerName, action.short]
+            if (action == .load || action == .play), !cue.clip.isEmpty { parts.append(cue.clip) }
+            if action == .jump { parts.append(TimeFormat.mmss(cue.jumpTo)) }
+            return parts.joined(separator: " ") + suffix
         default:
             return cue.text.isEmpty ? "Note" : cue.text
         }

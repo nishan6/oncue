@@ -203,3 +203,18 @@ public struct CountdownSettings: Codable, Hashable {
     public var showStandby = true
     public init() {}
 }
+
+extension Show {
+    /// The script as Live Mode runs it: shots whose status is greyed out ("Cut", or your own
+    /// status set to greyed out) are left out, so NEXT goes past them and they never reach a
+    /// switcher. Other tracks are untouched.
+    public func forLive(_ vocabulary: ShotVocabulary) -> Show {
+        var s = self
+        for i in s.items.indices {
+            for t in s.items[i].tracks.indices where s.items[i].tracks[t].kind == .shots {
+                s.items[i].tracks[t].cues.removeAll { vocabulary.isCut($0) }
+            }
+        }
+        return s
+    }
+}

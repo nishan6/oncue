@@ -35,3 +35,27 @@ public enum Countdown {
         return r
     }
 }
+
+/// A department call or player cue coming up in Live Mode.
+public struct UpcomingCall: Identifiable, Equatable {
+    public var id: UUID { cue.id }
+    public let kind: TrackKind
+    public let cue: Cue
+    /// Seconds from the current position, when the item has a time base.
+    public let inSeconds: Double?
+}
+
+extension Show {
+    /// The next Cues-track calls and Media Player Control cues at or after `position`, in order.
+    public func upcomingCalls(inItem id: UUID, after position: Double, limit: Int = 4) -> [UpcomingCall] {
+        guard let item = item(id) else { return [] }
+        var out: [UpcomingCall] = []
+        for track in item.tracks where !track.muted && (track.kind == .calls || track.kind == .player) {
+            for cue in track.cues where cue.at >= position - 1e-9 {
+                let secs = item.timeBase == .order ? nil : item.seconds(for: cue.at - position)
+                out.append(UpcomingCall(kind: track.kind, cue: cue, inSeconds: secs))
+            }
+        }
+        return Array(out.sorted { $0.cue.at < $1.cue.at }.prefix(limit))
+    }
+}

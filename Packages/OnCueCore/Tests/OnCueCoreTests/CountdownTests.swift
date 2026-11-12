@@ -51,3 +51,20 @@ final class CountdownTests: XCTestCase {
         XCTAssertNil(r.nextCut)
     }
 }
+
+final class UpcomingCallTests: XCTestCase {
+    func testCallsAndPlayerCuesInOrder() {
+        var show = Show.starter()
+        let id = show.items[0].id
+        show.addTrackCue(.calls, inItem: id, at: 8, text: "LX 14 GO")
+        show.addTrackCue(.player, inItem: id, at: 4)
+        show.addTrackCue(.calls, inItem: id, at: 2, text: "already gone")
+        show.addTrackCue(.notes, inItem: id, at: 5, text: "not a call")
+        let calls = show.upcomingCalls(inItem: id, after: 3)
+        XCTAssertEqual(calls.map(\.kind), [.player, .calls])
+        XCTAssertEqual(calls.last?.cue.text, "LX 14 GO")
+        XCTAssertEqual(calls.first?.cue.playerAction, .play)
+        // 120 BPM default: 5 beats = 2.5 s.
+        XCTAssertEqual(calls.last?.inSeconds ?? 0, show.items[0].seconds(for: 5), accuracy: 1e-9)
+    }
+}

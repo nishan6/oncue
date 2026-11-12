@@ -43,6 +43,8 @@ struct LiveView: View {
                     VStack(spacing: Space.l) {
                         if let item {
                             LiveCountdownBar(show: show, reading: reading(item: item, status: status))
+                            let calls = show.upcomingCalls(inItem: item.id, after: status.position)
+                            if !calls.isEmpty { LiveCallsStrip(show: show, calls: calls, timed: status.secondsToNext != nil) }
                         }
                         NowNextPanels(show: show, item: item, cursor: cursor, takenAt: status.takenAt,
                                       secondsToNext: status.secondsToNext, now: context.date)
@@ -146,6 +148,33 @@ struct LiveCountdownBar: View {
         HStack(spacing: Space.s) {
             Text(label).font(.ocTag).tracking(0.6).foregroundStyle(Gallery.faint)
             Text(value).font(.readout(16, weight: .semibold)).foregroundStyle(warn ? Gallery.amber : Gallery.ink)
+        }
+    }
+}
+
+/// The next department calls and player cues, so they can be called on comms.
+struct LiveCallsStrip: View {
+    let show: Show
+    let calls: [UpcomingCall]
+    let timed: Bool
+
+    var body: some View {
+        HStack(spacing: Space.s) {
+            ForEach(calls) { call in
+                HStack(spacing: Space.s) {
+                    Image(systemName: call.kind == .calls ? "megaphone" : "play.rectangle")
+                        .foregroundStyle(call.kind == .calls ? Color(hex: "#F2C46D") : Color(hex: "#7FD3E8"))
+                    Text(show.cueLabel(call.cue, kind: call.kind)).font(.ocBodyStrong).foregroundStyle(Gallery.ink).lineLimit(1)
+                    Spacer(minLength: 0)
+                    if timed, let s = call.inSeconds {
+                        Text(liveClock(s)).font(.readout(13, weight: .semibold))
+                            .foregroundStyle(s <= 5 ? Gallery.amber : Gallery.dim)
+                    }
+                }
+                .padding(.horizontal, Space.m)
+                .frame(maxWidth: .infinity, minHeight: 36, maxHeight: 36)
+                .background(LivePalette.panel, in: RoundedRectangle(cornerRadius: Radius.m))
+            }
         }
     }
 }

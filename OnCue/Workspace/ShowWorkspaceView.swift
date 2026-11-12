@@ -11,11 +11,13 @@ struct ShowWorkspaceView: View {
 
     var body: some View {
         let show = document.project.show(playlist: model.activePlaylistID)
+        // Live Mode runs without greyed-out (Cut) shots, so cursor positions match the engine.
+        let liveShow = show.forLive(document.project.properties.shots)
         ZStack {
         WorkspaceShell(show: show, model: model)
             .frame(minWidth: 980, minHeight: 640)
         if let engine = model.engine {
-            LiveView(show: show, engine: engine, model: model)
+            LiveView(show: liveShow, engine: engine, model: model)
                 .transition(.opacity)
         }
         }
@@ -25,7 +27,7 @@ struct ShowWorkspaceView: View {
         .toolbar {
             ToolbarItem(placement: .navigation) {
                 if let engine = model.engine {
-                    LiveToolbarContext(show: show, engine: engine)
+                    LiveToolbarContext(show: liveShow, engine: engine)
                 }
             }
             ToolbarItemGroup(placement: .primaryAction) {
@@ -33,7 +35,7 @@ struct ShowWorkspaceView: View {
                 // status here.
                 if let engine = model.engine {
                     CrewPageButton(crew: model.crew)
-                    LiveToolbarStatus(show: show, engine: engine, model: model)
+                    LiveToolbarStatus(show: liveShow, engine: engine, model: model)
                 }
             }
         }
@@ -102,7 +104,7 @@ struct ShowWorkspaceView: View {
         .onChange(of: show.id) { _, _ in model.attach(document: $document, fileURL: fileURL, undoManager: undoManager) }
         .onChange(of: show) { _, newShow in
             model.validateSelection()
-            model.engine?.update(show: newShow)
+            model.engine?.update(show: newShow.forLive(document.project.properties.shots))
             model.crew.showChanged(newShow)
             model.sendShowToBackup(newShow)
         }
