@@ -92,6 +92,47 @@ enum ScreenshotRun {
         }
     }
 
+    /// Routes as they might be set up for a show: Companion buttons, a grandMA3 picking songs,
+    /// the playback rig and a foot pedal.
+    static func sampleRoutes(_ project: Project) -> [TriggerRoute] {
+        func osc(_ name: String, _ address: String, _ action: TriggerAction) -> TriggerRoute {
+            var i = TriggerInput(kind: .osc); i.address = address
+            return TriggerRoute(name: name, input: i, action: action)
+        }
+        var next = TriggerAction(); next.command = .next
+        var jump = TriggerAction(kind: .jumpToItem); jump.target = .fromValue
+        var song = TriggerInput(kind: .msc); song.msc = .go
+        var pedal = TriggerInput(kind: .midiNote); pedal.number = 64; pedal.channel = 1
+        var note = TriggerAction(kind: .markNote); note.noteText = ""
+        var pgm = TriggerInput(kind: .midiProgram); pgm.channel = 16
+        var dmx = TriggerInput(kind: .artNet); dmx.universe = 1; dmx.number = 512
+        var take = TriggerAction(); take.command = .takeCamera; take.cameraNumber = 1
+        var broken = TriggerAction(kind: .jumpToSection)
+        broken.sectionID = UUID()
+        return [
+            osc("Stream Deck: NEXT", "/companion/next", next),
+            osc("Stream Deck: pause chase", "/companion/chase", TriggerAction(kind: .toggleChase)),
+            TriggerRoute(name: "MA3 MSC GO → song", input: song, action: jump),
+            TriggerRoute(name: "Ableton program → song", input: pgm, action: jump),
+            TriggerRoute(name: "Foot pedal: mark note", input: pedal, action: note),
+            TriggerRoute(name: "Desk ch 512: wide now", input: dmx, action: take),
+            TriggerRoute(name: "Old route", input: TriggerInput(kind: .osc), action: broken),
+        ]
+    }
+
+    static func sourcesShow(_ input: Show) -> Show {
+        var show = input
+        show.addSource(kind: .internalSource, name: "Black", input: 0)
+        show.addSource(kind: .internalSource, name: "Media player 1", input: 3010)
+        show.addSource(kind: .ndi, name: "Slides", input: 9, ndiName: "FOH-MAC (Keynote)")
+        show.addSource(kind: .playback, name: "vMix 1", input: 10)
+        show.addSource(kind: .graphics, name: "CG channel A", input: 11)
+        if let song = show.items.first?.id, let c = show.addTrackCue(.fx, inItem: song, at: 4) {
+            show.updateCue(c, inItem: song) { $0.fxAction = .dskOn; $0.fxIndex = 0 }
+        }
+        return show
+    }
+
     static let sampleCast: [ShotTerm] = ["Lead vocal", "Guitar", "Drums", "Keys", "Crowd"].map {
         ShotTerm(key: "cast-\($0.lowercased().replacingOccurrences(of: " ", with: "-"))", label: $0)
     }
@@ -193,6 +234,12 @@ enum ScreenshotRun {
         project.playlists[0].items[0].status = .ok
         project.playlists[0].items[1].status = .wip
         project.playlists.append(Playlist(name: "Festival cut"))
+        project.properties.triggerRoutes = sampleRoutes(project)
+        project.playlists[0].items[0].media = ItemMedia(path: "/Shows/Arena/Audio/Neon Skyline.wav", kind: .audio)
+        project.collectItemMedia()
+        project.importMedia([("/Shows/Arena/Clips/Intro loop.mov", nil, .playerClip, 42),
+                             ("/Shows/Arena/Graphics/Sponsor lower third.png", nil, .still, nil),
+                             ("/Shows/Arena/Clips/Old opener.mov", nil, .playerClip, 18)])
         let model = WorkspaceModel()
         model.attach(document: .constant(ProjectDocument(project: project)), fileURL: nil, undoManager: nil)
         sheetModel = model
@@ -205,6 +252,10 @@ enum ScreenshotRun {
             ("sheet-versions.png", AnyView(VersionsView(project: project, model: model)), NSSize(width: 580, height: 540)),
             ("sheet-project-properties.png", AnyView(ProjectPropertiesView(project: project, model: model)), NSSize(width: 680, height: 760)),
             ("sheet-project-properties-shots.png", AnyView(ProjectPropertiesView(project: project, model: model, initialTab: 2)), NSSize(width: 680, height: 640)),
+            ("sheet-trigger-routes.png", AnyView(TriggerRoutesView(project: project, model: model)), NSSize(width: 1000, height: 680)),
+            ("sheet-project-properties-timecode.png", AnyView(ProjectPropertiesView(project: project, model: model, initialTab: 3)), NSSize(width: 680, height: 560)),
+            ("panel-media-pool.png", AnyView(MediaPoolPanel(show: project.show(playlist: nil), model: model).frame(width: 380, height: 520).background(Gallery.panel)), NSSize(width: 380, height: 520)),
+            ("panel-sources.png", AnyView(SourcesPanel(show: sourcesShow(project.show(playlist: nil)), model: model).frame(width: 380, height: 620).background(Gallery.panel)), NSSize(width: 380, height: 620)),
             ("sheet-move-all.png", AnyView(MoveAllSheet(item: project.playlists[0].items[0], start: 32, model: model)), NSSize(width: 420, height: 200)),
             ("sheet-new-scene.png", AnyView(NewSceneSheet(kind: .song, project: project, show: project.show(playlist: project.playlists[0].id), model: model)), NSSize(width: 520, height: 420)),
             ("library.png", AnyView(LibraryView(library: library)), NSSize(width: 1100, height: 560)),

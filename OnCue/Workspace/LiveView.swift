@@ -42,7 +42,8 @@ struct LiveView: View {
                 TimelineView(.periodic(from: .now, by: 0.1)) { context in
                     VStack(spacing: Space.l) {
                         if let item {
-                            LiveCountdownBar(show: show, reading: reading(item: item, status: status))
+                            LiveCountdownBar(show: show, reading: reading(item: item, status: status),
+                                             chase: engine.chasePaused ? "CHASE PAUSED" : (engine.freewheeling ? "FREEWHEEL" : nil))
                             let calls = show.upcomingCalls(inItem: item.id, after: status.position)
                             if !calls.isEmpty { LiveCallsStrip(show: show, calls: calls, timed: status.secondsToNext != nil) }
                         }
@@ -125,6 +126,8 @@ extension LiveView {
 struct LiveCountdownBar: View {
     let show: Show
     let reading: CountdownReading
+    /// "FREEWHEEL" while timecode is lost, "CHASE PAUSED" when a trigger paused it.
+    var chase: String? = nil
 
     var body: some View {
         HStack(spacing: Space.xl) {
@@ -138,6 +141,12 @@ struct LiveCountdownBar: View {
                 }
             }
             Spacer(minLength: 0)
+            if let chase {
+                Text(chase).font(.ocTag).tracking(0.6).foregroundStyle(.black)
+                    .padding(.horizontal, 7).padding(.vertical, 3)
+                    .background(Gallery.amber, in: RoundedRectangle(cornerRadius: 3))
+                    .help(chase == "FREEWHEEL" ? "Timecode dropped out: OnCue is running on its own clock until it comes back or the song ends" : "Timecode chase is paused from a trigger")
+            }
         }
         .padding(.horizontal, Space.l)
         .frame(height: 40)
