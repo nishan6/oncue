@@ -129,7 +129,9 @@ struct LiveToolbarStatus: View {
         let status = engine.status
         HStack(spacing: Space.s) {
             StatusChip(symbol: timingSymbol(status.timing), label: "Timing · \(status.timing.label)",
-                       value: timingValue(status), warning: !status.timingSignal, help: timingHelp(status))
+                       value: timingValue(status),
+                       warning: (status.timing == .midiClock || status.timing == .ltc) && !status.timingSignal,
+                       help: timingHelp(status))
             Button { switcherOpen = true } label: {
                 StatusChip(symbol: status.switcherConnected ? "cable.connector" : "cable.connector.slash",
                            label: "Switcher · \(status.switcherName)",
@@ -162,7 +164,8 @@ struct LiveToolbarStatus: View {
         switch s.timing {
         case .manual: return "NEXT"
         case .taps, .internalClock:
-            return s.timingSignal ? "Running · \(Int((s.tempo ?? 0).rounded())) BPM" : "Waiting for GO"
+            if s.timingSignal { return "Running · \(Int((s.tempo ?? 0).rounded())) BPM" }
+            return s.timing == .taps ? "Tap or GO to run" : "Waiting for GO"
         case .midiClock:
             guard s.timingSignal else { return "No clock" }
             return s.tempo.map { String(format: "%.1f BPM", $0) } ?? "Receiving"

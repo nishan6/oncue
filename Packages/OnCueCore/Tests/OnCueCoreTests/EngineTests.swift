@@ -221,6 +221,22 @@ final class EngineTests: XCTestCase {
         XCTAssertNil(controller.status.pauseReason)
     }
 
+    func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+        let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+        let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+        defer { controller.shutdown() }
+        controller.connectSwitcher()
+        controller.setMode(.cut)
+        controller.next()   // mixes to camera 1 (the simulator takes a second)
+        controller.next()   // queued behind the mix
+        controller.next()
+        let settled = expectation(description: "commands sent")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) { settled.fulfill() }
+        wait(for: [settled], timeout: 5)
+        XCTAssertNil(controller.status.pauseReason, "OnCue's own queued cuts are not manual cuts")
+        XCTAssertEqual(controller.status.program, 3)
+    }
+
     // MARK: ATEM protocol against a stand-in switcher
 
     func testATEMHandshakeStateAndCommands() throws {

@@ -350,8 +350,11 @@ public final class EngineController: ObservableObject {
             }
             switch pending.removeFirst() {
             case .preview(let input): device.setPreview(input)
-            case .cut: device.cut()
+            case .cut:
+                engine.noteTransitionSent(to: device.state.preview, mix: false, now: now)
+                device.cut()
             case .auto:
+                engine.noteTransitionSent(to: device.state.preview, mix: true, now: now)
                 device.auto()
                 transitionDeadline = now + 3
                 transitionSeen = device.state.inTransition

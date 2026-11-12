@@ -40,8 +40,9 @@ public final class ShowEngine {
     /// When the shot on air was taken (caller's monotonic seconds).
     public private(set) var takenAt: Double?
 
-    /// Program input OnCue expects to see after its own command, until a deadline.
-    private var expected: (input: Int, until: Double)?
+    /// Program inputs OnCue expects to see after its own cuts, in order, each until a deadline.
+    /// A list, not a single value: fast NEXTs queue several cuts behind a mix.
+    private var expected: [(input: Int, until: Double)] = []
 
     public init(show: Show, itemID: UUID, mode: OutputMode = .display) {
         self.show = show
@@ -96,7 +97,7 @@ public final class ShowEngine {
         transport = .standby
         position = 0
         takenAt = nil
-        expected = nil
+        expected.removeAll()
         return primePreview()
     }
 
@@ -181,14 +182,20 @@ public final class ShowEngine {
     /// The switcher's program changed. In Auto cut, a change OnCue did not ask for is a manual
     /// cut: automation pauses until the director resumes it.
     public func programChanged(to input: Int, now: Double) {
-        if let e = expected, e.input == input, now <= e.until {
-            expected = nil
+        expected.removeAll { $0.until < now }
+        if let k = expected.firstIndex(where: { $0.input == input }) {
+            expected.removeFirst(k + 1)
             return
         }
         guard mode == .cut, transport == .running, pause == nil else { return }
         if input == self.input(of: onAir) { return }
         pause = EnginePause(reason: "Manual cut to input \(input)")
-        expected = nil
+        expected.removeAll()
+    }
+
+    /// The controller sent a cut or mix to `input` (what was on preview at that moment).
+    public func noteTransitionSent(to input: Int, mix: Bool, now: Double) {
+        expected.append((input, now + (mix ? 6 : 2)))
     }
 
     public func pauseAutomation(reason: String) {
@@ -221,7 +228,7 @@ public final class ShowEngine {
             if let input = input(of: shot) {
                 let mix = shot.cue.transition == .auto
                 commands += [.preview(input: input), mix ? .auto : .cut]
-                expected = (input, now + (mix ? 5 : 2))
+                expected.append((input, now + 10))
             }
             if let nextInput = input(of: following) { commands.append(.preview(input: nextInput)) }
         case .preview:
