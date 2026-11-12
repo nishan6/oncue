@@ -402,6 +402,8 @@ public struct RundownItem: Identifiable, Codable, Hashable {
     public var sections: [SongSection] = []
     public var tracks: [Track] = []
     public var notes: String = ""
+    /// Song audio or a PGM recording under the timeline.
+    public var media: ItemMedia?
 
     public var sortedSections: [SongSection] { sections.sorted { $0.at < $1.at } }
 }

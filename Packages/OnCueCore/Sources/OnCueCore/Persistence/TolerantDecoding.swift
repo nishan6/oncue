@@ -174,6 +174,7 @@ extension RundownItem {
         sections = try c.value("sections", [])
         tracks = try c.value("tracks", [])
         notes = try c.value("notes", "")
+        media = try c.value("media", ItemMedia?.none)
     }
 }
 
