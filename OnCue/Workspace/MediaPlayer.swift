@@ -138,6 +138,7 @@ final class MediaPlayer: ObservableObject {
         let bookmark = try? url.bookmarkData(options: [], includingResourceValuesForKeys: nil, relativeTo: nil)
         let media = ItemMedia(path: url.path, bookmark: bookmark, kind: ItemMedia.kind(of: url))
         model.edit("Load Media") { $0.updateItem(item.id) { $0.media = media } }
+        model.editProject("Add to Media Pool") { $0.collectItemMedia() }
     }
 }
 

@@ -239,7 +239,7 @@ struct SidePanel: View {
             case .rundown:
                 RunningOrderView(show: show, model: model)
             case .media:
-                MediaPanel(show: show, model: model)
+                MediaPoolPanel(show: show, model: model)
             case .sources:
                 SourcesPanel(show: show, model: model)
             case .controls:
