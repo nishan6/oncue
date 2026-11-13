@@ -812,6 +812,13 @@ struct ShotLane: View {
         isMain ? model.selectedShotIDs.contains(id) : model.selectedCueID == id
     }
 
+    /// Dragging one shot of a multiple selection moves the whole selection.
+    private func groupDrag(_ d: TimelineDrag) -> Bool {
+        isMain && d.kind == .move && model.selectedShotIDs.count > 1 && model.selectedShotIDs.contains(d.id)
+    }
+
+    @State private var marquee: (start: CGFloat, end: CGFloat)?
+
     private func select(_ id: UUID, extending: Bool = false) {
         if isMain { model.selectShot(id, extending: extending) } else { model.selectedCueID = id }
     }
@@ -830,6 +837,25 @@ struct ShotLane: View {
                     model.clearSelection()
                     focus()
                 }
+                .gesture(DragGesture(minimumDistance: 6)
+                    .onChanged { value in marquee = (value.startLocation.x, value.location.x) }
+                    .onEnded { value in
+                        marquee = nil
+                        guard isMain else { return }
+                        let lo = metrics.position(min(value.startLocation.x, value.location.x))
+                        let hi = metrics.position(max(value.startLocation.x, value.location.x))
+                        let hit = Set(spans.filter { $0.end > lo && $0.start < hi }.map(\.id))
+                        model.selectedShotIDs = extendSelectionModifiers ? model.selectedShotIDs.union(hit) : hit
+                        focus()
+                    })
+            if let m = marquee {
+                Rectangle().fill(Gallery.selection.opacity(0.18))
+                    .overlay(Rectangle().strokeBorder(Gallery.selection, lineWidth: 1))
+                    .frame(width: abs(m.end - m.start), height: height)
+                    .offset(x: min(m.start, m.end))
+                    .allowsHitTesting(false)
+                    .zIndex(2)
+            }
             ForEach(Array(spans.enumerated()), id: \.element.id) { k, span in
                 block(span, next: k + 1 < spans.count ? spans[k + 1] : nil,
                       afterNext: k + 2 < spans.count ? spans[k + 2] : nil, isNext: span.id == nextID)
@@ -849,6 +875,12 @@ struct ShotLane: View {
         let x = metrics.x(span.start)
         var w = max(metrics.x(span.end) - x, 6)
         var dx: CGFloat = 0
+        if let drag, drag.kind == .move, drag.id != span.id, groupDrag(drag), isSelected(span.id),
+           let lead = spans.first(where: { $0.id == drag.id }) {
+            // The rest of a dragged selection follows the shot under the pointer.
+            let delta = metrics.dragTarget(from: lead.start, dx: drag.dx) - lead.start
+            dx = metrics.x(span.start + delta) - metrics.x(span.start)
+        }
         if let drag, drag.id == span.id {
             if drag.kind == .move { dx = metrics.dragOffset(from: span.start, dx: drag.dx) }
             if drag.kind == .trim, let next {
@@ -886,8 +918,16 @@ struct ShotLane: View {
                     drag = TimelineDrag(id: span.id, kind: .move, dx: value.translation.width)
                 }
                 .onEnded { value in
+                    let wasGroup = drag.map(groupDrag) ?? false
                     drag = nil
-                    model.moveCue(span.id, to: metrics.dragTarget(from: span.start, dx: value.translation.width))
+                    let target = metrics.dragTarget(from: span.start, dx: value.translation.width)
+                    let copying = NSEvent.modifierFlags.contains(.option)
+                    if isMain && (wasGroup || copying) {
+                        let ids = wasGroup ? model.selectedShotIDs : [span.id]
+                        if copying { model.copyShots(ids, by: target - span.start) } else { model.moveShots(ids, by: target - span.start) }
+                    } else {
+                        model.moveCue(span.id, to: target)
+                    }
                 }, including: locked ? .none : .all)
     }
 
@@ -912,18 +952,69 @@ struct ShotLane: View {
         return min(max(raw, low), max(high, low))
     }
 
+    /// The shots a menu command applies to: the selection when this shot is in it, else this shot.
+    private func targets(_ span: ShotSpan) -> Set<UUID> {
+        isMain && model.selectedShotIDs.contains(span.id) ? model.selectedShotIDs : [span.id]
+    }
+
     @ViewBuilder
     private func shotMenu(_ span: ShotSpan) -> some View {
+        let ids = targets(span)
+        let vocab = model.project.properties.shots
+        let cue = span.row.cue
+        if ids.count > 1 { Text("\(ids.count) shots") }
         Menu("Camera") {
             ForEach(show.sortedCameras) { cam in
                 Button("\(cam.number)  \(cam.displayName)") {
-                    model.updateCue(span.id, "Set Camera") { $0.cameraID = cam.id }
+                    model.updateShots(ids, "Set Camera") { $0.cameraID = cam.id }
                 }
             }
         }
-        Button(span.row.cue.transition == .cut ? "Make It a Mix" : "Make It a Cut") {
-            let t: TransitionKind = span.row.cue.transition == .cut ? .auto : .cut
-            model.updateCue(span.id, "Change Transition") { $0.transition = t }
+        if isMain {
+            termMenu("Size", vocab.sizes, current: cue.shotSize, ids: ids) { $0.shotSize = $1 }
+            termMenu("Movement", vocab.movements, current: cue.movement, ids: ids) { $0.movement = $1 }
+            termMenu("Framing", vocab.framings, current: cue.framing, ids: ids) { $0.framing = $1 }
+            if !vocab.cast.isEmpty {
+                Menu("Subjects") {
+                    ForEach(vocab.cast) { term in
+                        let on = cue.subjects.contains(term.key)
+                        Button((on ? "✓ " : "") + term.label) {
+                            model.updateShots(ids, on ? "Remove from Shot" : "Add to Shot") { c in
+                                if on { c.subjects.removeAll { $0 == term.key } }
+                                else if !c.subjects.contains(term.key) { c.subjects.append(term.key) }
+                            }
+                        }
+                    }
+                }
+            }
+            Menu("Status") {
+                ForEach(vocab.statuses) { status in
+                    Button((cue.shotStatus == status.key ? "✓ " : "") + status.label) {
+                        model.updateShots(ids, "Shot Status") { $0.shotStatus = status.key }
+                    }
+                }
+            }
+            Menu("Transition") {
+                Button((cue.transition == .cut ? "✓ " : "") + "Cut") {
+                    model.updateShots(ids, "Change Transition") { $0.transition = .cut }
+                }
+                ForEach(vocab.transitions) { term in
+                    Button((cue.transition != .cut && cue.transitionStyle == term.key ? "✓ " : "") + term.label) {
+                        model.updateShots(ids, "Change Transition") { $0.transition = .auto; $0.transitionStyle = term.key }
+                    }
+                }
+            }
+            Divider()
+            Button("Select Shots in This Section") { model.selectShot(span.id, extending: false); model.selectShotsInSection() }
+            Button("Select From Here to the End") {
+                model.selectedShotIDs = Set(show.shotIDs(inItem: item.id, from: span.start))
+            }
+        }
+        if !isMain {
+            Button(span.row.cue.transition == .cut ? "Make It a Mix" : "Make It a Cut") {
+                let t: TransitionKind = span.row.cue.transition == .cut ? .auto : .cut
+                model.updateCue(span.id, "Change Transition") { $0.transition = t }
+            }
         }
         Button("Edit…") {
             select(span.id)
@@ -935,6 +1026,23 @@ struct ShotLane: View {
             Button("Delete", role: .destructive) { model.selectShot(span.id, extending: false); model.deleteSelectedShots() }
         } else {
             Button("Delete", role: .destructive) { model.selectedCueID = span.id; model.deleteSelectedCue() }
+        }
+    }
+}
+
+extension ShotLane {
+    /// A menu of shot terms (size, movement, framing) for the right-click menu, with "None".
+    @ViewBuilder
+    func termMenu(_ title: String, _ terms: [ShotTerm], current: String, ids: Set<UUID>,
+                  set: @escaping (inout Cue, String) -> Void) -> some View {
+        Menu(title) {
+            Button((current.isEmpty ? "✓ " : "") + "None") { model.updateShots(ids, "Shot \(title)") { set(&$0, "") } }
+            Divider()
+            ForEach(terms) { term in
+                Button((current == term.key ? "✓ " : "") + term.label) {
+                    model.updateShots(ids, "Shot \(title)") { set(&$0, term.key) }
+                }
+            }
         }
     }
 }

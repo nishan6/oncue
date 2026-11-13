@@ -788,6 +788,23 @@ final class WorkspaceModel: ObservableObject {
     }
 
     /// One undo step that changes several shots in the selected song or segment.
+    /// Moves shots together (a dragged selection). Refused before the start of the song.
+    func moveShots(_ ids: Set<UUID>, by delta: Double) {
+        guard let itemID = selectedItemID, delta != 0, !ids.isEmpty else { return }
+        var ok = true
+        edit(ids.count == 1 ? "Move Shot" : "Move Shots") { ok = $0.moveCues(ids, inItem: itemID, by: delta) }
+        if !ok { errorMessage = "The shots can't move before the start of the song." }
+    }
+
+    /// ⌥-drag: copies shots by `delta` and selects the copies.
+    func copyShots(_ ids: Set<UUID>, by delta: Double) {
+        guard let itemID = selectedItemID, !ids.isEmpty else { return }
+        var made: [UUID] = []
+        edit(ids.count == 1 ? "Copy Shot" : "Copy Shots") { made = $0.copyCues(ids, inItem: itemID, by: delta) }
+        if made.isEmpty { errorMessage = "The copies can't go before the start of the song." }
+        else { selectedShotIDs = Set(made) }
+    }
+
     func updateShots(_ ids: Set<UUID>, _ actionName: String, _ change: @escaping (inout Cue) -> Void) {
         guard let itemID = selectedItemID, !ids.isEmpty else { return }
         edit(actionName) { show in

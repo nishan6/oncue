@@ -268,3 +268,48 @@ extension Show {
         }
     }
 }
+
+// MARK: - Moving and copying several cues at once
+
+extension Show {
+    /// Moves cues together by `delta` (item units), keeping their spacing. Refused (false) when
+    /// that would put one before the start of the item.
+    @discardableResult
+    public mutating func moveCues(_ ids: Set<UUID>, inItem id: UUID, by delta: Double) -> Bool {
+        guard let i = itemIndex(id), delta != 0, !ids.isEmpty else { return false }
+        let moving = items[i].tracks.flatMap(\.cues).filter { ids.contains($0.id) }
+        guard let earliest = moving.map(\.at).min(), earliest + delta >= -1e-9 else { return false }
+        for t in items[i].tracks.indices {
+            var touched = false
+            for c in items[i].tracks[t].cues.indices where ids.contains(items[i].tracks[t].cues[c].id) {
+                items[i].tracks[t].cues[c].at = max(0, items[i].tracks[t].cues[c].at + delta)
+                touched = true
+            }
+            if touched { items[i].tracks[t].sortCues() }
+        }
+        return true
+    }
+
+    /// Copies cues `delta` later (or earlier) on their own tracks. Returns the new cues' ids;
+    /// empty when a copy would land before the start.
+    @discardableResult
+    public mutating func copyCues(_ ids: Set<UUID>, inItem id: UUID, by delta: Double) -> [UUID] {
+        guard let i = itemIndex(id), !ids.isEmpty else { return [] }
+        let moving = items[i].tracks.flatMap(\.cues).filter { ids.contains($0.id) }
+        guard let earliest = moving.map(\.at).min(), earliest + delta >= -1e-9 else { return [] }
+        var created: [UUID] = []
+        for t in items[i].tracks.indices {
+            let copies: [Cue] = items[i].tracks[t].cues.filter { ids.contains($0.id) }.map { cue in
+                var copy = cue
+                copy.id = UUID()
+                copy.at = max(0, cue.at + delta)
+                return copy
+            }
+            guard !copies.isEmpty else { continue }
+            items[i].tracks[t].cues += copies
+            items[i].tracks[t].sortCues()
+            created += copies.map(\.id)
+        }
+        return created
+    }
+}
