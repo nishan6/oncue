@@ -129,6 +129,10 @@ struct CueFields: View {
                     c.sendTargetID = id
                     let kinds = targets.first { $0.id == id }?.kind.sendKinds ?? [.text]
                     if c.send == nil || !kinds.contains(c.send!.kind) { c.send = DeviceSend(kind: kinds[0]) }
+                    if let t = targets.first(where: { $0.id == id }), t.kind == .console,
+                       let first = t.console.kind.actions.first, !t.console.kind.actions.contains(c.send!.console.kind) {
+                        c.send!.console = ConsoleAction(kind: first)
+                    }
                 }
             })) {
                 Text("Choose…").tag(UUID?.none)
@@ -182,6 +186,67 @@ struct CueFields: View {
                 PropertyRow(label: "Path") { textField("/api/location/1/0/0/press", send.path) { v in setSend { $0.path = v } } }
                 if send.method != .get {
                     PropertyRow(label: "Body") { textField("optional", send.body) { v in setSend { $0.body = v } } }
+                }
+            case .console:
+                let console = target.console.kind
+                let a = send.console
+                PropertyRow(label: "Action") {
+                    Picker("", selection: Binding(get: { a.kind }, set: { v in setSend { $0.console.kind = v } })) {
+                        ForEach(console.actions) { Text($0.label).tag($0) }
+                    }
+                    .labelsHidden().frame(width: 220)
+                }
+                switch a.kind {
+                case .goCue, .goNext:
+                    PropertyRow(label: console == .grandMA2 ? "Executor" : "Sequence") { intField(a.list, 1...9999) { v in setSend { $0.console.list = v } } }
+                    if a.kind == .goCue {
+                        PropertyRow(label: "Cue") {
+                            CommitField(placeholder: "12", value: String(format: "%g", a.number), font: .readout(13), width: 70) { text in
+                                guard let v = Double(text.replacingOccurrences(of: ",", with: ".")), v >= 0 else { return false }
+                                setSend { $0.console.number = v }
+                                return true
+                            }
+                        }
+                    }
+                case .command:
+                    PropertyRow(label: "Command") { textField("e.g. Go+ Sequence 5", a.text) { v in setSend { $0.console.text = v } } }
+                case .scene, .column:
+                    PropertyRow(label: a.kind == .scene ? "Scene" : "Column") { intField(Int(a.number), 0...9999) { v in setSend { $0.console.number = Double(v) } } }
+                case .mute, .fader:
+                    PropertyRow(label: "Channel") { intField(a.channel, 1...128) { v in setSend { $0.console.channel = v } } }
+                    if a.kind == .mute {
+                        PropertyRow(label: "State") {
+                            Picker("", selection: Binding(get: { a.on }, set: { v in setSend { $0.console.on = v } })) {
+                                Text("Mute").tag(true)
+                                Text("Unmute").tag(false)
+                            }
+                            .labelsHidden().pickerStyle(.segmented).frame(width: 160)
+                        }
+                    } else {
+                        PropertyRow(label: "Level dB") {
+                            CommitField(placeholder: "0", value: String(format: "%g", a.level), font: .readout(13), width: 70) { text in
+                                guard let v = Double(text.replacingOccurrences(of: ",", with: ".")), v <= 10 else { return false }
+                                setSend { $0.console.level = v }
+                                return true
+                            }
+                        }
+                    }
+                case .take, .takeOut, .cueGraphic:
+                    PropertyRow(label: "Take ID") { intField(Int(a.number), 0...99999) { v in setSend { $0.console.number = Double(v) } } }
+                    if a.kind != .takeOut {
+                        PropertyRow(label: "Framebuffer") { intField(a.list, 1...16) { v in setSend { $0.console.list = v } } }
+                        PropertyRow(label: "Layer") { intField(a.channel, -99...99) { v in setSend { $0.console.channel = v } } }
+                    }
+                case .clearLayer:
+                    if console == .xpression {
+                        PropertyRow(label: "Framebuffer") { intField(a.list, 1...16) { v in setSend { $0.console.list = v } } }
+                    }
+                    PropertyRow(label: "Layer") { intField(a.channel, 0...99) { v in setSend { $0.console.channel = v } } }
+                case .playClip:
+                    PropertyRow(label: "Layer") { intField(a.channel, 1...99) { v in setSend { $0.console.channel = v } } }
+                    PropertyRow(label: "Clip") { intField(Int(a.number), 1...999) { v in setSend { $0.console.number = Double(v) } } }
+                case .next:
+                    EmptyView()
                 }
             case .hyperDeck:
                 PropertyRow(label: "Action") {

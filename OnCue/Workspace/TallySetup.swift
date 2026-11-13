@@ -294,6 +294,53 @@ private struct DeviceTargetCard: View {
             case .tcp, .udp:
                 hostPort
                 lineEnding
+            case .console:
+                PropertyRow(label: "Console") {
+                    Picker("", selection: Binding(get: { target.console.kind }, set: { v in update("Change Console") { t in
+                        t.console = ConsoleSettings(kind: v)
+                        t.port = v.defaultPort
+                    } })) {
+                        ForEach(ConsoleKind.allCases) { Text($0.label).tag($0) }
+                    }
+                    .labelsHidden().frame(width: 340)
+                }
+                hostPort
+                switch target.console.kind {
+                case .grandMA3:
+                    PropertyRow(label: "OSC prefix") {
+                        CommitField(placeholder: "gma3", value: target.console.prefix, font: .readout(13), width: 120) { text in
+                            update("Change OSC Prefix") { $0.console.prefix = text.trimmingCharacters(in: .whitespaces) }
+                            return true
+                        }
+                    }
+                case .grandMA2:
+                    PropertyRow(label: "Login") {
+                        HStack {
+                            CommitField(placeholder: "user", value: target.console.user, font: .ocBody, width: 140) { text in
+                                update("Change Console User") { $0.console.user = text }
+                                return true
+                            }
+                            CommitField(placeholder: "password", value: target.console.password, font: .ocBody, width: 140) { text in
+                                update("Change Console Password") { $0.console.password = text }
+                                return true
+                            }
+                        }
+                    }
+                case .allenHeath:
+                    PropertyRow(label: "MIDI channel") {
+                        CommitField(placeholder: "1", value: String(target.console.midiChannel), font: .readout(13), width: 50) { text in
+                            guard let v = Int(text), (1...16).contains(v) else { return false }
+                            update("Change Console MIDI Channel") { $0.console.midiChannel = v }
+                            return true
+                        }
+                    }
+                case .yamahaRCP:
+                    Toggle("TF series (scene library scene_a)", isOn: Binding(get: { target.console.yamahaTF }, set: { v in update("Change Yamaha Series") { $0.console.yamahaTF = v } }))
+                        .toggleStyle(.checkbox)
+                default:
+                    EmptyView()
+                }
+                Text(target.console.kind.notes).font(.ocMeta).foregroundStyle(Gallery.faint).fixedSize(horizontal: false, vertical: true)
             case .hyperDeck:
                 hostPort
                 Text("Blackmagic HyperDeck Ethernet Protocol (port 9993). Turn on Remote in the deck's setup.")
