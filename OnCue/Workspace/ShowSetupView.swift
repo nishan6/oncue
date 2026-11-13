@@ -86,6 +86,14 @@ struct ShowSetupView: View {
                 Label("Switcher for a separate output", systemImage: "plus")
             }
             .help("A switcher cutting its own output (LED wall, IMAG, broadcast) at the same time")
+            if let main = mainID, !show.switchers.contains(where: { $0.mirrorOf == main }) {
+                Button {
+                    model.edit("Add Parallel Switcher") { $0.addParallelSwitcher(mirroring: main) }
+                } label: {
+                    Label("Parallel switcher (backup)", systemImage: "plus")
+                }
+                .help("A second switcher running in parallel: it gets every command the main one gets, and OnCue reads program and tally from it if the main one is lost")
+            }
         }
         .buttonStyle(QuietButtonStyle())
     }
@@ -296,7 +304,7 @@ struct SwitcherCard: View {
                     update("Rename Switcher") { $0.name = t }
                     return true
                 }
-                Pill(text: isMain ? "MAIN" : (config.role == .sub ? "SUB" : "OUTPUT"),
+                Pill(text: isMain ? "MAIN" : (config.mirrorOf != nil ? "PARALLEL" : (config.role == .sub ? "SUB" : "OUTPUT")),
                      color: isMain ? Gallery.selection : Gallery.dim)
                 Spacer()
                 if !isMain {
@@ -338,6 +346,33 @@ struct SwitcherCard: View {
                 Text("A switcher inside OnCue for rehearsing: cuts are instant, mixes take a second. Nothing leaves this Mac.")
                     .font(.ocMeta).foregroundStyle(Gallery.faint)
             }
+            if let mirrorOf = config.mirrorOf {
+                PropertyRow(label: "Mirrors") {
+                    Picker("Mirrors", selection: Binding(get: { Optional(mirrorOf) }, set: { id in update("Change Parallel Switcher") { $0.mirrorOf = id } })) {
+                        ForEach(show.switchers.filter { $0.id != config.id && $0.mirrorOf == nil }) { Text($0.name).tag(UUID?.some($0.id)) }
+                    }
+                    .labelsHidden().frame(width: 220)
+                }
+                Text("Gets every command the switcher it mirrors gets, on the same inputs. Wire its program to your router or backup record.")
+                    .font(.ocMeta).foregroundStyle(Gallery.faint).fixedSize(horizontal: false, vertical: true)
+            }
+            if show.switchers.contains(where: { $0.mirrorOf == config.id }) {
+                PropertyRow(label: "If lost") {
+                    HStack {
+                        Picker("Failover", selection: Binding(get: { config.failover }, set: { v in update("Change Failover") { $0.failover = v } })) {
+                            ForEach(FailoverPolicy.allCases) { Text("Fail over \($0.label.lowercased())").tag($0) }
+                        }
+                        .labelsHidden().frame(width: 220)
+                        Text("after").font(.ocMeta).foregroundStyle(Gallery.dim)
+                        CommitField(placeholder: "2", value: String(format: "%g", config.failoverTimeout), font: .readout(13), width: 50) { text in
+                            guard let v = Double(text.replacingOccurrences(of: ",", with: ".")), v >= 0.2, v <= 60 else { return false }
+                            update("Change Failover Time") { $0.failoverTimeout = v }
+                            return true
+                        }
+                        Text("s without contact").font(.ocMeta).foregroundStyle(Gallery.dim)
+                    }
+                }
+            }
             if config.role == .sub && !isMain {
                 PropertyRow(label: "Feeds") {
                     HStack {
@@ -355,7 +390,7 @@ struct SwitcherCard: View {
                     }
                 }
             }
-            let cams = show.sortedCameras.filter { ($0.switcherID ?? show.mainOutput?.switcherID) == config.id }
+            let cams = show.sortedCameras.filter { ($0.switcherID ?? show.mainOutput?.switcherID) == (config.mirrorOf ?? config.id) }
             Text(cams.isEmpty ? "No cameras on this switcher" : "Cameras: " + cams.map { "\($0.number) (in \($0.input))" }.joined(separator: ", "))
                 .font(.ocMeta).foregroundStyle(Gallery.faint).lineLimit(2)
         }

@@ -202,6 +202,16 @@ extension Show {
 
 extension Show {
     @discardableResult
+    /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+    /// it gets every command `main` gets.
+    @discardableResult
+    public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+        var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+        config.mirrorOf = main
+        switchers.append(config)
+        return config.id
+    }
+
     public mutating func addSwitcher(name: String, kind: SwitcherKind, role: SwitcherRole) -> UUID {
         var config = SwitcherConfig(name: name, kind: kind, role: role)
         if role == .sub { config.parentID = mainOutput?.switcherID }

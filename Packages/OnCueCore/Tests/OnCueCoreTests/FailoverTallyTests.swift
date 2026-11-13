@@ -103,3 +103,15 @@ final class FailoverTests: XCTestCase {
         XCTAssertTrue(c.failoverLog.isEmpty)
     }
 }
+
+final class ParallelSwitcherEditingTests: XCTestCase {
+    func testParallelSwitcherAddsNoOutputs() {
+        var show = Show.starter()
+        let outputs = show.outputs.count
+        let main = show.switchers[0].id
+        let id = show.addParallelSwitcher(mirroring: main)
+        XCTAssertEqual(show.outputs.count, outputs)
+        XCTAssertEqual(show.switchers.first { $0.id == id }?.mirrorOf, main)
+        XCTAssertEqual(show.switchers.first { $0.id == id }?.kind, show.switchers[0].kind)
+    }
+}
