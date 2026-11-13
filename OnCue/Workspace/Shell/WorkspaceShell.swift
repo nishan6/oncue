@@ -638,7 +638,7 @@ struct SourcesPanel: View {
                 if !sub.isEmpty { Text(sub).font(.ocMeta).foregroundStyle(Deck.faint).lineLimit(1) }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            Text(cam.kind == .camera || cam.input > 0 || cam.kind == .internalSource ? "in \(cam.input)" : "no input")
+            Text(cam.kind == .camera || cam.input > 0 || cam.kind == .internalSource ? "in " + String(cam.input) : "no input")
                 .font(.readout(11)).foregroundStyle(cam.input > 0 || cam.kind == .internalSource ? Deck.dim : Deck.warn)
         }
         .padding(.horizontal, Space.l)

@@ -22,7 +22,7 @@ struct TriggerRoutesView: View {
             HStack(alignment: .firstTextBaseline) {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("TRIGGER ROUTES").font(.system(size: 13, weight: .bold)).tracking(0.8).foregroundStyle(Gallery.ink)
-                    Text("Stream Deck via Companion, grandMA3, a playback rig or a MIDI pedal driving OnCue. OSC arrives on this Mac's OSC port (\(oscPort)); MIDI from every connected source; Art-Net on UDP 6454. The built-in /oncue/… addresses keep working alongside these routes.")
+                    Text("Stream Deck via Companion, grandMA3, a playback rig or a MIDI pedal driving OnCue. OSC arrives on this Mac's OSC port (\(String(oscPort))); MIDI from every connected source; Art-Net on UDP 6454. The built-in /oncue/… addresses keep working alongside these routes.")
                         .font(.ocMeta).foregroundStyle(Gallery.dim).fixedSize(horizontal: false, vertical: true)
                 }
                 Spacer()
