@@ -41,6 +41,10 @@ enum SwitcherFactory {
         switch config.kind {
         case .atem: return ATEMSwitcher(config: config)
         case .vmix: return VMixSwitcher(config: config)
+        case .ross: return RossTalkSwitcher(config: config)
+        case .panasonicHS410: return PanasonicHS410Switcher(config: config)
+        case .rolandV160: return RolandV160Switcher(config: config)
+        case .rolandV60: return RolandV60Switcher(config: config)
         case .obs: return OBSSwitcher(config: config)
         case .companion: return CompanionSwitcher(config: config, client: companion)
         case .simulator: return SimulatedSwitcher(config: config)

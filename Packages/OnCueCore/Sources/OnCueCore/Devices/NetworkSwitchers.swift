@@ -345,3 +345,211 @@ public enum OBSProtocol {
             .compactMap { $0["sceneName"] as? String }
     }
 }
+
+// MARK: - Ross (RossTalk, TCP 7788): Carbonite, Graphite, Ultrix Carbonite, Acuity
+
+/// RossTalk commands. RossTalk doesn't report back, so program and preview are assumed from
+/// OnCue's own commands; add a TSL tally input from the switcher to catch manual cuts.
+/// M/E numbers are the switcher's own (M/E setting 1 = "ME:1"). Macros run custom controls in
+/// bank 1 (macro 1 = CC 1:01). DSKs map to keyers on the program M/E.
+final class RossTalkSwitcher: LineSwitcher {
+    override var defaultPort: Int { 7788 }
+    private var me: Int { config.me + 1 }
+
+    override func didConnect() {
+        state.modelName = "Ross (RossTalk)"
+        state.assumed = true
+        changed()
+    }
+
+    override func setProgram(_ source: Int) { sendLine(RossTalk.program(me: me, input: source)); state.program = source; changed() }
+    override func setPreview(_ source: Int) { sendLine(RossTalk.preview(me: me, input: source)); state.preview = source; changed() }
+    override func cut() { sendLine("MECUT ME:\(me)"); swap() }
+    override func auto() { sendLine("MEAUTO ME:\(me)"); swap() }
+    override func setAux(_ aux: Int, source: Int) { sendLine("XPT AUX:\(aux + 1):IN:\(source)") }
+    override func runMacro(_ index: Int) { sendLine(RossTalk.customControl(index)) }
+    override func setDSK(_ index: Int, onAir: Bool) { sendLine("KEYAUTO\(onAir ? "ON" : "OFF") ME:\(me):\(index + 1)") }
+    override func autoDSK(_ index: Int) { sendLine("KEYAUTO ME:\(me):\(index + 1)") }
+    override func setKeyer(_ index: Int, onAir: Bool) { sendLine("KEYCUT\(onAir ? "ON" : "OFF") ME:\(me):\(index + 1)") }
+    override func fadeToBlack() { sendLine("FTB") }
+
+    private func swap() {
+        let p = state.program
+        state.program = state.preview
+        state.preview = p
+        changed()
+    }
+}
+
+public enum RossTalk {
+    public static func program(me: Int, input: Int) -> String { "XPT ME:\(me):PGM:IN:\(input)" }
+    public static func preview(me: Int, input: Int) -> String { "XPT ME:\(me):PST:IN:\(input)" }
+    /// Macro index 0 → "CC 1:01".
+    public static func customControl(_ index: Int) -> String {
+        let n = max(0, index)
+        return String(format: "CC %d:%02d", n / 99 + 1, n % 99 + 1)
+    }
+}
+
+// MARK: - Roland
+
+/// Roland V-160HD and V-80HD (LAN control, TCP 8023): plain ASCII commands ending in ";" and a
+/// 4-digit password sent first (host "ip#1234"). Inputs are "INPUT1"…; program and preview are
+/// polled with QPGM and QPST.
+final class RolandV160Switcher: LineSwitcher {
+    override var defaultPort: Int { 8023 }
+    override var terminator: String { "" }
+    private var poll: Timer?
+
+    override var endpoint: (String, Int) {
+        let host = String(config.host.split(separator: "#").first ?? "")
+        var c = config
+        c.host = host
+        let parts = host.split(separator: ":")
+        if parts.count == 2, let p = Int(parts[1]) { return (String(parts[0]), p) }
+        return (host, defaultPort)
+    }
+
+    private var password: String { config.host.split(separator: "#", maxSplits: 1).dropFirst().first.map(String.init) ?? "" }
+
+    override func didConnect() {
+        state.modelName = "Roland V-160HD / V-80HD"
+        if !password.isEmpty { sendLine(password + "\r\n") }
+        poll?.invalidate()
+        poll = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] _ in
+            self?.sendLine("QPGM;QPST;")
+        }
+    }
+
+    override func disconnect() {
+        poll?.invalidate()
+        poll = nil
+        super.disconnect()
+    }
+
+    override func received(line: String) {
+        for reply in RolandProtocol.replies(line) {
+            if let n = RolandProtocol.inputNumber(reply, command: "PGM") { if state.program != n { state.program = n; changed() } }
+            if let n = RolandProtocol.inputNumber(reply, command: "PST") { if state.preview != n { state.preview = n; changed() } }
+        }
+    }
+
+    override func setProgram(_ source: Int) { sendLine("PGM:INPUT\(source);") }
+    override func setPreview(_ source: Int) { sendLine("PST:INPUT\(source);") }
+    override func cut() { sendLine("CUT;") }
+    override func auto() { sendLine("ATO;") }
+    override func setDSK(_ index: Int, onAir: Bool) { sendLine("DSK:DSK\(index + 1),\(onAir ? "ON" : "OFF");") }
+    override func autoDSK(_ index: Int) { sendLine("DSK:DSK\(index + 1);") }
+}
+
+/// Roland V-60HD (TCP 8023): STX before each command, inputs numbered from 0, tally polled
+/// with TLY (0 dark, 1 red, 2 green for channels 1–8).
+final class RolandV60Switcher: LineSwitcher {
+    override var defaultPort: Int { 8023 }
+    override var terminator: String { "" }
+    private var poll: Timer?
+
+    override func didConnect() {
+        state.modelName = "Roland V-60HD"
+        poll?.invalidate()
+        poll = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] _ in
+            self?.sendLine("\u{02}TLY;")
+        }
+    }
+
+    override func disconnect() {
+        poll?.invalidate()
+        poll = nil
+        super.disconnect()
+    }
+
+    override func received(line: String) {
+        for reply in RolandProtocol.replies(line) {
+            if let t = RolandProtocol.tally(reply) {
+                if let p = t.program, p != state.program { state.program = p; changed() }
+                if let v = t.preview, v != state.preview { state.preview = v; changed() }
+            }
+        }
+    }
+
+    override func setProgram(_ source: Int) { sendLine("\u{02}PGM:\(max(0, source - 1));") }
+    override func setPreview(_ source: Int) { sendLine("\u{02}PST:\(max(0, source - 1));") }
+    override func cut() { sendLine("\u{02}CUT;") }
+    override func auto() { sendLine("\u{02}ATO;") }
+    override func autoDSK(_ index: Int) { sendLine("\u{02}DSK;") }
+}
+
+public enum RolandProtocol {
+    /// Splits "PGM:HDMI2,INPUT2;ACK;" into ["PGM:HDMI2,INPUT2", "ACK"], dropping STX and ACK bytes.
+    public static func replies(_ line: String) -> [String] {
+        line.replacingOccurrences(of: "\u{02}", with: "").replacingOccurrences(of: "\u{06}", with: "")
+            .split(separator: ";").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
+    }
+
+    /// "PGM:HDMI2,INPUT2" → 2.
+    public static func inputNumber(_ reply: String, command: String) -> Int? {
+        guard reply.hasPrefix(command + ":") else { return nil }
+        let params = reply.dropFirst(command.count + 1).split(separator: ",")
+        for p in params where p.hasPrefix("INPUT") { if let n = Int(p.dropFirst(5)) { return n } }
+        return nil
+    }
+
+    /// "TLY:0,1,2,0,0,0,0,0" → program 2, preview 3 (channels counted from 1).
+    public static func tally(_ reply: String) -> (program: Int?, preview: Int?)? {
+        guard reply.hasPrefix("TLY:") else { return nil }
+        let values = reply.dropFirst(4).split(separator: ",").map { Int($0.trimmingCharacters(in: .whitespaces)) ?? 0 }
+        return (values.firstIndex(of: 1).map { $0 + 1 }, values.firstIndex(of: 2).map { $0 + 1 })
+    }
+}
+
+// MARK: - Panasonic AV-HS410 (TCP 60040)
+
+/// STX/ETX framed 4-letter commands. Inputs 1–13 are materials 50–62; program and preview are
+/// polled with QBSC. Keys, DSK and macros are not mapped yet.
+final class PanasonicHS410Switcher: LineSwitcher {
+    override var defaultPort: Int { 60040 }
+    override var terminator: String { "\u{03}" }
+    private var poll: Timer?
+
+    override func didConnect() {
+        state.modelName = "Panasonic AV-HS410"
+        poll?.invalidate()
+        poll = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] _ in
+            self?.sendLine("\u{02}QBSC:02")
+            self?.sendLine("\u{02}QBSC:03")
+        }
+    }
+
+    override func disconnect() {
+        poll?.invalidate()
+        poll = nil
+        super.disconnect()
+    }
+
+    override func received(line: String) {
+        for reply in line.split(whereSeparator: { $0 == "\u{02}" || $0 == "\u{03}" }) {
+            guard let r = PanasonicProtocol.busStatus(String(reply)) else { continue }
+            if r.bus == 2, let n = r.input, n != state.program { state.program = n; changed() }
+            if r.bus == 3, let n = r.input, n != state.preview { state.preview = n; changed() }
+        }
+    }
+
+    override func setProgram(_ source: Int) { sendLine("\u{02}" + PanasonicProtocol.selectBus(2, input: source)) }
+    override func setPreview(_ source: Int) { sendLine("\u{02}" + PanasonicProtocol.selectBus(3, input: source)) }
+    override func cut() { sendLine("\u{02}SCUT:00") }
+    override func auto() { sendLine("\u{02}SAUT:00:0:0") }
+}
+
+public enum PanasonicProtocol {
+    /// Input n → material 49 + n (Input 1 = 50).
+    public static func selectBus(_ bus: Int, input: Int) -> String {
+        String(format: "SBUS:%02d:%02d", bus, 49 + max(1, min(input, 13)))
+    }
+
+    /// "ABSC:02:51:1" → bus 2, input 2.
+    public static func busStatus(_ reply: String) -> (bus: Int, input: Int?)? {
+        let parts = reply.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: ":")
+        guard parts.count >= 3, parts[0] == "ABSC", let bus = Int(parts[1]), let material = Int(parts[2]) else { return nil }
+        return (bus, (50...62).contains(material) ? material - 49 : nil)
+    }
+}

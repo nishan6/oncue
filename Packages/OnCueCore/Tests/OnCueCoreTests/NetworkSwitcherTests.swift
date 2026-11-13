@@ -33,3 +33,30 @@ final class NetworkSwitcherTests: XCTestCase {
         XCTAssertEqual(VMixSwitcher(config: c).endpoint.1, 9000)
     }
 }
+
+final class WaveBProtocolTests: XCTestCase {
+    func testRossTalk() {
+        XCTAssertEqual(RossTalk.preview(me: 2, input: 6), "XPT ME:2:PST:IN:6")
+        XCTAssertEqual(RossTalk.program(me: 1, input: 3), "XPT ME:1:PGM:IN:3")
+        XCTAssertEqual(RossTalk.customControl(4), "CC 1:05")
+    }
+
+    func testRolandV160Replies() {
+        let replies = RolandProtocol.replies("PGM:HDMI2,INPUT2;ACK;PST:SDI1,INPUT9;ACK;")
+        XCTAssertEqual(replies.compactMap { RolandProtocol.inputNumber($0, command: "PGM") }, [2])
+        XCTAssertEqual(replies.compactMap { RolandProtocol.inputNumber($0, command: "PST") }, [9])
+    }
+
+    func testRolandV60Tally() {
+        let t = RolandProtocol.tally(RolandProtocol.replies("\u{02}TLY:0,1,2,0,0,0,0,0;").first!)
+        XCTAssertEqual(t?.program, 2)
+        XCTAssertEqual(t?.preview, 3)
+    }
+
+    func testPanasonic() {
+        XCTAssertEqual(PanasonicProtocol.selectBus(2, input: 1), "SBUS:02:50")
+        XCTAssertEqual(PanasonicProtocol.selectBus(3, input: 13), "SBUS:03:62")
+        XCTAssertEqual(PanasonicProtocol.busStatus("ABSC:02:51:1")?.input, 2)
+        XCTAssertNil(PanasonicProtocol.busStatus("ABSC:02:70:1")?.input, "colour bars is not an input")
+    }
+}

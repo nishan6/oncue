@@ -337,9 +337,9 @@ struct SwitcherCard: View {
                         .labelsHidden().frame(width: 100)
                     }
                 }
-            case .vmix, .obs:
+            case .vmix, .obs, .ross, .panasonicHS410, .rolandV160, .rolandV60:
                 PropertyRow(label: "Address") {
-                    CommitField(placeholder: config.kind == .vmix ? "192.168.10.30 (port 8099)" : "192.168.10.30:4455#password",
+                    CommitField(placeholder: Self.addressHint(config.kind),
                                 value: config.host, font: .readout(13), width: 260) { text in
                         let t = text.trimmingCharacters(in: .whitespaces)
                         guard !t.isEmpty else { return false }
@@ -347,9 +347,9 @@ struct SwitcherCard: View {
                         return true
                     }
                 }
-                Text(config.kind == .vmix
+                Text(Self.notes(config.kind) ?? (config.kind == .vmix
                      ? "vMix TCP API (Settings › Web Controller / TCP API on). Inputs are vMix input numbers; DSK 1–4 are overlay channels 1–4; macros run vMix scripts named “Macro 1”, “Macro 2”… Program and preview are read back. Built from vMix's API documentation; not yet tested on vMix."
-                     : "obs-websocket 5 (Tools › WebSocket Server Settings). Inputs are scenes numbered top to bottom as OBS lists them. Turn on Studio Mode for preview and transitions. Add the password after a # if one is set. Built from the obs-websocket documentation; not yet tested on OBS.")
+                     : "obs-websocket 5 (Tools › WebSocket Server Settings). Inputs are scenes numbered top to bottom as OBS lists them. Turn on Studio Mode for preview and transitions. Add the password after a # if one is set. Built from the obs-websocket documentation; not yet tested on OBS."))
                     .font(.ocMeta).foregroundStyle(Gallery.faint).fixedSize(horizontal: false, vertical: true)
             case .companion:
                 PropertyRow(label: "Buttons") {
@@ -419,6 +419,28 @@ struct SwitcherCard: View {
 
     private func update(_ action: String, _ change: @escaping (inout SwitcherConfig) -> Void) {
         model.edit(action) { $0.updateSwitcher(config.id) { change(&$0) } }
+    }
+
+    static func addressHint(_ kind: SwitcherKind) -> String {
+        switch kind {
+        case .vmix: return "192.168.10.30 (port 8099)"
+        case .obs: return "192.168.10.30:4455#password"
+        case .ross: return "192.168.0.123 (port 7788)"
+        case .panasonicHS410: return "192.168.0.8 (port 60040)"
+        case .rolandV160: return "192.168.0.10#1234 (port 8023, # password)"
+        case .rolandV60: return "192.168.0.10 (port 8023)"
+        default: return "IP address"
+        }
+    }
+
+    static func notes(_ kind: SwitcherKind) -> String? {
+        switch kind {
+        case .ross: return "RossTalk on port 7788 (enable it in the switcher's RossTalk setup). RossTalk doesn't report back, so OnCue assumes program and preview from its own commands: add a TSL tally input (Show Setup › Tally) to catch manual cuts. Use the M/E setting for the M/E number. Macros run custom controls in bank 1. Built from Ross's RossTalk documentation; not yet tested on a Ross switcher."
+        case .panasonicHS410: return "AV-HS410 LAN control on port 60040. Inputs 1–13 are the switcher's Input 1–13; program and preview are read back. Keys, DSK and macros aren't mapped yet. Built from Panasonic's HS410 interface protocol; not yet tested on the switcher."
+        case .rolandV160: return "LAN Control on port 8023. Set a 4-digit password in the switcher's LAN Control menu and add it after a #. Inputs are INPUT 1, 2…; program and preview are read back. Built from Roland's LAN/RS-232 command reference; not yet tested on the switcher."
+        case .rolandV60: return "LAN control on port 8023. Inputs 1–8 are the switcher's channels 1–8; program and preview are read back from its tally. Built from the V-60HD reference manual; not yet tested on the switcher."
+        default: return nil
+        }
     }
 }
 
