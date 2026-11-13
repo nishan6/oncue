@@ -10,6 +10,10 @@
 # or an Apple ID with an app-specific password:
 #   NOTARY_APPLE_ID,  NOTARY_PASSWORD   (TEAM_ID as above)
 #
+# Version and build come from project.yml; CI overrides them with VERSION (from a v1.2.3 tag) and
+# BUILD_NUMBER (the run number), so every DMG has a build number higher than the last.
+# REQUIRE_NOTARIZED=1 fails the script unless the DMG ends up signed, notarised and stapled.
+#
 # Usage: scripts/package-dmg.sh [output folder]     (default: dist)
 set -euo pipefail
 
@@ -24,8 +28,8 @@ if ! [ -d OnCue.xcodeproj ]; then
   xcodegen generate
 fi
 
-VERSION=$(sed -n 's/.*MARKETING_VERSION: "\(.*\)"/\1/p' project.yml | head -1)
-BUILD_NUMBER=$(sed -n 's/.*CURRENT_PROJECT_VERSION: "\(.*\)"/\1/p' project.yml | head -1)
+VERSION="${VERSION:-$(sed -n 's/.*MARKETING_VERSION: "\(.*\)"/\1/p' project.yml | head -1)}"
+BUILD_NUMBER="${BUILD_NUMBER:-$(sed -n 's/.*CURRENT_PROJECT_VERSION: "\(.*\)"/\1/p' project.yml | head -1)}"
 echo "OnCue $VERSION ($BUILD_NUMBER), signing identity: $IDENTITY"
 
 SIGN_FLAGS=(CODE_SIGN_STYLE=Manual "CODE_SIGN_IDENTITY=$IDENTITY" "DEVELOPMENT_TEAM=$TEAM")
@@ -35,13 +39,14 @@ fi
 
 xcodebuild -project OnCue.xcodeproj -scheme OnCue -configuration Release \
   -destination 'generic/platform=macOS' -derivedDataPath "$BUILD" \
-  ARCHS=arm64 ONLY_ACTIVE_ARCH=NO "${SIGN_FLAGS[@]}" \
+  "ARCHS=arm64 x86_64" ONLY_ACTIVE_ARCH=NO "MARKETING_VERSION=$VERSION" "CURRENT_PROJECT_VERSION=$BUILD_NUMBER" "${SIGN_FLAGS[@]}" \
   clean build | tee "$BUILD.log" | grep -E "error:|warning: .*deprecated|BUILD (SUCCEEDED|FAILED)" || true
 grep -q "BUILD SUCCEEDED" "$BUILD.log" || { echo "Build failed, see $BUILD.log"; exit 1; }
 
 APP="$BUILD/Build/Products/Release/OnCue.app"
 codesign --verify --deep --strict --verbose=2 "$APP"
 codesign -dv --verbose=2 "$APP" 2>&1 | grep -E "Authority|TeamIdentifier|Runtime|Signature" || true
+echo "Architectures: $(lipo -archs "$APP/Contents/MacOS/OnCue")"
 
 # Disk image: the app and a link to Applications.
 STAGE="$BUILD/dmg"
@@ -54,6 +59,7 @@ hdiutil create -volname "OnCue $VERSION" -srcfolder "$STAGE" -fs HFS+ -format UD
 
 if [ "$IDENTITY" != "-" ]; then
   codesign --force --sign "$IDENTITY" --timestamp "$DMG"
+  NOTARIZED=""
   if [ -n "${NOTARY_KEY_PATH:-}" ]; then
     xcrun notarytool submit "$DMG" --key "$NOTARY_KEY_PATH" --key-id "$NOTARY_KEY_ID" --issuer "$NOTARY_ISSUER" --wait
   elif [ -n "${NOTARY_APPLE_ID:-}" ]; then
@@ -63,8 +69,13 @@ if [ "$IDENTITY" != "-" ]; then
   fi
   if [ -n "${NOTARY_KEY_PATH:-}${NOTARY_APPLE_ID:-}" ]; then
     xcrun stapler staple "$DMG"
-    spctl --assess --type open --context context:primary-signature --verbose=2 "$DMG" || true
+    spctl --assess --type open --context context:primary-signature --verbose=2 "$DMG" && NOTARIZED=yes
   fi
+fi
+
+if [ "${REQUIRE_NOTARIZED:-0}" = "1" ] && [ "${NOTARIZED:-}" != "yes" ]; then
+  echo "Release refused: the DMG is not signed with a Developer ID and notarised (set the signing and notary secrets)."
+  exit 1
 fi
 
 hdiutil verify "$DMG" >/dev/null

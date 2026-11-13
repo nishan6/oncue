@@ -111,6 +111,16 @@ struct MachineProfileView: View {
                     field("Main Mac address", \.primaryHost, prompt: "192.168.10.20")
                 }
             }
+            Section("Updates") {
+                Toggle("Check for updates automatically", isOn: Binding(get: { machine.profile.checkForUpdates },
+                                                                       set: { v in machine.update { $0.checkForUpdates = v } }))
+                HStack {
+                    Text("OnCue looks for a new version every 6 hours and asks before installing. It never checks or installs during Live Mode.")
+                        .font(.footnote).foregroundStyle(.secondary)
+                    Spacer()
+                    Button("Check Now") { Updater.shared.check(manual: true) }
+                }
+            }
             if let error = machine.saveError {
                 Text(error).foregroundStyle(.red)
             }

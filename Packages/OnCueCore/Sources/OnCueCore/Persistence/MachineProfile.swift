@@ -44,6 +44,17 @@ public struct MachineProfile: Codable, Equatable {
     /// A folder (iCloud Drive, a NAS, a USB drive) that gets a copy of every show as it changes.
     public var backupFolder: String = ""
 
+    // Updates
+    public var checkForUpdates: Bool = true
+    /// "<version>-<build>" of an update the person chose to skip.
+    public var skippedUpdate: String = ""
+
+    // Accessibility
+    /// Text size across the editor and Live Mode: 1 (standard) to 1.5.
+    public var textScale: Double = 1
+    /// Tally also shown by shape and words, not only red and green.
+    public var tallyShapes: Bool = false
+
     public init() {}
 
     public init(from decoder: Decoder) throws {
@@ -70,6 +81,10 @@ public struct MachineProfile: Codable, Equatable {
         backupFolder = try c.value("backupFolder", "")
         ltcOutputMode = try c.value("ltcOutputMode", "off")
         ltcOutputDevice = try c.value("ltcOutputDevice", "")
+        checkForUpdates = try c.value("checkForUpdates", true)
+        skippedUpdate = try c.value("skippedUpdate", "")
+        textScale = min(max(try c.value("textScale", 1.0), 1), 1.5)
+        tallyShapes = try c.value("tallyShapes", false)
     }
 }
 

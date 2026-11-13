@@ -5,7 +5,7 @@ import OnCueCore
 @main
 struct OnCueApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
-    @StateObject private var machine = MachineProfileModel()
+    @StateObject private var machine = MachineProfileModel.shared
     @StateObject private var library = LibraryModel()
 
     var body: some Scene {
@@ -48,12 +48,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         SmokeTest.runIfRequested()
         // `OnCue --screenshots <folder>` opens the sample production and saves window images.
         ScreenshotRun.runIfRequested()
+        Updater.shared.start()
     }
 }
 
 /// Bridges this Mac's profile (OnCueCore) to SwiftUI. Lives for the whole app, independent of any
 /// open show: opening or closing shows never changes it, and editing it never changes a show.
 final class MachineProfileModel: ObservableObject {
+    /// The one profile model for the app (Settings, Live Mode, updates).
+    static let shared = MachineProfileModel()
     private let store: MachineProfileStore
     @Published private(set) var profile: MachineProfile
     @Published private(set) var issue: String?
@@ -85,6 +88,9 @@ struct LibraryCommands: Commands {
     @FocusedObject private var workspace: WorkspaceModel?
 
     var body: some Commands {
+        CommandGroup(after: .appInfo) {
+            Button("Check for Updates…") { Updater.shared.check(manual: true) }
+        }
         CommandGroup(before: .windowList) {
             Button("Project Library") { openWindow(id: LibraryModel.windowID) }
                 .keyboardShortcut("l", modifiers: [.command, .shift])
