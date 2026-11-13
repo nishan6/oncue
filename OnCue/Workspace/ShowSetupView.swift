@@ -337,7 +337,7 @@ struct SwitcherCard: View {
                         .labelsHidden().frame(width: 100)
                     }
                 }
-            case .vmix, .obs, .ross, .panasonicHS410, .rolandV160, .rolandV60:
+            case .vmix, .obs, .ross, .panasonicHS410, .panasonicIP, .rolandV160, .rolandV60:
                 PropertyRow(label: "Address") {
                     CommitField(placeholder: Self.addressHint(config.kind),
                                 value: config.host, font: .readout(13), width: 260) { text in
@@ -427,6 +427,7 @@ struct SwitcherCard: View {
         case .obs: return "192.168.10.30:4455#password"
         case .ross: return "192.168.0.123 (port 7788)"
         case .panasonicHS410: return "192.168.0.8 (port 60040)"
+        case .panasonicIP: return "192.168.0.8 (port 62000)"
         case .rolandV160: return "192.168.0.10#1234 (port 8023, # password)"
         case .rolandV60: return "192.168.0.10 (port 8023)"
         default: return "IP address"
@@ -437,6 +438,7 @@ struct SwitcherCard: View {
         switch kind {
         case .ross: return "RossTalk on port 7788 (enable it in the switcher's RossTalk setup). RossTalk doesn't report back, so OnCue assumes program and preview from its own commands: add a TSL tally input (Show Setup › Tally) to catch manual cuts. Use the M/E setting for the M/E number. Macros run custom controls in bank 1. Built from Ross's RossTalk documentation; not yet tested on a Ross switcher."
         case .panasonicHS410: return "AV-HS410 LAN control on port 60040. Inputs 1–13 are the switcher's Input 1–13; program and preview are read back. Keys, DSK and macros aren't mapped yet. Built from Panasonic's HS410 interface protocol; not yet tested on the switcher."
+        case .panasonicIP: return "LAN control on port 62000. Inputs are the switcher's SDI/IN numbers on M/E 1; program and preview are read back. Panasonic's published protocol has no transition command, so OnCue cuts by putting the preview source on program, and transitions are cuts too: run mixes from the panel or through Companion. Built from Panasonic's interface guides; not yet tested on the switcher."
         case .rolandV160: return "LAN Control on port 8023. Set a 4-digit password in the switcher's LAN Control menu and add it after a #. Inputs are INPUT 1, 2…; program and preview are read back. Built from Roland's LAN/RS-232 command reference; not yet tested on the switcher."
         case .rolandV60: return "LAN control on port 8023. Inputs 1–8 are the switcher's channels 1–8; program and preview are read back from its tally. Built from the V-60HD reference manual; not yet tested on the switcher."
         default: return nil

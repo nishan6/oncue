@@ -57,13 +57,14 @@ public enum TransitionKind: String, Codable, CaseIterable, Identifiable {
 }
 
 public enum SwitcherKind: String, Codable, CaseIterable, Identifiable {
-    case atem, ross, panasonicHS410, rolandV160, rolandV60, vmix, obs, companion, simulator
+    case atem, ross, panasonicHS410, panasonicIP, rolandV160, rolandV60, vmix, obs, companion, simulator
     public var id: String { rawValue }
     public var label: String {
         switch self {
         case .atem: return "Blackmagic ATEM"
         case .ross: return "Ross (RossTalk): Carbonite, Graphite, Ultrix, Acuity"
         case .panasonicHS410: return "Panasonic AV-HS410"
+        case .panasonicIP: return "Panasonic AV-UHS500 / AV-HS6000 / AV-UHS5000"
         case .rolandV160: return "Roland V-160HD / V-80HD"
         case .rolandV60: return "Roland V-60HD"
         case .vmix: return "vMix"

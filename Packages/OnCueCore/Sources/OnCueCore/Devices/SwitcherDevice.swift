@@ -43,6 +43,7 @@ enum SwitcherFactory {
         case .vmix: return VMixSwitcher(config: config)
         case .ross: return RossTalkSwitcher(config: config)
         case .panasonicHS410: return PanasonicHS410Switcher(config: config)
+        case .panasonicIP: return PanasonicCrosspointSwitcher(config: config)
         case .rolandV160: return RolandV160Switcher(config: config)
         case .rolandV60: return RolandV60Switcher(config: config)
         case .obs: return OBSSwitcher(config: config)

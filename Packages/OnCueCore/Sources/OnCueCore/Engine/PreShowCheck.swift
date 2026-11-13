@@ -136,7 +136,7 @@ public final class PreShowCheck: ObservableObject {
                         self?.done()
                     }
                 }
-            case .atem, .vmix, .obs, .ross, .panasonicHS410, .rolandV160, .rolandV60:
+            case .atem, .vmix, .obs, .ross, .panasonicHS410, .panasonicIP, .rolandV160, .rolandV60:
                 guard !config.host.isEmpty else {
                     add(g, id, config.name, .fail, "No IP address set.")
                     continue

@@ -557,3 +557,57 @@ public enum PanasonicProtocol {
         return (bus, (50...62).contains(material) ? material - 49 : nil)
     }
 }
+
+// MARK: - Panasonic AV-UHS500, AV-HS6000, AV-UHS5000 (TCP 62000)
+
+/// Crosspoint control (SBUS on ME1 PGM = 01 and PVW = 02, inputs numbered as the switcher's
+/// SDI/IN numbers) and read-back (QBSC). Panasonic's published LAN protocol has no transition
+/// command, so a cut sets program directly and an auto transition is also a cut. The switcher
+/// drops a connection that is silent for 20 s; polling every half second keeps it open.
+final class PanasonicCrosspointSwitcher: LineSwitcher {
+    override var defaultPort: Int { 62000 }
+    override var terminator: String { "\u{03}" }
+    override var delimiters: Set<UInt8> { [0x03, 0x0A, 0x0D] }
+    private var poll: Timer?
+
+    override func didConnect() {
+        state.modelName = "Panasonic AV-UHS500 / HS6000"
+        poll?.invalidate()
+        poll = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
+            self?.sendLine("\u{02}QBSC:01")
+            self?.sendLine("\u{02}QBSC:02")
+        }
+    }
+
+    override func disconnect() {
+        poll?.invalidate()
+        poll = nil
+        super.disconnect()
+    }
+
+    override func received(line: String) {
+        for reply in line.split(whereSeparator: { $0 == "\u{02}" || $0 == "\u{03}" }) {
+            guard let r = PanasonicProtocol.crosspoint(String(reply)) else { continue }
+            if r.bus == 1, r.input != state.program { state.program = r.input; changed() }
+            if r.bus == 2, r.input != state.preview { state.preview = r.input; changed() }
+        }
+    }
+
+    override func setProgram(_ source: Int) { sendLine("\u{02}" + PanasonicProtocol.crosspointSelect(bus: 1, input: source)) }
+    override func setPreview(_ source: Int) { sendLine("\u{02}" + PanasonicProtocol.crosspointSelect(bus: 2, input: source)) }
+    override func cut() { setProgram(state.preview) }
+    override func auto() { setProgram(state.preview) }
+}
+
+extension PanasonicProtocol {
+    public static func crosspointSelect(bus: Int, input: Int) -> String {
+        String(format: "SBUS:%02d:%02d", bus, max(1, input))
+    }
+
+    /// "ABSC:01:05" or "ABUS:01:05" → bus 1, input 5.
+    public static func crosspoint(_ reply: String) -> (bus: Int, input: Int)? {
+        let parts = reply.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: ":")
+        guard parts.count >= 3, parts[0] == "ABSC" || parts[0] == "ABUS", let bus = Int(parts[1]), let input = Int(parts[2]) else { return nil }
+        return (bus, input)
+    }
+}

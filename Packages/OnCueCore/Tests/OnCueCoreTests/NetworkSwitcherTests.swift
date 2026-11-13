@@ -60,3 +60,13 @@ final class WaveBProtocolTests: XCTestCase {
         XCTAssertNil(PanasonicProtocol.busStatus("ABSC:02:70:1")?.input, "colour bars is not an input")
     }
 }
+
+final class PanasonicIPTests: XCTestCase {
+    func testCrosspoints() {
+        XCTAssertEqual(PanasonicProtocol.crosspointSelect(bus: 1, input: 1), "SBUS:01:01")
+        XCTAssertEqual(PanasonicProtocol.crosspointSelect(bus: 2, input: 32), "SBUS:02:32")
+        XCTAssertEqual(PanasonicProtocol.crosspoint("ABSC:01:05")?.input, 5)
+        XCTAssertEqual(PanasonicProtocol.crosspoint("ABUS:02:07")?.bus, 2)
+        XCTAssertNil(PanasonicProtocol.crosspoint("EROR:01"))
+    }
+}
