@@ -68,3 +68,12 @@ extension Cue {
         return parts.joined(separator: " · ")
     }
 }
+
+extension EngineStatus {
+    /// A running status with no switcher, at one shot: for previews and the screenshot run.
+    public static func preview(itemID: UUID, index: Int, position: Double) -> EngineStatus {
+        EngineStatus(itemID: itemID, index: index, position: position, transport: .running, modes: [:], pauseReason: nil,
+                     freeMode: false, loopSectionID: nil, takenAt: nil, secondsToNext: nil, timing: .internalClock,
+                     timingSignal: true, tempo: nil, timecode: nil, switchers: [], hints: [], logFile: nil, cutCount: 0)
+    }
+}

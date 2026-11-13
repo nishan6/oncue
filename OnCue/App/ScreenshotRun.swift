@@ -244,7 +244,25 @@ enum ScreenshotRun {
         model.attach(document: .constant(ProjectDocument(project: project)), fileURL: nil, undoManager: nil)
         sheetModel = model
         let library = makeSampleLibrary()
+        let viewerShow = project.show(playlist: nil)
+        let viewerSnap: CrewSnapshot = {
+            guard let item = viewerShow.items.first(where: { viewerShow.shotRows(forItem: $0.id).count > 3 }) else {
+                return viewerShow.crewSnapshot(status: nil, position: nil, running: false, scriptVersion: 0)
+            }
+            let rows = viewerShow.shotRows(forItem: item.id)
+            let at = rows[2].cue.at + 0.5
+            return viewerShow.crewSnapshot(status: .preview(itemID: item.id, index: 2, position: at), position: at, running: true,
+                                           scriptVersion: 0, vocabulary: project.properties.shots)
+        }()
+        let viewerCam = viewerSnap.program.map { _ in viewerShow.sortedCameras.dropFirst().first?.number ?? 1 } ?? 1
         let sheets: [(String, AnyView, NSSize)] = [
+            ("monitor-multi-view.png", AnyView(MultiViewMonitor(show: viewerShow, snap: viewerSnap, upcoming: 3, cameras: nil)
+                .background(LivePalette.base).preferredColorScheme(.dark)), NSSize(width: 1600, height: 820)),
+            ("monitor-full-page-camera.png", AnyView(FullPageMonitor(show: viewerShow, snap: viewerSnap, camera: viewerCam)
+                .background(LivePalette.base).preferredColorScheme(.dark)), NSSize(width: 1200, height: 800)),
+            ("monitor-full-page-script.png", AnyView(FullPageMonitor(show: viewerShow, snap: viewerSnap, camera: 0)
+                .background(LivePalette.base).preferredColorScheme(.dark)), NSSize(width: 1200, height: 800)),
+            ("sheet-device-status.png", AnyView(DeviceStatusView(show: viewerShow, model: model)), NSSize(width: 720, height: 560)),
             ("sheet-show-setup.png", AnyView(ShowSetupView(show: show, model: model, tab: .monitors)), NSSize(width: 860, height: 640)),
             ("sheet-preshow-check.png", AnyView(PreShowCheckView(show: show, model: model)), NSSize(width: 640, height: 620)),
             ("sheet-export.png", AnyView(ExportView(show: show, model: model)), NSSize(width: 480, height: 470)),
