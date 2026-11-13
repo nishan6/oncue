@@ -179,9 +179,17 @@ public final class EngineController: ObservableObject {
         }
         startTimer()
         publish()
+        // Live Mode must not be slowed by App Nap or timer coalescing when OnCue isn't the front
+        // app, and the Mac must not sleep mid-show.
+        activity = ProcessInfo.processInfo.beginActivity(
+            options: [.userInitiated, .latencyCritical, .idleSystemSleepDisabled, .idleDisplaySleepDisabled],
+            reason: "OnCue Live Mode")
     }
 
+    private var activity: NSObjectProtocol?
+
     deinit {
+        if let activity { ProcessInfo.processInfo.endActivity(activity) }
         timer?.invalidate()
         devices.values.forEach { $0.disconnect() }
         ltcInput?.stop()
@@ -197,6 +205,8 @@ public final class EngineController: ObservableObject {
 
     /// Stops the clock and inputs, saves the log and leaves every switcher as it is.
     public func shutdown() {
+        if let activity { ProcessInfo.processInfo.endActivity(activity) }
+        activity = nil
         timer?.invalidate()
         timer = nil
         deviceOut.stop()
@@ -221,7 +231,27 @@ public final class EngineController: ObservableObject {
         ltcInput = nil
     }
 
-    static var now: Double { ProcessInfo.processInfo.systemUptime }
+    /// Engine time. The soak test runs it faster than real time (`setTimeScale`); otherwise it is
+    /// the system's uptime.
+    static var now: Double {
+        let up = ProcessInfo.processInfo.systemUptime
+        return scaleEpoch + scaleOffsetFix + (up - scaleEpoch) * timeScale
+    }
+    private static var timeScale = 1.0
+    private static var scaleEpoch = 0.0
+
+    /// Soak test only: runs every engine clock `scale` times faster than real time from now on.
+    public static func setTimeScale(_ scale: Double) {
+        let current = now
+        scaleEpoch = ProcessInfo.processInfo.systemUptime
+        timeScale = max(scale, 0.01)
+        // Keep time continuous: shift so that `now` doesn't jump.
+        scaleOffsetFix = current - scaleEpoch
+    }
+    private static var scaleOffsetFix = 0.0
+
+    /// The engine's clock, in seconds (for the soak test).
+    public static var engineNow: Double { now }
 
     // MARK: - Timing source
 

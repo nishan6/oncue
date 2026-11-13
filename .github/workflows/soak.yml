@@ -1,0 +1,85 @@
+name: Soak test
+
+# Long runs of the sample show in Auto cut on the simulator switcher, checking memory and take
+# timing. GitHub stops a job after 6 hours, so the 24-hour run uses a faster engine clock:
+#   fast:      24 h of show time at 5× speed (about 4.8 h)  – memory, leaks, stalls
+#   real-time: 5.5 h of show time at 1× speed              – take timing at real speed
+on:
+  workflow_dispatch:
+    inputs:
+      fast_hours:
+        description: Show hours for the fast run
+        default: "24"
+      fast_speed:
+        description: Engine speed for the fast run
+        default: "5"
+      realtime_hours:
+        description: Show hours for the real-time run
+        default: "5.5"
+  schedule:
+    - cron: "17 20 * * 6"     # Saturdays 20:17 UTC (Sunday 01:47 in India)
+
+permissions:
+  contents: write
+
+jobs:
+  soak:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - kind: fast
+          - kind: realtime
+    runs-on: macos-15
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build OnCue (Release)
+        run: |
+          brew install xcodegen >/dev/null 2>&1 || true
+          xcodegen generate --spec project.yml >/dev/null
+          xcodebuild -project OnCue.xcodeproj -scheme OnCue -configuration Release \
+            -destination 'platform=macOS,arch=arm64' -derivedDataPath build/DerivedData build 2>&1 \
+            | grep -E "error:|BUILD (SUCCEEDED|FAILED)"
+      - name: Soak
+        id: soak
+        continue-on-error: true
+        run: |
+          if [ "${{ matrix.kind }}" = "fast" ]; then
+            HOURS="${{ github.event.inputs.fast_hours || '24' }}"; SPEED="${{ github.event.inputs.fast_speed || '5' }}"
+          else
+            HOURS="${{ github.event.inputs.realtime_hours || '5.5' }}"; SPEED=1
+          fi
+          mkdir -p soak-out
+          build/DerivedData/Build/Products/Release/OnCue.app/Contents/MacOS/OnCue --soak "$PWD/soak-out" --hours "$HOURS" --speed "$SPEED" 2>&1 | tee soak-out/soak.log
+          grep -q "^PASS$" soak-out/soak-result.txt
+      - name: Keep the results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soak-${{ matrix.kind }}-${{ github.sha }}
+          path: soak-out
+          retention-days: 90
+      - name: Publish results to the ci-results branch
+        if: always()
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set +e
+          SHORT="${GITHUB_SHA::7}"
+          URL="https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          cd "$RUNNER_TEMP"
+          git clone --quiet --depth 1 --branch ci-results "$URL" results || exit 0
+          cd results
+          DEST="soak/$SHORT-${{ matrix.kind }}"
+          mkdir -p "$DEST"
+          cp "$GITHUB_WORKSPACE"/soak-out/soak-result.txt "$GITHUB_WORKSPACE"/soak-out/soak.csv "$GITHUB_WORKSPACE"/soak-out/soak.log "$DEST/" 2>/dev/null
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A && git commit --quiet -m "Soak ${{ matrix.kind }} for $SHORT"
+          for i in 1 2 3; do git push --quiet "$URL" HEAD:ci-results && break; git pull --quiet --rebase "$URL" ci-results; done
+      - name: Result
+        if: always()
+        run: |
+          cat soak-out/soak-result.txt 2>/dev/null || echo "No result: the soak did not finish."
+          [ "${{ steps.soak.outcome }}" = "success" ]

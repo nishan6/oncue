@@ -48,6 +48,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         SmokeTest.runIfRequested()
         // `OnCue --screenshots <folder>` opens the sample production and saves window images.
         ScreenshotRun.runIfRequested()
+        // `OnCue --soak <folder> --hours 24 --speed 5`: the long-run memory and timing check.
+        SoakTest.runIfRequested()
         Updater.shared.start()
     }
 }
