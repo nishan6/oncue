@@ -38,8 +38,8 @@ ExecuteExternalTool /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/X
 
 ExecuteExternalTool /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
 
-Build description signature: 8c20be1fa879bcfc379d3b8e13b8ac61
-Build description path: /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/XCBuildData/8c20be1fa879bcfc379d3b8e13b8ac61.xcbuilddata
+Build description signature: b1383c8d8ee064063d39fa5460d08388
+Build description path: /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/XCBuildData/b1383c8d8ee064063d39fa5460d08388.xcbuilddata
 ClangStatCache /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk /Users/runner/work/oncue/oncue/build/DerivedData/SDKStatCaches.noindex/macosx15.5-24F74-a403186ba963133a54a0e0cacd566b0b.sdkstatcache
     cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
     /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -o /Users/runner/work/oncue/oncue/build/DerivedData/SDKStatCaches.noindex/macosx15.5-24F74-a403186ba963133a54a0e0cacd566b0b.sdkstatcache
@@ -52,13 +52,13 @@ CreateBuildDirectory /Users/runner/work/oncue/oncue/build/DerivedData/Build/Inte
     cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
     builtin-create-build-directory /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex
 
-CreateBuildDirectory /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug
-    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
-    builtin-create-build-directory /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug
-
 WriteAuxiliaryFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue-5961719cd045435316b5c2f1594b42a3-VFS/all-product-headers.yaml
     cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
     write-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue-5961719cd045435316b5c2f1594b42a3-VFS/all-product-headers.yaml
+
+CreateBuildDirectory /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug
+    cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
+    builtin-create-build-directory /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug
 
 CreateBuildDirectory /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/EagerLinkingTBDs/Debug
     cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
@@ -513,89 +513,25 @@ GenerateAssetSymbols /Users/runner/work/oncue/oncue/OnCue/Resources/Assets.xcass
 CompileAssetCatalogVariant thinned /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/Resources /Users/runner/work/oncue/oncue/OnCue/Resources/Assets.xcassets (in target 'OnCue' from project 'OnCue')
     cd /Users/runner/work/oncue/oncue
     /Applications/Xcode_16.4.app/Contents/Developer/usr/bin/actool /Users/runner/work/oncue/oncue/OnCue/Resources/Assets.xcassets --compile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_output/thinned --output-format human-readable-text --notices --warnings --export-dependency-info /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_dependencies_thinned --output-partial-info-plist /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_generated_info.plist_thinned --app-icon AppIcon --enable-on-demand-resources NO --development-region en --target-device mac --minimum-deployment-target 14.0 --platform macosx
-2026-11-13 07:48:01.200 ibtoold[4600:17540] NSFileCoordinator is doing nothing.
+2026-11-13 07:48:23.178 ibtoold[4161:16171] NSFileCoordinator is doing nothing.
 /* com.apple.actool.compilation-results */
 /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_generated_info.plist_thinned
 /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_output/thinned/AppIcon.icns
 /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_output/thinned/Assets.car
 
 
+SwiftDriverJobDiscovery normal arm64 Compiling LiveCursor.swift, SampleShow.swift, SceneNumbering.swift, ShowEditing.swift, SwitcherEditing.swift, TimelineEditing.swift, BackupLink.swift, Controls.swift, EngineController.swift, LTC.swift, LTCOutput.swift, MTC.swift, PreShowCheck.swift, RundownTiming.swift, ShowEngine.swift, Soak.swift, SwitchLog.swift, Timing.swift, TourComparison.swift, PDFExports.swift (in target 'OnCueCore' from project 'OnCueCore')
+
 SwiftDriver OnCue normal arm64 com.apple.xcode.tools.swift.compiler (in target 'OnCue' from project 'OnCue')
     cd /Users/runner/work/oncue/oncue
     builtin-SwiftDriver -- /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name OnCue -Onone -enforce-exclusivity\=checked @/Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue.SwiftFileList -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -target arm64-apple-macos14.0 -g -module-cache-path /Users/runner/work/oncue/oncue/build/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/runner/work/oncue/oncue/build/DerivedData/Index.noindex/DataStore -swift-version 5 -I /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug -F /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/PackageFrameworks -F /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug -c -j3 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/runner/work/oncue/oncue/build/DerivedData/SDKStatCaches.noindex/macosx15.5-24F74-a403186ba963133a54a0e0cacd566b0b.sdkstatcache -output-file-map /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/runner/work/oncue/oncue/build/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue_const_extract_protocols.json -Xcc -iquote -Xcc /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-generated-files.hmap -Xcc -I/Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-own-target-headers.hmap -Xcc -I/Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue-5961719cd045435316b5c2f1594b42a3-VFS/all-product-headers.yaml -Xcc -iquote -Xcc /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-project-headers.hmap -Xcc -I/Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/include -Xcc -I/Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/DerivedSources-normal/arm64 -Xcc -I/Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/DerivedSources/arm64 -Xcc -I/Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue-Swift.h -working-directory /Users/runner/work/oncue/oncue -experimental-emit-module-separately -disable-cmo
-
-LinkAssetCatalog /Users/runner/work/oncue/oncue/OnCue/Resources/Assets.xcassets (in target 'OnCue' from project 'OnCue')
-    cd /Users/runner/work/oncue/oncue
-    builtin-linkAssetCatalog --thinned /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_output/thinned --thinned-dependencies /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_dependencies_thinned --thinned-info-plist-content /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_generated_info.plist_thinned --unthinned /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_output/unthinned --unthinned-dependencies /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_dependencies_unthinned --unthinned-info-plist-content /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_generated_info.plist_unthinned --output /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/Resources --plist-output /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_generated_info.plist
-note: Emplaced /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/Resources/AppIcon.icns (in target 'OnCue' from project 'OnCue')
-note: Emplaced /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/Resources/Assets.car (in target 'OnCue' from project 'OnCue')
 
 SwiftEmitModule normal arm64 Emitting\ module\ for\ OnCue (in target 'OnCue' from project 'OnCue')
 EmitSwiftModule normal arm64 (in target 'OnCue' from project 'OnCue')
     cd /Users/runner/work/oncue/oncue
     
 
-SwiftCompile normal arm64 Compiling\ SmokeTest.swift,\ SoakTest.swift,\ TallySetup.swift,\ Theme.swift,\ TimelineView.swift,\ TourView.swift,\ TriggerRoutesView.swift,\ Updater.swift,\ VersionsView.swift,\ ViewerMonitors.swift,\ WorkspaceCommands.swift,\ WorkspaceModel.swift,\ WorkspaceShell.swift,\ GeneratedAssetSymbols.swift /Users/runner/work/oncue/oncue/OnCue/App/SmokeTest.swift /Users/runner/work/oncue/oncue/OnCue/App/SoakTest.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/TallySetup.swift /Users/runner/work/oncue/oncue/OnCue/UI/Theme.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/TimelineView.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/TourView.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/TriggerRoutesView.swift /Users/runner/work/oncue/oncue/OnCue/App/Updater.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/VersionsView.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/ViewerMonitors.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/WorkspaceCommands.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/WorkspaceModel.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/Shell/WorkspaceShell.swift /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'OnCue' from project 'OnCue')
-SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/App/SmokeTest.swift (in target 'OnCue' from project 'OnCue')
-    cd /Users/runner/work/oncue/oncue
-    
-
-SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/App/SoakTest.swift (in target 'OnCue' from project 'OnCue')
-    cd /Users/runner/work/oncue/oncue
-    
-
-SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/Workspace/TallySetup.swift (in target 'OnCue' from project 'OnCue')
-    cd /Users/runner/work/oncue/oncue
-    
-
-SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/UI/Theme.swift (in target 'OnCue' from project 'OnCue')
-    cd /Users/runner/work/oncue/oncue
-    
-
-SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/Workspace/TimelineView.swift (in target 'OnCue' from project 'OnCue')
-    cd /Users/runner/work/oncue/oncue
-    
-
-SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/Workspace/TourView.swift (in target 'OnCue' from project 'OnCue')
-    cd /Users/runner/work/oncue/oncue
-    
-
-SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/Workspace/TriggerRoutesView.swift (in target 'OnCue' from project 'OnCue')
-    cd /Users/runner/work/oncue/oncue
-    
-
-SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/App/Updater.swift (in target 'OnCue' from project 'OnCue')
-    cd /Users/runner/work/oncue/oncue
-    
-
-SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/Workspace/VersionsView.swift (in target 'OnCue' from project 'OnCue')
-    cd /Users/runner/work/oncue/oncue
-    
-
-SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/Workspace/ViewerMonitors.swift (in target 'OnCue' from project 'OnCue')
-    cd /Users/runner/work/oncue/oncue
-    
-
-SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/Workspace/WorkspaceCommands.swift (in target 'OnCue' from project 'OnCue')
-    cd /Users/runner/work/oncue/oncue
-    
-
-SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/Workspace/WorkspaceModel.swift (in target 'OnCue' from project 'OnCue')
-    cd /Users/runner/work/oncue/oncue
-    
-
-SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/Workspace/Shell/WorkspaceShell.swift (in target 'OnCue' from project 'OnCue')
-    cd /Users/runner/work/oncue/oncue
-    
-
-SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'OnCue' from project 'OnCue')
-    cd /Users/runner/work/oncue/oncue
-    
-
-SwiftDriverJobDiscovery normal arm64 Compiling LiveCursor.swift, SampleShow.swift, SceneNumbering.swift, ShowEditing.swift, SwitcherEditing.swift, TimelineEditing.swift, BackupLink.swift, Controls.swift, EngineController.swift, LTC.swift, LTCOutput.swift, MTC.swift, PreShowCheck.swift, RundownTiming.swift, ShowEngine.swift, Soak.swift, SwitchLog.swift, Timing.swift, TourComparison.swift, PDFExports.swift (in target 'OnCueCore' from project 'OnCueCore')
-
 SwiftCompile normal arm64 Compiling\ CameraManagerView.swift,\ CameraPlotView.swift,\ CrewController.swift,\ CueFields.swift,\ DeviceStatusView.swift,\ DraftScriptView.swift,\ ExportView.swift,\ FrameRatePicker.swift,\ InspectorView.swift,\ ItemEditorView.swift,\ KeyboardShortcutsView.swift,\ LibraryModel.swift,\ LibraryView.swift,\ LiveView.swift,\ MachineProfileView.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/CameraManagerView.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/CameraPlotView.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/CrewController.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/CueFields.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/DeviceStatusView.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/DraftScriptView.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/ExportView.swift /Users/runner/work/oncue/oncue/OnCue/UI/FrameRatePicker.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/InspectorView.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/ItemEditorView.swift /Users/runner/work/oncue/oncue/OnCue/UI/KeyboardShortcutsView.swift /Users/runner/work/oncue/oncue/OnCue/Library/LibraryModel.swift /Users/runner/work/oncue/oncue/OnCue/Library/LibraryView.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/LiveView.swift /Users/runner/work/oncue/oncue/OnCue/UI/MachineProfileView.swift (in target 'OnCue' from project 'OnCue')
-
 SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/Workspace/CameraManagerView.swift (in target 'OnCue' from project 'OnCue')
     cd /Users/runner/work/oncue/oncue
     
@@ -656,7 +592,70 @@ SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/UI/MachineProfile
     cd /Users/runner/work/oncue/oncue
     
 
+LinkAssetCatalog /Users/runner/work/oncue/oncue/OnCue/Resources/Assets.xcassets (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    builtin-linkAssetCatalog --thinned /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_output/thinned --thinned-dependencies /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_dependencies_thinned --thinned-info-plist-content /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_generated_info.plist_thinned --unthinned /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_output/unthinned --unthinned-dependencies /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_dependencies_unthinned --unthinned-info-plist-content /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_generated_info.plist_unthinned --output /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/Resources --plist-output /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_generated_info.plist
+note: Emplaced /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/Resources/AppIcon.icns (in target 'OnCue' from project 'OnCue')
+note: Emplaced /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/Resources/Assets.car (in target 'OnCue' from project 'OnCue')
+
 SwiftDriverJobDiscovery normal arm64 Compiling TextExports.swift, ItemMedia.swift, MediaPool.swift, TempoDetector.swift, Consoles.swift, DeviceModel.swift, DeviceOutputs.swift, Model.swift, ProjectModel.swift, ShotVocabulary.swift, TriggerRoutes.swift, BackupFolder.swift, MachineProfile.swift, ProjectCoding.swift, ProjectStorage.swift, ShowCoding.swift, ShowVersions.swift, TolerantDecoding.swift, CameraPlot.swift, UpdateCheck.swift (in target 'OnCueCore' from project 'OnCueCore')
+
+SwiftCompile normal arm64 Compiling\ SmokeTest.swift,\ SoakTest.swift,\ TallySetup.swift,\ Theme.swift,\ TimelineView.swift,\ TourView.swift,\ TriggerRoutesView.swift,\ Updater.swift,\ VersionsView.swift,\ ViewerMonitors.swift,\ WorkspaceCommands.swift,\ WorkspaceModel.swift,\ WorkspaceShell.swift,\ GeneratedAssetSymbols.swift /Users/runner/work/oncue/oncue/OnCue/App/SmokeTest.swift /Users/runner/work/oncue/oncue/OnCue/App/SoakTest.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/TallySetup.swift /Users/runner/work/oncue/oncue/OnCue/UI/Theme.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/TimelineView.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/TourView.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/TriggerRoutesView.swift /Users/runner/work/oncue/oncue/OnCue/App/Updater.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/VersionsView.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/ViewerMonitors.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/WorkspaceCommands.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/WorkspaceModel.swift /Users/runner/work/oncue/oncue/OnCue/Workspace/Shell/WorkspaceShell.swift /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'OnCue' from project 'OnCue')
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/App/SmokeTest.swift (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/App/SoakTest.swift (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/Workspace/TallySetup.swift (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/UI/Theme.swift (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/Workspace/TimelineView.swift (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/Workspace/TourView.swift (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/Workspace/TriggerRoutesView.swift (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/App/Updater.swift (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/Workspace/VersionsView.swift (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/Workspace/ViewerMonitors.swift (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/Workspace/WorkspaceCommands.swift (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/Workspace/WorkspaceModel.swift (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/Workspace/Shell/WorkspaceShell.swift (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    
+
+SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    
 
 SwiftDriver\ Compilation OnCueCore normal arm64 com.apple.xcode.tools.swift.compiler (in target 'OnCueCore' from project 'OnCueCore')
     cd /Users/runner/work/oncue/oncue/OnCue.xcodeproj
@@ -762,25 +761,25 @@ SwiftCompile normal arm64 /Users/runner/work/oncue/oncue/OnCue/Workspace/ShowWor
 
 SwiftDriverJobDiscovery normal arm64 Compiling CameraManagerView.swift, CameraPlotView.swift, CrewController.swift, CueFields.swift, DeviceStatusView.swift, DraftScriptView.swift, ExportView.swift, FrameRatePicker.swift, InspectorView.swift, ItemEditorView.swift, KeyboardShortcutsView.swift, LibraryModel.swift, LibraryView.swift, LiveView.swift, MachineProfileView.swift (in target 'OnCue' from project 'OnCue')
 
-SwiftDriverJobDiscovery normal arm64 Compiling MediaPlayer.swift, MediaPoolView.swift, OnCueApp.swift, OperatorMonitors.swift, PreShowCheckView.swift, ProjectDocument.swift, ProjectPropertiesView.swift, RunningOrderView.swift, SceneSheets.swift, ScreenshotRun.swift, ShotDetails.swift, ShotVocabularyEditor.swift, ShowReportView.swift, ShowSetupView.swift, ShowWorkspaceView.swift (in target 'OnCue' from project 'OnCue')
-
 ExtractAppIntentsMetadata (in target 'OnCueCore' from project 'OnCueCore')
     cd /Users/runner/work/oncue/oncue/Packages/OnCueCore
     /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name OnCueCore --sdk-root /Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk --xcode-version 16F6 --platform-family macOS --deployment-target 14.0 --bundle-identifier oncuecore.OnCueCore --output /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCueCore.appintents --target-triple arm64-apple-macos14.0 --binary-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCueCore.o --dependency-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore_dependency_info.dat --stringsdata-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore.SwiftFileList --metadata-file-list /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/OnCueCore.DependencyMetadataFileList --static-metadata-file-list /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/OnCueCore.DependencyStaticMetadataFileList --swift-const-vals-list /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCueCore.build/Debug/OnCueCore.build/Objects-normal/arm64/OnCueCore.SwiftConstValuesFileList --force --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
-2026-11-13 07:48:38.018 appintentsmetadataprocessor[7288:24457] Starting appintentsmetadataprocessor export
-2026-11-13 07:48:38.098 appintentsmetadataprocessor[7288:24457] Extracted no relevant App Intents symbols, skipping writing output
+2026-11-13 07:48:58.204 appintentsmetadataprocessor[6443:22420] Starting appintentsmetadataprocessor export
+2026-11-13 07:48:58.376 appintentsmetadataprocessor[6443:22420] Extracted no relevant App Intents symbols, skipping writing output
+
+SwiftDriverJobDiscovery normal arm64 Compiling MediaPlayer.swift, MediaPoolView.swift, OnCueApp.swift, OperatorMonitors.swift, PreShowCheckView.swift, ProjectDocument.swift, ProjectPropertiesView.swift, RunningOrderView.swift, SceneSheets.swift, ScreenshotRun.swift, ShotDetails.swift, ShotVocabularyEditor.swift, ShowReportView.swift, ShowSetupView.swift, ShowWorkspaceView.swift (in target 'OnCue' from project 'OnCue')
 
 RegisterExecutionPolicyException /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCueCore.o (in target 'OnCueCore' from project 'OnCueCore')
     cd /Users/runner/work/oncue/oncue/Packages/OnCueCore
     builtin-RegisterExecutionPolicyException /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCueCore.o
 
-ProcessInfoPlistFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/Info.plist /Users/runner/work/oncue/oncue/OnCue/Resources/Info.plist (in target 'OnCue' from project 'OnCue')
-    cd /Users/runner/work/oncue/oncue
-    builtin-infoPlistUtility /Users/runner/work/oncue/oncue/OnCue/Resources/Info.plist -producttype com.apple.product-type.application -genpkginfo /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/PkgInfo -expandbuildsettings -platform macosx -additionalcontentfile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_generated_info.plist -o /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/Info.plist
-
 Ld /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/MacOS/__preview.dylib normal (in target 'OnCue' from project 'OnCue')
     cd /Users/runner/work/oncue/oncue
     /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-macos14.0 -dynamiclib -isysroot /Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -O0 -L/Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug -F/Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/PackageFrameworks -F/Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug -install_name @rpath/OnCue.debug.dylib -rdynamic -Xlinker -no_deduplicate -Xlinker -dependency_info -Xlinker /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue_dependency_info.dat -Xlinker -no_adhoc_codesign -o /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/MacOS/__preview.dylib
+
+ProcessInfoPlistFile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/Info.plist /Users/runner/work/oncue/oncue/OnCue/Resources/Info.plist (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    builtin-infoPlistUtility /Users/runner/work/oncue/oncue/OnCue/Resources/Info.plist -producttype com.apple.product-type.application -genpkginfo /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/PkgInfo -expandbuildsettings -platform macosx -additionalcontentfile /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/assetcatalog_generated_info.plist -o /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/Info.plist
 
 SwiftDriverJobDiscovery normal arm64 Compiling SmokeTest.swift, SoakTest.swift, TallySetup.swift, Theme.swift, TimelineView.swift, TourView.swift, TriggerRoutesView.swift, Updater.swift, VersionsView.swift, ViewerMonitors.swift, WorkspaceCommands.swift, WorkspaceModel.swift, WorkspaceShell.swift, GeneratedAssetSymbols.swift (in target 'OnCue' from project 'OnCue')
 
@@ -801,15 +800,15 @@ Ld /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.a
     cd /Users/runner/work/oncue/oncue
     /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-macos14.0 -isysroot /Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -O0 -L/Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug -F/Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/PackageFrameworks -F/Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug -Xlinker -rpath -Xlinker @executable_path -Xlinker -rpath -Xlinker /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/PackageFrameworks -Xlinker -rpath -Xlinker @executable_path/../Frameworks -rdynamic -Xlinker -no_deduplicate -e ___debug_blank_executor_main -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_dylib -Xlinker /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-DebugDylibPath-normal-arm64.txt -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_instlnm -Xlinker /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-DebugDylibInstallName-normal-arm64.txt -Xlinker -filelist -Xlinker /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue-ExecutorLinkFileList-normal-arm64.txt /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/MacOS/OnCue.debug.dylib -Xlinker -no_adhoc_codesign -o /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/MacOS/OnCue
 
-ExtractAppIntentsMetadata (in target 'OnCue' from project 'OnCue')
-    cd /Users/runner/work/oncue/oncue
-    /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name OnCue --sdk-root /Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk --xcode-version 16F6 --platform-family macOS --deployment-target 14.0 --bundle-identifier com.nishanpani.oncue --output /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/Resources --target-triple arm64-apple-macos14.0 --binary-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/MacOS/OnCue --dependency-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue_dependency_info.dat --stringsdata-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue.SwiftFileList --metadata-file-list /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue.DependencyMetadataFileList --static-metadata-file-list /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue.DependencyStaticMetadataFileList --swift-const-vals-list /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
-2026-11-13 07:49:41.694 appintentsmetadataprocessor[9448:30314] Starting appintentsmetadataprocessor export
-2026-11-13 07:49:41.697 appintentsmetadataprocessor[9448:30314] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
-
 CopySwiftLibs /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app (in target 'OnCue' from project 'OnCue')
     cd /Users/runner/work/oncue/oncue
     builtin-swiftStdLibTool --copy --verbose --sign - --scan-executable /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/MacOS/OnCue.debug.dylib --scan-folder /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/Frameworks --scan-folder /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/PlugIns --scan-folder /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/Library/SystemExtensions --scan-folder /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/Extensions --platform macosx --toolchain /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+ExtractAppIntentsMetadata (in target 'OnCue' from project 'OnCue')
+    cd /Users/runner/work/oncue/oncue
+    /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name OnCue --sdk-root /Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk --xcode-version 16F6 --platform-family macOS --deployment-target 14.0 --bundle-identifier com.nishanpani.oncue --output /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/Resources --target-triple arm64-apple-macos14.0 --binary-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/MacOS/OnCue --dependency-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue_dependency_info.dat --stringsdata-file /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue.SwiftFileList --metadata-file-list /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue.DependencyMetadataFileList --static-metadata-file-list /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/OnCue.DependencyStaticMetadataFileList --swift-const-vals-list /Users/runner/work/oncue/oncue/build/DerivedData/Build/Intermediates.noindex/OnCue.build/Debug/OnCue.build/Objects-normal/arm64/OnCue.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2026-11-13 07:50:11.800 appintentsmetadataprocessor[8720:28468] Starting appintentsmetadataprocessor export
+2026-11-13 07:50:11.803 appintentsmetadataprocessor[8720:28468] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
 
 CodeSign /Users/runner/work/oncue/oncue/build/DerivedData/Build/Products/Debug/OnCue.app/Contents/MacOS/OnCue.debug.dylib (in target 'OnCue' from project 'OnCue')
     cd /Users/runner/work/oncue/oncue
