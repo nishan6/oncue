@@ -246,7 +246,7 @@ struct NewProjectSheet: View {
                 VStack(alignment: .leading, spacing: Space.m) {
                     section("Show")
                     Form {
-                        TextField("Name", text: $name, prompt: Text("Karbi Anglong Day"))
+                        TextField("Name", text: $name, prompt: Text("Show name"))
                         TextField("Artist", text: $artist)
                         TextField("Venue", text: $venue)
                         HStack {
