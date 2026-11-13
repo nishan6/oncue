@@ -1,0 +1,60 @@
+TITLE: Live at the Arena – Neon Skyline
+FCM: NON-DROP FRAME
+
+001  001      V     C        01:00:00:00 01:00:00:01 01:00:00:00 01:00:00:01
+ |C:ResolveColorBlue |M:Shot 1 Wide – Wide, lights up |D:1
+
+002  001      V     C        01:00:07:13 01:00:07:14 01:00:07:13 01:00:07:14
+ |C:ResolveColorPurple |M:Shot 2 Jib – Jib push in |D:1
+
+003  001      V     C        01:00:15:00 01:00:15:01 01:00:15:00 01:00:15:01
+ |C:ResolveColorYellow |M:Shot 3 Centre – Vocals, mid |D:1
+
+004  001      V     C        01:00:22:13 01:00:22:14 01:00:22:13 01:00:22:14
+ |C:ResolveColorCyan |M:Shot 4 Stage left – Guitar, tight on hands |D:1
+
+005  001      V     C        01:00:30:00 01:00:30:01 01:00:30:00 01:00:30:01
+ |C:ResolveColorYellow |M:Shot 5 Centre – Vocals, close |D:1
+
+006  001      V     C        01:00:37:13 01:00:37:14 01:00:37:13 01:00:37:14
+ |C:ResolveColorYellow |M:Shot 6 Drums – Drums, overhead |D:1
+
+007  001      V     C        01:00:45:00 01:00:45:01 01:00:45:00 01:00:45:01
+ |C:ResolveColorRed |M:Shot 7 Steadicam – Steadicam orbit |D:1
+
+008  001      V     C        01:00:52:13 01:00:52:14 01:00:52:13 01:00:52:14
+ |C:ResolveColorPink |M:Shot 8 Stage right – Keys, mid |D:1
+
+009  001      V     C        01:01:00:00 01:01:00:01 01:01:00:00 01:01:00:01
+ |C:ResolveColorBlue |M:Shot 9 Wide – Wide, chorus hit |D:1
+
+010  001      V     C        01:01:03:19 01:01:03:20 01:01:03:19 01:01:03:20
+ |C:ResolveColorCyan |M:Shot 10 Crowd – Crowd, hands up |D:1
+
+011  001      V     C        01:01:07:13 01:01:07:14 01:01:07:13 01:01:07:14
+ |C:ResolveColorYellow |M:Shot 11 Centre – Vocals, close |D:1
+
+012  001      V     C        01:01:15:00 01:01:15:01 01:01:15:00 01:01:15:01
+ |C:ResolveColorPurple |M:Shot 12 Jib – Jib high wide |D:1
+
+013  001      V     C        01:01:30:00 01:01:30:01 01:01:30:00 01:01:30:01
+ |C:ResolveColorCyan |M:Shot 13 Stage left – Guitar solo, tight |D:1
+
+014  001      V     C        01:01:45:00 01:01:45:01 01:01:45:00 01:01:45:01
+ |C:ResolveColorYellow |M:Shot 14 Centre – Vocals, mid |D:1
+
+015  001      V     C        01:02:00:00 01:02:00:01 01:02:00:00 01:02:00:01
+ |C:ResolveColorBlue |M:Shot 15 Wide – Wide |D:1
+
+016  001      V     C        01:02:07:13 01:02:07:14 01:02:07:13 01:02:07:14
+ |C:ResolveColorCyan |M:Shot 16 Crowd – Crowd |D:1
+
+017  001      V     C        01:02:15:00 01:02:15:01 01:02:15:00 01:02:15:01
+ |C:ResolveColorPurple |M:Shot 17 Jib – Jib sweep |D:1
+
+018  001      V     C        01:02:30:00 01:02:30:01 01:02:30:00 01:02:30:01
+ |C:ResolveColorYellow |M:Shot 18 Centre – Vocals, close, final line |D:1
+
+019  001      V     C        01:02:37:13 01:02:37:14 01:02:37:13 01:02:37:14
+ |C:ResolveColorBlue |M:Shot 19 Wide – Wide, blackout |D:1
+
