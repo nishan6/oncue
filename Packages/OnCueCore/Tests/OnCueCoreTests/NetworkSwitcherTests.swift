@@ -3,8 +3,9 @@ import XCTest
 
 final class NetworkSwitcherTests: XCTestCase {
     func testVMixTally() {
+        // One digit per input from input 1: input 2 on preview, input 4 on program.
         let t = VMixProtocol.parseTally("TALLY OK 0201000")
-        XCTAssertEqual(t?.program, 3)
+        XCTAssertEqual(t?.program, 4)
         XCTAssertEqual(t?.preview, 2)
         XCTAssertNil(VMixProtocol.parseTally("FUNCTION OK Completed"))
         XCTAssertNil(VMixProtocol.parseTally("TALLY OK 0000")?.program)
