@@ -272,6 +272,7 @@ struct TimelineEditorView: View {
                         TimelineCanvas(show: show, item: item, model: model, metrics: metrics, width: width,
                                        lanes: lanes, shotHeight: shotHeight, focus: { focused = true })
                             .background(HorizontalScrollDriver(request: scrollRequest))
+                            .background(PinchZoom(zoom: model.zoom) { model.zoom = $0 })
                     }
                     .scrollIndicators(.visible)
                     .onAppear { reveal(metrics) }
@@ -1377,5 +1378,86 @@ struct CueQuickEditor: View {
         }
         .padding(Space.l)
         .frame(width: 360)
+    }
+}
+
+
+/// Trackpad pinch (and ⌘ + scroll wheel) zooms the timeline, keeping the spot under the pointer
+/// where it is. Content x is proportional to zoom, so the anchor scales with it.
+struct PinchZoom: NSViewRepresentable {
+    let zoom: Double
+    let setZoom: (Double) -> Void
+
+    static let range = 0.15...6.0
+
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView()
+        context.coordinator.view = view
+        context.coordinator.install()
+        return view
+    }
+
+    func updateNSView(_ view: NSView, context: Context) {
+        context.coordinator.zoom = zoom
+        context.coordinator.setZoom = setZoom
+    }
+
+    static func dismantleNSView(_ view: NSView, coordinator: Coordinator) { coordinator.remove() }
+
+    func makeCoordinator() -> Coordinator { Coordinator(zoom: zoom, setZoom: setZoom) }
+
+    final class Coordinator {
+        weak var view: NSView?
+        var zoom: Double
+        var setZoom: (Double) -> Void
+        private var monitor: Any?
+
+        init(zoom: Double, setZoom: @escaping (Double) -> Void) {
+            self.zoom = zoom
+            self.setZoom = setZoom
+        }
+
+        func install() {
+            monitor = NSEvent.addLocalMonitorForEvents(matching: [.magnify, .scrollWheel]) { [weak self] event in
+                guard let self else { return event }
+                switch event.type {
+                case .magnify:
+                    return self.zoom(by: 1 + event.magnification, event: event) ? nil : event
+                case .scrollWheel where event.modifierFlags.contains(.command):
+                    let delta = event.hasPreciseScrollingDeltas ? event.scrollingDeltaY / 200 : event.scrollingDeltaY / 20
+                    return self.zoom(by: 1 + delta, event: event) ? nil : event
+                default:
+                    return event
+                }
+            }
+        }
+
+        func remove() {
+            if let monitor { NSEvent.removeMonitor(monitor) }
+            monitor = nil
+        }
+
+        /// Zooms when the pointer is over this timeline. Returns true when the event was used.
+        private func zoom(by factor: Double, event: NSEvent) -> Bool {
+            guard let view, let window = view.window, event.window === window,
+                  let scroll = view.enclosingScrollView else { return false }
+            let clip = scroll.contentView
+            let inClip = clip.convert(event.locationInWindow, from: nil)
+            guard clip.bounds.contains(inClip) else { return false }
+            let old = zoom
+            let new = min(max(old * factor, PinchZoom.range.lowerBound), PinchZoom.range.upperBound)
+            guard abs(new - old) > 1e-6 else { return true }
+            let pointerInView = inClip.x - clip.bounds.origin.x          // pointer's place in the visible area
+            let anchor = inClip.x * CGFloat(new / old)                   // the same content spot after zooming
+            zoom = new
+            setZoom(new)
+            DispatchQueue.main.async {
+                let contentWidth = scroll.documentView?.frame.width ?? 0
+                let originX = max(0, min(anchor - pointerInView, contentWidth - clip.bounds.width))
+                clip.setBoundsOrigin(NSPoint(x: originX, y: clip.bounds.origin.y))
+                scroll.reflectScrolledClipView(clip)
+            }
+            return true
+        }
     }
 }
