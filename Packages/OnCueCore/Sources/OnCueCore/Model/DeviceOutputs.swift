@@ -7,7 +7,7 @@ import Foundation
 // can be simulated: OnCue shows what it would send and nothing leaves the Mac.
 
 public enum DeviceTargetKind: String, Codable, CaseIterable, Identifiable {
-    case midi, tcp, udp, http, serial, artNet, sACN, hyperDeck
+    case midi, tcp, udp, http, serial, artNet, sACN, hyperDeck, console
     public var id: String { rawValue }
     public var label: String {
         switch self {
@@ -19,6 +19,7 @@ public enum DeviceTargetKind: String, Codable, CaseIterable, Identifiable {
         case .artNet: return "Art-Net DMX"
         case .sACN: return "sACN DMX (E1.31)"
         case .hyperDeck: return "HyperDeck"
+        case .console: return "Console"
         }
     }
     /// What a cue can send to this kind of target.
@@ -29,6 +30,7 @@ public enum DeviceTargetKind: String, Codable, CaseIterable, Identifiable {
         case .http: return [.http]
         case .artNet, .sACN: return [.dmx]
         case .hyperDeck: return [.hyperDeck]
+        case .console: return [.console]
         }
     }
 }
@@ -72,6 +74,8 @@ public struct DeviceTarget: Identifiable, Codable, Hashable {
     public var universe: Int = 0
     /// Nothing leaves the Mac; what would be sent is shown in Live.
     public var simulated = false
+    /// For consoles: which console and its settings.
+    public var console = ConsoleSettings()
 
     public init(name: String, kind: DeviceTargetKind) {
         self.name = name
@@ -87,7 +91,7 @@ public struct DeviceTarget: Identifiable, Codable, Hashable {
 }
 
 public enum DeviceSendKind: String, Codable, CaseIterable, Identifiable {
-    case midiNote, midiCC, midiProgram, msc, text, http, dmx, hyperDeck
+    case midiNote, midiCC, midiProgram, msc, text, http, dmx, hyperDeck, console
     public var id: String { rawValue }
     public var label: String {
         switch self {
@@ -99,6 +103,7 @@ public enum DeviceSendKind: String, Codable, CaseIterable, Identifiable {
         case .http: return "HTTP request"
         case .dmx: return "DMX level"
         case .hyperDeck: return "HyperDeck"
+        case .console: return "Console action"
         }
     }
 }
@@ -156,6 +161,7 @@ public struct DeviceSend: Codable, Hashable {
     /// Clip number for Go to clip; file name for Record (empty = the deck's own naming).
     public var clip: Int = 1
     public var recordName: String = ""
+    public var console = ConsoleAction()
 
     public init(kind: DeviceSendKind = .text) { self.kind = kind }
 
@@ -168,6 +174,7 @@ public struct DeviceSend: Codable, Hashable {
         case .text: return text.isEmpty ? "(empty string)" : text
         case .http: return "\(method.rawValue) \(path)"
         case .dmx: return "Ch \(dmxChannel) @ \(dmxLevel)" + (dmxFade > 0 ? " in \(String(format: "%g", dmxFade)) s" : "")
+        case .console: return console.summary
         case .hyperDeck:
             switch hyperDeck {
             case .gotoClip: return "Go to clip \(clip)"

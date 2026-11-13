@@ -53,6 +53,8 @@ final class DeviceOutputService {
                     deck.kind = .tcp
                     error = sendNetwork(Array(DeviceWire.hyperDeck(payload).utf8), to: deck)
                 }
+            case .console:
+                if payload.kind == .console { error = sendConsole(payload.console, to: target) }
             case .artNet, .sACN: break
             }
         }
@@ -99,6 +101,35 @@ final class DeviceOutputService {
     private func sendNetwork(_ bytes: [UInt8], to target: DeviceTarget) -> String? {
         guard let c = connection(target, host: target.host, port: target.port, udp: target.kind == .udp) else { return "No address set" }
         c.send(content: Data(bytes), completion: .contentProcessed { _ in })
+        return nil
+    }
+
+    private func sendConsole(_ action: ConsoleAction, to target: DeviceTarget) -> String? {
+        let s = target.console
+        let messages = ConsoleWire.messages(action, settings: s)
+        guard !messages.isEmpty else { return "\(s.kind.label) can't do “\(action.kind.label)”" }
+        let port = target.port > 0 ? target.port : s.kind.defaultPort
+        let isNew = connections[target.id] == nil
+        guard let c = connection(target, host: target.host, port: port, udp: s.kind.udp) else { return "No address set" }
+        if isNew {
+            for line in ConsoleWire.greeting(s) { c.send(content: Data((line + "\r\n").utf8), completion: .contentProcessed { _ in }) }
+        }
+        for m in messages {
+            let data: Data
+            switch m {
+            case .osc(let address, let args):
+                data = OSC.encode(address: address, args: args.map {
+                    switch $0 {
+                    case .int(let v): return .int(Int32(clamping: v))
+                    case .float(let v): return .float(Float(v))
+                    case .string(let v): return .string(v)
+                    }
+                })
+            case .line(let text): data = Data((text + "\r\n").utf8)
+            case .bytes(let b): data = Data(b)
+            }
+            c.send(content: data, completion: .contentProcessed { _ in })
+        }
         return nil
     }
 

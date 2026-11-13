@@ -399,6 +399,32 @@ extension DeviceTarget {
         baseURL = try c.value("baseURL", baseURL)
         universe = try c.value("universe", universe)
         simulated = try c.value("simulated", false)
+        console = try c.value("console", ConsoleSettings())
+    }
+}
+
+extension ConsoleSettings {
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: AnyCodingKey.self)
+        self.init(kind: try c.enumValue("kind", .grandMA3))
+        prefix = try c.value("prefix", "gma3")
+        user = try c.value("user", "administrator")
+        password = try c.value("password", "")
+        midiChannel = try c.value("midiChannel", 1)
+        yamahaTF = try c.value("yamahaTF", false)
+    }
+}
+
+extension ConsoleAction {
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: AnyCodingKey.self)
+        self.init(kind: try c.enumValue("kind", .goCue))
+        number = try c.value("number", 1.0)
+        list = try c.value("list", 1)
+        channel = try c.value("channel", 1)
+        on = try c.value("on", true)
+        level = try c.value("level", 0.0)
+        text = try c.value("text", "")
     }
 }
 
@@ -424,6 +450,7 @@ extension DeviceSend {
         hyperDeck = try c.enumValue("hyperDeck", .record)
         clip = try c.value("clip", 1)
         recordName = try c.value("recordName", "")
+        console = try c.value("console", ConsoleAction())
     }
 }
 
