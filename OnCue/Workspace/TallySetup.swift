@@ -294,6 +294,10 @@ private struct DeviceTargetCard: View {
             case .tcp, .udp:
                 hostPort
                 lineEnding
+            case .hyperDeck:
+                hostPort
+                Text("Blackmagic HyperDeck Ethernet Protocol (port 9993). Turn on Remote in the deck's setup.")
+                    .font(.ocMeta).foregroundStyle(Gallery.faint)
             case .http:
                 PropertyRow(label: "Address") {
                     CommitField(placeholder: "http://192.168.10.20:8000", value: target.baseURL, font: .readout(13)) { text in

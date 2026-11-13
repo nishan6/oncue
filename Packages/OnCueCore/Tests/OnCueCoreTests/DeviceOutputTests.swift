@@ -126,3 +126,17 @@ final class EngineDeviceTests: XCTestCase {
         XCTAssertEqual(c.tallyInProgram[tally.id], other.input)
     }
 }
+
+final class HyperDeckTests: XCTestCase {
+    func testCommands() {
+        var s = DeviceSend(kind: .hyperDeck)
+        XCTAssertEqual(DeviceWire.hyperDeck(s), "record\r\n")
+        s.recordName = "Song 3 ISO"
+        XCTAssertEqual(DeviceWire.hyperDeck(s), "record: name: Song 3 ISO\r\n")
+        s.hyperDeck = .gotoClip; s.clip = 4
+        XCTAssertEqual(DeviceWire.hyperDeck(s), "goto: clip id: 4\r\n")
+        s.hyperDeck = .playLoop
+        XCTAssertEqual(DeviceWire.hyperDeck(s), "play: loop: true\r\n")
+        XCTAssertEqual(DeviceTarget(name: "Deck", kind: .hyperDeck).port, 9993)
+    }
+}

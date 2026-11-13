@@ -183,6 +183,19 @@ struct CueFields: View {
                 if send.method != .get {
                     PropertyRow(label: "Body") { textField("optional", send.body) { v in setSend { $0.body = v } } }
                 }
+            case .hyperDeck:
+                PropertyRow(label: "Action") {
+                    Picker("", selection: Binding(get: { send.hyperDeck }, set: { v in setSend { $0.hyperDeck = v } })) {
+                        ForEach(HyperDeckAction.allCases) { Text($0.label).tag($0) }
+                    }
+                    .labelsHidden().frame(width: 160)
+                }
+                if send.hyperDeck == .gotoClip {
+                    PropertyRow(label: "Clip") { intField(send.clip, 1...9999) { v in setSend { $0.clip = v } } }
+                }
+                if send.hyperDeck == .record {
+                    PropertyRow(label: "File name") { textField("Deck's own naming", send.recordName) { v in setSend { $0.recordName = v } } }
+                }
             case .dmx:
                 PropertyRow(label: "Channel") { intField(send.dmxChannel, 1...512) { v in setSend { $0.dmxChannel = v } } }
                 PropertyRow(label: "Level") { intField(send.dmxLevel, 0...255) { v in setSend { $0.dmxLevel = v } } }

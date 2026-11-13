@@ -7,7 +7,7 @@ import Foundation
 // can be simulated: OnCue shows what it would send and nothing leaves the Mac.
 
 public enum DeviceTargetKind: String, Codable, CaseIterable, Identifiable {
-    case midi, tcp, udp, http, serial, artNet, sACN
+    case midi, tcp, udp, http, serial, artNet, sACN, hyperDeck
     public var id: String { rawValue }
     public var label: String {
         switch self {
@@ -18,6 +18,7 @@ public enum DeviceTargetKind: String, Codable, CaseIterable, Identifiable {
         case .serial: return "Serial (RS-232/422)"
         case .artNet: return "Art-Net DMX"
         case .sACN: return "sACN DMX (E1.31)"
+        case .hyperDeck: return "HyperDeck"
         }
     }
     /// What a cue can send to this kind of target.
@@ -27,6 +28,7 @@ public enum DeviceTargetKind: String, Codable, CaseIterable, Identifiable {
         case .tcp, .udp, .serial: return [.text]
         case .http: return [.http]
         case .artNet, .sACN: return [.dmx]
+        case .hyperDeck: return [.hyperDeck]
         }
     }
 }
@@ -78,13 +80,14 @@ public struct DeviceTarget: Identifiable, Codable, Hashable {
         case .artNet: port = 6454; universe = 0
         case .sACN: port = 5568; universe = 1
         case .http: baseURL = "http://"
+        case .hyperDeck: port = 9993
         default: break
         }
     }
 }
 
 public enum DeviceSendKind: String, Codable, CaseIterable, Identifiable {
-    case midiNote, midiCC, midiProgram, msc, text, http, dmx
+    case midiNote, midiCC, midiProgram, msc, text, http, dmx, hyperDeck
     public var id: String { rawValue }
     public var label: String {
         switch self {
@@ -95,6 +98,24 @@ public enum DeviceSendKind: String, Codable, CaseIterable, Identifiable {
         case .text: return "String"
         case .http: return "HTTP request"
         case .dmx: return "DMX level"
+        case .hyperDeck: return "HyperDeck"
+        }
+    }
+}
+
+/// HyperDeck transport commands (Blackmagic HyperDeck Ethernet Protocol, TCP 9993).
+public enum HyperDeckAction: String, Codable, CaseIterable, Identifiable {
+    case record, stop, play, playLoop, gotoClip, nextClip, previousClip
+    public var id: String { rawValue }
+    public var label: String {
+        switch self {
+        case .record: return "Record"
+        case .stop: return "Stop"
+        case .play: return "Play"
+        case .playLoop: return "Play looped"
+        case .gotoClip: return "Go to clip"
+        case .nextClip: return "Next clip"
+        case .previousClip: return "Previous clip"
         }
     }
 }
@@ -131,6 +152,10 @@ public struct DeviceSend: Codable, Hashable {
     public var dmxChannel: Int = 1
     public var dmxLevel: Int = 255
     public var dmxFade: Double = 0
+    public var hyperDeck: HyperDeckAction = .record
+    /// Clip number for Go to clip; file name for Record (empty = the deck's own naming).
+    public var clip: Int = 1
+    public var recordName: String = ""
 
     public init(kind: DeviceSendKind = .text) { self.kind = kind }
 
@@ -143,6 +168,12 @@ public struct DeviceSend: Codable, Hashable {
         case .text: return text.isEmpty ? "(empty string)" : text
         case .http: return "\(method.rawValue) \(path)"
         case .dmx: return "Ch \(dmxChannel) @ \(dmxLevel)" + (dmxFade > 0 ? " in \(String(format: "%g", dmxFade)) s" : "")
+        case .hyperDeck:
+            switch hyperDeck {
+            case .gotoClip: return "Go to clip \(clip)"
+            case .record: return recordName.isEmpty ? "Record" : "Record “\(recordName)”"
+            default: return hyperDeck.label
+            }
         }
     }
 }
@@ -201,6 +232,21 @@ public enum DeviceWire {
             i += 1
         }
         return out + ending.bytes
+    }
+
+    /// HyperDeck Ethernet Protocol command line.
+    public static func hyperDeck(_ s: DeviceSend) -> String {
+        switch s.hyperDeck {
+        case .record:
+            let name = s.recordName.replacingOccurrences(of: "\n", with: " ").trimmingCharacters(in: .whitespaces)
+            return name.isEmpty ? "record\r\n" : "record: name: \(name)\r\n"
+        case .stop: return "stop\r\n"
+        case .play: return "play\r\n"
+        case .playLoop: return "play: loop: true\r\n"
+        case .gotoClip: return "goto: clip id: \(max(1, s.clip))\r\n"
+        case .nextClip: return "goto: clip id: +1\r\n"
+        case .previousClip: return "goto: clip id: -1\r\n"
+        }
     }
 
     /// The URL for an HTTP cue: a full URL in the path wins, otherwise base + path.

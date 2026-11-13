@@ -421,6 +421,9 @@ extension DeviceSend {
         dmxChannel = try c.value("dmxChannel", 1)
         dmxLevel = try c.value("dmxLevel", 255)
         dmxFade = try c.value("dmxFade", 0.0)
+        hyperDeck = try c.enumValue("hyperDeck", .record)
+        clip = try c.value("clip", 1)
+        recordName = try c.value("recordName", "")
     }
 }
 

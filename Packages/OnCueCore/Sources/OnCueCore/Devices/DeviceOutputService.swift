@@ -47,6 +47,12 @@ final class DeviceOutputService {
             case .serial:
                 error = sendSerial(DeviceWire.text(payload.text, ending: target.lineEnding), to: target)
             case .http: error = sendHTTP(payload, to: target)
+            case .hyperDeck:
+                if payload.kind == .hyperDeck {
+                    var deck = target
+                    deck.kind = .tcp
+                    error = sendNetwork(Array(DeviceWire.hyperDeck(payload).utf8), to: deck)
+                }
             case .artNet, .sACN: break
             }
         }
