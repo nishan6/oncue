@@ -14,6 +14,6 @@ Runtime Version=15.5.0
 hdiutil: verify: checksum of "/Users/runner/work/_temp/dist/OnCue-0.1.0-1.dmg" is VALID
 Made /Users/runner/work/_temp/dist/OnCue-0.1.0-1.dmg (4.0M)
 total 8096
-drwxr-xr-x   3 runner  staff       96 Nov 13 00:23 .
-drwxr-xr-x  15 runner  staff      480 Nov 13 00:23 ..
--rw-r--r--@  1 runner  staff  4141282 Nov 13 00:23 OnCue-0.1.0-1.dmg
+drwxr-xr-x   3 runner  staff       96 Nov 13 02:55 .
+drwxr-xr-x  15 runner  staff      480 Nov 13 02:55 ..
+-rw-r--r--@  1 runner  staff  4141291 Nov 13 02:55 OnCue-0.1.0-1.dmg
