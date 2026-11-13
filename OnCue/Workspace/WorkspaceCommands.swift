@@ -48,6 +48,8 @@ struct WorkspaceCommands: Commands {
                 .keyboardShortcut("c", modifiers: [.command, .option])
             Button("Trigger Routes…") { workspace?.triggerRoutesOpen = true }
                 .keyboardShortcut("r", modifiers: [.command, .option])
+            Button("Device Status…") { workspace?.deviceStatusOpen = true }
+                .keyboardShortcut("d", modifiers: [.command, .option])
             Button("Show or Hide Inspector") { workspace?.showInspector.toggle() }
                 .keyboardShortcut("i", modifiers: [.command, .option])
             }

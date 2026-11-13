@@ -924,6 +924,7 @@ final class WorkspaceModel: ObservableObject {
     }
 
     @Published var triggerRoutesOpen = false
+    @Published var deviceStatusOpen = false
 
     /// Leaves Live Mode, selecting the song and the shot that was on air.
     func exitLive() {

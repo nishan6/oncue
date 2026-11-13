@@ -77,6 +77,7 @@ private struct ShowSheets: ViewModifier {
             .sheet(isPresented: $model.preShowCheckOpen) { PreShowCheckView(show: show, model: model) }
             .sheet(isPresented: $model.plotOpen) { CameraPlotView(show: show, model: model) }
             .sheet(isPresented: $model.tourOpen) { TourView(show: show, model: model) }
+            .sheet(isPresented: $model.deviceStatusOpen) { DeviceStatusView(show: show, model: model) }
             .modifier(SceneSheets(show: show, project: project, fileURL: fileURL, model: model))
     }
 }
