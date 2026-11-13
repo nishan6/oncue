@@ -164,7 +164,13 @@ struct LibraryView: View {
             do {
                 try await openDocument(at: url)
             } catch {
-                library.errorMessage = "Opening didn't work: \(error.localizedDescription)"
+                // macOS may not know .oncue is an OnCue project yet (another copy of OnCue, or an
+                // older one, registered the extension first): open it as one by name.
+                do {
+                    try ProjectOpener.open(url)
+                } catch {
+                    library.errorMessage = "Opening didn't work: \(error.localizedDescription)"
+                }
             }
         }
     }

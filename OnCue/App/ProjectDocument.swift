@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 import UniformTypeIdentifiers
 import OnCueCore
 
@@ -39,5 +40,24 @@ struct ProjectDocument: FileDocument {
             throw ShowFileError.invalidContent("this older show must be brought into a project first; the original file is left untouched")
         }
         return try ProjectPackage.fileWrapper(for: project, existing: configuration.existingFile)
+    }
+}
+
+
+/// Opens a .oncue project as an OnCue project explicitly, without asking macOS what kind of file
+/// it is. Used when Launch Services maps .oncue to a plain folder (an older or second copy of
+/// OnCue registered the extension) so projects still open.
+enum ProjectOpener {
+    static func open(_ url: URL) throws {
+        let dc = NSDocumentController.shared
+        if let open = dc.document(for: url) {
+            open.showWindows()
+            return
+        }
+        let doc = try dc.makeDocument(withContentsOf: url, ofType: UTType.onCueShow.identifier)
+        dc.addDocument(doc)
+        doc.makeWindowControllers()
+        doc.showWindows()
+        dc.noteNewRecentDocument(doc)
     }
 }

@@ -135,7 +135,8 @@ enum SampleProject {
             project.properties.shots.cast = ScreenshotRun.sampleCast
             try ProjectPackage.write(project, to: url)
             NSDocumentController.shared.openDocument(withContentsOf: url, display: true) { _, _, error in
-                if let error { NSAlert(error: error).runModal() }
+                guard error != nil else { return }
+                do { try ProjectOpener.open(url) } catch { NSAlert(error: error).runModal() }
             }
         } catch {
             NSAlert(error: error).runModal()
