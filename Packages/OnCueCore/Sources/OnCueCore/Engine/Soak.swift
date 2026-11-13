@@ -37,6 +37,8 @@ public struct SoakVerdict: Equatable {
 public enum SoakReport {
     /// Allowed memory growth after the first quarter of the run (log entries and caches settle there).
     public static let memoryAllowanceMB = 64.0
+    /// Show seconds without a take that count as a stall.
+    public static let stallLimit = 30.0 * 60
 
     /// The latest a take may land, in show seconds: two engine ticks at this speed plus 40 ms.
     public static func latenessLimit(speed: Double) -> Double { 2 * speed / 60 + 0.04 }
@@ -66,8 +68,16 @@ public enum SoakReport {
         // Takes keep happening to the end (no stall).
         let lastQuarter = samples.first { $0.show >= last.show * 0.75 } ?? samples[0]
         lines.append("Scripted takes: \(last.takes) (\(last.takes - lastQuarter.takes) in the last quarter).")
+        // The longest stretch without a take (the soak plays songs back to back, so anything
+        // longer than a song means the show stalled).
+        var longest = 0.0, since = samples[0].show, lastTakes = samples[0].takes
+        for x in samples.dropFirst() {
+            if x.takes > lastTakes { since = x.show; lastTakes = x.takes }
+            longest = max(longest, x.show - since)
+        }
+        lines.append(String(format: "Longest stretch without a take: %.0f show minutes.", longest / 60))
         if last.takes == 0 { fail("no shots were taken") }
-        else if last.takes - lastQuarter.takes == 0 { fail("no shots were taken in the last quarter: the show stalled") }
+        else if longest > stallLimit { fail(String(format: "the show stalled: no take for %.0f show minutes", longest / 60)) }
 
         // Timing.
         if lateness.isEmpty {
