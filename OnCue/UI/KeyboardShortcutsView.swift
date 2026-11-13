@@ -21,6 +21,9 @@ struct KeyboardShortcutsView: View {
         ]),
         ShortcutGroup(title: "Script", keys: [
             ("Return  or  ⌘Return", "New shot after the selected one"), ("1 – 99", "Camera for the selected shot"),
+            ("a – z", "Shot bar: type \"cu push 2s lead vocal\" for the selected shots, Return applies"),
+            ("⌥-drag", "Copy a shot or selection"), ("Drag on empty timeline", "Select every shot in that range"),
+            ("Pinch  or  ⌘-scroll", "Zoom the timeline at the pointer"),
             ("←  →", "Select the previous or next shot (timeline)"), ("↑  ↓", "Select shots (list)"),
             ("⌥⌘↑  ⌥⌘↓", "Move the shot up or down"), ("⌘D", "Duplicate shot"), ("⌥⌘T", "Switch cut or transition"),
             ("⌘⌫  or  Delete", "Delete the selection"), ("⌥⌘N", "New song"), ("⌥⇧⌘N", "New segment"), ("⌥⌘E", "New section"),

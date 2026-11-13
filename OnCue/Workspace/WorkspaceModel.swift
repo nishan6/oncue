@@ -941,6 +941,9 @@ final class WorkspaceModel: ObservableObject {
         controller.configureTriggers(routes: project.properties.triggerRoutes, chase: project.properties.chase)
     }
 
+    /// The shot bar under the timeline (type "cu push 2s lead" with shots selected).
+    @Published var shotBarOpen = false
+    @Published var shotBarText = ""
     @Published var triggerRoutesOpen = false
     @Published var deviceStatusOpen = false
 

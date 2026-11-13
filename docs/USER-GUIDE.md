@@ -52,6 +52,13 @@ To try everything without kit: **Help › Open Sample Project**.
   bars or time.
 - **Add a shot:** Return. **Pick the camera:** type its number (two digits quickly for 10+).
   Arrow keys move between shots; ⌥⌘↑/↓ moves a shot.
+- **Type a shot:** with shots selected, just start typing, e.g. `cu push 2s lead vocal`. Words
+  from your lists set size, movement, framing, subjects and status, a number sets the camera,
+  and anything else becomes the description. Return applies to every selected shot.
+- **On the timeline:** pinch (or ⌘-scroll) to zoom at the pointer; drag a selection to move it
+  together; ⌥-drag to copy; drag on empty timeline to select a range; drag a shot's right edge
+  to move the next cut; right-click to set camera, size, movement, framing, subjects, status and
+  transition for the whole selection; double-click to type the description.
 - **Shot details** (inspector › Info): size, movement, framing, subjects, transition (cut, mix,
   dip, wipe, DVE, stinger or your own) with its length in frames, notes, and status. Statuses are
   Planned, Confirmed and Cut, plus your own; shots marked Cut stay in the script greyed out and are

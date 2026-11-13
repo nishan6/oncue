@@ -285,6 +285,9 @@ struct TimelineEditorView: View {
                 }
                 .scrollIndicators(.automatic)
                 Spacer(minLength: 0)
+                if model.shotBarOpen {
+                    ShotBar(show: show, model: model) { focused = true }
+                }
             }
         }
         .background(Gallery.canvas)
@@ -293,6 +296,13 @@ struct TimelineEditorView: View {
         .focused($focused)
         .onKeyPress(characters: .decimalDigits) { press in
             model.typeCameraDigit(press.characters)
+            return .handled
+        }
+        .onKeyPress(characters: .letters) { press in
+            // Typing a word with shots selected opens the shot bar: "cu push 2s lead vocal".
+            guard !model.selectedShotIDs.isEmpty, press.modifiers.isDisjoint(with: [.command, .control, .option]) else { return .ignored }
+            model.shotBarText = press.characters
+            model.shotBarOpen = true
             return .handled
         }
         .onKeyPress(.return) {
@@ -1567,5 +1577,67 @@ struct PinchZoom: NSViewRepresentable {
             }
             return true
         }
+    }
+}
+
+
+/// The bar under the timeline that opens when you type with shots selected. Words become size,
+/// movement, framing, subjects and status from the project's lists; a number is the camera; the
+/// rest is the description. Return applies to every selected shot, Esc closes.
+struct ShotBar: View {
+    let show: Show
+    @ObservedObject var model: WorkspaceModel
+    let done: () -> Void
+    @FocusState private var focused: Bool
+
+    var body: some View {
+        let vocab = model.project.properties.shots
+        let phrase = ShotPhrase.parse(model.shotBarText, vocabulary: vocab)
+        let count = model.selectedShotIDs.count
+        HStack(spacing: Space.m) {
+            Image(systemName: "text.cursor").foregroundStyle(Gallery.selection)
+            TextField("cu push 2s lead vocal  ·  a number sets the camera  ·  other words are the description",
+                      text: $model.shotBarText)
+                .textFieldStyle(.plain)
+                .font(.ocBody)
+                .focused($focused)
+                .onSubmit { apply(phrase) }
+                .onExitCommand { close() }
+            Text(phrase.summary(vocab).isEmpty ? "" : phrase.summary(vocab))
+                .font(.ocMeta).foregroundStyle(Gallery.dim).lineLimit(1)
+            Text(count == 1 ? "1 shot" : "\(count) shots").font(.ocMeta).foregroundStyle(Gallery.faint)
+            Button("Apply") { apply(phrase) }.buttonStyle(QuietButtonStyle(prominent: true))
+            IconButton(symbol: "xmark", help: "Close (Esc)") { close() }
+        }
+        .padding(.horizontal, Space.m)
+        .padding(.vertical, Space.s)
+        .background(Gallery.raised)
+        .overlay(alignment: .top) { Rectangle().fill(Gallery.hairline).frame(height: 1) }
+        .onAppear {
+            focused = true
+            // Put the caret after the first letter that opened the bar.
+            DispatchQueue.main.async {
+                if let editor = NSApp.keyWindow?.firstResponder as? NSTextView {
+                    editor.setSelectedRange(NSRange(location: (editor.string as NSString).length, length: 0))
+                }
+            }
+        }
+    }
+
+    private func apply(_ phrase: ShotPhrase) {
+        let ids = model.selectedShotIDs
+        if !ids.isEmpty, phrase != ShotPhrase() {
+            let cameras = show.sortedCameras
+            model.updateShots(ids, ids.count == 1 ? "Type Shot" : "Type Shots") { cue in
+                phrase.apply(to: &cue) { n in cameras.first { $0.number == n }?.id }
+            }
+        }
+        close()
+    }
+
+    private func close() {
+        model.shotBarOpen = false
+        model.shotBarText = ""
+        done()
     }
 }
