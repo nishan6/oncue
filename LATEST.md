@@ -1,17 +1,17 @@
-# CI results for 847393d
+# CI results for cb4a241
 
-- Commit: 847393dbcffe43ed13c75ffc4ba001c4a8c70411
-- Run: https://github.com/nishan6/oncue/actions/runs/43374981588
-- Date (UTC): 2026-11-13T06:04:30Z
+- Commit: cb4a241bd79aaa926742563bdbc48add70f910b1
+- Run: https://github.com/nishan6/oncue/actions/runs/43375785932
+- Date (UTC): 2026-11-13T06:07:14Z
 
 | Step | Result |
 | --- | --- |
 | Generate project | success (project changed: true) |
-| Package tests | success |
-| App build | success |
-| Launch smoke test | success |
-| Screenshots | success |
-| DMG | success |
+| Package tests | failure |
+| App build | failure |
+| Launch smoke test | skipped |
+| Screenshots | skipped |
+| DMG | skipped |
 
 ## Toolchain
 ```
@@ -27,107 +27,43 @@ Version: 2.46.0
 ```
 ## Test summary
 ```
-Test Case '-[OnCueCoreTests.TimelineTests testCameraColourDefaultsByNumberAndCanBeChosen]' passed (0.005 seconds).
-Test Case '-[OnCueCoreTests.TimelineTests testCameraColourRoundTripsAndIsOptionalInOldFiles]' passed (0.001 seconds).
-Test Case '-[OnCueCoreTests.TimelineTests testLiveCursorSteppingAndJumping]' passed (0.002 seconds).
-Test Case '-[OnCueCoreTests.TimelineTests testMovingAShotOnTheTimelineReordersTheShotList]' passed (0.001 seconds).
-Test Case '-[OnCueCoreTests.TimelineTests testOrderItemsGiveEachShotOneStep]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.TimelineTests testPlannedLengthExtendsTheEnd]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.TimelineTests testRunLength]' passed (0.002 seconds).
-Test Case '-[OnCueCoreTests.TimelineTests testSampleShowHasEveryTrackKind]' passed (0.002 seconds).
-Test Case '-[OnCueCoreTests.TimelineTests testShotSpansRunToTheNextShotAndTheSongEnd]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.TimelineTests testSnap]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.TimelineTests testTrackCuesAreCreatedOnTheRightTrack]' passed (0.000 seconds).
-Test Suite 'TimelineTests' passed at 2026-11-13 05:54:57.469.
-	 Executed 11 tests, with 0 failures (0 unexpected) in 0.014 (0.015) seconds
-Test Case '-[OnCueCoreTests.TourTests testLoadLogsFromFolder]' passed (0.040 seconds).
-Test Case '-[OnCueCoreTests.TourTests testNightsCompared]' passed (0.004 seconds).
-Test Case '-[OnCueCoreTests.TourTests testOldLogsWithoutTourFieldsStillOpen]' passed (0.018 seconds).
-Test Suite 'TourTests' passed at 2026-11-13 05:54:57.531.
-	 Executed 3 tests, with 0 failures (0 unexpected) in 0.062 (0.062) seconds
-Test Case '-[OnCueCoreTests.TriggerLearnTests testLearnedInputMatchesItsEvent]' passed (0.001 seconds).
-Test Suite 'TriggerLearnTests' passed at 2026-11-13 05:54:57.532.
-	 Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
-Test Case '-[OnCueCoreTests.TriggerRouteTests testArtNetFiresOnceAsTheLevelRises]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.TriggerRouteTests testArtNetParser]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.TriggerRouteTests testCCFiresOnceAsItCrosses]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.TriggerRouteTests testDisabledRoutesNeverFire]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.TriggerRouteTests testMSCParser]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.TriggerRouteTests testNoteOnOnlyAndChannels]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.TriggerRouteTests testOSCExactAndWildcard]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.TriggerRouteTests testProgramChangeAndMSC]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.TriggerRouteTests testResolveSongFromValue]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.TriggerRouteTests testRoutesRoundTrip]' passed (0.003 seconds).
-Test Case '-[OnCueCoreTests.TriggerRouteTests testValidation]' passed (0.001 seconds).
-Test Suite 'TriggerRouteTests' passed at 2026-11-13 05:54:57.537.
-	 Executed 11 tests, with 0 failures (0 unexpected) in 0.005 (0.005) seconds
-Test Case '-[OnCueCoreTests.UpcomingCallTests testCallsAndPlayerCuesInOrder]' passed (0.000 seconds).
-Test Suite 'UpcomingCallTests' passed at 2026-11-13 05:54:57.538.
-	 Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
-Test Case '-[OnCueCoreTests.UpdateCheckTests testDMGNames]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.UpdateCheckTests testNeverChecksDuringLiveMode]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.UpdateCheckTests testNoOfferWhenSameOlderSkippedDraftOrWithoutDMG]' passed (0.001 seconds).
-Test Case '-[OnCueCoreTests.UpdateCheckTests testOffersANewerRelease]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.UpdateCheckTests testProfileKeepsUpdateAndAccessibilitySettings]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.UpdateCheckTests testVersionsCompareNumerically]' passed (0.000 seconds).
-Test Suite 'UpdateCheckTests' passed at 2026-11-13 05:54:57.540.
-	 Executed 6 tests, with 0 failures (0 unexpected) in 0.002 (0.003) seconds
-Test Case '-[OnCueCoreTests.VersionTests testBackupFolder]' passed (0.019 seconds).
-Test Case '-[OnCueCoreTests.VersionTests testSaveRestoreAndLimits]' passed (0.102 seconds).
-Test Suite 'VersionTests' passed at 2026-11-13 05:54:57.661.
-	 Executed 2 tests, with 0 failures (0 unexpected) in 0.120 (0.120) seconds
-Test Case '-[OnCueCoreTests.WaveBProtocolTests testPanasonic]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.WaveBProtocolTests testRolandV160Replies]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.WaveBProtocolTests testRolandV60Tally]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.WaveBProtocolTests testRossTalk]' passed (0.000 seconds).
-Test Suite 'WaveBProtocolTests' passed at 2026-11-13 05:54:57.661.
-	 Executed 4 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
-Test Suite 'OnCueCorePackageTests.xctest' passed at 2026-11-13 05:54:57.661.
-	 Executed 273 tests, with 0 failures (0 unexpected) in 10.534 (10.550) seconds
-Test Suite 'All tests' passed at 2026-11-13 05:54:57.662.
-	 Executed 273 tests, with 0 failures (0 unexpected) in 10.534 (10.552) seconds
-✔ Test run with 0 tests passed after 0.001 seconds.
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+error: fatalError
 ```
 ## Build result
 ```
-** BUILD SUCCEEDED **
+** BUILD FAILED **
+/Users/runner/work/oncue/oncue/OnCue/App/SoakTest.swift:43:60: error: 'SoakVerdict' initializer is inaccessible due to 'internal' protection level
 ```
-## Warnings (       7)
+## Warnings (0)
 ```
-/Users/runner/work/oncue/oncue/OnCue/Workspace/MediaPlayer.swift:134:36: warning: 'isPlayable' was deprecated in macOS 13.0: Use load(.isPlayable) instead
-/Users/runner/work/oncue/oncue/OnCue/Workspace/MediaPoolView.swift:150:69: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
-/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
-2026-11-13 05:58:06.831 appintentsmetadataprocessor[6880:22904] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
 ```
 ## Smoke test
 ```
-[smoke] app launched (pid 6899)
-[smoke] machine profile created at /Users/runner/work/_temp/smoke/profile/MachineProfile.json
-[smoke] new project opened (type com.nishanpani.oncue.show, windows: 1)
-[smoke] saved to /Users/runner/work/_temp/smoke/smoke.oncue
-[smoke] window closed
-[smoke] saved project verified: package, format 2, 1 playlist(s), 1 scene(s), 4 camera(s), 1 backup(s) inside, 25 fps
-[smoke] reopened smoke.oncue (windows: 1)
-[smoke] PASS: create, save, close and reopen all succeeded
 ```
 ## DMG
 ```
-/Users/runner/work/oncue/oncue/OnCue/Workspace/MediaPlayer.swift:134:36: warning: 'isPlayable' was deprecated in macOS 13.0: Use load(.isPlayable) instead
-/Users/runner/work/oncue/oncue/OnCue/Workspace/MediaPoolView.swift:150:69: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
-** BUILD SUCCEEDED **
-build/Release/Build/Products/Release/OnCue.app: valid on disk
-build/Release/Build/Products/Release/OnCue.app: satisfies its Designated Requirement
-Signature=adhoc
-TeamIdentifier=not set
-Runtime Version=15.5.0
-Architectures: x86_64 arm64
-hdiutil: verify: checksum of "/Users/runner/work/_temp/dist/OnCue-0.1.0-118.dmg" is VALID
-Made /Users/runner/work/_temp/dist/OnCue-0.1.0-118.dmg ( 10M)
-total 20680
-drwxr-xr-x   3 runner  staff        96 Nov 13 06:04 .
-drwxr-xr-x  15 runner  staff       480 Nov 13 06:04 ..
--rw-r--r--@  1 runner  staff  10587128 Nov 13 06:04 OnCue-0.1.0-118.dmg
 ```

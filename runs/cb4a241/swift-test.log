@@ -1,0 +1,1181 @@
+Building for debugging...
+[0/8] /Users/runner/work/oncue/oncue/Packages/OnCueCore/.build/arm64-apple-macosx/debug/OnCueCorePackageTests.derived/runner.swift
+[1/8] Write sources
+[3/8] Copying Fixtures
+[3/8] Write sources
+[5/8] Write swift-version--79AA4F9932D1E87A.txt
+[7/49] Emitting module OnCueCore
+[8/69] Compiling OnCueCore CrewPage.swift
+[9/69] Compiling OnCueCore CrewServer.swift
+[10/69] Compiling OnCueCore CrewSnapshot.swift
+[11/69] Compiling OnCueCore MultiView.swift
+[12/69] Compiling OnCueCore ViewerPage.swift
+[13/69] Compiling OnCueCore ATEMSwitcher.swift
+[14/69] Compiling OnCueCore ArtNetListener.swift
+[15/69] Compiling OnCueCore CompanionClient.swift
+[16/69] Compiling OnCueCore DeviceOutputService.swift
+[17/69] Compiling OnCueCore MIDIManager.swift
+[18/69] Compiling OnCueCore NetworkSwitchers.swift
+[19/69] Compiling OnCueCore OSC.swift
+[20/69] Compiling OnCueCore PTZService.swift
+[21/69] Compiling OnCueCore SwitcherDevice.swift
+[22/69] Compiling OnCueCore TSL.swift
+[23/69] Compiling OnCueCore TallySender.swift
+[24/69] Compiling OnCueCore TriggerMonitor.swift
+[25/69] Compiling OnCueCore BulkEditing.swift
+[26/69] Compiling OnCueCore Countdown.swift
+[27/69] Compiling OnCueCore DraftScript.swift
+[28/69] Compiling OnCueCore LiveCursor.swift
+[29/69] Compiling OnCueCore SampleShow.swift
+[30/69] Compiling OnCueCore SceneNumbering.swift
+[31/69] Compiling OnCueCore ShowEditing.swift
+[32/69] Compiling OnCueCore SwitcherEditing.swift
+[33/69] Compiling OnCueCore TimelineEditing.swift
+[34/69] Compiling OnCueCore BackupLink.swift
+[35/69] Compiling OnCueCore Controls.swift
+[36/69] Compiling OnCueCore EngineController.swift
+[37/69] Compiling OnCueCore LTC.swift
+[38/69] Compiling OnCueCore LTCOutput.swift
+[39/69] Compiling OnCueCore MTC.swift
+[40/69] Compiling OnCueCore PreShowCheck.swift
+[41/69] Compiling OnCueCore RundownTiming.swift
+[42/69] Compiling OnCueCore ShowEngine.swift
+[43/69] Compiling OnCueCore Soak.swift
+[44/69] Compiling OnCueCore SwitchLog.swift
+[45/69] Compiling OnCueCore Timing.swift
+[46/69] Compiling OnCueCore TourComparison.swift
+[47/69] Compiling OnCueCore PDFExports.swift
+[48/69] Compiling OnCueCore TextExports.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[49/69] Compiling OnCueCore ItemMedia.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[50/69] Compiling OnCueCore MediaPool.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[51/69] Compiling OnCueCore TempoDetector.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[52/69] Compiling OnCueCore Consoles.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[53/69] Compiling OnCueCore DeviceModel.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[54/69] Compiling OnCueCore DeviceOutputs.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[55/69] Compiling OnCueCore Model.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[56/69] Compiling OnCueCore ProjectModel.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[57/69] Compiling OnCueCore ShotVocabulary.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[58/69] Compiling OnCueCore TriggerRoutes.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[59/69] Compiling OnCueCore BackupFolder.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[60/69] Compiling OnCueCore MachineProfile.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[61/69] Compiling OnCueCore ProjectCoding.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[62/69] Compiling OnCueCore ProjectStorage.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[63/69] Compiling OnCueCore ShowCoding.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[64/69] Compiling OnCueCore ShowVersions.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[65/69] Compiling OnCueCore TolerantDecoding.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[66/69] Compiling OnCueCore CameraPlot.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[67/69] Compiling OnCueCore UpdateCheck.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[68/94] Compiling OnCueCoreTests FailoverTallyTests.swift
+[69/94] Compiling OnCueCoreTests LargeTimelineTests.swift
+[70/94] Compiling OnCueCoreTests MachineProfileTests.swift
+[71/94] Compiling OnCueCoreTests MediaPoolTests.swift
+[72/94] Compiling OnCueCoreTests MediaTests.swift
+[73/94] Compiling OnCueCoreTests ModelTests.swift
+[74/94] Compiling OnCueCoreTests MultiViewTests.swift
+[75/94] Compiling OnCueCoreTests NetworkSwitcherTests.swift
+[76/94] Compiling OnCueCoreTests PersistenceTests.swift
+[77/94] Compiling OnCueCoreTests PreShowCheckTests.swift
+[78/94] Compiling OnCueCoreTests ProjectStorageTests.swift
+[79/94] Compiling OnCueCoreTests ProjectTests.swift
+[80/106] Emitting module OnCueCoreTests
+[81/106] Compiling OnCueCoreTests BackupTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[82/106] Compiling OnCueCoreTests BulkEditingTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[83/106] Compiling OnCueCoreTests CameraPlotTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[84/106] Compiling OnCueCoreTests ConsoleTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[85/106] Compiling OnCueCoreTests ControlsTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[86/106] Compiling OnCueCoreTests CountdownTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[87/106] Compiling OnCueCoreTests CrewTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[88/106] Compiling OnCueCoreTests DeviceOutputTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[89/106] Compiling OnCueCoreTests DraftScriptTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[90/106] Compiling OnCueCoreTests EditingTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[91/106] Compiling OnCueCoreTests EngineTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[92/106] Compiling OnCueCoreTests ExportTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:23:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 21 |     func testDisplayModeSendsNothingButFollowsThePlayhead() {
+ 22 |         let (show, song) = scriptedShow()
+ 23 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 24 |         let engine = ShowEngine(show: show, itemID: song)
+ 25 |         XCTAssertEqual(engine.load(itemID: song, now: 0), [])
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:72:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 70 |     func testAutoPreviewIgnoresTheDirectorsCuts() {
+ 71 |         let (show, song) = scriptedShow()
+ 72 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+ 73 |         let engine = ShowEngine(show: show, itemID: song, mode: .preview)
+ 74 |         _ = engine.load(itemID: song, now: 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:206:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+204 |     func testControllerDrivesTheSimulatorAndPausesOnAManualCut() throws {
+205 |         let (show, song) = scriptedShow()
+206 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+207 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+208 |         defer { controller.shutdown() }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/EngineTests.swift:234:13: warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+232 |     func testFastNextThroughAMixDoesNotLookLikeAManualCut() {
+233 |         let (show, song) = scriptedShow(transitions: [.auto, .cut, .cut])
+234 |         let S = show.mainOutput!.switcherID!
+    |             `- warning: initialization of immutable value 'S' was never used; consider replacing with assignment to '_' or removing it
+235 |         let controller = EngineController(show: show, itemID: song, profile: MachineProfile())
+236 |         defer { controller.shutdown() }
+[93/106] Compiling OnCueCoreTests RundownTimingTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 4 | final class SoakReportTests: XCTestCase {
+ 5 |     private func run(memory: (Double) -> Double, takesPerHour: Int = 900, hours: Double = 24) -> [SoakSample] {
+ 6 |         stride(from: 0.0, through: hours * 3600, by: 300).map { show in
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 7 |             SoakSample(real: show / 5, show: show, memoryMB: memory(show / 3600), takes: Int(show / 3600 * Double(takesPerHour)))
+ 8 |         }
+[94/106] Compiling OnCueCoreTests ShotVocabularyTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 4 | final class SoakReportTests: XCTestCase {
+ 5 |     private func run(memory: (Double) -> Double, takesPerHour: Int = 900, hours: Double = 24) -> [SoakSample] {
+ 6 |         stride(from: 0.0, through: hours * 3600, by: 300).map { show in
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 7 |             SoakSample(real: show / 5, show: show, memoryMB: memory(show / 3600), takes: Int(show / 3600 * Double(takesPerHour)))
+ 8 |         }
+[95/106] Compiling OnCueCoreTests ShowControlTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 4 | final class SoakReportTests: XCTestCase {
+ 5 |     private func run(memory: (Double) -> Double, takesPerHour: Int = 900, hours: Double = 24) -> [SoakSample] {
+ 6 |         stride(from: 0.0, through: hours * 3600, by: 300).map { show in
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 7 |             SoakSample(real: show / 5, show: show, memoryMB: memory(show / 3600), takes: Int(show / 3600 * Double(takesPerHour)))
+ 8 |         }
+[96/106] Compiling OnCueCoreTests SoakReportTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 4 | final class SoakReportTests: XCTestCase {
+ 5 |     private func run(memory: (Double) -> Double, takesPerHour: Int = 900, hours: Double = 24) -> [SoakSample] {
+ 6 |         stride(from: 0.0, through: hours * 3600, by: 300).map { show in
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 7 |             SoakSample(real: show / 5, show: show, memoryMB: memory(show / 3600), takes: Int(show / 3600 * Double(takesPerHour)))
+ 8 |         }
+[97/106] Compiling OnCueCoreTests SourcesTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 4 | final class SoakReportTests: XCTestCase {
+ 5 |     private func run(memory: (Double) -> Double, takesPerHour: Int = 900, hours: Double = 24) -> [SoakSample] {
+ 6 |         stride(from: 0.0, through: hours * 3600, by: 300).map { show in
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 7 |             SoakSample(real: show / 5, show: show, memoryMB: memory(show / 3600), takes: Int(show / 3600 * Double(takesPerHour)))
+ 8 |         }
+[98/106] Compiling OnCueCoreTests TSLTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 4 | final class SoakReportTests: XCTestCase {
+ 5 |     private func run(memory: (Double) -> Double, takesPerHour: Int = 900, hours: Double = 24) -> [SoakSample] {
+ 6 |         stride(from: 0.0, through: hours * 3600, by: 300).map { show in
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 7 |             SoakSample(real: show / 5, show: show, memoryMB: memory(show / 3600), takes: Int(show / 3600 * Double(takesPerHour)))
+ 8 |         }
+[99/106] Compiling OnCueCoreTests TimelineTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 4 | final class SoakReportTests: XCTestCase {
+ 5 |     private func run(memory: (Double) -> Double, takesPerHour: Int = 900, hours: Double = 24) -> [SoakSample] {
+ 6 |         stride(from: 0.0, through: hours * 3600, by: 300).map { show in
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 7 |             SoakSample(real: show / 5, show: show, memoryMB: memory(show / 3600), takes: Int(show / 3600 * Double(takesPerHour)))
+ 8 |         }
+[100/106] Compiling OnCueCoreTests TourTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 4 | final class SoakReportTests: XCTestCase {
+ 5 |     private func run(memory: (Double) -> Double, takesPerHour: Int = 900, hours: Double = 24) -> [SoakSample] {
+ 6 |         stride(from: 0.0, through: hours * 3600, by: 300).map { show in
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 7 |             SoakSample(real: show / 5, show: show, memoryMB: memory(show / 3600), takes: Int(show / 3600 * Double(takesPerHour)))
+ 8 |         }
+[101/106] Compiling OnCueCoreTests TriggerRouteTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 4 | final class SoakReportTests: XCTestCase {
+ 5 |     private func run(memory: (Double) -> Double, takesPerHour: Int = 900, hours: Double = 24) -> [SoakSample] {
+ 6 |         stride(from: 0.0, through: hours * 3600, by: 300).map { show in
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 7 |             SoakSample(real: show / 5, show: show, memoryMB: memory(show / 3600), takes: Int(show / 3600 * Double(takesPerHour)))
+ 8 |         }
+[102/106] Compiling OnCueCoreTests UpdateCheckTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 4 | final class SoakReportTests: XCTestCase {
+ 5 |     private func run(memory: (Double) -> Double, takesPerHour: Int = 900, hours: Double = 24) -> [SoakSample] {
+ 6 |         stride(from: 0.0, through: hours * 3600, by: 300).map { show in
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 7 |             SoakSample(real: show / 5, show: show, memoryMB: memory(show / 3600), takes: Int(show / 3600 * Double(takesPerHour)))
+ 8 |         }
+[103/106] Compiling OnCueCoreTests VersionTests.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 4 | final class SoakReportTests: XCTestCase {
+ 5 |     private func run(memory: (Double) -> Double, takesPerHour: Int = 900, hours: Double = 24) -> [SoakSample] {
+ 6 |         stride(from: 0.0, through: hours * 3600, by: 300).map { show in
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 7 |             SoakSample(real: show / 5, show: show, memoryMB: memory(show / 3600), takes: Int(show / 3600 * Double(takesPerHour)))
+ 8 |         }
+[104/106] Compiling OnCueCoreTests resource_bundle_accessor.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Tests/OnCueCoreTests/SoakReportTests.swift:6:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 4 | final class SoakReportTests: XCTestCase {
+ 5 |     private func run(memory: (Double) -> Double, takesPerHour: Int = 900, hours: Double = 24) -> [SoakSample] {
+ 6 |         stride(from: 0.0, through: hours * 3600, by: 300).map { show in
+   |         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 7 |             SoakSample(real: show / 5, show: show, memoryMB: memory(show / 3600), takes: Int(show / 3600 * Double(takesPerHour)))
+ 8 |         }
+error: fatalError
