@@ -337,6 +337,20 @@ struct SwitcherCard: View {
                         .labelsHidden().frame(width: 100)
                     }
                 }
+            case .vmix, .obs:
+                PropertyRow(label: "Address") {
+                    CommitField(placeholder: config.kind == .vmix ? "192.168.10.30 (port 8099)" : "192.168.10.30:4455#password",
+                                value: config.host, font: .readout(13), width: 260) { text in
+                        let t = text.trimmingCharacters(in: .whitespaces)
+                        guard !t.isEmpty else { return false }
+                        update("Change Switcher Address") { $0.host = t }
+                        return true
+                    }
+                }
+                Text(config.kind == .vmix
+                     ? "vMix TCP API (Settings › Web Controller / TCP API on). Inputs are vMix input numbers; DSK 1–4 are overlay channels 1–4; macros run vMix scripts named “Macro 1”, “Macro 2”… Program and preview are read back. Built from vMix's API documentation; not yet tested on vMix."
+                     : "obs-websocket 5 (Tools › WebSocket Server Settings). Inputs are scenes numbered top to bottom as OBS lists them. Turn on Studio Mode for preview and transitions. Add the password after a # if one is set. Built from the obs-websocket documentation; not yet tested on OBS.")
+                    .font(.ocMeta).foregroundStyle(Gallery.faint).fixedSize(horizontal: false, vertical: true)
             case .companion:
                 PropertyRow(label: "Buttons") {
                     Button("Map Companion buttons…") { companionOpen = true }

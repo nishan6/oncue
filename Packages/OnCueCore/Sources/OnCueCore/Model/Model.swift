@@ -57,11 +57,13 @@ public enum TransitionKind: String, Codable, CaseIterable, Identifiable {
 }
 
 public enum SwitcherKind: String, Codable, CaseIterable, Identifiable {
-    case atem, companion, simulator
+    case atem, vmix, obs, companion, simulator
     public var id: String { rawValue }
     public var label: String {
         switch self {
         case .atem: return "Blackmagic ATEM"
+        case .vmix: return "vMix"
+        case .obs: return "OBS Studio"
         case .companion: return "Via Bitfocus Companion"
         case .simulator: return "Simulator (testing)"
         }

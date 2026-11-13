@@ -40,6 +40,8 @@ enum SwitcherFactory {
     static func make(_ config: SwitcherConfig, companion: CompanionClient) -> SwitcherDevice {
         switch config.kind {
         case .atem: return ATEMSwitcher(config: config)
+        case .vmix: return VMixSwitcher(config: config)
+        case .obs: return OBSSwitcher(config: config)
         case .companion: return CompanionSwitcher(config: config, client: companion)
         case .simulator: return SimulatedSwitcher(config: config)
         }
