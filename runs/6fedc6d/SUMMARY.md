@@ -1,8 +1,8 @@
 # CI results for 6fedc6d
 
 - Commit: 6fedc6db5aa73992875bc408e971f7c8640d640c
-- Run: https://github.com/nishan6/oncue/actions/runs/43377879893
-- Date (UTC): 2026-11-13T06:28:16Z
+- Run: https://github.com/nishan6/oncue/actions/runs/43383849877
+- Date (UTC): 2026-11-13T07:21:23Z
 
 | Step | Result |
 | --- | --- |
@@ -33,21 +33,21 @@ Test Case '-[OnCueCoreTests.TimelineTests testLiveCursorSteppingAndJumping]' pas
 Test Case '-[OnCueCoreTests.TimelineTests testMovingAShotOnTheTimelineReordersTheShotList]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.TimelineTests testOrderItemsGiveEachShotOneStep]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.TimelineTests testPlannedLengthExtendsTheEnd]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.TimelineTests testRunLength]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testRunLength]' passed (0.003 seconds).
 Test Case '-[OnCueCoreTests.TimelineTests testSampleShowHasEveryTrackKind]' passed (0.002 seconds).
-Test Case '-[OnCueCoreTests.TimelineTests testShotSpansRunToTheNextShotAndTheSongEnd]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testShotSpansRunToTheNextShotAndTheSongEnd]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.TimelineTests testSnap]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.TimelineTests testTrackCuesAreCreatedOnTheRightTrack]' passed (0.000 seconds).
-Test Suite 'TimelineTests' passed at 2026-11-13 06:20:19.055.
-	 Executed 11 tests, with 0 failures (0 unexpected) in 0.009 (0.010) seconds
-Test Case '-[OnCueCoreTests.TourTests testLoadLogsFromFolder]' passed (0.019 seconds).
-Test Case '-[OnCueCoreTests.TourTests testNightsCompared]' passed (0.004 seconds).
-Test Case '-[OnCueCoreTests.TourTests testOldLogsWithoutTourFieldsStillOpen]' passed (0.015 seconds).
-Test Suite 'TourTests' passed at 2026-11-13 06:20:19.094.
-	 Executed 3 tests, with 0 failures (0 unexpected) in 0.039 (0.039) seconds
-Test Case '-[OnCueCoreTests.TriggerLearnTests testLearnedInputMatchesItsEvent]' passed (0.000 seconds).
-Test Suite 'TriggerLearnTests' passed at 2026-11-13 06:20:19.095.
-	 Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'TimelineTests' passed at 2026-11-13 07:12:18.075.
+	 Executed 11 tests, with 0 failures (0 unexpected) in 0.012 (0.013) seconds
+Test Case '-[OnCueCoreTests.TourTests testLoadLogsFromFolder]' passed (0.032 seconds).
+Test Case '-[OnCueCoreTests.TourTests testNightsCompared]' passed (0.005 seconds).
+Test Case '-[OnCueCoreTests.TourTests testOldLogsWithoutTourFieldsStillOpen]' passed (0.025 seconds).
+Test Suite 'TourTests' passed at 2026-11-13 07:12:18.137.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.062 (0.062) seconds
+Test Case '-[OnCueCoreTests.TriggerLearnTests testLearnedInputMatchesItsEvent]' passed (0.001 seconds).
+Test Suite 'TriggerLearnTests' passed at 2026-11-13 07:12:18.138.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
 Test Case '-[OnCueCoreTests.TriggerRouteTests testArtNetFiresOnceAsTheLevelRises]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.TriggerRouteTests testArtNetParser]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.TriggerRouteTests testCCFiresOnceAsItCrosses]' passed (0.000 seconds).
@@ -56,36 +56,36 @@ Test Case '-[OnCueCoreTests.TriggerRouteTests testMSCParser]' passed (0.000 seco
 Test Case '-[OnCueCoreTests.TriggerRouteTests testNoteOnOnlyAndChannels]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.TriggerRouteTests testOSCExactAndWildcard]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.TriggerRouteTests testProgramChangeAndMSC]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.TriggerRouteTests testResolveSongFromValue]' passed (0.000 seconds).
-Test Case '-[OnCueCoreTests.TriggerRouteTests testRoutesRoundTrip]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.TriggerRouteTests testResolveSongFromValue]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.TriggerRouteTests testRoutesRoundTrip]' passed (0.006 seconds).
 Test Case '-[OnCueCoreTests.TriggerRouteTests testValidation]' passed (0.000 seconds).
-Test Suite 'TriggerRouteTests' passed at 2026-11-13 06:20:19.099.
-	 Executed 11 tests, with 0 failures (0 unexpected) in 0.004 (0.004) seconds
+Test Suite 'TriggerRouteTests' passed at 2026-11-13 07:12:18.149.
+	 Executed 11 tests, with 0 failures (0 unexpected) in 0.010 (0.011) seconds
 Test Case '-[OnCueCoreTests.UpcomingCallTests testCallsAndPlayerCuesInOrder]' passed (0.000 seconds).
-Test Suite 'UpcomingCallTests' passed at 2026-11-13 06:20:19.099.
-	 Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
-Test Case '-[OnCueCoreTests.UpdateCheckTests testDMGNames]' passed (0.000 seconds).
+Test Suite 'UpcomingCallTests' passed at 2026-11-13 07:12:18.150.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Case '-[OnCueCoreTests.UpdateCheckTests testDMGNames]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.UpdateCheckTests testNeverChecksDuringLiveMode]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.UpdateCheckTests testNoOfferWhenSameOlderSkippedDraftOrWithoutDMG]' passed (0.001 seconds).
-Test Case '-[OnCueCoreTests.UpdateCheckTests testOffersANewerRelease]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.UpdateCheckTests testOffersANewerRelease]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.UpdateCheckTests testProfileKeepsUpdateAndAccessibilitySettings]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.UpdateCheckTests testVersionsCompareNumerically]' passed (0.000 seconds).
-Test Suite 'UpdateCheckTests' passed at 2026-11-13 06:20:19.102.
+Test Suite 'UpdateCheckTests' passed at 2026-11-13 07:12:18.153.
 	 Executed 6 tests, with 0 failures (0 unexpected) in 0.003 (0.003) seconds
-Test Case '-[OnCueCoreTests.VersionTests testBackupFolder]' passed (0.015 seconds).
-Test Case '-[OnCueCoreTests.VersionTests testSaveRestoreAndLimits]' passed (0.072 seconds).
-Test Suite 'VersionTests' passed at 2026-11-13 06:20:19.189.
-	 Executed 2 tests, with 0 failures (0 unexpected) in 0.087 (0.087) seconds
+Test Case '-[OnCueCoreTests.VersionTests testBackupFolder]' passed (0.019 seconds).
+Test Case '-[OnCueCoreTests.VersionTests testSaveRestoreAndLimits]' passed (0.084 seconds).
+Test Suite 'VersionTests' passed at 2026-11-13 07:12:18.256.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.103 (0.103) seconds
 Test Case '-[OnCueCoreTests.WaveBProtocolTests testPanasonic]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.WaveBProtocolTests testRolandV160Replies]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.WaveBProtocolTests testRolandV60Tally]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.WaveBProtocolTests testRossTalk]' passed (0.000 seconds).
-Test Suite 'WaveBProtocolTests' passed at 2026-11-13 06:20:19.191.
+Test Suite 'WaveBProtocolTests' passed at 2026-11-13 07:12:18.257.
 	 Executed 4 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
-Test Suite 'OnCueCorePackageTests.xctest' passed at 2026-11-13 06:20:19.191.
-	 Executed 278 tests, with 0 failures (0 unexpected) in 10.178 (10.193) seconds
-Test Suite 'All tests' passed at 2026-11-13 06:20:19.191.
-	 Executed 278 tests, with 0 failures (0 unexpected) in 10.178 (10.196) seconds
+Test Suite 'OnCueCorePackageTests.xctest' passed at 2026-11-13 07:12:18.257.
+	 Executed 278 tests, with 0 failures (0 unexpected) in 11.447 (11.469) seconds
+Test Suite 'All tests' passed at 2026-11-13 07:12:18.258.
+	 Executed 278 tests, with 0 failures (0 unexpected) in 11.447 (11.473) seconds
 ✔ Test run with 0 tests passed after 0.001 seconds.
 ```
 ## Build result
@@ -100,11 +100,11 @@ Test Suite 'All tests' passed at 2026-11-13 06:20:19.191.
 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
-2026-11-13 06:23:08.638 appintentsmetadataprocessor[5106:18647] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+2026-11-13 07:15:48.057 appintentsmetadataprocessor[11616:36340] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
 ```
 ## Smoke test
 ```
-[smoke] app launched (pid 5128)
+[smoke] app launched (pid 11700)
 [smoke] machine profile created at /Users/runner/work/_temp/smoke/profile/MachineProfile.json
 [smoke] new project opened (type com.nishanpani.oncue.show, windows: 1)
 [smoke] saved to /Users/runner/work/_temp/smoke/smoke.oncue
@@ -124,10 +124,10 @@ Signature=adhoc
 TeamIdentifier=not set
 Runtime Version=15.5.0
 Architectures: x86_64 arm64
-hdiutil: verify: checksum of "/Users/runner/work/_temp/dist/OnCue-0.1.0-127.dmg" is VALID
-Made /Users/runner/work/_temp/dist/OnCue-0.1.0-127.dmg ( 10M)
+hdiutil: verify: checksum of "/Users/runner/work/_temp/dist/OnCue-0.1.0-128.dmg" is VALID
+Made /Users/runner/work/_temp/dist/OnCue-0.1.0-128.dmg ( 10M)
 total 20896
-drwxr-xr-x   3 runner  staff        96 Nov 13 06:28 .
-drwxr-xr-x  15 runner  staff       480 Nov 13 06:28 ..
--rw-r--r--@  1 runner  staff  10696949 Nov 13 06:28 OnCue-0.1.0-127.dmg
+drwxr-xr-x   3 runner  staff        96 Nov 13 07:21 .
+drwxr-xr-x  15 runner  staff       480 Nov 13 07:21 ..
+-rw-r--r--@  1 runner  staff  10696946 Nov 13 07:21 OnCue-0.1.0-128.dmg
 ```
