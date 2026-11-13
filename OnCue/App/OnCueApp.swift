@@ -98,6 +98,8 @@ struct LibraryCommands: Commands {
             Button("Check for Updates…") { Updater.shared.check(manual: true) }
         }
         CommandGroup(after: .help) {
+            Button("Keyboard Shortcuts") { KeyboardShortcutsView.show() }
+                .keyboardShortcut("/", modifiers: .command)
             Button("Open Sample Project") { SampleProject.open() }
         }
         CommandGroup(before: .windowList) {
