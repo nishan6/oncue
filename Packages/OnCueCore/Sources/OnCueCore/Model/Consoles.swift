@@ -152,6 +152,8 @@ public struct ConsoleSettings: Codable, Hashable {
     public var midiChannel: Int = 1
     /// Yamaha TF scenes use a different library name.
     public var yamahaTF = false
+    /// Resolume: the port OnCue listens on for Resolume's OSC output (Preferences › OSC › Output).
+    public var feedbackPort: Int = 7001
     public init(kind: ConsoleKind = .grandMA3) { self.kind = kind }
 }
 
@@ -260,7 +262,26 @@ public enum ConsoleWire {
 public struct ConsoleReadBack: Equatable {
     public var scene: Int?
     public var muted: Set<Int> = []
+    /// Resolume: the clip connected (playing) on each layer.
+    public var layerClips: [Int: Int] = [:]
     public init() {}
+
+    /// Resolume OSC output: /composition/layers/L/clips/C/connected with 0 empty, 1 loaded,
+    /// 2 previewed, 3 connected, 4 connected and previewed. A layer's stop message can arrive
+    /// after the next clip's start, so a stop only clears the layer if that clip was the one shown.
+    public mutating func applyResolume(address: String, value: Int?) -> Bool {
+        let parts = address.split(separator: "/")
+        guard parts.count == 6, parts[0] == "composition", parts[1] == "layers", parts[3] == "clips", parts[5] == "connected",
+              let layer = Int(parts[2]), let clip = Int(parts[4]), let v = value else { return false }
+        if v >= 3 {
+            guard layerClips[layer] != clip else { return false }
+            layerClips[layer] = clip
+            return true
+        }
+        guard layerClips[layer] == clip else { return false }
+        layerClips[layer] = nil
+        return true
+    }
 
     /// X32/M32 replies and /xremote updates. Returns true when something changed.
     public mutating func apply(address: String, value: Int?) -> Bool {
@@ -281,6 +302,7 @@ public struct ConsoleReadBack: Equatable {
         var parts: [String] = []
         if let scene { parts.append("scene \(scene)") }
         if !muted.isEmpty { parts.append("muted " + muted.sorted().map(String.init).joined(separator: ", ")) }
+        for layer in layerClips.keys.sorted() { parts.append("layer \(layer) clip \(layerClips[layer]!)") }
         return parts.isEmpty ? "connected, nothing reported yet" : parts.joined(separator: " · ")
     }
 }

@@ -87,4 +87,38 @@ final class MoreConsoleTests: XCTestCase {
         f.channel = 2; f.level = -2
         XCTAssertEqual(ConsoleWire.messages(f, settings: ConsoleSettings(kind: .wing)), [.osc("/ch/2/fdr", [.float(-2)])])
     }
+
+    func testResolumeReadBackTracksTheConnectedClipPerLayer() {
+        var r = ConsoleReadBack()
+        XCTAssertTrue(r.applyResolume(address: "/composition/layers/1/clips/3/connected", value: 3))
+        XCTAssertEqual(r.layerClips, [1: 3])
+        // The next clip starts before the old one's stop arrives: the late stop must not clear it.
+        XCTAssertTrue(r.applyResolume(address: "/composition/layers/1/clips/4/connected", value: 4))
+        XCTAssertFalse(r.applyResolume(address: "/composition/layers/1/clips/3/connected", value: 1))
+        XCTAssertEqual(r.layerClips, [1: 4])
+        XCTAssertTrue(r.applyResolume(address: "/composition/layers/1/clips/4/connected", value: 1))
+        XCTAssertEqual(r.layerClips, [:])
+        XCTAssertFalse(r.applyResolume(address: "/composition/layers/1/opacity", value: 1))
+        _ = r.applyResolume(address: "/composition/layers/2/clips/1/connected", value: 3)
+        XCTAssertEqual(r.summary, "layer 2 clip 1")
+    }
+
+    func testOSCBundlesDecodeEveryMessage() {
+        let a = OSC.encode(address: "/composition/layers/1/clips/2/connected", args: [.int(3)])
+        let b = OSC.encode(address: "/composition/layers/2/clips/5/connected", args: [.int(1)])
+        var bundle = Data("#bundle".utf8) + Data([0]) + Data(repeating: 0, count: 7) + Data([1])
+        for m in [a, b] {
+            let n = UInt32(m.count)
+            bundle += Data([UInt8(n >> 24), UInt8(n >> 16 & 0xFF), UInt8(n >> 8 & 0xFF), UInt8(n & 0xFF)]) + m
+        }
+        let all = OSC.decodeAll(bundle)
+        XCTAssertEqual(all.map(\.0), ["/composition/layers/1/clips/2/connected", "/composition/layers/2/clips/5/connected"])
+        XCTAssertEqual(all.map(\.1), [[.int(3)], [.int(1)]])
+        XCTAssertEqual(OSC.decodeAll(a).count, 1)
+    }
+
+    func testConsoleSettingsDecodeWithoutFeedbackPort() throws {
+        let s = try JSONDecoder().decode(ConsoleSettings.self, from: Data(#"{"kind":"resolume"}"#.utf8))
+        XCTAssertEqual(s.feedbackPort, 7001)
+    }
 }

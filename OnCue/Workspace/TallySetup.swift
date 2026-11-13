@@ -340,6 +340,16 @@ private struct DeviceTargetCard: View {
                             return true
                         }
                     }
+                case .resolume:
+                    PropertyRow(label: "Listen on") {
+                        CommitField(placeholder: "7001", value: String(target.console.feedbackPort), font: .readout(13), width: 70) { text in
+                            guard let v = Int(text), (1...65535).contains(v) else { return false }
+                            update("Change Resolume Feedback Port") { $0.console.feedbackPort = v }
+                            return true
+                        }
+                    }
+                    Text("To see which clip is playing on each layer, turn on OSC Output in Resolume's Preferences › OSC and send it to this Mac on this port.")
+                        .font(.ocMeta).foregroundStyle(Gallery.faint).fixedSize(horizontal: false, vertical: true)
                 case .yamahaRCP:
                     Toggle("TF series (scene library scene_a)", isOn: Binding(get: { target.console.yamahaTF }, set: { v in update("Change Yamaha Series") { $0.console.yamahaTF = v } }))
                         .toggleStyle(.checkbox)

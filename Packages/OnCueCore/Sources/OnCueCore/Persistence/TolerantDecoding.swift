@@ -412,6 +412,7 @@ extension ConsoleSettings {
         password = try c.value("password", "")
         midiChannel = try c.value("midiChannel", 1)
         yamahaTF = try c.value("yamahaTF", false)
+        feedbackPort = try c.value("feedbackPort", 7001)
     }
 }
 

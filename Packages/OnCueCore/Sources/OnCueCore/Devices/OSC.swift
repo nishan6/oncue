@@ -69,6 +69,24 @@ enum OSC {
         return out
     }
 
+    /// Every message in a packet: one message, or a bundle (nested bundles included).
+    static func decodeAll(_ data: Data) -> [(String, [OSCValue])] {
+        let b = [UInt8](data)
+        guard b.count >= 16, b.starts(with: Array("#bundle".utf8) + [0]) else {
+            return decode(data).map { [$0] } ?? []
+        }
+        var out: [(String, [OSCValue])] = []
+        var i = 16                                              // "#bundle\0" + 8-byte time tag
+        while i + 4 <= b.count {
+            let size = Int(UInt32(b[i]) << 24 | UInt32(b[i + 1]) << 16 | UInt32(b[i + 2]) << 8 | UInt32(b[i + 3]))
+            i += 4
+            guard size > 0, i + size <= b.count else { break }
+            out += decodeAll(Data(b[i..<(i + size)]))
+            i += size
+        }
+        return out
+    }
+
     /// Decode a single (non-bundle) OSC message: address and arguments.
     static func decode(_ data: Data) -> (String, [OSCValue])? {
         let b = [UInt8](data)

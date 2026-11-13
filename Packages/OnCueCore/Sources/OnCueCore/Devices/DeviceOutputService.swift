@@ -31,6 +31,8 @@ final class DeviceOutputService {
     func stop() {
         connections.values.forEach { $0.cancel() }
         connections.removeAll()
+        feedback.values.forEach { $0.cancel() }
+        feedback.removeAll()
         serial.values.forEach { close($0) }
         serial.removeAll()
     }
@@ -71,7 +73,31 @@ final class DeviceOutputService {
     private var listening: Set<UUID> = []
 
     /// X32/M32: subscribe with /xremote (renewed every 9 s) and ask for the current scene.
+    private var feedback: [UUID: NWListener] = [:]
+
+    /// Resolume: listen on the feedback port for its OSC output, and ask once for every clip's state.
+    private func startResolumeFeedback(_ t: DeviceTarget) {
+        guard feedback[t.id] == nil, let p = NWEndpoint.Port(rawValue: UInt16(clamping: t.console.feedbackPort)), t.console.feedbackPort > 0 else { return }
+        let params = NWParameters.udp
+        params.allowLocalEndpointReuse = true
+        guard let l = try? NWListener(using: params, on: p) else {
+            NSLog("OnCue console \(t.name): can't listen on port \(t.console.feedbackPort)")
+            return
+        }
+        let id = t.id
+        l.newConnectionHandler = { [weak self] conn in
+            conn.start(queue: self?.queue ?? .main)
+            self?.receiveConsole(conn, id: id, resolume: true)
+        }
+        l.start(queue: queue)
+        feedback[id] = l
+        if let c = connection(t, host: t.host, port: t.port > 0 ? t.port : 7000, udp: true) {
+            c.send(content: OSC.encode(address: "/composition/layers/*/clips/*/connected", args: [.string("?")]), completion: .contentProcessed { _ in })
+        }
+    }
+
     private func tickConsoles(_ targets: [DeviceTarget], now: Double) {
+        for t in targets where t.kind == .console && t.console.kind == .resolume && !t.simulated { startResolumeFeedback(t) }
         for t in targets where t.kind == .console && t.console.kind == .x32 && !t.simulated {
             guard now - (lastRemote[t.id] ?? 0) >= 9,
                   let c = connection(t, host: t.host, port: t.port > 0 ? t.port : 10023, udp: true) else { continue }
@@ -85,19 +111,26 @@ final class DeviceOutputService {
         }
     }
 
-    private func receiveConsole(_ c: NWConnection, id: UUID) {
+    private func receiveConsole(_ c: NWConnection, id: UUID, resolume: Bool = false) {
         c.receiveMessage { [weak self] data, _, _, error in
-            if let data, let decoded = OSC.decode(data) {
-                let address = decoded.0, args = decoded.1
-                DispatchQueue.main.async {
-                    guard let self else { return }
-                    var s = self.consoleState[id] ?? ConsoleReadBack()
-                    if s.apply(address: address, value: args.first.flatMap {
-                        switch $0 { case .int(let v): return Int(v); case .float(let v): return Int(v); default: return nil }
-                    }) { self.consoleState[id] = s }
+            if let data {
+                let messages = OSC.decodeAll(data)
+                if !messages.isEmpty {
+                    DispatchQueue.main.async {
+                        guard let self else { return }
+                        var s = self.consoleState[id] ?? ConsoleReadBack()
+                        var changed = false
+                        for (address, args) in messages {
+                            let value = args.first.flatMap { v -> Int? in
+                                switch v { case .int(let v): return Int(v); case .float(let v): return Int(v); default: return nil }
+                            }
+                            if resolume ? s.applyResolume(address: address, value: value) : s.apply(address: address, value: value) { changed = true }
+                        }
+                        if changed || self.consoleState[id] == nil { self.consoleState[id] = s }
+                    }
                 }
             }
-            if error == nil { self?.receiveConsole(c, id: id) }
+            if error == nil { self?.receiveConsole(c, id: id, resolume: resolume) }
             else { DispatchQueue.main.async { self?.listening.remove(id) } }
         }
     }
