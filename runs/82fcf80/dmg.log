@@ -1,4 +1,4 @@
-OnCue 0.1.0 (139), signing identity: -
+OnCue 0.1.0 (138), signing identity: -
 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
@@ -18,9 +18,9 @@ Signature=adhoc
 TeamIdentifier=not set
 Runtime Version=15.5.0
 Architectures: x86_64 arm64
-hdiutil: verify: checksum of "/Users/runner/work/_temp/dist/OnCue-0.1.0-139.dmg" is VALID
-Made /Users/runner/work/_temp/dist/OnCue-0.1.0-139.dmg ( 10M)
+hdiutil: verify: checksum of "/Users/runner/work/_temp/dist/OnCue-0.1.0-138.dmg" is VALID
+Made /Users/runner/work/_temp/dist/OnCue-0.1.0-138.dmg ( 10M)
 total 21312
-drwxr-xr-x   3 runner  staff        96 Nov 13 08:06 .
-drwxr-xr-x  15 runner  staff       480 Nov 13 08:06 ..
--rw-r--r--@  1 runner  staff  10911649 Nov 13 08:06 OnCue-0.1.0-139.dmg
+drwxr-xr-x   3 runner  staff        96 Nov 13 08:08 .
+drwxr-xr-x  15 runner  staff       480 Nov 13 08:08 ..
+-rw-r--r--@  1 runner  staff  10911651 Nov 13 08:08 OnCue-0.1.0-138.dmg

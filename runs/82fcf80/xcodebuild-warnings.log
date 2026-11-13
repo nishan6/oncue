@@ -4,4 +4,4 @@
 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
-2026-11-13 07:59:53.993 appintentsmetadataprocessor[7587:24907] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+2026-11-13 07:59:41.244 appintentsmetadataprocessor[7739:25251] warning: Metadata extraction skipped. No AppIntents.framework dependency found.

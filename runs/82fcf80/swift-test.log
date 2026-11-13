@@ -1,50 +1,50 @@
 Building for debugging...
 [0/8] /Users/runner/work/oncue/oncue/Packages/OnCueCore/.build/arm64-apple-macosx/debug/OnCueCorePackageTests.derived/runner.swift
-[0/8] Copying Fixtures
-[0/8] Write sources
+[1/8] Write sources
+[4/8] Copying Fixtures
 [5/8] Write swift-version--79AA4F9932D1E87A.txt
 [7/50] Emitting module OnCueCore
-[8/70] Compiling OnCueCore CrewPage.swift
-[9/70] Compiling OnCueCore CrewServer.swift
-[10/70] Compiling OnCueCore CrewSnapshot.swift
-[11/70] Compiling OnCueCore MultiView.swift
-[12/70] Compiling OnCueCore ViewerPage.swift
-[13/70] Compiling OnCueCore ATEMSwitcher.swift
-[14/70] Compiling OnCueCore ArtNetListener.swift
-[15/70] Compiling OnCueCore CompanionClient.swift
-[16/70] Compiling OnCueCore DeviceOutputService.swift
-[17/70] Compiling OnCueCore MIDIManager.swift
-[18/70] Compiling OnCueCore NetworkSwitchers.swift
-[19/70] Compiling OnCueCore OSC.swift
-[20/70] Compiling OnCueCore PTZService.swift
-[21/70] Compiling OnCueCore SwitcherDevice.swift
-[22/70] Compiling OnCueCore TSL.swift
-[23/70] Compiling OnCueCore TallySender.swift
-[24/70] Compiling OnCueCore TriggerMonitor.swift
-[25/70] Compiling OnCueCore BulkEditing.swift
-[26/70] Compiling OnCueCore Countdown.swift
-[27/70] Compiling OnCueCore DraftScript.swift
-[28/70] Compiling OnCueCore LiveCursor.swift
-[29/70] Compiling OnCueCore SampleShow.swift
-[30/70] Compiling OnCueCore SceneNumbering.swift
-[31/70] Compiling OnCueCore ShotPhrase.swift
-[32/70] Compiling OnCueCore ShowEditing.swift
-[33/70] Compiling OnCueCore SwitcherEditing.swift
-[34/70] Compiling OnCueCore TimelineEditing.swift
-[35/70] Compiling OnCueCore BackupLink.swift
-[36/70] Compiling OnCueCore Controls.swift
-[37/70] Compiling OnCueCore EngineController.swift
-[38/70] Compiling OnCueCore LTC.swift
-[39/70] Compiling OnCueCore LTCOutput.swift
-[40/70] Compiling OnCueCore MTC.swift
-[41/70] Compiling OnCueCore PreShowCheck.swift
-[42/70] Compiling OnCueCore RundownTiming.swift
-[43/70] Compiling OnCueCore ShowEngine.swift
-[44/70] Compiling OnCueCore Soak.swift
-[45/70] Compiling OnCueCore SwitchLog.swift
-[46/70] Compiling OnCueCore Timing.swift
-[47/70] Compiling OnCueCore TourComparison.swift
-[48/70] Compiling OnCueCore PDFExports.swift
+[8/70] Compiling OnCueCore SampleShow.swift
+[9/70] Compiling OnCueCore SceneNumbering.swift
+[10/70] Compiling OnCueCore ShotPhrase.swift
+[11/70] Compiling OnCueCore ShowEditing.swift
+[12/70] Compiling OnCueCore SwitcherEditing.swift
+[13/70] Compiling OnCueCore TimelineEditing.swift
+[14/70] Compiling OnCueCore BackupLink.swift
+[15/70] Compiling OnCueCore Controls.swift
+[16/70] Compiling OnCueCore EngineController.swift
+[17/70] Compiling OnCueCore LTC.swift
+[18/70] Compiling OnCueCore LTCOutput.swift
+[19/70] Compiling OnCueCore MTC.swift
+[20/70] Compiling OnCueCore PreShowCheck.swift
+[21/70] Compiling OnCueCore RundownTiming.swift
+[22/70] Compiling OnCueCore ShowEngine.swift
+[23/70] Compiling OnCueCore Soak.swift
+[24/70] Compiling OnCueCore SwitchLog.swift
+[25/70] Compiling OnCueCore Timing.swift
+[26/70] Compiling OnCueCore TourComparison.swift
+[27/70] Compiling OnCueCore PDFExports.swift
+[28/70] Compiling OnCueCore CrewPage.swift
+[29/70] Compiling OnCueCore CrewServer.swift
+[30/70] Compiling OnCueCore CrewSnapshot.swift
+[31/70] Compiling OnCueCore MultiView.swift
+[32/70] Compiling OnCueCore ViewerPage.swift
+[33/70] Compiling OnCueCore ATEMSwitcher.swift
+[34/70] Compiling OnCueCore ArtNetListener.swift
+[35/70] Compiling OnCueCore CompanionClient.swift
+[36/70] Compiling OnCueCore DeviceOutputService.swift
+[37/70] Compiling OnCueCore MIDIManager.swift
+[38/70] Compiling OnCueCore NetworkSwitchers.swift
+[39/70] Compiling OnCueCore OSC.swift
+[40/70] Compiling OnCueCore PTZService.swift
+[41/70] Compiling OnCueCore SwitcherDevice.swift
+[42/70] Compiling OnCueCore TSL.swift
+[43/70] Compiling OnCueCore TallySender.swift
+[44/70] Compiling OnCueCore TriggerMonitor.swift
+[45/70] Compiling OnCueCore BulkEditing.swift
+[46/70] Compiling OnCueCore Countdown.swift
+[47/70] Compiling OnCueCore DraftScript.swift
+[48/70] Compiling OnCueCore LiveCursor.swift
 [49/70] Compiling OnCueCore TextExports.swift
 /Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
  42 |     public static func kind(of url: URL) -> Kind {
@@ -1131,19 +1131,19 @@ Building for debugging...
 [109/111] Emitting module OnCueCorePackageTests
 [109/111] Write Objects.LinkFileList
 [110/111] Linking OnCueCorePackageTests
-Build complete! (50.46s)
-Test Suite 'All tests' started at 2026-11-13 07:56:43.898.
-Test Suite 'OnCueCorePackageTests.xctest' started at 2026-11-13 07:56:43.900.
-Test Suite 'BackupTests' started at 2026-11-13 07:56:43.901.
+Build complete! (49.03s)
+Test Suite 'All tests' started at 2026-11-13 07:56:34.582.
+Test Suite 'OnCueCorePackageTests.xctest' started at 2026-11-13 07:56:34.584.
+Test Suite 'BackupTests' started at 2026-11-13 07:56:34.584.
 Test Case '-[OnCueCoreTests.BackupTests testBackupFollowsWithoutSendingThenTakesOver]' started.
-Test Case '-[OnCueCoreTests.BackupTests testBackupFollowsWithoutSendingThenTakesOver]' passed (0.040 seconds).
+Test Case '-[OnCueCoreTests.BackupTests testBackupFollowsWithoutSendingThenTakesOver]' passed (0.029 seconds).
 Test Case '-[OnCueCoreTests.BackupTests testFollowIgnoresAnotherShow]' started.
-Test Case '-[OnCueCoreTests.BackupTests testFollowIgnoresAnotherShow]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.BackupTests testFollowIgnoresAnotherShow]' passed (0.007 seconds).
 Test Case '-[OnCueCoreTests.BackupTests testLinkOverLocalhost]' started.
-Test Case '-[OnCueCoreTests.BackupTests testLinkOverLocalhost]' passed (0.007 seconds).
-Test Suite 'BackupTests' passed at 2026-11-13 07:56:43.951.
-	 Executed 3 tests, with 0 failures (0 unexpected) in 0.050 (0.050) seconds
-Test Suite 'BulkEditingTests' started at 2026-11-13 07:56:43.951.
+Test Case '-[OnCueCoreTests.BackupTests testLinkOverLocalhost]' passed (0.028 seconds).
+Test Suite 'BackupTests' passed at 2026-11-13 07:56:34.647.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.063 (0.064) seconds
+Test Suite 'BulkEditingTests' started at 2026-11-13 07:56:34.647.
 Test Case '-[OnCueCoreTests.BulkEditingTests testMoveAllOpensAndClosesAGap]' started.
 Test Case '-[OnCueCoreTests.BulkEditingTests testMoveAllOpensAndClosesAGap]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.BulkEditingTests testMoveAllRefusesToOverlap]' started.
@@ -1154,21 +1154,21 @@ Test Case '-[OnCueCoreTests.BulkEditingTests testQuantizeToTheBar]' started.
 Test Case '-[OnCueCoreTests.BulkEditingTests testQuantizeToTheBar]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.BulkEditingTests testSelectFromHere]' started.
 Test Case '-[OnCueCoreTests.BulkEditingTests testSelectFromHere]' passed (0.000 seconds).
-Test Suite 'BulkEditingTests' passed at 2026-11-13 07:56:43.953.
-	 Executed 5 tests, with 0 failures (0 unexpected) in 0.001 (0.002) seconds
-Test Suite 'CameraPlotTests' started at 2026-11-13 07:56:43.953.
+Test Suite 'BulkEditingTests' passed at 2026-11-13 07:56:34.649.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
+Test Suite 'CameraPlotTests' started at 2026-11-13 07:56:34.649.
 Test Case '-[OnCueCoreTests.CameraPlotTests testPlaceMoveRotateRemove]' started.
-Test Case '-[OnCueCoreTests.CameraPlotTests testPlaceMoveRotateRemove]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.CameraPlotTests testPlaceMoveRotateRemove]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.CameraPlotTests testPlotSurvivesSavingAndOldFiles]' started.
 Test Case '-[OnCueCoreTests.CameraPlotTests testPlotSurvivesSavingAndOldFiles]' passed (0.004 seconds).
-Test Suite 'CameraPlotTests' passed at 2026-11-13 07:56:43.958.
+Test Suite 'CameraPlotTests' passed at 2026-11-13 07:56:34.654.
 	 Executed 2 tests, with 0 failures (0 unexpected) in 0.005 (0.005) seconds
-Test Suite 'ConsoleReadBackTests' started at 2026-11-13 07:56:43.958.
+Test Suite 'ConsoleReadBackTests' started at 2026-11-13 07:56:34.654.
 Test Case '-[OnCueCoreTests.ConsoleReadBackTests testX32Updates]' started.
 Test Case '-[OnCueCoreTests.ConsoleReadBackTests testX32Updates]' passed (0.000 seconds).
-Test Suite 'ConsoleReadBackTests' passed at 2026-11-13 07:56:43.958.
+Test Suite 'ConsoleReadBackTests' passed at 2026-11-13 07:56:34.654.
 	 Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
-Test Suite 'ConsoleTests' started at 2026-11-13 07:56:43.958.
+Test Suite 'ConsoleTests' started at 2026-11-13 07:56:34.654.
 Test Case '-[OnCueCoreTests.ConsoleTests testAllenHeath]' started.
 Test Case '-[OnCueCoreTests.ConsoleTests testAllenHeath]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ConsoleTests testEveryListedActionProducesSomething]' started.
@@ -1183,24 +1183,24 @@ Test Case '-[OnCueCoreTests.ConsoleTests testXPression]' started.
 Test Case '-[OnCueCoreTests.ConsoleTests testXPression]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ConsoleTests testYamaha]' started.
 Test Case '-[OnCueCoreTests.ConsoleTests testYamaha]' passed (0.000 seconds).
-Test Suite 'ConsoleTests' passed at 2026-11-13 07:56:43.959.
+Test Suite 'ConsoleTests' passed at 2026-11-13 07:56:34.655.
 	 Executed 7 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
-Test Suite 'ControlsTests' started at 2026-11-13 07:56:43.959.
+Test Suite 'ControlsTests' started at 2026-11-13 07:56:34.655.
 Test Case '-[OnCueCoreTests.ControlsTests testAPC40DefaultsMapPadsAndButtons]' started.
 Test Case '-[OnCueCoreTests.ControlsTests testAPC40DefaultsMapPadsAndButtons]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ControlsTests testControllerPerformsTakeCameraAsAManualCut]' started.
-Test Case '-[OnCueCoreTests.ControlsTests testControllerPerformsTakeCameraAsAManualCut]' passed (0.009 seconds).
+Test Case '-[OnCueCoreTests.ControlsTests testControllerPerformsTakeCameraAsAManualCut]' passed (0.030 seconds).
 Test Case '-[OnCueCoreTests.ControlsTests testMIDILearnReplacesOldBindings]' started.
-Test Case '-[OnCueCoreTests.ControlsTests testMIDILearnReplacesOldBindings]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ControlsTests testMIDILearnReplacesOldBindings]' passed (0.009 seconds).
 Test Case '-[OnCueCoreTests.ControlsTests testOSCAddresses]' started.
-Test Case '-[OnCueCoreTests.ControlsTests testOSCAddresses]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ControlsTests testOSCAddresses]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.ControlsTests testPadColorsShowTally]' started.
-Test Case '-[OnCueCoreTests.ControlsTests testPadColorsShowTally]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ControlsTests testPadColorsShowTally]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.ControlsTests testTapTempo]' started.
 Test Case '-[OnCueCoreTests.ControlsTests testTapTempo]' passed (0.000 seconds).
-Test Suite 'ControlsTests' passed at 2026-11-13 07:56:43.969.
-	 Executed 6 tests, with 0 failures (0 unexpected) in 0.010 (0.010) seconds
-Test Suite 'CountdownTests' started at 2026-11-13 07:56:43.969.
+Test Suite 'ControlsTests' passed at 2026-11-13 07:56:34.697.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.041 (0.042) seconds
+Test Suite 'CountdownTests' started at 2026-11-13 07:56:34.697.
 Test Case '-[OnCueCoreTests.CountdownTests testNextSectionInSeconds]' started.
 Test Case '-[OnCueCoreTests.CountdownTests testNextSectionInSeconds]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.CountdownTests testNoSectionWithoutATimingSourceOrAfterTheLast]' started.
@@ -1209,24 +1209,24 @@ Test Case '-[OnCueCoreTests.CountdownTests testStandbyOnlyInsideTheWindow]' star
 Test Case '-[OnCueCoreTests.CountdownTests testStandbyOnlyInsideTheWindow]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.CountdownTests testStandbySkipsGreyedOutShotsAndCanBeTurnedOff]' started.
 Test Case '-[OnCueCoreTests.CountdownTests testStandbySkipsGreyedOutShotsAndCanBeTurnedOff]' passed (0.000 seconds).
-Test Suite 'CountdownTests' passed at 2026-11-13 07:56:43.970.
+Test Suite 'CountdownTests' passed at 2026-11-13 07:56:34.698.
 	 Executed 4 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
-Test Suite 'CrewTests' started at 2026-11-13 07:56:43.970.
+Test Suite 'CrewTests' started at 2026-11-13 07:56:34.698.
 Test Case '-[OnCueCoreTests.CrewTests testCommentsFromThePage]' started.
 Test Case '-[OnCueCoreTests.CrewTests testCommentsFromThePage]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.CrewTests testEventStreamSendsStateAndUpdates]' started.
-Test Case '-[OnCueCoreTests.CrewTests testEventStreamSendsStateAndUpdates]' passed (0.446 seconds).
+Test Case '-[OnCueCoreTests.CrewTests testEventStreamSendsStateAndUpdates]' passed (0.350 seconds).
 Test Case '-[OnCueCoreTests.CrewTests testLiveSnapshotTallyAndCountdown]' started.
-Test Case '-[OnCueCoreTests.CrewTests testLiveSnapshotTallyAndCountdown]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.CrewTests testLiveSnapshotTallyAndCountdown]' passed (0.002 seconds).
 Test Case '-[OnCueCoreTests.CrewTests testRequestParsingWaitsForTheBody]' started.
-Test Case '-[OnCueCoreTests.CrewTests testRequestParsingWaitsForTheBody]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.CrewTests testRequestParsingWaitsForTheBody]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.CrewTests testReviewSnapshotHasEveryItem]' started.
 Test Case '-[OnCueCoreTests.CrewTests testReviewSnapshotHasEveryItem]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.CrewTests testServerOnLocalhost]' started.
-Test Case '-[OnCueCoreTests.CrewTests testServerOnLocalhost]' passed (0.074 seconds).
-Test Suite 'CrewTests' passed at 2026-11-13 07:56:44.493.
-	 Executed 6 tests, with 0 failures (0 unexpected) in 0.523 (0.523) seconds
-Test Suite 'DeviceWireTests' started at 2026-11-13 07:56:44.493.
+Test Case '-[OnCueCoreTests.CrewTests testServerOnLocalhost]' passed (0.243 seconds).
+Test Suite 'CrewTests' passed at 2026-11-13 07:56:35.295.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.597 (0.597) seconds
+Test Suite 'DeviceWireTests' started at 2026-11-13 07:56:35.295.
 Test Case '-[OnCueCoreTests.DeviceWireTests testArtDmxParsesBack]' started.
 Test Case '-[OnCueCoreTests.DeviceWireTests testArtDmxParsesBack]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.DeviceWireTests testDMXFades]' started.
@@ -1236,21 +1236,21 @@ Test Case '-[OnCueCoreTests.DeviceWireTests testHTTPURL]' passed (0.000 seconds)
 Test Case '-[OnCueCoreTests.DeviceWireTests testMIDI]' started.
 Test Case '-[OnCueCoreTests.DeviceWireTests testMIDI]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.DeviceWireTests testMSCRoundTripsThroughTheParser]' started.
-Test Case '-[OnCueCoreTests.DeviceWireTests testMSCRoundTripsThroughTheParser]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.DeviceWireTests testMSCRoundTripsThroughTheParser]' passed (0.006 seconds).
 Test Case '-[OnCueCoreTests.DeviceWireTests testSACNLayout]' started.
 Test Case '-[OnCueCoreTests.DeviceWireTests testSACNLayout]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.DeviceWireTests testTextEscapesAndEndings]' started.
 Test Case '-[OnCueCoreTests.DeviceWireTests testTextEscapesAndEndings]' passed (0.000 seconds).
-Test Suite 'DeviceWireTests' passed at 2026-11-13 07:56:44.495.
-	 Executed 7 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
-Test Suite 'DraftScriptTests' started at 2026-11-13 07:56:44.496.
+Test Suite 'DeviceWireTests' passed at 2026-11-13 07:56:35.303.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.008 (0.008) seconds
+Test Suite 'DraftScriptTests' started at 2026-11-13 07:56:35.303.
 Test Case '-[OnCueCoreTests.DraftScriptTests testDraftFromEDL]' started.
 Test Case '-[OnCueCoreTests.DraftScriptTests testDraftFromEDL]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.DraftScriptTests testDraftFromSwitchLog]' started.
 Test Case '-[OnCueCoreTests.DraftScriptTests testDraftFromSwitchLog]' passed (0.000 seconds).
-Test Suite 'DraftScriptTests' passed at 2026-11-13 07:56:44.497.
+Test Suite 'DraftScriptTests' passed at 2026-11-13 07:56:35.305.
 	 Executed 2 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
-Test Suite 'EditingTests' started at 2026-11-13 07:56:44.497.
+Test Suite 'EditingTests' started at 2026-11-13 07:56:35.305.
 Test Case '-[OnCueCoreTests.EditingTests testAddRenameDeleteSections]' started.
 Test Case '-[OnCueCoreTests.EditingTests testAddRenameDeleteSections]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.EditingTests testAddShotsAtEndAfterAndInSection]' started.
@@ -1258,13 +1258,13 @@ Test Case '-[OnCueCoreTests.EditingTests testAddShotsAtEndAfterAndInSection]' pa
 Test Case '-[OnCueCoreTests.EditingTests testAddSongsAndSegmentsInPlace]' started.
 Test Case '-[OnCueCoreTests.EditingTests testAddSongsAndSegmentsInPlace]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.EditingTests testCamerasNumberingAndDeletion]' started.
-Test Case '-[OnCueCoreTests.EditingTests testCamerasNumberingAndDeletion]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testCamerasNumberingAndDeletion]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.EditingTests testDragReorderKeepsTimeSlots]' started.
-Test Case '-[OnCueCoreTests.EditingTests testDragReorderKeepsTimeSlots]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testDragReorderKeepsTimeSlots]' passed (0.002 seconds).
 Test Case '-[OnCueCoreTests.EditingTests testMoveHelperMatchesSwiftUISemantics]' started.
 Test Case '-[OnCueCoreTests.EditingTests testMoveHelperMatchesSwiftUISemantics]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.EditingTests testMovingSectionsCarriesTheirShots]' started.
-Test Case '-[OnCueCoreTests.EditingTests testMovingSectionsCarriesTheirShots]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testMovingSectionsCarriesTheirShots]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.EditingTests testNudgeDuplicateEditDelete]' started.
 Test Case '-[OnCueCoreTests.EditingTests testNudgeDuplicateEditDelete]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.EditingTests testOrderBasedItemsStayNumbered]' started.
@@ -1274,25 +1274,25 @@ Test Case '-[OnCueCoreTests.EditingTests testRenameReorderDuplicateDelete]' pass
 Test Case '-[OnCueCoreTests.EditingTests testReorderWithinSectionOnly]' started.
 Test Case '-[OnCueCoreTests.EditingTests testReorderWithinSectionOnly]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.EditingTests testSampleProductionSurvivesSaveAndReopen]' started.
-Test Case '-[OnCueCoreTests.EditingTests testSampleProductionSurvivesSaveAndReopen]' passed (0.007 seconds).
+Test Case '-[OnCueCoreTests.EditingTests testSampleProductionSurvivesSaveAndReopen]' passed (0.017 seconds).
 Test Case '-[OnCueCoreTests.EditingTests testScriptChecks]' started.
 Test Case '-[OnCueCoreTests.EditingTests testScriptChecks]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.EditingTests testTimeBaseConversionKeepsTiming]' started.
-Test Case '-[OnCueCoreTests.EditingTests testTimeBaseConversionKeepsTiming]' passed (0.000 seconds).
-Test Suite 'EditingTests' passed at 2026-11-13 07:56:44.510.
-	 Executed 14 tests, with 0 failures (0 unexpected) in 0.012 (0.013) seconds
-Test Suite 'EngineDeviceTests' started at 2026-11-13 07:56:44.510.
+Test Case '-[OnCueCoreTests.EditingTests testTimeBaseConversionKeepsTiming]' passed (0.001 seconds).
+Test Suite 'EditingTests' passed at 2026-11-13 07:56:35.330.
+	 Executed 14 tests, with 0 failures (0 unexpected) in 0.025 (0.025) seconds
+Test Suite 'EngineDeviceTests' started at 2026-11-13 07:56:35.330.
 Test Case '-[OnCueCoreTests.EngineDeviceTests testDeviceCueFiresToASimulatedTarget]' started.
-Test Case '-[OnCueCoreTests.EngineDeviceTests testDeviceCueFiresToASimulatedTarget]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.EngineDeviceTests testDeviceCueFiresToASimulatedTarget]' passed (0.013 seconds).
 Test Case '-[OnCueCoreTests.EngineDeviceTests testTallyInCatchesAManualCut]' started.
-Test Case '-[OnCueCoreTests.EngineDeviceTests testTallyInCatchesAManualCut]' passed (0.003 seconds).
-Test Suite 'EngineDeviceTests' passed at 2026-11-13 07:56:44.516.
-	 Executed 2 tests, with 0 failures (0 unexpected) in 0.006 (0.006) seconds
-Test Suite 'EngineTests' started at 2026-11-13 07:56:44.516.
+Test Case '-[OnCueCoreTests.EngineDeviceTests testTallyInCatchesAManualCut]' passed (0.012 seconds).
+Test Suite 'EngineDeviceTests' passed at 2026-11-13 07:56:35.354.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.024 (0.025) seconds
+Test Suite 'EngineTests' started at 2026-11-13 07:56:35.354.
 Test Case '-[OnCueCoreTests.EngineTests testATEMHandshakeStateAndCommands]' started.
-Test Case '-[OnCueCoreTests.EngineTests testATEMHandshakeStateAndCommands]' passed (0.133 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testATEMHandshakeStateAndCommands]' passed (0.090 seconds).
 Test Case '-[OnCueCoreTests.EngineTests testAutoCutTakesShotsAndPreloadsTheNext]' started.
-Test Case '-[OnCueCoreTests.EngineTests testAutoCutTakesShotsAndPreloadsTheNext]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testAutoCutTakesShotsAndPreloadsTheNext]' passed (0.002 seconds).
 Test Case '-[OnCueCoreTests.EngineTests testAutoPreviewIgnoresTheDirectorsCuts]' started.
 Test Case '-[OnCueCoreTests.EngineTests testAutoPreviewIgnoresTheDirectorsCuts]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.EngineTests testAutoPreviewOnlyLoadsPreview]' started.
@@ -1302,9 +1302,9 @@ Test Case '-[OnCueCoreTests.EngineTests testCamerasWithoutAnInputAreSkippedNotSe
 Test Case '-[OnCueCoreTests.EngineTests testControllerDrivesTheSimulatorAndPausesOnAManualCut]' started.
 Test Case '-[OnCueCoreTests.EngineTests testControllerDrivesTheSimulatorAndPausesOnAManualCut]' passed (0.005 seconds).
 Test Case '-[OnCueCoreTests.EngineTests testDisplayModeSendsNothingButFollowsThePlayhead]' started.
-Test Case '-[OnCueCoreTests.EngineTests testDisplayModeSendsNothingButFollowsThePlayhead]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testDisplayModeSendsNothingButFollowsThePlayhead]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.EngineTests testFastNextThroughAMixDoesNotLookLikeAManualCut]' started.
-Test Case '-[OnCueCoreTests.EngineTests testFastNextThroughAMixDoesNotLookLikeAManualCut]' passed (2.533 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testFastNextThroughAMixDoesNotLookLikeAManualCut]' passed (2.564 seconds).
 Test Case '-[OnCueCoreTests.EngineTests testInternalClockAndRates]' started.
 Test Case '-[OnCueCoreTests.EngineTests testInternalClockAndRates]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.EngineTests testLTCDecodesInvertedAndQuietSignals]' started.
@@ -1312,7 +1312,7 @@ Test Case '-[OnCueCoreTests.EngineTests testLTCDecodesInvertedAndQuietSignals]' 
 Test Case '-[OnCueCoreTests.EngineTests testLTCFollowerUsesTheItemStartOrTheFirstFrame]' started.
 Test Case '-[OnCueCoreTests.EngineTests testLTCFollowerUsesTheItemStartOrTheFirstFrame]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.EngineTests testLTCRoundTrip]' started.
-Test Case '-[OnCueCoreTests.EngineTests testLTCRoundTrip]' passed (0.004 seconds).
+Test Case '-[OnCueCoreTests.EngineTests testLTCRoundTrip]' passed (0.003 seconds).
 Test Case '-[OnCueCoreTests.EngineTests testManualCutPausesAutoCutUntilResume]' started.
 Test Case '-[OnCueCoreTests.EngineTests testManualCutPausesAutoCutUntilResume]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.EngineTests testMIDIClockFollower]' started.
@@ -1321,54 +1321,54 @@ Test Case '-[OnCueCoreTests.EngineTests testNextBackTapAndJump]' started.
 Test Case '-[OnCueCoreTests.EngineTests testNextBackTapAndJump]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.EngineTests testSecondsToNextUsesTheTempo]' started.
 Test Case '-[OnCueCoreTests.EngineTests testSecondsToNextUsesTheTempo]' passed (0.000 seconds).
-Test Suite 'EngineTests' passed at 2026-11-13 07:56:47.198.
-	 Executed 16 tests, with 0 failures (0 unexpected) in 2.681 (2.682) seconds
-Test Suite 'EngineTriggerTests' started at 2026-11-13 07:56:47.198.
+Test Suite 'EngineTests' passed at 2026-11-13 07:56:38.025.
+	 Executed 16 tests, with 0 failures (0 unexpected) in 2.669 (2.670) seconds
+Test Suite 'EngineTriggerTests' started at 2026-11-13 07:56:38.025.
 Test Case '-[OnCueCoreTests.EngineTriggerTests testFireCueJumpsToTheShot]' started.
-Test Case '-[OnCueCoreTests.EngineTriggerTests testFireCueJumpsToTheShot]' passed (0.004 seconds).
+Test Case '-[OnCueCoreTests.EngineTriggerTests testFireCueJumpsToTheShot]' passed (0.005 seconds).
 Test Case '-[OnCueCoreTests.EngineTriggerTests testRoutesDriveTheEngine]' started.
-Test Case '-[OnCueCoreTests.EngineTriggerTests testRoutesDriveTheEngine]' passed (0.003 seconds).
-Test Suite 'EngineTriggerTests' passed at 2026-11-13 07:56:47.204.
-	 Executed 2 tests, with 0 failures (0 unexpected) in 0.006 (0.007) seconds
-Test Suite 'ExportTests' started at 2026-11-13 07:56:47.204.
+Test Case '-[OnCueCoreTests.EngineTriggerTests testRoutesDriveTheEngine]' passed (0.005 seconds).
+Test Suite 'EngineTriggerTests' passed at 2026-11-13 07:56:38.035.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.010 (0.010) seconds
+Test Suite 'ExportTests' started at 2026-11-13 07:56:38.035.
 Test Case '-[OnCueCoreTests.ExportTests testCallSheetsOnePerCamera]' started.
-Test Case '-[OnCueCoreTests.ExportTests testCallSheetsOnePerCamera]' passed (0.142 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testCallSheetsOnePerCamera]' passed (0.228 seconds).
 Test Case '-[OnCueCoreTests.ExportTests testCameraScriptPDF]' started.
-Test Case '-[OnCueCoreTests.ExportTests testCameraScriptPDF]' passed (0.191 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testCameraScriptPDF]' passed (0.235 seconds).
 Test Case '-[OnCueCoreTests.ExportTests testCSVQuoting]' started.
 Test Case '-[OnCueCoreTests.ExportTests testCSVQuoting]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ExportTests testMarkerEDL]' started.
-Test Case '-[OnCueCoreTests.ExportTests testMarkerEDL]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testMarkerEDL]' passed (0.002 seconds).
 Test Case '-[OnCueCoreTests.ExportTests testResolveMarkerColour]' started.
 Test Case '-[OnCueCoreTests.ExportTests testResolveMarkerColour]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ExportTests testScriptCSVHasEveryShot]' started.
-Test Case '-[OnCueCoreTests.ExportTests testScriptCSVHasEveryShot]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testScriptCSVHasEveryShot]' passed (0.004 seconds).
 Test Case '-[OnCueCoreTests.ExportTests testSwitchLogCSV]' started.
-Test Case '-[OnCueCoreTests.ExportTests testSwitchLogCSV]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.ExportTests testSwitchLogCSV]' passed (0.003 seconds).
 Test Case '-[OnCueCoreTests.ExportTests testSwitchLogEDLFallsBackToTimeOfDay]' started.
 Test Case '-[OnCueCoreTests.ExportTests testSwitchLogEDLFallsBackToTimeOfDay]' passed (0.002 seconds).
 Test Case '-[OnCueCoreTests.ExportTests testSwitchLogEDLUsesLTC]' started.
 Test Case '-[OnCueCoreTests.ExportTests testSwitchLogEDLUsesLTC]' passed (0.002 seconds).
 Test Case '-[OnCueCoreTests.ExportTests testTimecodeMath]' started.
 Test Case '-[OnCueCoreTests.ExportTests testTimecodeMath]' passed (0.000 seconds).
-Test Suite 'ExportTests' passed at 2026-11-13 07:56:47.549.
-	 Executed 10 tests, with 0 failures (0 unexpected) in 0.344 (0.344) seconds
-Test Suite 'FailoverTests' started at 2026-11-13 07:56:47.549.
+Test Suite 'ExportTests' passed at 2026-11-13 07:56:38.512.
+	 Executed 10 tests, with 0 failures (0 unexpected) in 0.477 (0.477) seconds
+Test Suite 'FailoverTests' started at 2026-11-13 07:56:38.512.
 Test Case '-[OnCueCoreTests.FailoverTests testAskFirstWaitsForYou]' started.
-2026-11-13 07:56:47.551 xctest[2474:10448] OnCue failover: Simulator lost for 0 s. Waiting for you to fail over to Parallel.
-2026-11-13 07:56:47.552 xctest[2474:10448] OnCue failover: Failed over: Simulator out of contact, reading program and tally from Parallel.
-Test Case '-[OnCueCoreTests.FailoverTests testAskFirstWaitsForYou]' passed (0.005 seconds).
+2026-11-13 07:56:38.515 xctest[2342:10262] OnCue failover: Simulator lost for 0 s. Waiting for you to fail over to Parallel.
+2026-11-13 07:56:38.523 xctest[2342:10262] OnCue failover: Failed over: Simulator out of contact, reading program and tally from Parallel.
+Test Case '-[OnCueCoreTests.FailoverTests testAskFirstWaitsForYou]' passed (0.020 seconds).
 Test Case '-[OnCueCoreTests.FailoverTests testAutomaticFailoverAndRecovery]' started.
-2026-11-13 07:56:47.557 xctest[2474:10448] OnCue failover: Failed over: Simulator out of contact, reading program and tally from Parallel.
-2026-11-13 07:56:47.559 xctest[2474:10448] OnCue failover: Simulator is back. Reading program and tally from it again (Parallel keeps mirroring).
-Test Case '-[OnCueCoreTests.FailoverTests testAutomaticFailoverAndRecovery]' passed (0.011 seconds).
+2026-11-13 07:56:38.534 xctest[2342:10262] OnCue failover: Failed over: Simulator out of contact, reading program and tally from Parallel.
+2026-11-13 07:56:38.547 xctest[2342:10262] OnCue failover: Simulator is back. Reading program and tally from it again (Parallel keeps mirroring).
+Test Case '-[OnCueCoreTests.FailoverTests testAutomaticFailoverAndRecovery]' passed (0.026 seconds).
 Test Case '-[OnCueCoreTests.FailoverTests testParallelSwitcherGetsEveryCommand]' started.
-Test Case '-[OnCueCoreTests.FailoverTests testParallelSwitcherGetsEveryCommand]' passed (0.005 seconds).
+Test Case '-[OnCueCoreTests.FailoverTests testParallelSwitcherGetsEveryCommand]' passed (0.017 seconds).
 Test Case '-[OnCueCoreTests.FailoverTests testRealSwitchersAreNeverUnpluggedFromHere]' started.
 Test Case '-[OnCueCoreTests.FailoverTests testRealSwitchersAreNeverUnpluggedFromHere]' passed (0.002 seconds).
-Test Suite 'FailoverTests' passed at 2026-11-13 07:56:47.571.
-	 Executed 4 tests, with 0 failures (0 unexpected) in 0.022 (0.022) seconds
-Test Suite 'FrameRateTests' started at 2026-11-13 07:56:47.571.
+Test Suite 'FailoverTests' passed at 2026-11-13 07:56:38.578.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.065 (0.066) seconds
+Test Suite 'FrameRateTests' started at 2026-11-13 07:56:38.578.
 Test Case '-[OnCueCoreTests.FrameRateTests testClosestPreset]' started.
 Test Case '-[OnCueCoreTests.FrameRateTests testClosestPreset]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.FrameRateTests testCustomRates]' started.
@@ -1381,105 +1381,105 @@ Test Case '-[OnCueCoreTests.FrameRateTests testKeyRoundTrip]' started.
 Test Case '-[OnCueCoreTests.FrameRateTests testKeyRoundTrip]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.FrameRateTests testPresetsAndLabels]' started.
 Test Case '-[OnCueCoreTests.FrameRateTests testPresetsAndLabels]' passed (0.000 seconds).
-Test Suite 'FrameRateTests' passed at 2026-11-13 07:56:47.572.
+Test Suite 'FrameRateTests' passed at 2026-11-13 07:56:38.579.
 	 Executed 6 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
-Test Suite 'FreewheelTests' started at 2026-11-13 07:56:47.572.
+Test Suite 'FreewheelTests' started at 2026-11-13 07:56:38.579.
 Test Case '-[OnCueCoreTests.FreewheelTests testForSecondsAndOff]' started.
 Test Case '-[OnCueCoreTests.FreewheelTests testForSecondsAndOff]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.FreewheelTests testUntilSongEnd]' started.
 Test Case '-[OnCueCoreTests.FreewheelTests testUntilSongEnd]' passed (0.000 seconds).
-Test Suite 'FreewheelTests' passed at 2026-11-13 07:56:47.573.
+Test Suite 'FreewheelTests' passed at 2026-11-13 07:56:38.579.
 	 Executed 2 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
-Test Suite 'GroupMoveTests' started at 2026-11-13 07:56:47.573.
+Test Suite 'GroupMoveTests' started at 2026-11-13 07:56:38.579.
 Test Case '-[OnCueCoreTests.GroupMoveTests testCopiesKeepDetailsWithNewIDs]' started.
-Test Case '-[OnCueCoreTests.GroupMoveTests testCopiesKeepDetailsWithNewIDs]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.GroupMoveTests testCopiesKeepDetailsWithNewIDs]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.GroupMoveTests testMovesSelectionTogether]' started.
 Test Case '-[OnCueCoreTests.GroupMoveTests testMovesSelectionTogether]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.GroupMoveTests testRefusesToMoveBeforeTheStart]' started.
 Test Case '-[OnCueCoreTests.GroupMoveTests testRefusesToMoveBeforeTheStart]' passed (0.000 seconds).
-Test Suite 'GroupMoveTests' passed at 2026-11-13 07:56:47.574.
+Test Suite 'GroupMoveTests' passed at 2026-11-13 07:56:38.581.
 	 Executed 3 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
-Test Suite 'HyperDeckTests' started at 2026-11-13 07:56:47.574.
+Test Suite 'HyperDeckTests' started at 2026-11-13 07:56:38.581.
 Test Case '-[OnCueCoreTests.HyperDeckTests testCommands]' started.
-Test Case '-[OnCueCoreTests.HyperDeckTests testCommands]' passed (0.000 seconds).
-Test Suite 'HyperDeckTests' passed at 2026-11-13 07:56:47.574.
-	 Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
-Test Suite 'LTCOutputTests' started at 2026-11-13 07:56:47.574.
+Test Case '-[OnCueCoreTests.HyperDeckTests testCommands]' passed (0.001 seconds).
+Test Suite 'HyperDeckTests' passed at 2026-11-13 07:56:38.581.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'LTCOutputTests' started at 2026-11-13 07:56:38.581.
 Test Case '-[OnCueCoreTests.LTCOutputTests testFrameForTime]' started.
 Test Case '-[OnCueCoreTests.LTCOutputTests testFrameForTime]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.LTCOutputTests testGeneratorStreamDecodes]' started.
-Test Case '-[OnCueCoreTests.LTCOutputTests testGeneratorStreamDecodes]' passed (0.017 seconds).
-Test Suite 'LTCOutputTests' passed at 2026-11-13 07:56:47.591.
-	 Executed 2 tests, with 0 failures (0 unexpected) in 0.017 (0.017) seconds
-Test Suite 'LargeTimelineTests' started at 2026-11-13 07:56:47.591.
+Test Case '-[OnCueCoreTests.LTCOutputTests testGeneratorStreamDecodes]' passed (0.012 seconds).
+Test Suite 'LTCOutputTests' passed at 2026-11-13 07:56:38.594.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.013 (0.013) seconds
+Test Suite 'LargeTimelineTests' started at 2026-11-13 07:56:38.595.
 Test Case '-[OnCueCoreTests.LargeTimelineTests testEditAndSaveStayFast]' started.
-Test Case '-[OnCueCoreTests.LargeTimelineTests testEditAndSaveStayFast]' passed (0.513 seconds).
+Test Case '-[OnCueCoreTests.LargeTimelineTests testEditAndSaveStayFast]' passed (0.538 seconds).
 Test Case '-[OnCueCoreTests.LargeTimelineTests testRowsAndSpansStayFast]' started.
-Test Case '-[OnCueCoreTests.LargeTimelineTests testRowsAndSpansStayFast]' passed (0.627 seconds).
-Test Suite 'LargeTimelineTests' passed at 2026-11-13 07:56:48.731.
-	 Executed 2 tests, with 0 failures (0 unexpected) in 1.140 (1.140) seconds
-Test Suite 'LiveScriptTests' started at 2026-11-13 07:56:48.732.
+Test Case '-[OnCueCoreTests.LargeTimelineTests testRowsAndSpansStayFast]' passed (0.587 seconds).
+Test Suite 'LargeTimelineTests' passed at 2026-11-13 07:56:39.720.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 1.125 (1.125) seconds
+Test Suite 'LiveScriptTests' started at 2026-11-13 07:56:39.720.
 Test Case '-[OnCueCoreTests.LiveScriptTests testCutShotsAreLeftOutOfLiveOnly]' started.
 Test Case '-[OnCueCoreTests.LiveScriptTests testCutShotsAreLeftOutOfLiveOnly]' passed (0.000 seconds).
-Test Suite 'LiveScriptTests' passed at 2026-11-13 07:56:48.732.
+Test Suite 'LiveScriptTests' passed at 2026-11-13 07:56:39.720.
 	 Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
-Test Suite 'MTCTests' started at 2026-11-13 07:56:48.732.
+Test Suite 'MTCTests' started at 2026-11-13 07:56:39.720.
 Test Case '-[OnCueCoreTests.MTCTests testFullFrame]' started.
-Test Case '-[OnCueCoreTests.MTCTests testFullFrame]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.MTCTests testFullFrame]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.MTCTests testOutOfOrderPiecesAreIgnored]' started.
-Test Case '-[OnCueCoreTests.MTCTests testOutOfOrderPiecesAreIgnored]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.MTCTests testOutOfOrderPiecesAreIgnored]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.MTCTests testQuarterFramesGiveTimeTwoFramesOn]' started.
 Test Case '-[OnCueCoreTests.MTCTests testQuarterFramesGiveTimeTwoFramesOn]' passed (0.000 seconds).
-Test Suite 'MTCTests' passed at 2026-11-13 07:56:48.732.
-	 Executed 3 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
-Test Suite 'MachineProfileTests' started at 2026-11-13 07:56:48.732.
+Test Suite 'MTCTests' passed at 2026-11-13 07:56:39.723.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.002 (0.003) seconds
+Test Suite 'MachineProfileTests' started at 2026-11-13 07:56:39.723.
 Test Case '-[OnCueCoreTests.MachineProfileTests testCorruptProfileIsKeptAsBackupAndDefaultsUsed]' started.
-Test Case '-[OnCueCoreTests.MachineProfileTests testCorruptProfileIsKeptAsBackupAndDefaultsUsed]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testCorruptProfileIsKeptAsBackupAndDefaultsUsed]' passed (0.007 seconds).
 Test Case '-[OnCueCoreTests.MachineProfileTests testMissingProfileIsCreatedWithDefaults]' started.
 Test Case '-[OnCueCoreTests.MachineProfileTests testMissingProfileIsCreatedWithDefaults]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.MachineProfileTests testNewerProfileFormatIsNotOverwrittenInPlace]' started.
-Test Case '-[OnCueCoreTests.MachineProfileTests testNewerProfileFormatIsNotOverwrittenInPlace]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testNewerProfileFormatIsNotOverwrittenInPlace]' passed (0.003 seconds).
 Test Case '-[OnCueCoreTests.MachineProfileTests testOpeningAnotherShowDoesNotTouchTheProfile]' started.
-Test Case '-[OnCueCoreTests.MachineProfileTests testOpeningAnotherShowDoesNotTouchTheProfile]' passed (0.003 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testOpeningAnotherShowDoesNotTouchTheProfile]' passed (0.016 seconds).
 Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesDoNotMutateShows]' started.
-Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesDoNotMutateShows]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesDoNotMutateShows]' passed (0.008 seconds).
 Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesPersistAcrossLaunches]' started.
-Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesPersistAcrossLaunches]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.MachineProfileTests testProfileChangesPersistAcrossLaunches]' passed (0.007 seconds).
 Test Case '-[OnCueCoreTests.MachineProfileTests testProfileMissingFieldsGetDefaults]' started.
 Test Case '-[OnCueCoreTests.MachineProfileTests testProfileMissingFieldsGetDefaults]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.MachineProfileTests testShowFilesCarryNoMachineSettings]' started.
-Test Case '-[OnCueCoreTests.MachineProfileTests testShowFilesCarryNoMachineSettings]' passed (0.005 seconds).
-Test Suite 'MachineProfileTests' passed at 2026-11-13 07:56:48.748.
-	 Executed 8 tests, with 0 failures (0 unexpected) in 0.016 (0.016) seconds
-Test Suite 'MediaPoolTests' started at 2026-11-13 07:56:48.748.
+Test Case '-[OnCueCoreTests.MachineProfileTests testShowFilesCarryNoMachineSettings]' passed (0.021 seconds).
+Test Suite 'MachineProfileTests' passed at 2026-11-13 07:56:39.787.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.063 (0.064) seconds
+Test Suite 'MediaPoolTests' started at 2026-11-13 07:56:39.787.
 Test Case '-[OnCueCoreTests.MediaPoolTests testGuessKind]' started.
-Test Case '-[OnCueCoreTests.MediaPoolTests testGuessKind]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.MediaPoolTests testGuessKind]' passed (0.003 seconds).
 Test Case '-[OnCueCoreTests.MediaPoolTests testPoolRoundTrip]' started.
-Test Case '-[OnCueCoreTests.MediaPoolTests testPoolRoundTrip]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.MediaPoolTests testPoolRoundTrip]' passed (0.006 seconds).
 Test Case '-[OnCueCoreTests.MediaPoolTests testRelinkByFolderNeverGuesses]' started.
 Test Case '-[OnCueCoreTests.MediaPoolTests testRelinkByFolderNeverGuesses]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.MediaPoolTests testRelinkUpdatesSongs]' started.
 Test Case '-[OnCueCoreTests.MediaPoolTests testRelinkUpdatesSongs]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.MediaPoolTests testUsageImportAndUnused]' started.
 Test Case '-[OnCueCoreTests.MediaPoolTests testUsageImportAndUnused]' passed (0.000 seconds).
-Test Suite 'MediaPoolTests' passed at 2026-11-13 07:56:48.751.
-	 Executed 5 tests, with 0 failures (0 unexpected) in 0.003 (0.003) seconds
-Test Suite 'MediaTests' started at 2026-11-13 07:56:48.751.
+Test Suite 'MediaPoolTests' passed at 2026-11-13 07:56:39.798.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.010 (0.010) seconds
+Test Suite 'MediaTests' started at 2026-11-13 07:56:39.798.
 Test Case '-[OnCueCoreTests.MediaTests testMediaSurvivesSaving]' started.
-Test Case '-[OnCueCoreTests.MediaTests testMediaSurvivesSaving]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.MediaTests testMediaSurvivesSaving]' passed (0.005 seconds).
 Test Case '-[OnCueCoreTests.MediaTests testMediaTimeMapping]' started.
 Test Case '-[OnCueCoreTests.MediaTests testMediaTimeMapping]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.MediaTests testWaveformPeaks]' started.
-Test Case '-[OnCueCoreTests.MediaTests testWaveformPeaks]' passed (0.489 seconds).
-Test Suite 'MediaTests' passed at 2026-11-13 07:56:49.241.
-	 Executed 3 tests, with 0 failures (0 unexpected) in 0.490 (0.490) seconds
-Test Suite 'ModelTests' started at 2026-11-13 07:56:49.241.
+Test Case '-[OnCueCoreTests.MediaTests testWaveformPeaks]' passed (0.554 seconds).
+Test Suite 'MediaTests' passed at 2026-11-13 07:56:40.357.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.559 (0.559) seconds
+Test Suite 'ModelTests' started at 2026-11-13 07:56:40.357.
 Test Case '-[OnCueCoreTests.ModelTests testBarsPositionsParseAndFormat]' started.
-Test Case '-[OnCueCoreTests.ModelTests testBarsPositionsParseAndFormat]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testBarsPositionsParseAndFormat]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.ModelTests testCameraLabels]' started.
 Test Case '-[OnCueCoreTests.ModelTests testCameraLabels]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ModelTests testEnsureShotTracksAddsTrackPerOutput]' started.
-Test Case '-[OnCueCoreTests.ModelTests testEnsureShotTracksAddsTrackPerOutput]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testEnsureShotTracksAddsTrackPerOutput]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.ModelTests testOrderPositions]' started.
 Test Case '-[OnCueCoreTests.ModelTests testOrderPositions]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ModelTests testSecondsFromBeats]' started.
@@ -1489,38 +1489,38 @@ Test Case '-[OnCueCoreTests.ModelTests testSecondsPositionsParseAndFormat]' pass
 Test Case '-[OnCueCoreTests.ModelTests testSectionsAndEnds]' started.
 Test Case '-[OnCueCoreTests.ModelTests testSectionsAndEnds]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ModelTests testStarterShow]' started.
-Test Case '-[OnCueCoreTests.ModelTests testStarterShow]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.ModelTests testStarterShow]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ModelTests testTimecodeHelpers]' started.
 Test Case '-[OnCueCoreTests.ModelTests testTimecodeHelpers]' passed (0.000 seconds).
-Test Suite 'ModelTests' passed at 2026-11-13 07:56:49.246.
-	 Executed 9 tests, with 0 failures (0 unexpected) in 0.005 (0.005) seconds
-Test Suite 'MoreConsoleTests' started at 2026-11-13 07:56:49.246.
+Test Suite 'ModelTests' passed at 2026-11-13 07:56:40.359.
+	 Executed 9 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
+Test Suite 'MoreConsoleTests' started at 2026-11-13 07:56:40.359.
 Test Case '-[OnCueCoreTests.MoreConsoleTests testAvolitesAndWing]' started.
 Test Case '-[OnCueCoreTests.MoreConsoleTests testAvolitesAndWing]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.MoreConsoleTests testConsoleSettingsDecodeWithoutFeedbackPort]' started.
 Test Case '-[OnCueCoreTests.MoreConsoleTests testConsoleSettingsDecodeWithoutFeedbackPort]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.MoreConsoleTests testOSCBundlesDecodeEveryMessage]' started.
-Test Case '-[OnCueCoreTests.MoreConsoleTests testOSCBundlesDecodeEveryMessage]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.MoreConsoleTests testOSCBundlesDecodeEveryMessage]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.MoreConsoleTests testResolumeReadBackTracksTheConnectedClipPerLayer]' started.
 Test Case '-[OnCueCoreTests.MoreConsoleTests testResolumeReadBackTracksTheConnectedClipPerLayer]' passed (0.000 seconds).
-Test Suite 'MoreConsoleTests' passed at 2026-11-13 07:56:49.247.
+Test Suite 'MoreConsoleTests' passed at 2026-11-13 07:56:40.361.
 	 Executed 4 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
-Test Suite 'MultiViewTests' started at 2026-11-13 07:56:49.247.
+Test Suite 'MultiViewTests' started at 2026-11-13 07:56:40.361.
 Test Case '-[OnCueCoreTests.MultiViewTests testChosenCamerasKeepTheirOrder]' started.
 Test Case '-[OnCueCoreTests.MultiViewTests testChosenCamerasKeepTheirOrder]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.MultiViewTests testFullPageOneCameraOrWholeScript]' started.
 Test Case '-[OnCueCoreTests.MultiViewTests testFullPageOneCameraOrWholeScript]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.MultiViewTests testLiveColumnsShowTallyCurrentAndNextShots]' started.
-Test Case '-[OnCueCoreTests.MultiViewTests testLiveColumnsShowTallyCurrentAndNextShots]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.MultiViewTests testLiveColumnsShowTallyCurrentAndNextShots]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.MultiViewTests testMonitorConfigDecodesOlderFiles]' started.
 Test Case '-[OnCueCoreTests.MultiViewTests testMonitorConfigDecodesOlderFiles]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.MultiViewTests testNotLiveListsTheWholeScript]' started.
 Test Case '-[OnCueCoreTests.MultiViewTests testNotLiveListsTheWholeScript]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.MultiViewTests testShotDetailsUseTheProjectVocabulary]' started.
 Test Case '-[OnCueCoreTests.MultiViewTests testShotDetailsUseTheProjectVocabulary]' passed (0.000 seconds).
-Test Suite 'MultiViewTests' passed at 2026-11-13 07:56:49.250.
-	 Executed 6 tests, with 0 failures (0 unexpected) in 0.002 (0.003) seconds
-Test Suite 'NetworkSwitcherTests' started at 2026-11-13 07:56:49.250.
+Test Suite 'MultiViewTests' passed at 2026-11-13 07:56:40.363.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.003 (0.003) seconds
+Test Suite 'NetworkSwitcherTests' started at 2026-11-13 07:56:40.363.
 Test Case '-[OnCueCoreTests.NetworkSwitcherTests testLineSwitcherHostAndPort]' started.
 Test Case '-[OnCueCoreTests.NetworkSwitcherTests testLineSwitcherHostAndPort]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.NetworkSwitcherTests testOBSAuthentication]' started.
@@ -1529,23 +1529,23 @@ Test Case '-[OnCueCoreTests.NetworkSwitcherTests testOBSScenesTopToBottom]' star
 Test Case '-[OnCueCoreTests.NetworkSwitcherTests testOBSScenesTopToBottom]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.NetworkSwitcherTests testVMixTally]' started.
 Test Case '-[OnCueCoreTests.NetworkSwitcherTests testVMixTally]' passed (0.000 seconds).
-Test Suite 'NetworkSwitcherTests' passed at 2026-11-13 07:56:49.251.
+Test Suite 'NetworkSwitcherTests' passed at 2026-11-13 07:56:40.364.
 	 Executed 4 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
-Test Suite 'PanasonicIPTests' started at 2026-11-13 07:56:49.251.
+Test Suite 'PanasonicIPTests' started at 2026-11-13 07:56:40.364.
 Test Case '-[OnCueCoreTests.PanasonicIPTests testCrosspoints]' started.
 Test Case '-[OnCueCoreTests.PanasonicIPTests testCrosspoints]' passed (0.000 seconds).
-Test Suite 'PanasonicIPTests' passed at 2026-11-13 07:56:49.251.
+Test Suite 'PanasonicIPTests' passed at 2026-11-13 07:56:40.365.
 	 Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
-Test Suite 'ParallelSwitcherEditingTests' started at 2026-11-13 07:56:49.251.
+Test Suite 'ParallelSwitcherEditingTests' started at 2026-11-13 07:56:40.365.
 Test Case '-[OnCueCoreTests.ParallelSwitcherEditingTests testParallelSwitcherAddsNoOutputs]' started.
 Test Case '-[OnCueCoreTests.ParallelSwitcherEditingTests testParallelSwitcherAddsNoOutputs]' passed (0.000 seconds).
-Test Suite 'ParallelSwitcherEditingTests' passed at 2026-11-13 07:56:49.251.
+Test Suite 'ParallelSwitcherEditingTests' passed at 2026-11-13 07:56:40.365.
 	 Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
-Test Suite 'PersistenceTests' started at 2026-11-13 07:56:49.251.
+Test Suite 'PersistenceTests' started at 2026-11-13 07:56:40.365.
 Test Case '-[OnCueCoreTests.PersistenceTests testCorruptFileOnDiskIsNotModified]' started.
-Test Case '-[OnCueCoreTests.PersistenceTests testCorruptFileOnDiskIsNotModified]' passed (0.017 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testCorruptFileOnDiskIsNotModified]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testEmptyFileGivesClearError]' started.
-Test Case '-[OnCueCoreTests.PersistenceTests testEmptyFileGivesClearError]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testEmptyFileGivesClearError]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testEmptyObjectIsAnEmptyShow]' started.
 Test Case '-[OnCueCoreTests.PersistenceTests testEmptyObjectIsAnEmptyShow]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testEncodedFileCarriesCurrentSchemaVersion]' started.
@@ -1557,7 +1557,7 @@ Test Case '-[OnCueCoreTests.PersistenceTests testFutureSchemaFileIsLeftUntouched
 Test Case '-[OnCueCoreTests.PersistenceTests testFutureSchemaIsRefusedWithClearError]' started.
 Test Case '-[OnCueCoreTests.PersistenceTests testFutureSchemaIsRefusedWithClearError]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testGoldenFileResavesAsCurrentSchemaAndReopens]' started.
-Test Case '-[OnCueCoreTests.PersistenceTests testGoldenFileResavesAsCurrentSchemaAndReopens]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testGoldenFileResavesAsCurrentSchemaAndReopens]' passed (0.002 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testGoldenSchema0FileOpens]' started.
 Test Case '-[OnCueCoreTests.PersistenceTests testGoldenSchema0FileOpens]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testJSONArrayIsNotAShow]' started.
@@ -1565,48 +1565,48 @@ Test Case '-[OnCueCoreTests.PersistenceTests testJSONArrayIsNotAShow]' passed (0
 Test Case '-[OnCueCoreTests.PersistenceTests testMissingFieldsGetDefaults]' started.
 Test Case '-[OnCueCoreTests.PersistenceTests testMissingFieldsGetDefaults]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testMissingFileGivesError]' started.
-Test Case '-[OnCueCoreTests.PersistenceTests testMissingFileGivesError]' passed (0.005 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testMissingFileGivesError]' passed (0.002 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testNonJSONGivesClearError]' started.
 Test Case '-[OnCueCoreTests.PersistenceTests testNonJSONGivesClearError]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testSaveCloseReopenOnDisk]' started.
-Test Case '-[OnCueCoreTests.PersistenceTests testSaveCloseReopenOnDisk]' passed (0.004 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testSaveCloseReopenOnDisk]' passed (0.008 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testStarterShowRoundTrips]' started.
-Test Case '-[OnCueCoreTests.PersistenceTests testStarterShowRoundTrips]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testStarterShowRoundTrips]' passed (0.003 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testUnknownEnumValuesFallBackSafely]' started.
-Test Case '-[OnCueCoreTests.PersistenceTests testUnknownEnumValuesFallBackSafely]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.PersistenceTests testUnknownEnumValuesFallBackSafely]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.PersistenceTests testWrongValueTypeNamesTheField]' started.
-Test Case '-[OnCueCoreTests.PersistenceTests testWrongValueTypeNamesTheField]' passed (0.000 seconds).
-Test Suite 'PersistenceTests' passed at 2026-11-13 07:56:49.285.
-	 Executed 17 tests, with 0 failures (0 unexpected) in 0.033 (0.034) seconds
-Test Suite 'PreShowCheckTests' started at 2026-11-13 07:56:49.285.
+Test Case '-[OnCueCoreTests.PersistenceTests testWrongValueTypeNamesTheField]' passed (0.001 seconds).
+Test Suite 'PersistenceTests' passed at 2026-11-13 07:56:40.389.
+	 Executed 17 tests, with 0 failures (0 unexpected) in 0.023 (0.024) seconds
+Test Suite 'PreShowCheckTests' started at 2026-11-13 07:56:40.389.
 Test Case '-[OnCueCoreTests.PreShowCheckTests testATEMThatAnswersAndOneThatDoesnt]' started.
-Test Case '-[OnCueCoreTests.PreShowCheckTests testATEMThatAnswersAndOneThatDoesnt]' passed (1.454 seconds).
+Test Case '-[OnCueCoreTests.PreShowCheckTests testATEMThatAnswersAndOneThatDoesnt]' passed (1.538 seconds).
 Test Case '-[OnCueCoreTests.PreShowCheckTests testProblemsAreFound]' started.
-Test Case '-[OnCueCoreTests.PreShowCheckTests testProblemsAreFound]' passed (0.012 seconds).
+Test Case '-[OnCueCoreTests.PreShowCheckTests testProblemsAreFound]' passed (0.022 seconds).
 Test Case '-[OnCueCoreTests.PreShowCheckTests testPTZOverTCP]' started.
-Test Case '-[OnCueCoreTests.PreShowCheckTests testPTZOverTCP]' passed (2.062 seconds).
+Test Case '-[OnCueCoreTests.PreShowCheckTests testPTZOverTCP]' passed (2.051 seconds).
 Test Case '-[OnCueCoreTests.PreShowCheckTests testSampleShowOnTheSimulator]' started.
-Test Case '-[OnCueCoreTests.PreShowCheckTests testSampleShowOnTheSimulator]' passed (0.018 seconds).
-Test Suite 'PreShowCheckTests' passed at 2026-11-13 07:56:52.832.
-	 Executed 4 tests, with 0 failures (0 unexpected) in 3.546 (3.547) seconds
-Test Suite 'ProjectStorageTests' started at 2026-11-13 07:56:52.832.
+Test Case '-[OnCueCoreTests.PreShowCheckTests testSampleShowOnTheSimulator]' passed (0.019 seconds).
+Test Suite 'PreShowCheckTests' passed at 2026-11-13 07:56:44.019.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 3.629 (3.630) seconds
+Test Suite 'ProjectStorageTests' started at 2026-11-13 07:56:44.019.
 Test Case '-[OnCueCoreTests.ProjectStorageTests testBackupFolderKeepsEveryCopyAndFindsTheNewest]' started.
-Test Case '-[OnCueCoreTests.ProjectStorageTests testBackupFolderKeepsEveryCopyAndFindsTheNewest]' passed (0.079 seconds).
+Test Case '-[OnCueCoreTests.ProjectStorageTests testBackupFolderKeepsEveryCopyAndFindsTheNewest]' passed (0.069 seconds).
 Test Case '-[OnCueCoreTests.ProjectStorageTests testDuplicateAndRename]' started.
-Test Case '-[OnCueCoreTests.ProjectStorageTests testDuplicateAndRename]' passed (0.070 seconds).
+Test Case '-[OnCueCoreTests.ProjectStorageTests testDuplicateAndRename]' passed (0.060 seconds).
 Test Case '-[OnCueCoreTests.ProjectStorageTests testLibraryCreateScanSortAndSearch]' started.
-Test Case '-[OnCueCoreTests.ProjectStorageTests testLibraryCreateScanSortAndSearch]' passed (0.022 seconds).
+Test Case '-[OnCueCoreTests.ProjectStorageTests testLibraryCreateScanSortAndSearch]' passed (0.019 seconds).
 Test Case '-[OnCueCoreTests.ProjectStorageTests testOlderSingleFileShowIsRecognised]' started.
-Test Case '-[OnCueCoreTests.ProjectStorageTests testOlderSingleFileShowIsRecognised]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.ProjectStorageTests testOlderSingleFileShowIsRecognised]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.ProjectStorageTests testPackageRoundTripAndInsideBackups]' started.
-Test Case '-[OnCueCoreTests.ProjectStorageTests testPackageRoundTripAndInsideBackups]' passed (0.171 seconds).
+Test Case '-[OnCueCoreTests.ProjectStorageTests testPackageRoundTripAndInsideBackups]' passed (0.090 seconds).
 Test Case '-[OnCueCoreTests.ProjectStorageTests testUniqueNames]' started.
-Test Case '-[OnCueCoreTests.ProjectStorageTests testUniqueNames]' passed (0.011 seconds).
-Test Suite 'ProjectStorageTests' passed at 2026-11-13 07:56:53.188.
-	 Executed 6 tests, with 0 failures (0 unexpected) in 0.355 (0.356) seconds
-Test Suite 'ProjectTests' started at 2026-11-13 07:56:53.189.
+Test Case '-[OnCueCoreTests.ProjectStorageTests testUniqueNames]' passed (0.005 seconds).
+Test Suite 'ProjectStorageTests' passed at 2026-11-13 07:56:44.264.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.245 (0.245) seconds
+Test Suite 'ProjectTests' started at 2026-11-13 07:56:44.264.
 Test Case '-[OnCueCoreTests.ProjectTests testAddingAShowAsAPlaylistMatchesCamerasByNumber]' started.
-Test Case '-[OnCueCoreTests.ProjectTests testAddingAShowAsAPlaylistMatchesCamerasByNumber]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.ProjectTests testAddingAShowAsAPlaylistMatchesCamerasByNumber]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.ProjectTests testBridgeEditsComeBackToThePlaylist]' started.
 Test Case '-[OnCueCoreTests.ProjectTests testBridgeEditsComeBackToThePlaylist]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ProjectTests testLegacyFileIsRecognised]' started.
@@ -1618,19 +1618,19 @@ Test Case '-[OnCueCoreTests.ProjectTests testMigrationSnapsToTheGrid]' passed (0
 Test Case '-[OnCueCoreTests.ProjectTests testNewerFileIsRefused]' started.
 Test Case '-[OnCueCoreTests.ProjectTests testNewerFileIsRefused]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ProjectTests testProjectRoundTripIsExactAndStoresWholeNumbers]' started.
-Test Case '-[OnCueCoreTests.ProjectTests testProjectRoundTripIsExactAndStoresWholeNumbers]' passed (0.005 seconds).
+Test Case '-[OnCueCoreTests.ProjectTests testProjectRoundTripIsExactAndStoresWholeNumbers]' passed (0.002 seconds).
 Test Case '-[OnCueCoreTests.ProjectTests testStarterUsesSceneDefaults]' started.
 Test Case '-[OnCueCoreTests.ProjectTests testStarterUsesSceneDefaults]' passed (0.000 seconds).
-Test Suite 'ProjectTests' passed at 2026-11-13 07:56:53.199.
-	 Executed 8 tests, with 0 failures (0 unexpected) in 0.010 (0.010) seconds
-Test Suite 'ProjectVersionTests' started at 2026-11-13 07:56:53.199.
+Test Suite 'ProjectTests' passed at 2026-11-13 07:56:44.270.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.006 (0.006) seconds
+Test Suite 'ProjectVersionTests' started at 2026-11-13 07:56:44.270.
 Test Case '-[OnCueCoreTests.ProjectVersionTests testAutomaticVersionSkippedWhenNothingChanged]' started.
 Test Case '-[OnCueCoreTests.ProjectVersionTests testAutomaticVersionSkippedWhenNothingChanged]' passed (0.002 seconds).
 Test Case '-[OnCueCoreTests.ProjectVersionTests testRestoreKeepsLaterVersionsAndAddsNewOnes]' started.
-Test Case '-[OnCueCoreTests.ProjectVersionTests testRestoreKeepsLaterVersionsAndAddsNewOnes]' passed (0.009 seconds).
-Test Suite 'ProjectVersionTests' passed at 2026-11-13 07:56:53.210.
-	 Executed 2 tests, with 0 failures (0 unexpected) in 0.012 (0.012) seconds
-Test Suite 'RundownTimingTests' started at 2026-11-13 07:56:53.210.
+Test Case '-[OnCueCoreTests.ProjectVersionTests testRestoreKeepsLaterVersionsAndAddsNewOnes]' passed (0.007 seconds).
+Test Suite 'ProjectVersionTests' passed at 2026-11-13 07:56:44.279.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.009 (0.009) seconds
+Test Suite 'RundownTimingTests' started at 2026-11-13 07:56:44.279.
 Test Case '-[OnCueCoreTests.RundownTimingTests testAppliesOnlyWhenTimed]' started.
 Test Case '-[OnCueCoreTests.RundownTimingTests testAppliesOnlyWhenTimed]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.RundownTimingTests testDeadlineAcrossMidnight]' started.
@@ -1641,9 +1641,9 @@ Test Case '-[OnCueCoreTests.RundownTimingTests testOverUnderAndHardOut]' started
 Test Case '-[OnCueCoreTests.RundownTimingTests testOverUnderAndHardOut]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.RundownTimingTests testRunsFromTheLog]' started.
 Test Case '-[OnCueCoreTests.RundownTimingTests testRunsFromTheLog]' passed (0.000 seconds).
-Test Suite 'RundownTimingTests' passed at 2026-11-13 07:56:53.212.
+Test Suite 'RundownTimingTests' passed at 2026-11-13 07:56:44.281.
 	 Executed 5 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
-Test Suite 'SceneNumberingTests' started at 2026-11-13 07:56:53.212.
+Test Suite 'SceneNumberingTests' started at 2026-11-13 07:56:44.281.
 Test Case '-[OnCueCoreTests.SceneNumberingTests testAutomaticFollowsPosition]' started.
 Test Case '-[OnCueCoreTests.SceneNumberingTests testAutomaticFollowsPosition]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.SceneNumberingTests testFixedTakesNextFreeNumber]' started.
@@ -1654,16 +1654,16 @@ Test Case '-[OnCueCoreTests.SceneNumberingTests testStartTimecodeChoices]' start
 Test Case '-[OnCueCoreTests.SceneNumberingTests testStartTimecodeChoices]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.SceneNumberingTests testSuffixInsertsLetters]' started.
 Test Case '-[OnCueCoreTests.SceneNumberingTests testSuffixInsertsLetters]' passed (0.000 seconds).
-Test Suite 'SceneNumberingTests' passed at 2026-11-13 07:56:53.213.
+Test Suite 'SceneNumberingTests' passed at 2026-11-13 07:56:44.281.
 	 Executed 5 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
-Test Suite 'SetupEditingTests' started at 2026-11-13 07:56:53.213.
+Test Suite 'SetupEditingTests' started at 2026-11-13 07:56:44.281.
 Test Case '-[OnCueCoreTests.SetupEditingTests testOutputsSwitchersAndTheirTracks]' started.
 Test Case '-[OnCueCoreTests.SetupEditingTests testOutputsSwitchersAndTheirTracks]' passed (0.001 seconds).
-Test Suite 'SetupEditingTests' passed at 2026-11-13 07:56:53.214.
+Test Suite 'SetupEditingTests' passed at 2026-11-13 07:56:44.282.
 	 Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
-Test Suite 'ShotPhraseTests' started at 2026-11-13 07:56:53.214.
+Test Suite 'ShotPhraseTests' started at 2026-11-13 07:56:44.282.
 Test Case '-[OnCueCoreTests.ShotPhraseTests testApplyOnlyChangesWhatWasTyped]' started.
-Test Case '-[OnCueCoreTests.ShotPhraseTests testApplyOnlyChangesWhatWasTyped]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.ShotPhraseTests testApplyOnlyChangesWhatWasTyped]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.ShotPhraseTests testCameraAndLeftoverDescription]' started.
 Test Case '-[OnCueCoreTests.ShotPhraseTests testCameraAndLeftoverDescription]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.ShotPhraseTests testLongestMatchWins]' started.
@@ -1672,11 +1672,11 @@ Test Case '-[OnCueCoreTests.ShotPhraseTests testSecondSizeIsText]' started.
 Test Case '-[OnCueCoreTests.ShotPhraseTests testSecondSizeIsText]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ShotPhraseTests testShortFormsAndFullNames]' started.
 Test Case '-[OnCueCoreTests.ShotPhraseTests testShortFormsAndFullNames]' passed (0.001 seconds).
-Test Suite 'ShotPhraseTests' passed at 2026-11-13 07:56:53.220.
-	 Executed 5 tests, with 0 failures (0 unexpected) in 0.006 (0.006) seconds
-Test Suite 'ShotVocabularyTests' started at 2026-11-13 07:56:53.220.
+Test Suite 'ShotPhraseTests' passed at 2026-11-13 07:56:44.285.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.003 (0.003) seconds
+Test Suite 'ShotVocabularyTests' started at 2026-11-13 07:56:44.285.
 Test Case '-[OnCueCoreTests.ShotVocabularyTests testCutStatusGreysOutAndCustomStatusesFollowTheirRole]' started.
-Test Case '-[OnCueCoreTests.ShotVocabularyTests testCutStatusGreysOutAndCustomStatusesFollowTheirRole]' passed (0.007 seconds).
+Test Case '-[OnCueCoreTests.ShotVocabularyTests testCutStatusGreysOutAndCustomStatusesFollowTheirRole]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.ShotVocabularyTests testNewShotDefaults]' started.
 Test Case '-[OnCueCoreTests.ShotVocabularyTests testNewShotDefaults]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ShotVocabularyTests testOldProjectGetsStandardVocabulary]' started.
@@ -1684,16 +1684,16 @@ Test Case '-[OnCueCoreTests.ShotVocabularyTests testOldProjectGetsStandardVocabu
 Test Case '-[OnCueCoreTests.ShotVocabularyTests testOldShotsDecodeWithDefaults]' started.
 Test Case '-[OnCueCoreTests.ShotVocabularyTests testOldShotsDecodeWithDefaults]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.ShotVocabularyTests testRemovedBuiltInsComeBackInPlaceAndCustomTermsStay]' started.
-Test Case '-[OnCueCoreTests.ShotVocabularyTests testRemovedBuiltInsComeBackInPlaceAndCustomTermsStay]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShotVocabularyTests testRemovedBuiltInsComeBackInPlaceAndCustomTermsStay]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.ShotVocabularyTests testShotDetailsSurviveAProjectRoundTrip]' started.
-Test Case '-[OnCueCoreTests.ShotVocabularyTests testShotDetailsSurviveAProjectRoundTrip]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.ShotVocabularyTests testShotDetailsSurviveAProjectRoundTrip]' passed (0.005 seconds).
 Test Case '-[OnCueCoreTests.ShotVocabularyTests testStandardLists]' started.
 Test Case '-[OnCueCoreTests.ShotVocabularyTests testStandardLists]' passed (0.000 seconds).
-Test Suite 'ShotVocabularyTests' passed at 2026-11-13 07:56:53.231.
-	 Executed 7 tests, with 0 failures (0 unexpected) in 0.011 (0.011) seconds
-Test Suite 'ShowControlTests' started at 2026-11-13 07:56:53.231.
+Test Suite 'ShotVocabularyTests' passed at 2026-11-13 07:56:44.294.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.008 (0.009) seconds
+Test Suite 'ShowControlTests' started at 2026-11-13 07:56:44.294.
 Test Case '-[OnCueCoreTests.ShowControlTests testAnalysisMatchesScriptedShotsToCuts]' started.
-Test Case '-[OnCueCoreTests.ShowControlTests testAnalysisMatchesScriptedShotsToCuts]' passed (0.012 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testAnalysisMatchesScriptedShotsToCuts]' passed (0.006 seconds).
 Test Case '-[OnCueCoreTests.ShowControlTests testAuxOutputSetsTheAux]' started.
 Test Case '-[OnCueCoreTests.ShowControlTests testAuxOutputSetsTheAux]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.ShowControlTests testCameraDownMovesOnlyTheRequestedUpcomingShots]' started.
@@ -1705,126 +1705,126 @@ Test Case '-[OnCueCoreTests.ShowControlTests testControlTrackLoadsTheNextItem]' 
 Test Case '-[OnCueCoreTests.ShowControlTests testCuesFireOnceWhenThePlayheadPassesThem]' started.
 Test Case '-[OnCueCoreTests.ShowControlTests testCuesFireOnceWhenThePlayheadPassesThem]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.ShowControlTests testDisplayModeSendsOSCButNotFX]' started.
-Test Case '-[OnCueCoreTests.ShowControlTests testDisplayModeSendsOSCButNotFX]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testDisplayModeSendsOSCButNotFX]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.ShowControlTests testFreeModeHoldsTheScriptAndSendsNothing]' started.
-Test Case '-[OnCueCoreTests.ShowControlTests testFreeModeHoldsTheScriptAndSendsNothing]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testFreeModeHoldsTheScriptAndSendsNothing]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.ShowControlTests testLoopRepeatsTheSectionUntilReleased]' started.
-Test Case '-[OnCueCoreTests.ShowControlTests testLoopRepeatsTheSectionUntilReleased]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testLoopRepeatsTheSectionUntilReleased]' passed (0.002 seconds).
 Test Case '-[OnCueCoreTests.ShowControlTests testMirroringOutputFollowsTheMainCut]' started.
-Test Case '-[OnCueCoreTests.ShowControlTests testMirroringOutputFollowsTheMainCut]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testMirroringOutputFollowsTheMainCut]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.ShowControlTests testPanicDropsEveryOutputToDisplay]' started.
-Test Case '-[OnCueCoreTests.ShowControlTests testPanicDropsEveryOutputToDisplay]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testPanicDropsEveryOutputToDisplay]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.ShowControlTests testSeparateOutputWithItsOwnTrackAndMode]' started.
 Test Case '-[OnCueCoreTests.ShowControlTests testSeparateOutputWithItsOwnTrackAndMode]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.ShowControlTests testSubSwitcherRoutesThroughItsFeed]' started.
-Test Case '-[OnCueCoreTests.ShowControlTests testSubSwitcherRoutesThroughItsFeed]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.ShowControlTests testSubSwitcherRoutesThroughItsFeed]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.ShowControlTests testVarietyHintsPreferCamerasOffAirLongest]' started.
-Test Case '-[OnCueCoreTests.ShowControlTests testVarietyHintsPreferCamerasOffAirLongest]' passed (0.001 seconds).
-Test Suite 'ShowControlTests' passed at 2026-11-13 07:56:53.252.
-	 Executed 14 tests, with 0 failures (0 unexpected) in 0.020 (0.021) seconds
-Test Suite 'SoakReportTests' started at 2026-11-13 07:56:53.252.
+Test Case '-[OnCueCoreTests.ShowControlTests testVarietyHintsPreferCamerasOffAirLongest]' passed (0.000 seconds).
+Test Suite 'ShowControlTests' passed at 2026-11-13 07:56:44.312.
+	 Executed 14 tests, with 0 failures (0 unexpected) in 0.017 (0.018) seconds
+Test Suite 'SoakReportTests' started at 2026-11-13 07:56:44.312.
 Test Case '-[OnCueCoreTests.SoakReportTests testCSV]' started.
-Test Case '-[OnCueCoreTests.SoakReportTests testCSV]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.SoakReportTests testCSV]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.SoakReportTests testLateAndEarlyTakesFail]' started.
-Test Case '-[OnCueCoreTests.SoakReportTests testLateAndEarlyTakesFail]' passed (0.006 seconds).
+Test Case '-[OnCueCoreTests.SoakReportTests testLateAndEarlyTakesFail]' passed (0.003 seconds).
 Test Case '-[OnCueCoreTests.SoakReportTests testLeakFails]' started.
 Test Case '-[OnCueCoreTests.SoakReportTests testLeakFails]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.SoakReportTests testStallAndShortRunFail]' started.
-Test Case '-[OnCueCoreTests.SoakReportTests testStallAndShortRunFail]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.SoakReportTests testStallAndShortRunFail]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.SoakReportTests testSteadyRunPasses]' started.
-Test Case '-[OnCueCoreTests.SoakReportTests testSteadyRunPasses]' passed (0.000 seconds).
-Test Suite 'SoakReportTests' passed at 2026-11-13 07:56:53.262.
-	 Executed 5 tests, with 0 failures (0 unexpected) in 0.009 (0.009) seconds
-Test Suite 'SourcesTests' started at 2026-11-13 07:56:53.262.
+Test Case '-[OnCueCoreTests.SoakReportTests testSteadyRunPasses]' passed (0.001 seconds).
+Test Suite 'SoakReportTests' passed at 2026-11-13 07:56:44.318.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.005 (0.005) seconds
+Test Suite 'SourcesTests' started at 2026-11-13 07:56:44.318.
 Test Case '-[OnCueCoreTests.SourcesTests testAShotCanCutToASource]' started.
 Test Case '-[OnCueCoreTests.SourcesTests testAShotCanCutToASource]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.SourcesTests testKeyUsage]' started.
 Test Case '-[OnCueCoreTests.SourcesTests testKeyUsage]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.SourcesTests testSourcesAreNumberedFrom100AndKeepTheirKind]' started.
-Test Case '-[OnCueCoreTests.SourcesTests testSourcesAreNumberedFrom100AndKeepTheirKind]' passed (0.000 seconds).
-Test Suite 'SourcesTests' passed at 2026-11-13 07:56:53.263.
-	 Executed 3 tests, with 0 failures (0 unexpected) in 0.001 (0.002) seconds
-Test Suite 'TSLTests' started at 2026-11-13 07:56:53.263.
+Test Case '-[OnCueCoreTests.SourcesTests testSourcesAreNumberedFrom100AndKeepTheirKind]' passed (0.001 seconds).
+Test Suite 'SourcesTests' passed at 2026-11-13 07:56:44.320.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.002 (0.003) seconds
+Test Suite 'TSLTests' started at 2026-11-13 07:56:44.320.
 Test Case '-[OnCueCoreTests.TSLTests test31]' started.
-Test Case '-[OnCueCoreTests.TSLTests test31]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.TSLTests test31]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.TSLTests test40ChecksumAndColours]' started.
 Test Case '-[OnCueCoreTests.TSLTests test40ChecksumAndColours]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.TSLTests test50RoundTrip]' started.
-Test Case '-[OnCueCoreTests.TSLTests test50RoundTrip]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.TSLTests test50RoundTrip]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.TSLTests testTCPFramingDoublesDLE]' started.
 Test Case '-[OnCueCoreTests.TSLTests testTCPFramingDoublesDLE]' passed (0.000 seconds).
-Test Suite 'TSLTests' passed at 2026-11-13 07:56:53.267.
-	 Executed 4 tests, with 0 failures (0 unexpected) in 0.003 (0.004) seconds
-Test Suite 'TallyStateTests' started at 2026-11-13 07:56:53.268.
+Test Suite 'TSLTests' passed at 2026-11-13 07:56:44.322.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'TallyStateTests' started at 2026-11-13 07:56:44.322.
 Test Case '-[OnCueCoreTests.TallyStateTests testIndexByInputAndNoNames]' started.
-Test Case '-[OnCueCoreTests.TallyStateTests testIndexByInputAndNoNames]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.TallyStateTests testIndexByInputAndNoNames]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.TallyStateTests testPacketsPerVersion]' started.
 Test Case '-[OnCueCoreTests.TallyStateTests testPacketsPerVersion]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.TallyStateTests testProgramPreviewAndNames]' started.
 Test Case '-[OnCueCoreTests.TallyStateTests testProgramPreviewAndNames]' passed (0.000 seconds).
-Test Suite 'TallyStateTests' passed at 2026-11-13 07:56:53.270.
-	 Executed 3 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
-Test Suite 'TempoMapTests' started at 2026-11-13 07:56:53.270.
+Test Suite 'TallyStateTests' passed at 2026-11-13 07:56:44.323.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Suite 'TempoMapTests' started at 2026-11-13 07:56:44.323.
 Test Case '-[OnCueCoreTests.TempoMapTests testTicksBeatsSeconds]' started.
 Test Case '-[OnCueCoreTests.TempoMapTests testTicksBeatsSeconds]' passed (0.000 seconds).
-Test Suite 'TempoMapTests' passed at 2026-11-13 07:56:53.271.
+Test Suite 'TempoMapTests' passed at 2026-11-13 07:56:44.323.
 	 Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
-Test Suite 'TempoTests' started at 2026-11-13 07:56:53.271.
+Test Suite 'TempoTests' started at 2026-11-13 07:56:44.323.
 Test Case '-[OnCueCoreTests.TempoTests testDetectsTempoAndFirstBeat]' started.
-Test Case '-[OnCueCoreTests.TempoTests testDetectsTempoAndFirstBeat]' passed (1.359 seconds).
+Test Case '-[OnCueCoreTests.TempoTests testDetectsTempoAndFirstBeat]' passed (0.830 seconds).
 Test Case '-[OnCueCoreTests.TempoTests testSilenceHasNoTempo]' started.
-Test Case '-[OnCueCoreTests.TempoTests testSilenceHasNoTempo]' passed (0.104 seconds).
-Test Suite 'TempoTests' passed at 2026-11-13 07:56:54.734.
-	 Executed 2 tests, with 0 failures (0 unexpected) in 1.464 (1.464) seconds
-Test Suite 'TimecodeTests' started at 2026-11-13 07:56:54.734.
+Test Case '-[OnCueCoreTests.TempoTests testSilenceHasNoTempo]' passed (0.069 seconds).
+Test Suite 'TempoTests' passed at 2026-11-13 07:56:45.221.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.899 (0.899) seconds
+Test Suite 'TimecodeTests' started at 2026-11-13 07:56:45.222.
 Test Case '-[OnCueCoreTests.TimecodeTests testDropFrameKnownValues]' started.
-Test Case '-[OnCueCoreTests.TimecodeTests testDropFrameKnownValues]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.TimecodeTests testDropFrameKnownValues]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.TimecodeTests testDropFrameRoundTripsEveryFrameOfAnHour]' started.
-Test Case '-[OnCueCoreTests.TimecodeTests testDropFrameRoundTripsEveryFrameOfAnHour]' passed (0.254 seconds).
+Test Case '-[OnCueCoreTests.TimecodeTests testDropFrameRoundTripsEveryFrameOfAnHour]' passed (0.227 seconds).
 Test Case '-[OnCueCoreTests.TimecodeTests testNonDropFrame]' started.
 Test Case '-[OnCueCoreTests.TimecodeTests testNonDropFrame]' passed (0.000 seconds).
-Test Suite 'TimecodeTests' passed at 2026-11-13 07:56:54.990.
-	 Executed 3 tests, with 0 failures (0 unexpected) in 0.255 (0.255) seconds
-Test Suite 'TimelineTests' started at 2026-11-13 07:56:54.990.
+Test Suite 'TimecodeTests' passed at 2026-11-13 07:56:45.449.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.227 (0.228) seconds
+Test Suite 'TimelineTests' started at 2026-11-13 07:56:45.449.
 Test Case '-[OnCueCoreTests.TimelineTests testCameraColourDefaultsByNumberAndCanBeChosen]' started.
 Test Case '-[OnCueCoreTests.TimelineTests testCameraColourDefaultsByNumberAndCanBeChosen]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.TimelineTests testCameraColourRoundTripsAndIsOptionalInOldFiles]' started.
-Test Case '-[OnCueCoreTests.TimelineTests testCameraColourRoundTripsAndIsOptionalInOldFiles]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testCameraColourRoundTripsAndIsOptionalInOldFiles]' passed (0.002 seconds).
 Test Case '-[OnCueCoreTests.TimelineTests testLiveCursorSteppingAndJumping]' started.
-Test Case '-[OnCueCoreTests.TimelineTests testLiveCursorSteppingAndJumping]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testLiveCursorSteppingAndJumping]' passed (0.004 seconds).
 Test Case '-[OnCueCoreTests.TimelineTests testMovingAShotOnTheTimelineReordersTheShotList]' started.
-Test Case '-[OnCueCoreTests.TimelineTests testMovingAShotOnTheTimelineReordersTheShotList]' passed (0.006 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testMovingAShotOnTheTimelineReordersTheShotList]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.TimelineTests testOrderItemsGiveEachShotOneStep]' started.
 Test Case '-[OnCueCoreTests.TimelineTests testOrderItemsGiveEachShotOneStep]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.TimelineTests testPlannedLengthExtendsTheEnd]' started.
 Test Case '-[OnCueCoreTests.TimelineTests testPlannedLengthExtendsTheEnd]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.TimelineTests testRunLength]' started.
-Test Case '-[OnCueCoreTests.TimelineTests testRunLength]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testRunLength]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.TimelineTests testSampleShowHasEveryTrackKind]' started.
-Test Case '-[OnCueCoreTests.TimelineTests testSampleShowHasEveryTrackKind]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.TimelineTests testSampleShowHasEveryTrackKind]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.TimelineTests testShotSpansRunToTheNextShotAndTheSongEnd]' started.
 Test Case '-[OnCueCoreTests.TimelineTests testShotSpansRunToTheNextShotAndTheSongEnd]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.TimelineTests testSnap]' started.
 Test Case '-[OnCueCoreTests.TimelineTests testSnap]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.TimelineTests testTrackCuesAreCreatedOnTheRightTrack]' started.
 Test Case '-[OnCueCoreTests.TimelineTests testTrackCuesAreCreatedOnTheRightTrack]' passed (0.000 seconds).
-Test Suite 'TimelineTests' passed at 2026-11-13 07:56:55.006.
-	 Executed 11 tests, with 0 failures (0 unexpected) in 0.016 (0.016) seconds
-Test Suite 'TourTests' started at 2026-11-13 07:56:55.006.
+Test Suite 'TimelineTests' passed at 2026-11-13 07:56:45.462.
+	 Executed 11 tests, with 0 failures (0 unexpected) in 0.012 (0.013) seconds
+Test Suite 'TourTests' started at 2026-11-13 07:56:45.462.
 Test Case '-[OnCueCoreTests.TourTests testLoadLogsFromFolder]' started.
-Test Case '-[OnCueCoreTests.TourTests testLoadLogsFromFolder]' passed (0.034 seconds).
+Test Case '-[OnCueCoreTests.TourTests testLoadLogsFromFolder]' passed (0.032 seconds).
 Test Case '-[OnCueCoreTests.TourTests testNightsCompared]' started.
 Test Case '-[OnCueCoreTests.TourTests testNightsCompared]' passed (0.004 seconds).
 Test Case '-[OnCueCoreTests.TourTests testOldLogsWithoutTourFieldsStillOpen]' started.
-Test Case '-[OnCueCoreTests.TourTests testOldLogsWithoutTourFieldsStillOpen]' passed (0.016 seconds).
-Test Suite 'TourTests' passed at 2026-11-13 07:56:55.061.
-	 Executed 3 tests, with 0 failures (0 unexpected) in 0.054 (0.055) seconds
-Test Suite 'TriggerLearnTests' started at 2026-11-13 07:56:55.061.
+Test Case '-[OnCueCoreTests.TourTests testOldLogsWithoutTourFieldsStillOpen]' passed (0.022 seconds).
+Test Suite 'TourTests' passed at 2026-11-13 07:56:45.520.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.058 (0.058) seconds
+Test Suite 'TriggerLearnTests' started at 2026-11-13 07:56:45.520.
 Test Case '-[OnCueCoreTests.TriggerLearnTests testLearnedInputMatchesItsEvent]' started.
-Test Case '-[OnCueCoreTests.TriggerLearnTests testLearnedInputMatchesItsEvent]' passed (0.000 seconds).
-Test Suite 'TriggerLearnTests' passed at 2026-11-13 07:56:55.061.
-	 Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
-Test Suite 'TriggerRouteTests' started at 2026-11-13 07:56:55.061.
+Test Case '-[OnCueCoreTests.TriggerLearnTests testLearnedInputMatchesItsEvent]' passed (0.001 seconds).
+Test Suite 'TriggerLearnTests' passed at 2026-11-13 07:56:45.521.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'TriggerRouteTests' started at 2026-11-13 07:56:45.521.
 Test Case '-[OnCueCoreTests.TriggerRouteTests testArtNetFiresOnceAsTheLevelRises]' started.
 Test Case '-[OnCueCoreTests.TriggerRouteTests testArtNetFiresOnceAsTheLevelRises]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.TriggerRouteTests testArtNetParser]' started.
@@ -1838,45 +1838,45 @@ Test Case '-[OnCueCoreTests.TriggerRouteTests testMSCParser]' passed (0.000 seco
 Test Case '-[OnCueCoreTests.TriggerRouteTests testNoteOnOnlyAndChannels]' started.
 Test Case '-[OnCueCoreTests.TriggerRouteTests testNoteOnOnlyAndChannels]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.TriggerRouteTests testOSCExactAndWildcard]' started.
-Test Case '-[OnCueCoreTests.TriggerRouteTests testOSCExactAndWildcard]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.TriggerRouteTests testOSCExactAndWildcard]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.TriggerRouteTests testProgramChangeAndMSC]' started.
-Test Case '-[OnCueCoreTests.TriggerRouteTests testProgramChangeAndMSC]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.TriggerRouteTests testProgramChangeAndMSC]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.TriggerRouteTests testResolveSongFromValue]' started.
-Test Case '-[OnCueCoreTests.TriggerRouteTests testResolveSongFromValue]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.TriggerRouteTests testResolveSongFromValue]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.TriggerRouteTests testRoutesRoundTrip]' started.
-Test Case '-[OnCueCoreTests.TriggerRouteTests testRoutesRoundTrip]' passed (0.002 seconds).
+Test Case '-[OnCueCoreTests.TriggerRouteTests testRoutesRoundTrip]' passed (0.005 seconds).
 Test Case '-[OnCueCoreTests.TriggerRouteTests testValidation]' started.
 Test Case '-[OnCueCoreTests.TriggerRouteTests testValidation]' passed (0.000 seconds).
-Test Suite 'TriggerRouteTests' passed at 2026-11-13 07:56:55.065.
-	 Executed 11 tests, with 0 failures (0 unexpected) in 0.004 (0.004) seconds
-Test Suite 'UpcomingCallTests' started at 2026-11-13 07:56:55.065.
+Test Suite 'TriggerRouteTests' passed at 2026-11-13 07:56:45.530.
+	 Executed 11 tests, with 0 failures (0 unexpected) in 0.008 (0.009) seconds
+Test Suite 'UpcomingCallTests' started at 2026-11-13 07:56:45.530.
 Test Case '-[OnCueCoreTests.UpcomingCallTests testCallsAndPlayerCuesInOrder]' started.
 Test Case '-[OnCueCoreTests.UpcomingCallTests testCallsAndPlayerCuesInOrder]' passed (0.000 seconds).
-Test Suite 'UpcomingCallTests' passed at 2026-11-13 07:56:55.066.
+Test Suite 'UpcomingCallTests' passed at 2026-11-13 07:56:45.530.
 	 Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
-Test Suite 'UpdateCheckTests' started at 2026-11-13 07:56:55.066.
+Test Suite 'UpdateCheckTests' started at 2026-11-13 07:56:45.530.
 Test Case '-[OnCueCoreTests.UpdateCheckTests testDMGNames]' started.
 Test Case '-[OnCueCoreTests.UpdateCheckTests testDMGNames]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.UpdateCheckTests testNeverChecksDuringLiveMode]' started.
 Test Case '-[OnCueCoreTests.UpdateCheckTests testNeverChecksDuringLiveMode]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.UpdateCheckTests testNoOfferWhenSameOlderSkippedDraftOrWithoutDMG]' started.
-Test Case '-[OnCueCoreTests.UpdateCheckTests testNoOfferWhenSameOlderSkippedDraftOrWithoutDMG]' passed (0.001 seconds).
+Test Case '-[OnCueCoreTests.UpdateCheckTests testNoOfferWhenSameOlderSkippedDraftOrWithoutDMG]' passed (0.003 seconds).
 Test Case '-[OnCueCoreTests.UpdateCheckTests testOffersANewerRelease]' started.
-Test Case '-[OnCueCoreTests.UpdateCheckTests testOffersANewerRelease]' passed (0.000 seconds).
+Test Case '-[OnCueCoreTests.UpdateCheckTests testOffersANewerRelease]' passed (0.001 seconds).
 Test Case '-[OnCueCoreTests.UpdateCheckTests testProfileKeepsUpdateAndAccessibilitySettings]' started.
 Test Case '-[OnCueCoreTests.UpdateCheckTests testProfileKeepsUpdateAndAccessibilitySettings]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.UpdateCheckTests testVersionsCompareNumerically]' started.
-Test Case '-[OnCueCoreTests.UpdateCheckTests testVersionsCompareNumerically]' passed (0.000 seconds).
-Test Suite 'UpdateCheckTests' passed at 2026-11-13 07:56:55.068.
-	 Executed 6 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
-Test Suite 'VersionTests' started at 2026-11-13 07:56:55.068.
+Test Case '-[OnCueCoreTests.UpdateCheckTests testVersionsCompareNumerically]' passed (0.001 seconds).
+Test Suite 'UpdateCheckTests' passed at 2026-11-13 07:56:45.535.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.005 (0.005) seconds
+Test Suite 'VersionTests' started at 2026-11-13 07:56:45.535.
 Test Case '-[OnCueCoreTests.VersionTests testBackupFolder]' started.
-Test Case '-[OnCueCoreTests.VersionTests testBackupFolder]' passed (0.024 seconds).
+Test Case '-[OnCueCoreTests.VersionTests testBackupFolder]' passed (0.026 seconds).
 Test Case '-[OnCueCoreTests.VersionTests testSaveRestoreAndLimits]' started.
-Test Case '-[OnCueCoreTests.VersionTests testSaveRestoreAndLimits]' passed (0.111 seconds).
-Test Suite 'VersionTests' passed at 2026-11-13 07:56:55.203.
-	 Executed 2 tests, with 0 failures (0 unexpected) in 0.135 (0.135) seconds
-Test Suite 'WaveBProtocolTests' started at 2026-11-13 07:56:55.203.
+Test Case '-[OnCueCoreTests.VersionTests testSaveRestoreAndLimits]' passed (0.101 seconds).
+Test Suite 'VersionTests' passed at 2026-11-13 07:56:45.663.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.127 (0.128) seconds
+Test Suite 'WaveBProtocolTests' started at 2026-11-13 07:56:45.663.
 Test Case '-[OnCueCoreTests.WaveBProtocolTests testPanasonic]' started.
 Test Case '-[OnCueCoreTests.WaveBProtocolTests testPanasonic]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.WaveBProtocolTests testRolandV160Replies]' started.
@@ -1885,14 +1885,14 @@ Test Case '-[OnCueCoreTests.WaveBProtocolTests testRolandV60Tally]' started.
 Test Case '-[OnCueCoreTests.WaveBProtocolTests testRolandV60Tally]' passed (0.000 seconds).
 Test Case '-[OnCueCoreTests.WaveBProtocolTests testRossTalk]' started.
 Test Case '-[OnCueCoreTests.WaveBProtocolTests testRossTalk]' passed (0.000 seconds).
-Test Suite 'WaveBProtocolTests' passed at 2026-11-13 07:56:55.204.
-	 Executed 4 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
-Test Suite 'OnCueCorePackageTests.xctest' passed at 2026-11-13 07:56:55.204.
-	 Executed 286 tests, with 0 failures (0 unexpected) in 11.286 (11.304) seconds
-Test Suite 'All tests' passed at 2026-11-13 07:56:55.204.
-	 Executed 286 tests, with 0 failures (0 unexpected) in 11.286 (11.306) seconds
-[perf] bulk edits 49 ms; save+load 5944 KB in 314 ms
-[perf] rows+spans+groups for 6,120 shots: 99.8 ms
+Test Suite 'WaveBProtocolTests' passed at 2026-11-13 07:56:45.665.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
+Test Suite 'OnCueCorePackageTests.xctest' passed at 2026-11-13 07:56:45.665.
+	 Executed 286 tests, with 0 failures (0 unexpected) in 11.061 (11.082) seconds
+Test Suite 'All tests' passed at 2026-11-13 07:56:45.666.
+	 Executed 286 tests, with 0 failures (0 unexpected) in 11.061 (11.083) seconds
+[perf] bulk edits 40 ms; save+load 5944 KB in 355 ms
+[perf] rows+spans+groups for 6,120 shots: 94.6 ms
 ◇ Test run started.
 ↳ Testing Library Version: 124.4
 ↳ Target Platform: arm64e-apple-macos14.0
