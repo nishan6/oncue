@@ -5,6 +5,9 @@ name: Soak test
 #   fast:      24 h of show time at 5× speed (about 4.8 h)  – memory, leaks, stalls
 #   real-time: 5.5 h of show time at 1× speed              – take timing at real speed
 on:
+  # Pushing any commit to a soak/… branch starts both runs (works before this file is on main).
+  push:
+    branches: ["soak/**"]
   workflow_dispatch:
     inputs:
       fast_hours:
