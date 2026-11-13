@@ -51,6 +51,7 @@ struct LiveView: View {
                                       secondsToNext: status.secondsToNext, now: context.date)
                     }
                 }
+                LiveDeviceStrip(show: show, engine: engine)
                 UpcomingStrip(show: show, cursor: cursor)
                 TimelineView(.periodic(from: .now, by: 0.25)) { context in
                     LiveCameraGrid(show: show, status: status,
