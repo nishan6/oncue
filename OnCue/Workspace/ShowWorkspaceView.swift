@@ -13,13 +13,21 @@ struct ShowWorkspaceView: View {
         let show = document.project.show(playlist: model.activePlaylistID)
         // Live Mode runs without greyed-out (Cut) shots, so cursor positions match the engine.
         let liveShow = show.forLive(document.project.properties.shots)
+        main(show: show, liveShow: liveShow)
+            .modifier(ShowSheets(show: show, project: document.project, fileURL: fileURL, model: model))
+            .modifier(ProjectSheets(project: document.project, model: model))
+            .modifier(WorkspaceEvents(document: $document, show: show, fileURL: fileURL, undoManager: undoManager, model: model))
+    }
+
+    @ViewBuilder
+    private func main(show: Show, liveShow: Show) -> some View {
         ZStack {
-        WorkspaceShell(show: show, model: model)
-            .frame(minWidth: 980, minHeight: 640)
-        if let engine = model.engine {
-            LiveView(show: liveShow, engine: engine, model: model)
-                .transition(.opacity)
-        }
+            WorkspaceShell(show: show, model: model)
+                .frame(minWidth: 980, minHeight: 640)
+            if let engine = model.engine {
+                LiveView(show: liveShow, engine: engine, model: model)
+                    .transition(.opacity)
+            }
         }
         .animation(.easeOut(duration: 0.18), value: model.isLive)
         .toolbarBackground(model.isLive ? LivePalette.base : Deck.bar, for: .windowToolbar)
@@ -39,50 +47,6 @@ struct ShowWorkspaceView: View {
                 }
             }
         }
-        .sheet(isPresented: $model.cameraManagerOpen) {
-            CameraManagerView(show: show, model: model)
-        }
-        .sheet(isPresented: $model.switcherSetupOpen) {
-            ShowSetupView(show: show, model: model)
-        }
-        .sheet(isPresented: $model.exportOpen) {
-            ExportView(show: show, model: model)
-        }
-        .sheet(isPresented: $model.preShowCheckOpen) {
-            PreShowCheckView(show: show, model: model)
-        }
-        .sheet(isPresented: $model.plotOpen) {
-            CameraPlotView(show: show, model: model)
-        }
-        .sheet(isPresented: $model.tourOpen) {
-            TourView(show: show, model: model)
-        }
-        .modifier(ProjectSheets(project: document.project, model: model))
-        .sheet(item: Binding(get: { model.newSceneKind.map(SceneKindBox.init) }, set: { model.newSceneKind = $0?.kind })) { box in
-            NewSceneSheet(kind: box.kind, project: document.project, show: show, model: model)
-        }
-        .sheet(item: Binding(get: { model.legacyShow.map(LegacyBox.init) }, set: { _ in })) { box in
-            LegacyShowSheet(show: box.show, originalURL: fileURL, model: model)
-                .interactiveDismissDisabled()
-        }
-        .alert("Renumber the scenes?", isPresented: $model.renumberPromptOpen) {
-            Button("Renumber") { model.renumberScenes() }
-            Button("Keep Numbers", role: .cancel) {}
-        } message: {
-            Text("The scene numbers no longer follow the running order. Renumber them from \(document.project.properties.sceneDefaults.numberingFrom)? A version is kept first.")
-        }
-        .sheet(item: $model.draftSource) { source in
-            DraftScriptView(show: show, source: source, model: model)
-        }
-        .sheet(item: Binding(get: { model.reportLog.map(ReportBox.init) }, set: { model.reportLog = $0?.log })) { box in
-            ShowReportView(show: show, log: box.log)
-        }
-        .alert("Can't do that", isPresented: Binding(get: { model.errorMessage != nil },
-                                                      set: { if !$0 { model.errorMessage = nil } })) {
-            Button("OK") { model.errorMessage = nil }
-        } message: {
-            Text(model.errorMessage ?? "")
-        }
         .environment(\.shotVocabulary, document.project.properties.shots)
         .environment(\.projectFrameRate, document.project.frameRate)
         .background(Deck.base)
@@ -95,18 +59,86 @@ struct ShowWorkspaceView: View {
                     .padding(.top, Space.s)
             }
         }
-        .onAppear { model.attach(document: $document, fileURL: fileURL, undoManager: undoManager) }
-        .onChange(of: show.id) { _, _ in model.attach(document: $document, fileURL: fileURL, undoManager: undoManager) }
-        .onChange(of: document.project.properties) { _, _ in
-            if let engine = model.engine { model.configureTriggers(engine) }
-        }
-        .onChange(of: show) { _, newShow in
-            model.validateSelection()
-            model.engine?.update(show: newShow.forLive(document.project.properties.shots))
-            model.crew.showChanged(newShow)
-            model.sendShowToBackup(newShow)
-        }
-        .onDisappear { model.crew.stop() }
+    }
+}
+
+/// The show-wide sheets and alerts.
+private struct ShowSheets: ViewModifier {
+    let show: Show
+    let project: Project
+    let fileURL: URL?
+    @ObservedObject var model: WorkspaceModel
+
+    func body(content: Content) -> some View {
+        content
+            .sheet(isPresented: $model.cameraManagerOpen) { CameraManagerView(show: show, model: model) }
+            .sheet(isPresented: $model.switcherSetupOpen) { ShowSetupView(show: show, model: model) }
+            .sheet(isPresented: $model.exportOpen) { ExportView(show: show, model: model) }
+            .sheet(isPresented: $model.preShowCheckOpen) { PreShowCheckView(show: show, model: model) }
+            .sheet(isPresented: $model.plotOpen) { CameraPlotView(show: show, model: model) }
+            .sheet(isPresented: $model.tourOpen) { TourView(show: show, model: model) }
+            .modifier(SceneSheets(show: show, project: project, fileURL: fileURL, model: model))
+    }
+}
+
+private struct SceneSheets: ViewModifier {
+    let show: Show
+    let project: Project
+    let fileURL: URL?
+    @ObservedObject var model: WorkspaceModel
+
+    func body(content: Content) -> some View {
+        content
+            .sheet(item: Binding(get: { model.newSceneKind.map(SceneKindBox.init) }, set: { model.newSceneKind = $0?.kind })) { box in
+                NewSceneSheet(kind: box.kind, project: project, show: show, model: model)
+            }
+            .sheet(item: Binding(get: { model.legacyShow.map(LegacyBox.init) }, set: { _ in })) { box in
+                LegacyShowSheet(show: box.show, originalURL: fileURL, model: model)
+                    .interactiveDismissDisabled()
+            }
+            .alert("Renumber the scenes?", isPresented: $model.renumberPromptOpen) {
+                Button("Renumber") { model.renumberScenes() }
+                Button("Keep Numbers", role: .cancel) {}
+            } message: {
+                Text("The scene numbers no longer follow the running order. Renumber them from \(project.properties.sceneDefaults.numberingFrom)? A version is kept first.")
+            }
+            .sheet(item: $model.draftSource) { source in
+                DraftScriptView(show: show, source: source, model: model)
+            }
+            .sheet(item: Binding(get: { model.reportLog.map(ReportBox.init) }, set: { model.reportLog = $0?.log })) { box in
+                ShowReportView(show: show, log: box.log)
+            }
+            .alert("Can't do that", isPresented: Binding(get: { model.errorMessage != nil },
+                                                          set: { if !$0 { model.errorMessage = nil } })) {
+                Button("OK") { model.errorMessage = nil }
+            } message: {
+                Text(model.errorMessage ?? "")
+            }
+    }
+}
+
+/// Keeps the model, the live engine, the crew page and the backup Mac in step with the document.
+private struct WorkspaceEvents: ViewModifier {
+    @Binding var document: ProjectDocument
+    let show: Show
+    let fileURL: URL?
+    let undoManager: UndoManager?
+    @ObservedObject var model: WorkspaceModel
+
+    func body(content: Content) -> some View {
+        content
+            .onAppear { model.attach(document: $document, fileURL: fileURL, undoManager: undoManager) }
+            .onChange(of: show.id) { _, _ in model.attach(document: $document, fileURL: fileURL, undoManager: undoManager) }
+            .onChange(of: document.project.properties) { _, _ in
+                if let engine = model.engine { model.configureTriggers(engine) }
+            }
+            .onChange(of: show) { _, newShow in
+                model.validateSelection()
+                model.engine?.update(show: newShow.forLive(document.project.properties.shots))
+                model.crew.showChanged(newShow)
+                model.sendShowToBackup(newShow)
+            }
+            .onDisappear { model.crew.stop() }
     }
 }
 

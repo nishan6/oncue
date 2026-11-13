@@ -965,8 +965,12 @@ extension EngineController {
               let cue = item.tracks.flatMap(\.cues).first(where: { $0.id == id }) else { return }
         if item.id != engine.cursor.itemID { load(itemID: item.id) }
         let now = Self.now
-        if timingKind == .internalClock || timingKind == .taps { clock.start(at: cue.at, now: now) }
-        engine.syncRaw(cue.at)
-        run(engine.setPosition(raw: cue.at, now: now))
+        // Move the playhead, then restart the internal clock from there so the next tick
+        // carries on from the cue (timecode, when followed, takes over again on its next frame).
+        run(engine.setPosition(cue.at, now: now))
+        if timingKind == .internalClock || timingKind == .taps {
+            clock.start(at: cue.at, now: now)
+            engine.syncRaw(cue.at)
+        }
     }
 }
