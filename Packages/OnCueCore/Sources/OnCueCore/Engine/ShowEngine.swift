@@ -27,6 +27,7 @@ public enum EngineCommand: Equatable {
     case fadeToBlack(switcher: UUID)
     case osc(target: UUID, address: String, args: String)
     case ptz(camera: UUID, preset: Int)
+    case send(target: UUID, payload: DeviceSend)
 }
 
 public enum EngineTransport: Equatable {
@@ -576,6 +577,10 @@ public final class ShowEngine {
             case .osc:
                 if let target = cue.oscTargetID, !cue.oscAddress.isEmpty {
                     commands.append(.osc(target: target, address: cue.oscAddress, args: cue.oscArgs))
+                }
+            case .device:
+                if let target = cue.sendTargetID, let payload = cue.send {
+                    commands.append(.send(target: target, payload: payload))
                 }
             case .ptz:
                 if automation, let camera = cue.ptzCameraID {

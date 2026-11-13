@@ -91,3 +91,31 @@ extension Show {
         }
     }
 }
+
+// MARK: - Tally in
+
+/// A tally source OnCue listens to (TSL 3.1 or 5.0 over UDP): a switcher or tally system that
+/// reports what is really on program, so a manual cut on a switcher OnCue can't read back
+/// directly (Ross, Panasonic, Roland through Companion) still pauses automation.
+public struct TallyInputConfig: Identifiable, Codable, Hashable {
+    public var id = UUID()
+    public var name: String = "Tally in"
+    public var enabled = true
+    public var version: TSLVersion = .v50
+    public var port: Int = 8901
+    public var indexMode: TallyIndexMode = .cameraNumber
+    /// The switcher whose program this tally reports.
+    public var switcherID: UUID?
+    public init(name: String = "Tally in") { self.name = name }
+}
+
+extension Show {
+    /// The switcher input a tally index stands for.
+    public func input(forTallyIndex index: Int, mode: TallyIndexMode, switcherID: UUID?) -> Int? {
+        switch mode {
+        case .switcherInput: return index
+        case .cameraNumber:
+            return cameras.first { $0.number == index && ($0.switcherID == nil || switcherID == nil || $0.switcherID == switcherID) }?.input
+        }
+    }
+}

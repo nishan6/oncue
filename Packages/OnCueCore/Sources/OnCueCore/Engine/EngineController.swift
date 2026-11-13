@@ -127,6 +127,10 @@ public final class EngineController: ObservableObject {
     public private(set) var failoverPrompt: UUID?
     public private(set) var failoverLog: [FailoverEvent] = []
     private var tallySenders: [UUID: TallySender] = [:]
+    private var tallyListeners: [UUID: (config: TallyInputConfig, listener: TallyListener)] = [:]
+    /// What each tally input last reported on program (switcher input).
+    public private(set) var tallyInProgram: [UUID: Int] = [:]
+    let deviceOut = DeviceOutputService()
 
     // Trigger Routes and timecode chase
     private var triggerRouter = TriggerRouter(routes: [])
@@ -195,6 +199,11 @@ public final class EngineController: ObservableObject {
     public func shutdown() {
         timer?.invalidate()
         timer = nil
+        deviceOut.stop()
+        tallyListeners.values.forEach { $0.listener.stop() }
+        tallyListeners.removeAll()
+        tallySenders.values.forEach { $0.stop() }
+        artNet.stop()
         saveLog()
         for device in devices.values {
             device.onChange = nil
@@ -502,6 +511,8 @@ public final class EngineController: ObservableObject {
             }
         }
         checkFailover(now)
+        deviceOut.tick(targets: engine.show.deviceTargets, now: now)
+        if tickCount % 20 == 0 { syncTallyInputs() }
         if tickCount % 2 == 0 { sendTally(now) }
         processPending(now)
         tickCount += 1
@@ -567,7 +578,7 @@ public final class EngineController: ObservableObject {
         case .dskAuto(let s, let index): device(s)?.autoDSK(index)
         case .key(let s, let index, let on): device(s)?.setKeyer(index, onAir: on)
         case .fadeToBlack(let s): device(s)?.fadeToBlack()
-        case .osc, .ptz: break
+        case .osc, .ptz, .send: break
         }
     }
 
@@ -596,6 +607,10 @@ public final class EngineController: ObservableObject {
             }
         case .ptz(let cameraID, let preset):
             if let cam = engine.show.ptz(cameraID) { ptz.recall(cam, preset: preset) }
+        case .send(let targetID, let payload):
+            if let target = engine.show.deviceTargets.first(where: { $0.id == targetID }) {
+                deviceOut.send(payload, to: target, now: now)
+            }
         }
     }
 
@@ -1036,7 +1051,7 @@ extension EngineCommand {
         switch self {
         case .preview(let s, _), .cut(let s), .auto(let s), .program(let s, _), .aux(let s, _, _), .macro(let s, _),
              .dsk(let s, _, _), .dskAuto(let s, _), .key(let s, _, _), .fadeToBlack(let s): return s
-        case .osc, .ptz: return nil
+        case .osc, .ptz, .send: return nil
         }
     }
 
@@ -1053,7 +1068,7 @@ extension EngineCommand {
         case .dskAuto(_, let i): return .dskAuto(switcher: id, index: i)
         case .key(_, let i, let on): return .key(switcher: id, index: i, on: on)
         case .fadeToBlack: return .fadeToBlack(switcher: id)
-        case .osc, .ptz: return self
+        case .osc, .ptz, .send: return self
         }
     }
 }
@@ -1151,5 +1166,50 @@ extension EngineController {
     public func tallyNow(_ outputID: UUID) -> (states: [TallyState], sent: Int, error: String?)? {
         guard let s = tallySenders[outputID] else { return nil }
         return (s.current, s.packetsSent, s.lastError)
+    }
+}
+
+// MARK: - Device commands and tally in
+
+extension EngineController {
+    /// The last few Device commands sent (or simulated), newest first.
+    public var recentDeviceSends: [(time: Date, target: String, summary: String, simulated: Bool, error: String?)] {
+        deviceOut.recent.map { s in
+            (s.time, engine.show.deviceTargets.first { $0.id == s.targetID }?.name ?? "?", s.summary, s.simulated, s.error)
+        }
+    }
+
+    /// Sends one Device command now (Test in the cue inspector, or a trigger).
+    public func sendDevice(_ payload: DeviceSend, target: UUID) {
+        guard let t = engine.show.deviceTargets.first(where: { $0.id == target }) else { return }
+        deviceOut.send(payload, to: t, now: Self.now)
+    }
+
+    /// Starts and stops TSL tally listeners to match the show.
+    private func syncTallyInputs() {
+        let wanted = engine.show.tallyInputs.filter(\.enabled)
+        for (id, entry) in tallyListeners where !wanted.contains(where: { $0.id == id && $0 == entry.config }) {
+            entry.listener.stop()
+            tallyListeners[id] = nil
+            tallyInProgram[id] = nil
+        }
+        for config in wanted where tallyListeners[config.id] == nil {
+            let listener = TallyListener(version: config.version)
+            listener.onProgram = { [weak self] index in self?.tallyIn(config, index: index) }
+            listener.start(port: config.port)
+            tallyListeners[config.id] = (config, listener)
+        }
+    }
+
+    /// Tally in reported a program change: a cut OnCue didn't make pauses automation, the same
+    /// way an ATEM's own read-back does.
+    func tallyIn(_ config: TallyInputConfig, index: Int) {
+        guard let input = engine.show.input(forTallyIndex: index, mode: config.indexMode, switcherID: config.switcherID),
+              tallyInProgram[config.id] != input else { return }
+        tallyInProgram[config.id] = input
+        if let switcher = config.switcherID ?? engine.show.mainOutput?.switcherID {
+            engine.programChanged(to: input, on: switcher, now: Self.now)
+        }
+        publish()
     }
 }

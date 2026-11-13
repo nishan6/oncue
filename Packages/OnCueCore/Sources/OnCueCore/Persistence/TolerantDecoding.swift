@@ -173,6 +173,8 @@ extension Cue {
         shotStatus = try c.value("shotStatus", ShotVocabulary.defaultStatusKey)
         reviews = try c.value("reviews", [])
         callRole = try c.value("callRole", "")
+        sendTargetID = try c.optional("sendTargetID")
+        send = try c.optional("send")
         playerAction = try c.optionalEnum("playerAction")
         playerName = try c.value("playerName", "")
         clip = try c.value("clip", "")
@@ -372,11 +374,65 @@ extension Show {
         items = try c.value("items", [])
         oscTargets = try c.value("oscTargets", [])
         tallyOutputs = try c.value("tallyOutputs", [])
+        tallyInputs = try c.value("tallyInputs", [])
+        deviceTargets = try c.value("deviceTargets", [])
         ptzCameras = try c.value("ptzCameras", [])
         comments = try c.value("comments", [])
         midiBindings = try c.value("midiBindings", [])
         settings = try c.value("settings", ShowSettings())
         plot = try c.value("plot", CameraPlot())
         versions = try c.value("versions", [])
+    }
+}
+
+extension DeviceTarget {
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: AnyCodingKey.self)
+        self.init(name: try c.value("name", "Device"), kind: try c.enumValue("kind", .udp))
+        id = try c.value("id", UUID())
+        host = try c.value("host", host)
+        port = try c.value("port", port)
+        midiDestination = try c.value("midiDestination", "")
+        serialPath = try c.value("serialPath", "")
+        baud = try c.value("baud", 9600)
+        lineEnding = try c.enumValue("lineEnding", .none)
+        baseURL = try c.value("baseURL", baseURL)
+        universe = try c.value("universe", universe)
+        simulated = try c.value("simulated", false)
+    }
+}
+
+extension DeviceSend {
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: AnyCodingKey.self)
+        self.init(kind: try c.enumValue("kind", .text))
+        channel = try c.value("channel", 1)
+        number = try c.value("number", 0)
+        value = try c.value("value", 127)
+        msc = MSCCommand(rawValue: try c.value("msc", MSCCommand.go.rawValue)) ?? .go
+        mscCue = try c.value("mscCue", "")
+        mscList = try c.value("mscList", "")
+        mscDevice = try c.value("mscDevice", 127)
+        mscFormat = try c.value("mscFormat", 1)
+        text = try c.value("text", "")
+        method = try c.enumValue("method", .get)
+        path = try c.value("path", "")
+        body = try c.value("body", "")
+        dmxChannel = try c.value("dmxChannel", 1)
+        dmxLevel = try c.value("dmxLevel", 255)
+        dmxFade = try c.value("dmxFade", 0.0)
+    }
+}
+
+extension TallyInputConfig {
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: AnyCodingKey.self)
+        self.init(name: try c.value("name", "Tally in"))
+        id = try c.value("id", UUID())
+        enabled = try c.value("enabled", true)
+        version = try c.enumValue("version", .v50)
+        port = try c.value("port", 8901)
+        indexMode = try c.enumValue("indexMode", .cameraNumber)
+        switcherID = try c.optional("switcherID")
     }
 }

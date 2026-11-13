@@ -369,6 +369,8 @@ public struct Project: Identifiable, Codable, Hashable {
     public var outputs: [OutputConfig] = []
     public var oscTargets: [OSCTarget] = []
     public var tallyOutputs: [TallyOutputConfig] = []
+    public var tallyInputs: [TallyInputConfig] = []
+    public var deviceTargets: [DeviceTarget] = []
     public var ptzCameras: [PTZCamera] = []
     public var midiBindings: [MIDIBinding] = []
     public var settings = ShowSettings()
@@ -453,6 +455,8 @@ public struct Project: Identifiable, Codable, Hashable {
         s.items = list?.items ?? []
         s.oscTargets = oscTargets
         s.tallyOutputs = tallyOutputs
+        s.tallyInputs = tallyInputs
+        s.deviceTargets = deviceTargets
         s.ptzCameras = ptzCameras
         s.comments = comments
         s.midiBindings = midiBindings
@@ -470,6 +474,8 @@ public struct Project: Identifiable, Codable, Hashable {
         outputs = show.outputs
         oscTargets = show.oscTargets
         tallyOutputs = show.tallyOutputs
+        tallyInputs = show.tallyInputs
+        deviceTargets = show.deviceTargets
         ptzCameras = show.ptzCameras
         comments = show.comments
         midiBindings = show.midiBindings
@@ -505,6 +511,8 @@ public struct Project: Identifiable, Codable, Hashable {
         outputs = show.outputs
         oscTargets = show.oscTargets
         tallyOutputs = show.tallyOutputs
+        tallyInputs = show.tallyInputs
+        deviceTargets = show.deviceTargets
         ptzCameras = show.ptzCameras
         midiBindings = show.midiBindings
         settings = show.settings

@@ -91,6 +91,8 @@ public enum TrackKind: String, Codable, CaseIterable, Identifiable {
     case calls
     /// Media player commands: load, play, pause, stop, loop, jump.
     case player
+    /// MIDI, MSC, TCP/UDP/HTTP, serial and DMX to the show's device targets.
+    case device
     public var id: String { rawValue }
     public var label: String {
         switch self {
@@ -103,6 +105,7 @@ public enum TrackKind: String, Codable, CaseIterable, Identifiable {
         case .notes: return "Notes"
         case .calls: return "Cues"
         case .player: return "Media Player Control"
+        case .device: return "Device commands"
         }
     }
 }
@@ -434,6 +437,9 @@ public struct Cue: Identifiable, Codable, Hashable {
     public var ptzPreset: Int = 1
     // Cues (calls): `text` is the call, `callRole` the department ("" = everyone).
     public var callRole: String = ""
+    // Device commands
+    public var sendTargetID: UUID?
+    public var send: DeviceSend?
     // Media Player Control
     public var playerAction: PlayerAction?
     /// Which player, as you name it ("MP1", "Playback A").
@@ -562,6 +568,10 @@ public struct Show: Codable, Hashable, Identifiable {
     public var oscTargets: [OSCTarget] = []
     /// Tally systems and multiviewers OnCue sends TSL tally and camera names to.
     public var tallyOutputs: [TallyOutputConfig] = []
+    /// Tally sources OnCue reads (TSL in), to see what a switcher really has on air.
+    public var tallyInputs: [TallyInputConfig] = []
+    /// MIDI, TCP/UDP, HTTP, serial and DMX targets for Device commands cues.
+    public var deviceTargets: [DeviceTarget] = []
     public var ptzCameras: [PTZCamera] = []
     public var comments: [Comment] = []
     public var midiBindings: [MIDIBinding] = []
