@@ -13,6 +13,7 @@
 		2055365CF545654F68171AB6 /* ShowSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F559336BED9E808C8D2BE3 /* ShowSetupView.swift */; };
 		243C5BC44F9BE6CCFCF985A2 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D71DBB1C47285045DB3B14E /* LibraryView.swift */; };
 		29FC616B3A78E7E956D34F8E /* ScreenshotRun.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C39235BF555BFD93EA0270B /* ScreenshotRun.swift */; };
+		2A7B286C5D7B35F99A692FAB /* GoLiveSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0648CED2B313F73CE4D9ACC5 /* GoLiveSheet.swift */; };
 		32E9B7C6AD4E6C3210FC5F7C /* PreShowCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8627F4EB520DBB4D480F1496 /* PreShowCheckView.swift */; };
 		357EDD62A4DF8D7E7D2CF857 /* CommandPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D634FF0F2ED189D3BE73F67 /* CommandPalette.swift */; };
 		3722D0A7C3EED3D07031744A /* Updater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2484709650247BEA349A4BA2 /* Updater.swift */; };
@@ -57,6 +58,7 @@
 
 /* Begin PBXFileReference section */
 		04636F0E36A443DF6B007A8A /* MediaPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayer.swift; sourceTree = "<group>"; };
+		0648CED2B313F73CE4D9ACC5 /* GoLiveSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoLiveSheet.swift; sourceTree = "<group>"; };
 		0C1FB3ECAF444CB9D48D9EB9 /* TallySetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TallySetup.swift; sourceTree = "<group>"; };
 		0C39235BF555BFD93EA0270B /* ScreenshotRun.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotRun.swift; sourceTree = "<group>"; };
 		1D71DBB1C47285045DB3B14E /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 				8932C535E1E6844324219F88 /* DeviceStatusView.swift */,
 				6D3AE142ACE33618B209DDAA /* DraftScriptView.swift */,
 				328850312120FD1B1C6560EF /* ExportView.swift */,
+				0648CED2B313F73CE4D9ACC5 /* GoLiveSheet.swift */,
 				DF6AAA1B35A6655F52406962 /* InspectorView.swift */,
 				E271F3E9BE490209AD047BE0 /* ItemEditorView.swift */,
 				ADF717A9AA87D0F24DA3FB3E /* LiveView.swift */,
@@ -327,6 +330,7 @@
 				F48FFE50FA2982B8FFE58A50 /* DraftScriptView.swift in Sources */,
 				40DEA88FD61358EE4EA96A11 /* ExportView.swift in Sources */,
 				5D7A2ABDD3EDFC7C93C26AE8 /* FrameRatePicker.swift in Sources */,
+				2A7B286C5D7B35F99A692FAB /* GoLiveSheet.swift in Sources */,
 				7CCED2FF9F4F02B6087CF920 /* InspectorView.swift in Sources */,
 				848009FB351D646A30816EF9 /* ItemEditorView.swift in Sources */,
 				D96D8C4B0C1B433BD4B0BD9F /* KeyboardShortcutsView.swift in Sources */,
