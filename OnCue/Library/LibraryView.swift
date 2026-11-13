@@ -222,6 +222,8 @@ private struct LibraryRow: View {
 }
 
 /// New project: name (required), artist, venue, show date and frame rate.
+/// A new show in one screen: the show, its cameras and operators, the main switcher and the
+/// setlist. Everything but the name is optional and can be changed later.
 struct NewProjectSheet: View {
     @ObservedObject var library: LibraryModel
     let created: (URL) -> Void
@@ -232,25 +234,62 @@ struct NewProjectSheet: View {
     @State private var hasDate = false
     @State private var date = Date()
     @State private var rate: FrameRate = .r25
+    @State private var setup = ProjectSetup()
 
     var body: some View {
+        let cameraLines = ProjectSetup.cameras(setup.cameraLines)
+        let cameraTotal = max(setup.cameraCount, cameraLines.count)
+        let scenes = ProjectSetup.scenes(setup.setlist)
         VStack(alignment: .leading, spacing: Space.m) {
-            Text("NEW PROJECT").font(.system(size: 13, weight: .bold)).tracking(0.8).foregroundStyle(Gallery.ink)
-            Form {
-                TextField("Name", text: $name)
-                TextField("Artist", text: $artist)
-                TextField("Venue", text: $venue)
-                HStack {
-                    Toggle("Show date", isOn: $hasDate)
-                    if hasDate { DatePicker("", selection: $date, displayedComponents: .date).labelsHidden() }
+            Text("NEW SHOW").font(.system(size: 13, weight: .bold)).tracking(0.8).foregroundStyle(Gallery.ink)
+            HStack(alignment: .top, spacing: Space.l) {
+                VStack(alignment: .leading, spacing: Space.m) {
+                    section("Show")
+                    Form {
+                        TextField("Name", text: $name, prompt: Text("Karbi Anglong Day"))
+                        TextField("Artist", text: $artist)
+                        TextField("Venue", text: $venue)
+                        HStack {
+                            Toggle("Show date", isOn: $hasDate)
+                            if hasDate { DatePicker("", selection: $date, displayedComponents: .date).labelsHidden() }
+                        }
+                        LabeledContent("Frame rate") { FrameRatePicker(rate: $rate) }
+                    }
+                    section("Switcher")
+                    Form {
+                        Picker("Main switcher", selection: $setup.switcherKind) {
+                            ForEach(SwitcherKind.allCases, id: \.self) { Text($0.label).tag($0) }
+                        }
+                        if setup.switcherKind != .simulator {
+                            TextField("Address", text: $setup.switcherHost, prompt: Text("192.168.10.240"))
+                        }
+                    }
+                    section("Cameras")
+                    HStack {
+                        Stepper("\(cameraTotal) camera\(cameraTotal == 1 ? "" : "s")", value: $setup.cameraCount, in: 1...200)
+                        Spacer()
+                        Text("Inputs 1–\(cameraTotal)").font(.ocMeta).foregroundStyle(Gallery.faint)
+                    }
+                    editor($setup.cameraLines, placeholder: "One per line, optional:\nWide – Arjun\nCentre – Meera\nJib – Rohan", height: 120)
                 }
-                LabeledContent("Frame rate") { FrameRatePicker(rate: $rate) }
+                .frame(width: 360)
+                VStack(alignment: .leading, spacing: Space.m) {
+                    section("Setlist")
+                    editor($setup.setlist, placeholder: "Paste the setlist, one per line:\n1. Intro\n2. Neon Skyline\n* Speech (a * makes a segment)\n3. Encore", height: 330)
+                    Text(scenes.isEmpty ? "No setlist: the show starts with one empty scene."
+                         : "\(scenes.filter { !$0.segment }.count) songs, \(scenes.filter(\.segment).count) segments")
+                        .font(.ocMeta).foregroundStyle(Gallery.faint)
+                }
+                .frame(width: 320)
             }
+            Text("Everything except the name can be changed later in Cameras, Show Setup and the running order.")
+                .font(.ocMeta).foregroundStyle(Gallery.faint)
             HStack {
                 Spacer()
                 Button("Cancel") { dismiss() }.buttonStyle(QuietButtonStyle()).keyboardShortcut(.cancelAction)
-                Button("Create") {
-                    if let url = library.create(name: name, artist: artist, venue: venue, showDate: hasDate ? date : nil, rate: rate) {
+                Button("Create Show") {
+                    if let url = library.create(name: name, artist: artist, venue: venue, showDate: hasDate ? date : nil,
+                                                rate: rate, setup: setup) {
                         dismiss()
                         created(url)
                     }
@@ -261,9 +300,28 @@ struct NewProjectSheet: View {
             }
         }
         .padding(Space.l)
-        .frame(width: 460)
         .background(Gallery.panel)
         .preferredColorScheme(.dark)
+    }
+
+    private func section(_ title: String) -> some View {
+        Text(title.uppercased()).font(.ocTag).tracking(0.6).foregroundStyle(Gallery.faint)
+    }
+
+    private func editor(_ text: Binding<String>, placeholder: String, height: CGFloat) -> some View {
+        ZStack(alignment: .topLeading) {
+            TextEditor(text: text)
+                .font(.ocBody)
+                .scrollContentBackground(.hidden)
+                .padding(6)
+            if text.wrappedValue.isEmpty {
+                Text(placeholder).font(.ocBody).foregroundStyle(Gallery.faint)
+                    .padding(.horizontal, 11).padding(.vertical, 6)
+                    .allowsHitTesting(false)
+            }
+        }
+        .frame(height: height)
+        .background(Gallery.well, in: RoundedRectangle(cornerRadius: Radius.m))
     }
 }
 

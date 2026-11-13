@@ -76,9 +76,10 @@ final class LibraryModel: ObservableObject {
     }
 
     @discardableResult
-    func create(name: String, artist: String, venue: String, showDate: Date?, rate: FrameRate) -> URL? {
+    func create(name: String, artist: String, venue: String, showDate: Date?, rate: FrameRate, setup: ProjectSetup? = nil) -> URL? {
         guard let folder else { return nil }
         var project = Project.starter(name: name.trimmingCharacters(in: .whitespaces), frameRate: rate)
+        if let setup { project.apply(setup) }
         project.artist = artist.trimmingCharacters(in: .whitespaces)
         project.venue = venue.trimmingCharacters(in: .whitespaces)
         project.showDate = showDate

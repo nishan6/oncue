@@ -277,6 +277,8 @@ enum ScreenshotRun {
             ("sheet-move-all.png", AnyView(MoveAllSheet(item: project.playlists[0].items[0], start: 32, model: model)), NSSize(width: 420, height: 200)),
             ("sheet-new-scene.png", AnyView(NewSceneSheet(kind: .song, project: project, show: project.show(playlist: project.playlists[0].id), model: model)), NSSize(width: 520, height: 420)),
             ("library.png", AnyView(LibraryView(library: library)), NSSize(width: 1100, height: 560)),
+            ("sheet-new-show.png", AnyView(NewProjectSheet(library: library) { _ in }), NSSize(width: 760, height: 640)),
+            ("palette.png", AnyView(CommandPalette(show: viewerShow, model: model)), NSSize(width: 620, height: 420)),
             ("sheet-settings.png", AnyView(MachineProfileView().environmentObject(MachineProfileModel())), NSSize(width: 540, height: 680)),
         ]
         for (k, (_, view, size)) in sheets.enumerated() {
