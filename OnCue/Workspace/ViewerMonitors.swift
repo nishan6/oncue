@@ -86,6 +86,8 @@ private struct ViewerShotCard: View {
                     Text("#\(shot.number) · \(shot.position)").font(.readout(11 * scale)).foregroundStyle(Gallery.faint)
                     if shot.transition == "mix" { Text("MIX").font(.system(size: 11 * scale, weight: .bold)).foregroundStyle(Gallery.dim) }
                 }
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
                 if !shot.text.isEmpty {
                     Text(shot.text).font(.system(size: 16 * scale, weight: .semibold)).foregroundStyle(Gallery.ink)
                         .fixedSize(horizontal: false, vertical: true)
