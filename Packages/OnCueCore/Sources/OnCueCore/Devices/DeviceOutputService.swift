@@ -87,7 +87,8 @@ final class DeviceOutputService {
 
     private func receiveConsole(_ c: NWConnection, id: UUID) {
         c.receiveMessage { [weak self] data, _, _, error in
-            if let data, let (address, args) = OSC.decode(data) {
+            if let data, let decoded = OSC.decode(data) {
+                let address = decoded.0, args = decoded.1
                 DispatchQueue.main.async {
                     guard let self else { return }
                     var s = self.consoleState[id] ?? ConsoleReadBack()
