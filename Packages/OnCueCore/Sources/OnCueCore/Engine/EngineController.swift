@@ -118,6 +118,16 @@ public final class EngineController: ObservableObject {
     private var lastVariables: [String: String] = [:]
     private var lastVariablePush: Double = 0
 
+    // Parallel switchers, failover and tally out
+    /// When each switcher lost contact (cleared when it comes back).
+    private var lostSince: [UUID: Double] = [:]
+    /// Main switcher → the parallel switcher OnCue now reads program and tally from.
+    public private(set) var failedOver: [UUID: UUID] = [:]
+    /// A switcher whose failover waits for you ("Ask me first").
+    public private(set) var failoverPrompt: UUID?
+    public private(set) var failoverLog: [FailoverEvent] = []
+    private var tallySenders: [UUID: TallySender] = [:]
+
     // Trigger Routes and timecode chase
     private var triggerRouter = TriggerRouter(routes: [])
     private let artNet = ArtNetListener()
@@ -261,6 +271,8 @@ public final class EngineController: ObservableObject {
         devices[id] = device
         connectedOnce.remove(id)
         lastProgram[id] = nil
+        // Counts as out of contact until it answers (a main that never connects can fail over).
+        if lostSince[id] == nil { lostSince[id] = Self.now }
         device.connect()
     }
 
@@ -279,6 +291,16 @@ public final class EngineController: ObservableObject {
         guard let device = devices[id] else { return }
         let state = device.state
         let now = Self.now
+        trackContact(id, connected: state.connected, now: now)
+        // A parallel switcher that has taken over: its program changes count as the main's.
+        if let main = failedOver.first(where: { $0.value == id })?.key {
+            if state.connected, let last = lastProgram[id], state.program != last, !state.assumed {
+                engine.programChanged(to: state.program, on: main, now: now)
+            }
+            lastProgram[id] = state.connected ? state.program : nil
+            publish()
+            return
+        }
         if state.connected && !connectedOnce.contains(id) {
             connectedOnce.insert(id)
             lastProgram[id] = state.program
@@ -479,6 +501,8 @@ public final class EngineController: ObservableObject {
                 freewheeling = false
             }
         }
+        checkFailover(now)
+        if tickCount % 2 == 0 { sendTally(now) }
         processPending(now)
         tickCount += 1
         if tickCount % 3 == 0 { publish() }
@@ -519,6 +543,35 @@ public final class EngineController: ObservableObject {
     }
 
     private func execute(_ command: EngineCommand, now: Double) {
+        executePrimary(command, now: now)
+        if let s = command.switcherID {
+            for m in mirrors(of: s) { mirror(command.on(m)) }
+        }
+    }
+
+    /// Parallel switchers that mirror `id`.
+    private func mirrors(of id: UUID) -> [UUID] {
+        engine.show.switchers.filter { $0.mirrorOf == id }.map(\.id)
+    }
+
+    /// The same command on a parallel switcher, without the engine's bookkeeping.
+    private func mirror(_ command: EngineCommand) {
+        switch command {
+        case .preview(let s, let input): device(s)?.setPreview(input)
+        case .program(let s, let input): device(s)?.setProgram(input)
+        case .cut(let s): device(s)?.cut()
+        case .auto(let s): device(s)?.auto()
+        case .aux(let s, let aux, let input): device(s)?.setAux(aux, source: input)
+        case .macro(let s, let index): device(s)?.runMacro(index)
+        case .dsk(let s, let index, let on): device(s)?.setDSK(index, onAir: on)
+        case .dskAuto(let s, let index): device(s)?.autoDSK(index)
+        case .key(let s, let index, let on): device(s)?.setKeyer(index, onAir: on)
+        case .fadeToBlack(let s): device(s)?.fadeToBlack()
+        case .osc, .ptz: break
+        }
+    }
+
+    private func executePrimary(_ command: EngineCommand, now: Double) {
         switch command {
         case .preview(let s, let input): device(s)?.setPreview(input)
         case .program(let s, let input): device(s)?.setProgram(input)
@@ -972,5 +1025,131 @@ extension EngineController {
             clock.start(at: cue.at, now: now)
             engine.syncRaw(cue.at)
         }
+    }
+}
+
+// MARK: - Failover and tally
+
+extension EngineCommand {
+    /// The switcher a command is for (nil for OSC and PTZ).
+    public var switcherID: UUID? {
+        switch self {
+        case .preview(let s, _), .cut(let s), .auto(let s), .program(let s, _), .aux(let s, _, _), .macro(let s, _),
+             .dsk(let s, _, _), .dskAuto(let s, _), .key(let s, _, _), .fadeToBlack(let s): return s
+        case .osc, .ptz: return nil
+        }
+    }
+
+    /// The same command for another switcher.
+    public func on(_ id: UUID) -> EngineCommand {
+        switch self {
+        case .preview(_, let i): return .preview(switcher: id, input: i)
+        case .cut: return .cut(switcher: id)
+        case .auto: return .auto(switcher: id)
+        case .program(_, let i): return .program(switcher: id, input: i)
+        case .aux(_, let a, let i): return .aux(switcher: id, aux: a, input: i)
+        case .macro(_, let i): return .macro(switcher: id, index: i)
+        case .dsk(_, let i, let on): return .dsk(switcher: id, index: i, on: on)
+        case .dskAuto(_, let i): return .dskAuto(switcher: id, index: i)
+        case .key(_, let i, let on): return .key(switcher: id, index: i, on: on)
+        case .fadeToBlack: return .fadeToBlack(switcher: id)
+        case .osc, .ptz: return self
+        }
+    }
+}
+
+extension EngineController {
+    private func trackContact(_ id: UUID, connected: Bool, now: Double) {
+        if connected {
+            if lostSince.removeValue(forKey: id) != nil, let mirror = failedOver.removeValue(forKey: id) {
+                let name = engine.show.switchers.first { $0.id == id }?.name ?? "Main switcher"
+                let mirrorName = engine.show.switchers.first { $0.id == mirror }?.name ?? "parallel switcher"
+                logFailover(id, "\(name) is back. Reading program and tally from it again (\(mirrorName) keeps mirroring).")
+            }
+            if failoverPrompt == id { failoverPrompt = nil }
+        } else if lostSince[id] == nil {
+            lostSince[id] = now
+        }
+    }
+
+    /// Fails over switchers that have been out of contact longer than their timeout.
+    private func checkFailover(_ now: Double) {
+        for config in engine.show.switchers where failedOver[config.id] == nil {
+            guard let since = lostSince[config.id], now - since >= config.failoverTimeout,
+                  let mirror = engine.show.switchers.first(where: { $0.mirrorOf == config.id && devices[$0.id]?.state.connected == true })
+            else { continue }
+            if config.failover == .automatic {
+                failover(config.id, to: mirror.id)
+            } else if failoverPrompt != config.id {
+                failoverPrompt = config.id
+                logFailover(config.id, "\(config.name) lost for \(Int(now - since)) s. Waiting for you to fail over to \(mirror.name).")
+                publish()
+            }
+        }
+    }
+
+    /// Reads program, preview and tally from the parallel switcher instead of the lost one.
+    /// Commands keep going to both, so nothing is sent twice and nothing is missed when the
+    /// main one comes back.
+    public func failover(_ id: UUID, to mirror: UUID? = nil) {
+        guard let target = mirror ?? engine.show.switchers.first(where: { $0.mirrorOf == id })?.id else { return }
+        failedOver[id] = target
+        if failoverPrompt == id { failoverPrompt = nil }
+        let name = engine.show.switchers.first { $0.id == id }?.name ?? "Main switcher"
+        let mirrorName = engine.show.switchers.first { $0.id == target }?.name ?? "parallel switcher"
+        logFailover(id, "Failed over: \(name) out of contact, reading program and tally from \(mirrorName).")
+        lastProgram[target] = devices[target]?.state.program
+        publish()
+    }
+
+    /// Simulation and rehearsal: pull a switcher's plug (or put it back) to practise failover.
+    /// Only for simulated switchers; real devices are never disconnected from here.
+    public func simulateLoss(_ id: UUID, lost: Bool) {
+        guard let config = engine.show.switchers.first(where: { $0.id == id }), config.kind == .simulator,
+              let device = devices[id] else { return }
+        if lost { device.disconnect() } else { device.connect() }
+    }
+
+    public func dismissFailoverPrompt() {
+        failoverPrompt = nil
+        publish()
+    }
+
+    private func logFailover(_ id: UUID, _ message: String) {
+        failoverLog.append(FailoverEvent(time: Date(), switcherID: id, message: message))
+        if failoverLog.count > 200 { failoverLog.removeFirst(failoverLog.count - 200) }
+        NSLog("OnCue failover: \(message)")
+    }
+
+    /// The switcher OnCue trusts for read-back of `id`: itself, or the parallel one after failover.
+    private func readBack(_ id: UUID) -> SwitcherDevice? {
+        if let mirror = failedOver[id] { return device(mirror) }
+        return device(id)
+    }
+
+    /// Tally out: program and preview from the main switcher (its real read-back, or the
+    /// parallel switcher's after failover), to every tally output.
+    private func sendTally(_ now: Double) {
+        let outputs = engine.show.tallyOutputs
+        for id in tallySenders.keys where !outputs.contains(where: { $0.id == id }) {
+            tallySenders[id]?.stop()
+            tallySenders[id] = nil
+        }
+        guard !outputs.isEmpty else { return }
+        let main = engine.show.switchers.first { $0.role == .main && $0.mirrorOf == nil }
+        let state = main.flatMap { readBack($0.id)?.state }
+        for config in outputs {
+            let sender = tallySenders[config.id] ?? TallySender(config: config)
+            tallySenders[config.id] = sender
+            sender.update(config: config)
+            let states = engine.show.tallyStates(program: state?.program, preview: state?.preview, switcherID: main?.id, config: config)
+            sender.send(states, now: now)
+        }
+    }
+
+    /// What each tally output is showing (for simulated outputs and the device panel).
+    public func tallyNow(_ outputID: UUID) -> (states: [TallyState], sent: Int, error: String?)? {
+        guard let s = tallySenders[outputID] else { return nil }
+        return (s.current, s.packetsSent, s.lastError)
     }
 }

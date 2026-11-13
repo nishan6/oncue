@@ -84,6 +84,7 @@ extension Project {
         switchers = try c.value("switchers", [])
         outputs = try c.value("outputs", [])
         oscTargets = try c.value("oscTargets", [])
+        tallyOutputs = try c.value("tallyOutputs", [])
         ptzCameras = try c.value("ptzCameras", [])
         midiBindings = try c.value("midiBindings", [])
         settings = try c.value("settings", ShowSettings())

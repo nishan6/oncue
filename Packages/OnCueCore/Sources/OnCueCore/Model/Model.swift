@@ -367,6 +367,12 @@ public struct SwitcherConfig: Identifiable, Codable, Hashable {
     public var companion = CompanionMapping()
     /// Simulator input count.
     public var inputCount: Int = 20
+    /// A second switcher running in parallel: it gets every command the switcher it mirrors gets,
+    /// and takes over read-back and tally if that one is lost.
+    public var mirrorOf: UUID?
+    public var failover: FailoverPolicy = .automatic
+    /// Seconds without contact before failover.
+    public var failoverTimeout: Double = 2
 }
 
 public struct OutputConfig: Identifiable, Codable, Hashable {
@@ -554,6 +560,8 @@ public struct Show: Codable, Hashable, Identifiable {
     public var outputs: [OutputConfig] = []
     public var items: [RundownItem] = []
     public var oscTargets: [OSCTarget] = []
+    /// Tally systems and multiviewers OnCue sends TSL tally and camera names to.
+    public var tallyOutputs: [TallyOutputConfig] = []
     public var ptzCameras: [PTZCamera] = []
     public var comments: [Comment] = []
     public var midiBindings: [MIDIBinding] = []

@@ -102,6 +102,26 @@ extension SwitcherConfig {
         feedInput = try c.value("feedInput", 0)
         companion = try c.value("companion", CompanionMapping())
         inputCount = try c.value("inputCount", 20)
+        mirrorOf = try c.optional("mirrorOf")
+        failover = try c.enumValue("failover", .automatic)
+        failoverTimeout = try c.value("failoverTimeout", 2.0)
+    }
+}
+
+extension TallyOutputConfig {
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: AnyCodingKey.self)
+        self.init(name: try c.value("name", "Tally"))
+        id = try c.value("id", UUID())
+        enabled = try c.value("enabled", true)
+        version = try c.enumValue("version", .v50)
+        transport = try c.enumValue("transport", .udp)
+        host = try c.value("host", "")
+        port = try c.value("port", 8900)
+        screen = try c.value("screen", 0)
+        indexMode = try c.enumValue("indexMode", .cameraNumber)
+        sendNames = try c.value("sendNames", true)
+        simulated = try c.value("simulated", false)
     }
 }
 
@@ -351,6 +371,7 @@ extension Show {
         outputs = try c.value("outputs", [])
         items = try c.value("items", [])
         oscTargets = try c.value("oscTargets", [])
+        tallyOutputs = try c.value("tallyOutputs", [])
         ptzCameras = try c.value("ptzCameras", [])
         comments = try c.value("comments", [])
         midiBindings = try c.value("midiBindings", [])
