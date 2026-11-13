@@ -28,6 +28,10 @@ public struct SoakSample: Equatable {
 public struct SoakVerdict: Equatable {
     public var pass: Bool
     public var lines: [String]
+    public init(pass: Bool, lines: [String]) {
+        self.pass = pass
+        self.lines = lines
+    }
 }
 
 public enum SoakReport {
