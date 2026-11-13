@@ -137,6 +137,8 @@ public final class CrewServer {
         switch (request.method, request.path) {
         case ("GET", "/"), ("GET", "/index.html"):
             send(conn, status: "200 OK", type: "text/html; charset=utf-8", body: Data(CrewPage.html.utf8))
+        case ("GET", "/view"), ("GET", "/view/"):
+            send(conn, status: "200 OK", type: "text/html; charset=utf-8", body: Data(ViewerPage.html.utf8))
         case ("GET", "/api/state"):
             send(conn, status: "200 OK", type: "application/json", body: stateJSON)
         case ("GET", "/events"):

@@ -19,6 +19,8 @@ public struct CrewShot: Codable, Equatable {
     public var text: String
     public var note: String
     public var transition: String
+    /// Shot size, movement, framing and subjects, short forms ("CU · PUSH · 2S · Lead vocal").
+    public var details: String = ""
     /// Seconds until this shot, while a timing source runs (nil otherwise).
     public var secondsUntil: Double?
     public var comments: [CrewComment]
@@ -63,7 +65,8 @@ public struct CrewSnapshot: Codable, Equatable {
 
 extension Show {
     /// The crew page's view of the show. Pass the engine status in Live Mode, nil when editing.
-    public func crewSnapshot(status: EngineStatus?, position: Double?, running: Bool, scriptVersion: Int, now: Date = Date()) -> CrewSnapshot {
+    public func crewSnapshot(status: EngineStatus?, position: Double?, running: Bool, scriptVersion: Int, now: Date = Date(),
+                             vocabulary: ShotVocabulary = ShotVocabulary()) -> CrewSnapshot {
         let cams = sortedCameras.map { CrewCamera(number: $0.number, name: $0.displayName, operatorName: $0.operatorName, color: $0.resolvedColor) }
 
         func shots(for item: RundownItem, timed: Bool) -> [CrewShot] {
@@ -78,7 +81,7 @@ extension Show {
                 return CrewShot(id: row.id.uuidString, itemID: item.id.uuidString, number: row.number,
                                 position: item.format(row.cue.at), camera: camera(row.cue.cameraID)?.number,
                                 text: row.cue.text, note: row.cue.note, transition: row.cue.transition == .cut ? "cut" : "mix",
-                                secondsUntil: seconds, comments: cueComments)
+                                details: row.cue.detailLine(vocabulary), secondsUntil: seconds, comments: cueComments)
             }
         }
 

@@ -212,6 +212,7 @@ final class WorkspaceModel: ObservableObject {
         crew.onComment = { [weak self] itemID, cueID, author, text in
             self?.edit("Crew Comment") { $0.addComment(itemID: itemID, cueID: cueID, author: author, text: text) }
         }
+        crew.vocabulary = { [weak self] in self?.project.properties.shots ?? ShotVocabulary() }
         crew.showChanged(show)
         if attachedShowID != show.id {
             attachedShowID = show.id

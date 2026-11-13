@@ -330,6 +330,8 @@ extension MonitorConfig {
         kind = try c.enumValue("kind", .gallery)
         cameraIDs = try c.value("cameraIDs", [])
         screenName = try c.value("screenName", "")
+        fullPageCamera = try c.value("fullPageCamera", 0)
+        upcoming = max(1, min(try c.value("upcoming", 3), 8))
     }
 }
 

@@ -21,6 +21,8 @@ final class CrewController: ObservableObject {
     private var scriptVersion = 0
     private var lastSent = Date.distantPast
     private var pendingSend = false
+    /// The project's shot vocabulary, for shot details on the page.
+    var vocabulary: () -> ShotVocabulary = { ShotVocabulary() }
 
     /// Called with a comment from a phone.
     var onComment: ((String?, String?, String, String) -> Void)? {
@@ -35,6 +37,9 @@ final class CrewController: ObservableObject {
         guard running, !address.isEmpty else { return nil }
         return "http://\(address):\(port)/"
     }
+
+    /// The Multi View and Full Page viewer for iPads and other screens (view only).
+    var viewerURL: String? { url.map { $0 + "view" } }
 
     func start() {
         let profile = MachineProfileStore().profile
@@ -121,7 +126,8 @@ final class CrewController: ObservableObject {
         lastSent = Date()
         let status = engine?.status
         let moving = status?.positionMoving ?? false
-        server.update(show.crewSnapshot(status: status, position: status?.position, running: moving, scriptVersion: scriptVersion))
+        server.update(show.crewSnapshot(status: status, position: status?.position, running: moving, scriptVersion: scriptVersion,
+                                       vocabulary: vocabulary()))
     }
 }
 
@@ -200,6 +206,26 @@ struct CrewPagePopover: View {
                             .font(.ocMeta).foregroundStyle(crew.clients > 0 ? Gallery.next : Gallery.faint)
                         Text("Phones must be on the same network. Comments sent from the page appear on the shot in the inspector.")
                             .font(.ocMeta).foregroundStyle(Gallery.faint).fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                if let viewer = crew.viewerURL {
+                    Rectangle().fill(Gallery.hairline).frame(height: 1)
+                    HStack(alignment: .top, spacing: Space.m) {
+                        if let qr = QRCode.image(for: viewer) {
+                            Image(nsImage: qr).interpolation(.none).resizable().frame(width: 96, height: 96)
+                                .padding(6).background(Color.white, in: RoundedRectangle(cornerRadius: Radius.m))
+                        }
+                        VStack(alignment: .leading, spacing: Space.s) {
+                            Text("Viewer: Multi View and Full Page").font(.ocBodyStrong).foregroundStyle(Gallery.ink)
+                            Text(viewer).font(.readout(12, weight: .semibold)).foregroundStyle(Gallery.ink).textSelection(.enabled)
+                            Button("Copy viewer address") {
+                                NSPasteboard.general.clearContents()
+                                NSPasteboard.general.setString(viewer, forType: .string)
+                            }
+                            .buttonStyle(QuietButtonStyle())
+                            Text("For iPads and the floor manager: every camera side by side, one camera full page, or the whole script. View only.")
+                                .font(.ocMeta).foregroundStyle(Gallery.faint).fixedSize(horizontal: false, vertical: true)
+                        }
                     }
                 }
             } else if crew.starting {

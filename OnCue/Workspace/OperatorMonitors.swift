@@ -50,7 +50,7 @@ private struct MonitorRoot: View {
         TimelineView(.periodic(from: .now, by: 0.1)) { context in
             let show = model.show
             if let monitor = show.settings.monitors.first(where: { $0.id == monitorID }) {
-                MonitorContent(monitor: monitor, show: show, engine: engine, now: context.date)
+                MonitorContent(monitor: monitor, show: show, engine: engine, now: context.date, vocabulary: model.project.properties.shots)
             } else {
                 Text("This monitor was deleted in Show Setup.").font(.ocHeading).foregroundStyle(Gallery.faint)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -66,10 +66,12 @@ private struct MonitorContent: View {
     let show: Show
     let engine: EngineController
     let now: Date
+    let vocabulary: ShotVocabulary
 
     var body: some View {
         let status = engine.status
-        let snap = show.crewSnapshot(status: status, position: status.position, running: status.positionMoving, scriptVersion: 0, now: now)
+        let snap = show.crewSnapshot(status: status, position: status.position, running: status.positionMoving, scriptVersion: 0,
+                                     now: now, vocabulary: vocabulary)
         VStack(spacing: 0) {
             MonitorHeader(monitor: monitor, show: show, snap: snap)
             switch monitor.kind {
@@ -96,6 +98,11 @@ private struct MonitorContent: View {
                            live: snap.program.flatMap { show.camera(number: $0)?.id },
                            next: snap.preview.flatMap { show.camera(number: $0)?.id }, tally: true)
                     .padding(Space.xl)
+            case .multiView:
+                MultiViewMonitor(show: show, snap: snap, upcoming: monitor.upcoming,
+                                 cameras: monitor.cameraIDs.isEmpty ? nil : monitor.cameraIDs.compactMap { show.camera($0)?.number })
+            case .fullPage:
+                FullPageMonitor(show: show, snap: snap, camera: monitor.fullPageCamera)
             }
         }
     }

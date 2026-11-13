@@ -96,6 +96,8 @@ final class CrewTests: XCTestCase {
         // The page.
         let page = try fetch("http://127.0.0.1:\(port)/")
         XCTAssertTrue(String(decoding: page, as: UTF8.self).contains("Which camera are you on?"))
+        let viewer = try fetch("http://127.0.0.1:\(port)/view?mode=multi&cams=1,2")
+        XCTAssertTrue(String(decoding: viewer, as: UTF8.self).contains("Multi View"), "the viewer page is served, address options ignored by the server")
 
         // The state (give the server queue a moment to store it).
         var state: [String: Any] = [:]

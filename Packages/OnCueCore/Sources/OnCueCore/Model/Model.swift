@@ -208,7 +208,7 @@ public enum BackupRole: String, Codable, CaseIterable, Identifiable {
 }
 
 public enum MonitorKind: String, Codable, CaseIterable, Identifiable {
-    case gallery, cameras, shotlist, countdown, plot
+    case gallery, cameras, shotlist, countdown, plot, multiView, fullPage
     public var id: String { rawValue }
     public var label: String {
         switch self {
@@ -217,6 +217,8 @@ public enum MonitorKind: String, Codable, CaseIterable, Identifiable {
         case .shotlist: return "Shotlist"
         case .countdown: return "Big countdown"
         case .plot: return "Camera plot (live and next lit)"
+        case .multiView: return "Multi View (every camera's shots side by side)"
+        case .fullPage: return "Full page (one camera, or the whole script)"
         }
     }
 }
@@ -536,6 +538,10 @@ public struct MonitorConfig: Identifiable, Codable, Hashable {
     public var cameraIDs: [UUID] = []
     /// NSScreen.localizedName to open on. Empty = choose when opening.
     public var screenName: String = ""
+    /// Full page: the camera number to show, or 0 for the whole script.
+    public var fullPageCamera: Int = 0
+    /// Multi View: how many coming shots each camera's column lists.
+    public var upcoming: Int = 3
 }
 
 public struct Comment: Identifiable, Codable, Hashable {

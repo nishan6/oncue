@@ -660,7 +660,23 @@ struct MonitorsSetup: View {
                     .labelsHidden()
                     .frame(width: 260)
                 }
-                if monitor.kind == .cameras {
+                if monitor.kind == .fullPage {
+                    HStack(spacing: Space.s) {
+                        Text("Shows").font(.ocMeta).foregroundStyle(Gallery.dim)
+                        Picker("Camera", selection: Binding(get: { monitor.fullPageCamera }, set: { n in model.edit("Change Full Page") { $0.updateMonitor(monitor.id) { $0.fullPageCamera = n } } })) {
+                            Text("The whole script").tag(0)
+                            ForEach(show.sortedCameras) { cam in Text("Camera \(cam.number) – \(cam.displayName)").tag(cam.number) }
+                        }
+                        .labelsHidden()
+                        .frame(width: 260)
+                    }
+                }
+                if monitor.kind == .multiView {
+                    Stepper(value: Binding(get: { monitor.upcoming }, set: { n in model.edit("Change Multi View") { $0.updateMonitor(monitor.id) { $0.upcoming = n } } }), in: 1...8) {
+                        Text("Next \(monitor.upcoming) shot\(monitor.upcoming == 1 ? "" : "s") per camera").font(.ocMeta).foregroundStyle(Gallery.dim)
+                    }
+                }
+                if monitor.kind == .cameras || monitor.kind == .multiView {
                     HStack(spacing: 4) {
                         Text("Cameras").font(.ocMeta).foregroundStyle(Gallery.dim)
                         ForEach(show.sortedCameras) { cam in
