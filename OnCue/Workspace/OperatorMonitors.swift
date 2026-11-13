@@ -177,7 +177,7 @@ private struct MonitorCameraTile: View {
                     .foregroundStyle(camera.swiftUIColor)
                     .minimumScaleFactor(0.5)
                 VStack(alignment: .leading, spacing: 6) {
-                    Text(onAir ? "ON AIR" : (onPreview ? "STAND BY" : "CLEAR"))
+                    Text(TallyStyle.word(onAir ? .program : (onPreview ? .preview : .clear)))
                         .font(.system(size: numeral * 0.28, weight: .heavy))
                         .foregroundStyle(onAir ? Gallery.tally : (onPreview ? Gallery.next : Gallery.faint))
                     Text(camera.displayName + (camera.operatorName.isEmpty ? "" : " · \(camera.operatorName)"))
@@ -199,7 +199,8 @@ private struct MonitorCameraTile: View {
             .frame(width: geo.size.width, height: geo.size.height, alignment: .leading)
             .background(onAir ? Gallery.tally.opacity(0.14) : LivePalette.panel, in: RoundedRectangle(cornerRadius: Radius.l))
             .overlay(RoundedRectangle(cornerRadius: Radius.l)
-                .strokeBorder(onAir ? Gallery.tally : (onPreview ? Gallery.next : Color.clear), lineWidth: 6))
+                .strokeBorder(onAir ? Gallery.tally : (onPreview ? Gallery.next : Color.clear),
+                              style: TallyStyle.edge(preview: onPreview, width: 6)))
         }
     }
 }

@@ -126,8 +126,10 @@ final class CrewController: ObservableObject {
         lastSent = Date()
         let status = engine?.status
         let moving = status?.positionMoving ?? false
-        server.update(show.crewSnapshot(status: status, position: status?.position, running: moving, scriptVersion: scriptVersion,
-                                       vocabulary: vocabulary()))
+        var snap = show.crewSnapshot(status: status, position: status?.position, running: moving, scriptVersion: scriptVersion,
+                                     vocabulary: vocabulary())
+        snap.tallyShapes = TallyStyle.shapes
+        server.update(snap)
     }
 }
 

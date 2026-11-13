@@ -787,7 +787,8 @@ struct SourceButton: View {
                 .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: Radius.m, bottomTrailingRadius: Radius.m))
         }
         .overlay(RoundedRectangle(cornerRadius: Radius.m)
-            .strokeBorder(tally == .off ? Color.white.opacity(hovering ? 0.12 : 0.05) : tally.color, lineWidth: tally == .off ? 1 : 2))
+            .strokeBorder(tally == .off ? Color.white.opacity(hovering ? 0.12 : 0.05) : tally.color,
+                          style: TallyStyle.edge(preview: tally == .next, width: tally == .off ? 1 : 2)))
         .scaleEffect(pressed ? 0.97 : 1)
         .contentShape(Rectangle())
     }

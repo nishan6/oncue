@@ -42,6 +42,7 @@ main{padding:16px}
 .tally{border-radius:18px;padding:20px;background:var(--panel);border:6px solid transparent;display:flex;gap:18px;align-items:center;transition:border-color .12s}
 .tally.pgm{border-color:var(--tally);background:#2a1214}
 .tally.pvw{border-color:var(--next)}
+.shapes .tally.pvw{border-style:dashed}
 .badge{width:112px;height:112px;border-radius:16px;background:var(--c);color:#0F1012;display:flex;align-items:center;justify-content:center;font-size:72px;font-weight:900;flex:none;letter-spacing:-2px}
 .state{flex:1;min-width:0}
 .state .word{font-size:30px;font-weight:800;letter-spacing:.5px}
@@ -148,7 +149,7 @@ main{padding:16px}
     if(state.paused) h+='<div class="banner">The show is paused. Follow the director.</div>';
     else if(state.freeMode) h+='<div class="banner">Free mode: the director is calling shots live.</div>';
     if(myCam){
-      var word=onPgm?'ON AIR':(onPvw?'STAND BY':'CLEAR'), sub='', count='';
+      var sh=state.tallyShapes,word=onPgm?(sh?'● ':'')+'ON AIR':(onPvw?(sh?'▲ ':'')+'STAND BY':'CLEAR'), sub='', count='';
       var counter=function(s){var r=remaining(s);return r==null?'':'<div class="count num'+(r<5?' soon':'')+'" data-count="'+s.id+'">'+clock(r)+'</div>'};
       var nextShot=upcoming[0];
       if(onPgm){
@@ -207,7 +208,7 @@ main{padding:16px}
   }
 
   function apply(data){
-    state=data;receivedAt=Date.now();
+    state=data;receivedAt=Date.now();document.body.classList.toggle('shapes',!!data.tallyShapes);
     if(navigator.vibrate&&lastVersion!==null&&state.scriptVersion!==lastVersion)navigator.vibrate(80);
     lastVersion=state.scriptVersion;
     render();

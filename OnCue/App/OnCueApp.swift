@@ -12,6 +12,7 @@ struct OnCueApp: App {
         // The Project Library is the first window: OnCue opens on it.
         Window("Projects", id: LibraryModel.windowID) {
             LibraryView(library: library)
+                .id("\(machine.profile.textScale)-\(machine.profile.tallyShapes)")
         }
         .defaultSize(width: 1040, height: 640)
 
@@ -19,6 +20,7 @@ struct OnCueApp: App {
             ShowWorkspaceView(document: file.$document, fileURL: file.fileURL)
                 .environmentObject(machine)
                 .environmentObject(library)
+                .id(machine.profile.textScale)
         }
         .defaultSize(width: 1440, height: 900)
         .commands {
@@ -80,6 +82,8 @@ final class MachineProfileModel: ObservableObject {
             saveError = "This Mac's settings could not be saved: \(error.localizedDescription)"
         }
         profile = store.profile
+        TextScale.factor = CGFloat(profile.textScale)
+        TallyStyle.shapes = profile.tallyShapes
     }
 }
 

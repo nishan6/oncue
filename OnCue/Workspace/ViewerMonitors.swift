@@ -47,7 +47,7 @@ private struct MultiViewColumnView: View {
                 }
                 Spacer(minLength: 0)
             }
-            Text(t == .program ? "ON AIR" : (t == .preview ? "STAND BY" : "CLEAR"))
+            Text(TallyStyle.word(t))
                 .font(.system(size: 18, weight: .heavy))
                 .foregroundStyle(t == .program ? Gallery.tally : (t == .preview ? Gallery.next : Gallery.faint))
             if let now = column.current {
@@ -64,7 +64,8 @@ private struct MultiViewColumnView: View {
         .padding(Space.m)
         .background(t == .program ? Gallery.tally.opacity(0.12) : LivePalette.panel, in: RoundedRectangle(cornerRadius: Radius.l))
         .overlay(RoundedRectangle(cornerRadius: Radius.l)
-            .strokeBorder(t == .program ? Gallery.tally : (t == .preview ? Gallery.next : Color.clear), lineWidth: 5))
+            .strokeBorder(t == .program ? Gallery.tally : (t == .preview ? Gallery.next : Color.clear),
+                          style: TallyStyle.edge(preview: t == .preview, width: 5)))
     }
 }
 
@@ -129,7 +130,7 @@ struct FullPageMonitor: View {
                 HStack(spacing: Space.l) {
                     Text("\(camera)").font(Font.cameraNumeral(96)).foregroundStyle(cam?.swiftUIColor ?? Gallery.faint)
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(t == .program ? "ON AIR" : (t == .preview ? "STAND BY" : "CLEAR"))
+                        Text(TallyStyle.word(t))
                             .font(.system(size: 40, weight: .heavy))
                             .foregroundStyle(t == .program ? Gallery.tally : (t == .preview ? Gallery.next : Gallery.faint))
                         Text((cam?.displayName ?? "Camera \(camera) is not in this show") + ((cam?.operatorName ?? "").isEmpty ? "" : " · \(cam!.operatorName)"))
@@ -143,7 +144,8 @@ struct FullPageMonitor: View {
                 .padding(Space.l)
                 .background(t == .program ? Gallery.tally.opacity(0.14) : LivePalette.panel, in: RoundedRectangle(cornerRadius: Radius.l))
                 .overlay(RoundedRectangle(cornerRadius: Radius.l)
-                    .strokeBorder(t == .program ? Gallery.tally : (t == .preview ? Gallery.next : Color.clear), lineWidth: 6))
+                    .strokeBorder(t == .program ? Gallery.tally : (t == .preview ? Gallery.next : Color.clear),
+                                  style: TallyStyle.edge(preview: t == .preview, width: 6)))
             }
             ScrollView {
                 VStack(alignment: .leading, spacing: Space.s) {
@@ -171,6 +173,16 @@ struct FullPageMonitor: View {
                     .foregroundStyle(c?.swiftUIColor ?? Gallery.faint).frame(width: 64)
             }
             ViewerShotCard(shot: shot, label: label, accent: accent, large: true)
+        }
+    }
+}
+
+extension TallyStyle {
+    static func word(_ t: ViewerTally) -> String {
+        switch t {
+        case .program: return mark(program: true) + "ON AIR"
+        case .preview: return mark(program: false) + "STAND BY"
+        case .clear: return "CLEAR"
         }
     }
 }

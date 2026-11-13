@@ -111,6 +111,17 @@ struct MachineProfileView: View {
                     field("Main Mac address", \.primaryHost, prompt: "192.168.10.20")
                 }
             }
+            Section("Accessibility") {
+                Picker("Text size", selection: Binding(get: { machine.profile.textScale }, set: { v in machine.update { $0.textScale = v } })) {
+                    Text("Standard").tag(1.0)
+                    Text("Large").tag(1.15)
+                    Text("Larger").tag(1.3)
+                }
+                Toggle("Show tally with shapes and words, not only red and green", isOn: Binding(get: { machine.profile.tallyShapes },
+                                                                                               set: { v in machine.update { $0.tallyShapes = v } }))
+                Text("On air gets a filled circle and PGM, stand by a hollow triangle and PVW, in Live Mode, the monitors and the crew pages.")
+                    .font(.footnote).foregroundStyle(.secondary)
+            }
             Section("Updates") {
                 Toggle("Check for updates automatically", isOn: Binding(get: { machine.profile.checkForUpdates },
                                                                        set: { v in machine.update { $0.checkForUpdates = v } }))

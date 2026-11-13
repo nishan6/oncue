@@ -61,6 +61,8 @@ public struct CrewSnapshot: Codable, Equatable {
     public var items: [CrewItem]
     /// Bumps when the script changes, so phones can show "script changed".
     public var scriptVersion: Int
+    /// Accessibility: pages also show tally by shape (● on air, ▲ stand by, dashed preview edge).
+    public var tallyShapes: Bool = false
 }
 
 extension Show {

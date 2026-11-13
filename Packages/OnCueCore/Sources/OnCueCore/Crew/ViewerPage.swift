@@ -38,6 +38,7 @@ main{flex:1;min-height:0;padding:12px;overflow:auto}
 .col{flex:1 0 210px;min-width:210px;background:var(--panel);border-radius:14px;padding:10px;border:5px solid transparent;display:flex;flex-direction:column;gap:7px;overflow:hidden}
 .col.pgm{border-color:var(--tally);background:#26131a}
 .col.pvw{border-color:var(--next)}
+.shapes .col.pvw,.shapes .big.pvw{border-style:dashed}
 .ch{display:flex;align-items:baseline;gap:8px}
 .ch b{font-size:40px;font-weight:900;color:var(--c);line-height:1}
 .ch div{min-width:0}
@@ -101,7 +102,7 @@ main{flex:1;min-height:0;padding:12px;overflow:auto}
   function remaining(s){return s.secondsUntil==null?null:s.secondsUntil-(Date.now()-receivedAt)/1000}
   function clock(s){if(s==null)return '';s=Math.max(0,s);var m=Math.floor(s/60),r=s-m*60;return m>0?m+':'+(r<10?'0':'')+Math.floor(r):(s<10?s.toFixed(1):String(Math.floor(s)))}
   function tally(n){return state.program===n?'pgm':(state.preview===n?'pvw':'')}
-  function word(t){return t==='pgm'?'ON AIR':(t==='pvw'?'STAND BY':'CLEAR')}
+  function word(t){var s=state&&state.tallyShapes;return t==='pgm'?(s?'● ':'')+'ON AIR':(t==='pvw'?(s?'▲ ':'')+'STAND BY':'CLEAR')}
   function shots(){
     if(state.live){var s=(state.items[0]||{shots:[]}).shots,k=-1;s.forEach(function(x,i){if(x.id===state.nowShotID)k=i});return {now:k>=0?s[k]:null,after:s.slice(k+1)}}
     var all=[];state.items.forEach(function(i){all=all.concat(i.shots)});return {now:null,after:all};
@@ -154,7 +155,7 @@ main{flex:1;min-height:0;padding:12px;overflow:auto}
   }
   function find(id){var p=shots();if(p.now&&p.now.id===id)return p.now;for(var i=0;i<p.after.length;i++)if(p.after[i].id===id)return p.after[i];return null}
   function tick(){if(!state||!state.live)return;document.querySelectorAll('[data-t]').forEach(function(el){var s=find(el.getAttribute('data-t'));if(!s)return;var r=remaining(s);el.textContent=clock(r);el.classList.toggle('soon',r!=null&&r<5)})}
-  function apply(d){state=d;receivedAt=Date.now();render()}
+  function apply(d){state=d;receivedAt=Date.now();document.body.classList.toggle('shapes',!!d.tallyShapes);render()}
   function connect(){
     if(!window.EventSource){poll();return}
     var es=new EventSource('/events');

@@ -126,21 +126,30 @@ extension Camera {
 
 // MARK: - Type scale
 
+/// Settings › Accessibility › Text size: scales the editor and Live Mode type. Set from this
+/// Mac's profile at launch and when the setting changes (windows rebuild to pick it up).
+enum TextScale {
+    static var factor: CGFloat = CGFloat(MachineProfileStore().profile.textScale)
+}
+
 extension Font {
+    private static func scaled(_ size: CGFloat, _ weight: Font.Weight) -> Font {
+        .system(size: size * TextScale.factor, weight: weight)
+    }
     /// Window-level titles (Live Mode, empty states).
-    static let ocDisplay = Font.system(size: 26, weight: .semibold)
+    static var ocDisplay: Font { scaled(26, .semibold) }
     /// Song and segment titles.
-    static let ocTitle = Font.system(size: 20, weight: .semibold)
+    static var ocTitle: Font { scaled(20, .semibold) }
     /// Panel and inspector headings.
-    static let ocHeading = Font.system(size: 13.5, weight: .semibold)
+    static var ocHeading: Font { scaled(13.5, .semibold) }
     /// Primary content: shot descriptions, item names.
-    static let ocBody = Font.system(size: 13, weight: .regular)
-    static let ocBodyStrong = Font.system(size: 13, weight: .medium)
+    static var ocBody: Font { scaled(13, .regular) }
+    static var ocBodyStrong: Font { scaled(13, .medium) }
     /// Metadata and secondary labels.
-    static let ocMeta = Font.system(size: 11.5, weight: .regular)
-    static let ocLabel = Font.system(size: 11.5, weight: .medium)
+    static var ocMeta: Font { scaled(11.5, .regular) }
+    static var ocLabel: Font { scaled(11.5, .medium) }
     /// Small tags (CUT, MIX, PGM).
-    static let ocTag = Font.system(size: 9.5, weight: .heavy)
+    static var ocTag: Font { scaled(9.5, .heavy) }
 
     /// Camera numerals: heavy and wide, OnCue's signature.
     static func cameraNumeral(_ size: CGFloat) -> Font {
@@ -148,11 +157,11 @@ extension Font {
     }
     /// Positions, durations, counts: tabular figures.
     static func readout(_ size: CGFloat = 12, weight: Font.Weight = .medium) -> Font {
-        .system(size: size, weight: weight).monospacedDigit()
+        .system(size: size < 30 ? size * TextScale.factor : size, weight: weight).monospacedDigit()
     }
     /// Condensed labels where width is tight (camera names on keys and blocks).
     static func umd(_ size: CGFloat = 11) -> Font {
-        .system(size: size, weight: .semibold).width(.condensed)
+        .system(size: size * TextScale.factor, weight: .semibold).width(.condensed)
     }
     static func title(_ size: CGFloat) -> Font {
         .system(size: size, weight: .semibold)
@@ -220,6 +229,17 @@ struct QuietButtonStyle: ButtonStyle {
 
 // MARK: - Tally
 
+/// Settings › Accessibility: tally also shown by shape (● on air, ▲ stand by) and a dashed edge
+/// for preview, for people who can't tell red from green.
+enum TallyStyle {
+    static var shapes: Bool = MachineProfileStore().profile.tallyShapes
+    static func mark(program: Bool) -> String { shapes ? (program ? "● " : "▲ ") : "" }
+    /// A preview edge: dashed when shapes are on.
+    static func edge(preview: Bool, width: CGFloat) -> StrokeStyle {
+        StrokeStyle(lineWidth: width, dash: shapes && preview ? [width * 2.2, width * 1.4] : [])
+    }
+}
+
 /// Tally relative to the selected shot (Edit) or the running position (Live).
 enum TallyState {
     case off, current, next
@@ -249,7 +269,7 @@ struct TallyTag: View {
 
     var body: some View {
         if let text = state.label(live: live) {
-            Text(text)
+            Text(TallyStyle.mark(program: state == .current) + text)
                 .font(.ocTag)
                 .tracking(0.4)
                 .foregroundStyle(state == .current ? Color.white : Gallery.next)
