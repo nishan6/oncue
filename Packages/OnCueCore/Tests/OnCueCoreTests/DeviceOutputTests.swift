@@ -116,6 +116,7 @@ final class EngineDeviceTests: XCTestCase {
                                  logFolder: FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString))
         defer { c.shutdown() }
         c.connectSwitcher()
+        c.setMode(.cut)
         c.go()
         XCTAssertNil(c.engine.pause)
         // The last camera reported on program: nothing in the script put it there.
