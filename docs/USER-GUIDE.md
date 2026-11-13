@@ -5,7 +5,7 @@ and Intel). You script every shot of a show against the music or the running ord
 live: OnCue calls, previews or cuts the shots on your switcher, drives tally, lighting, sound and
 graphics cues, and keeps the crew on the same page.
 
-> **Device status.** Every device adapter except ATEM is marked **Built**: written from the
+> **Device status.** Every device adapter, ATEM included, is marked **Built**: written from the
 > maker's protocol documents and tested against simulators, not yet on the real hardware. Try a
 > device on the kit before a show, never for the first time during one. See
 > [Device support](#device-support).
@@ -151,8 +151,7 @@ shapes and words, not only red and green) and **Updates**.
 
 | Device | Status |
 | --- | --- |
-| ATEM | Tested earlier on hardware |
-| Ross (RossTalk), Panasonic AV-HS410 / AV-UHS500 / AV-HS6000, Roland V-160HD / V-80HD / V-60HD, vMix, OBS | Built |
+| ATEM, Ross (RossTalk), Panasonic AV-HS410 / AV-UHS500 / AV-HS6000, Roland V-160HD / V-80HD / V-60HD, vMix, OBS | Built |
 | For-A | Through Companion (direct adapter needs For-A's protocol document) |
 | Roland V-1HD / V-8HD | Not yet (needs the MIDI implementation chart) |
 | TSL 3.1 / 4.0 / 5.0 tally, GPI via ATEM GPI and Tally Interface | Built |
