@@ -17,6 +17,8 @@ class LineSwitcher: SwitcherDevice {
     private var retry: DispatchWorkItem?
     var defaultPort: Int { 0 }
     var terminator: String { "\r\n" }
+    /// Bytes that end a reply.
+    var delimiters: Set<UInt8> { [0x0A, 0x0D] }
 
     init(config: SwitcherConfig) {
         self.config = config
@@ -86,9 +88,10 @@ class LineSwitcher: SwitcherDevice {
     }
 
     private func drain() {
-        while let r = buffer.firstRange(of: Data([0x0A])) ?? buffer.firstRange(of: Data([0x0D])) {
-            let line = String(decoding: buffer[..<r.lowerBound], as: UTF8.self).trimmingCharacters(in: .whitespacesAndNewlines)
-            buffer.removeSubrange(..<r.upperBound)
+        let ends = delimiters
+        while let k = buffer.firstIndex(where: { ends.contains($0) }) {
+            let line = String(decoding: buffer[buffer.startIndex..<k], as: UTF8.self).trimmingCharacters(in: .whitespacesAndNewlines)
+            buffer.removeSubrange(buffer.startIndex...k)
             if !line.isEmpty { DispatchQueue.main.async { self.received(line: line) } }
         }
     }
@@ -399,12 +402,11 @@ public enum RossTalk {
 final class RolandV160Switcher: LineSwitcher {
     override var defaultPort: Int { 8023 }
     override var terminator: String { "" }
+    override var delimiters: Set<UInt8> { [0x0A, 0x0D, 0x3B, 0x06] }
     private var poll: Timer?
 
     override var endpoint: (String, Int) {
         let host = String(config.host.split(separator: "#").first ?? "")
-        var c = config
-        c.host = host
         let parts = host.split(separator: ":")
         if parts.count == 2, let p = Int(parts[1]) { return (String(parts[0]), p) }
         return (host, defaultPort)
@@ -447,6 +449,7 @@ final class RolandV160Switcher: LineSwitcher {
 final class RolandV60Switcher: LineSwitcher {
     override var defaultPort: Int { 8023 }
     override var terminator: String { "" }
+    override var delimiters: Set<UInt8> { [0x0A, 0x0D, 0x3B, 0x06] }
     private var poll: Timer?
 
     override func didConnect() {
@@ -509,6 +512,7 @@ public enum RolandProtocol {
 final class PanasonicHS410Switcher: LineSwitcher {
     override var defaultPort: Int { 60040 }
     override var terminator: String { "\u{03}" }
+    override var delimiters: Set<UInt8> { [0x03, 0x0A, 0x0D] }
     private var poll: Timer?
 
     override func didConnect() {
