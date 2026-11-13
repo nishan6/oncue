@@ -14,6 +14,7 @@
 		243C5BC44F9BE6CCFCF985A2 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D71DBB1C47285045DB3B14E /* LibraryView.swift */; };
 		29FC616B3A78E7E956D34F8E /* ScreenshotRun.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C39235BF555BFD93EA0270B /* ScreenshotRun.swift */; };
 		32E9B7C6AD4E6C3210FC5F7C /* PreShowCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8627F4EB520DBB4D480F1496 /* PreShowCheckView.swift */; };
+		357EDD62A4DF8D7E7D2CF857 /* CommandPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D634FF0F2ED189D3BE73F67 /* CommandPalette.swift */; };
 		3722D0A7C3EED3D07031744A /* Updater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2484709650247BEA349A4BA2 /* Updater.swift */; };
 		3BD326E7A74A91ACF15FAF8D /* MachineProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A77E84C1FEBE7E5718BDEE /* MachineProfileView.swift */; };
 		40DEA88FD61358EE4EA96A11 /* ExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328850312120FD1B1C6560EF /* ExportView.swift */; };
@@ -63,6 +64,7 @@
 		203EB89D07949FF4E67E4F9E /* VersionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionsView.swift; sourceTree = "<group>"; };
 		2140908169D0233F22D7CBEA /* KeyboardShortcutsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcutsView.swift; sourceTree = "<group>"; };
 		2484709650247BEA349A4BA2 /* Updater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Updater.swift; sourceTree = "<group>"; };
+		2D634FF0F2ED189D3BE73F67 /* CommandPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandPalette.swift; sourceTree = "<group>"; };
 		31634D4D0419A3ABC588A840 /* CueFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CueFields.swift; sourceTree = "<group>"; };
 		328850312120FD1B1C6560EF /* ExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportView.swift; sourceTree = "<group>"; };
 		3BF100B54F968642D24C4FD5 /* CrewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrewController.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 			children = (
 				71DA87E37B8723563B71C8E9 /* CameraManagerView.swift */,
 				CE647BFC3E5C1940BC7B5648 /* CameraPlotView.swift */,
+				2D634FF0F2ED189D3BE73F67 /* CommandPalette.swift */,
 				3BF100B54F968642D24C4FD5 /* CrewController.swift */,
 				31634D4D0419A3ABC588A840 /* CueFields.swift */,
 				8932C535E1E6844324219F88 /* DeviceStatusView.swift */,
@@ -317,6 +320,7 @@
 			files = (
 				0947F8491CB412955A65C6EE /* CameraManagerView.swift in Sources */,
 				E5A5BCB2B9C660EB80B45BDB /* CameraPlotView.swift in Sources */,
+				357EDD62A4DF8D7E7D2CF857 /* CommandPalette.swift in Sources */,
 				66C2206864ADAA19F7AE3CFD /* CrewController.swift in Sources */,
 				9359AEE688E11C34223B81D7 /* CueFields.swift in Sources */,
 				4FBFFC864116F2B9B2C133A7 /* DeviceStatusView.swift in Sources */,
