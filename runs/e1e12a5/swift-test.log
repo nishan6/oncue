@@ -1,0 +1,1187 @@
+Building for debugging...
+[0/8] /Users/runner/work/oncue/oncue/Packages/OnCueCore/.build/arm64-apple-macosx/debug/OnCueCorePackageTests.derived/runner.swift
+[1/8] Write sources
+[4/8] Copying Fixtures
+[5/8] Write swift-version--79AA4F9932D1E87A.txt
+error: emit-module command failed with exit code 1 (use -v to see invocation)
+[7/44] Emitting module OnCueCore
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[8/61] Compiling OnCueCore CrewPage.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[9/61] Compiling OnCueCore CrewServer.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[10/61] Compiling OnCueCore CrewSnapshot.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[11/61] Compiling OnCueCore ATEMSwitcher.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[12/61] Compiling OnCueCore ArtNetListener.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[13/61] Compiling OnCueCore CompanionClient.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[14/61] Compiling OnCueCore MIDIManager.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[15/61] Compiling OnCueCore OSC.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[16/61] Compiling OnCueCore PTZService.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[17/61] Compiling OnCueCore SwitcherDevice.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[18/61] Compiling OnCueCore TSL.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[19/61] Compiling OnCueCore TallySender.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[20/61] Compiling OnCueCore TriggerMonitor.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[21/61] Compiling OnCueCore BulkEditing.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[22/61] Compiling OnCueCore Countdown.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[23/61] Compiling OnCueCore DraftScript.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[24/61] Compiling OnCueCore LiveCursor.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[25/61] Compiling OnCueCore SampleShow.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[26/61] Compiling OnCueCore SceneNumbering.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[27/61] Compiling OnCueCore ShowEditing.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[28/61] Compiling OnCueCore SwitcherEditing.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[29/61] Compiling OnCueCore TimelineEditing.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[30/61] Compiling OnCueCore BackupLink.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[31/61] Compiling OnCueCore Controls.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[32/61] Compiling OnCueCore EngineController.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[33/61] Compiling OnCueCore LTC.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[34/61] Compiling OnCueCore LTCOutput.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[35/61] Compiling OnCueCore MTC.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[36/61] Compiling OnCueCore PreShowCheck.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[37/61] Compiling OnCueCore RundownTiming.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[38/61] Compiling OnCueCore ShowEngine.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[39/61] Compiling OnCueCore SwitchLog.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[40/61] Compiling OnCueCore Timing.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[41/61] Compiling OnCueCore TourComparison.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[42/61] Compiling OnCueCore PDFExports.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+[43/61] Compiling OnCueCore TextExports.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[44/61] Compiling OnCueCore ItemMedia.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[45/61] Compiling OnCueCore MediaPool.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[46/61] Compiling OnCueCore TempoDetector.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[47/61] Compiling OnCueCore DeviceModel.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[48/61] Compiling OnCueCore Model.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[49/61] Compiling OnCueCore ProjectModel.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[50/61] Compiling OnCueCore ShotVocabulary.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[51/61] Compiling OnCueCore TriggerRoutes.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[52/61] Compiling OnCueCore BackupFolder.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[53/61] Compiling OnCueCore MachineProfile.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[54/61] Compiling OnCueCore ProjectCoding.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[55/61] Compiling OnCueCore ProjectStorage.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[56/61] Compiling OnCueCore ShowCoding.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[57/61] Compiling OnCueCore ShowVersions.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[58/61] Compiling OnCueCore TolerantDecoding.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+[59/61] Compiling OnCueCore CameraPlot.swift
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Editing/TimelineEditing.swift:207:6: error: duplicate attribute
+202 | 
+203 | extension Show {
+204 |     @discardableResult
+    |     `- note: attribute already specified here
+205 |     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
+206 |     /// it gets every command `main` gets.
+207 |     @discardableResult
+    |      `- error: duplicate attribute
+208 |     public mutating func addParallelSwitcher(mirroring main: UUID, name: String = "Parallel switcher") -> UUID {
+209 |         var config = SwitcherConfig(name: name, kind: switchers.first { $0.id == main }?.kind ?? .atem, role: .output)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:44:22: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 42 |     public static func kind(of url: URL) -> Kind {
+ 43 |         let asset = AVURLAsset(url: url)
+ 44 |         return asset.tracks(withMediaType: .video).isEmpty ? .audio : .video
+    |                      `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 45 |     }
+ 46 | }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:83:47: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 81 |     public static func load(url: URL, peaksPerSecond: Double = 100) throws -> Waveform {
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+    |                                               `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/ItemMedia.swift:84:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 82 |         let asset = AVURLAsset(url: url)
+ 83 |         let duration = CMTimeGetSeconds(asset.duration)
+ 84 |         guard let track = asset.tracks(withMediaType: .audio).first else {
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+ 85 |             return Waveform(peaksPerSecond: peaksPerSecond, peaks: [], duration: duration.isFinite ? duration : 0)
+ 86 |         }
+
+/Users/runner/work/oncue/oncue/Packages/OnCueCore/Sources/OnCueCore/Media/TempoDetector.swift:8:33: warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  6 |     public static func read(url: URL, sampleRate: Double, maxSeconds: Double? = nil) throws -> [Float] {
+  7 |         let asset = AVURLAsset(url: url)
+  8 |         guard let track = asset.tracks(withMediaType: .audio).first else { return [] }
+    |                                 `- warning: 'tracks(withMediaType:)' was deprecated in macOS 13.0: Use loadTracks(withMediaType:) instead
+  9 |         let reader = try AVAssetReader(asset: asset)
+ 10 |         if let maxSeconds {
+error: fatalError
