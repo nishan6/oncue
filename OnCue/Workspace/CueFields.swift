@@ -198,7 +198,7 @@ struct CueFields: View {
                 }
                 switch a.kind {
                 case .goCue, .goNext:
-                    PropertyRow(label: console == .grandMA2 ? "Executor" : "Sequence") { intField(a.list, 1...9999) { v in setSend { $0.console.list = v } } }
+                    PropertyRow(label: console == .grandMA2 ? "Executor" : (console == .avolites ? "Playback" : "Sequence")) { intField(a.list, 1...9999) { v in setSend { $0.console.list = v } } }
                     if a.kind == .goCue {
                         PropertyRow(label: "Cue") {
                             CommitField(placeholder: "12", value: String(format: "%g", a.number), font: .readout(13), width: 70) { text in
