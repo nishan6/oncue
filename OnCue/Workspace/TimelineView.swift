@@ -72,6 +72,7 @@ enum TimelineLayout {
         // default tracks) or has cues on it.
         if item.tracks.contains(where: { $0.kind == .calls }) { all.append(.calls) }
         if item.tracks.contains(where: { $0.kind == .player }) { all.append(.player) }
+        if item.tracks.contains(where: { $0.kind == .device }) || !show.deviceTargets.isEmpty { all.append(.device) }
         if !show.oscTargets.isEmpty || has(.osc) { all.append(.osc) }
         if !show.ptzCameras.isEmpty || has(.ptz) { all.append(.ptz) }
         return all
@@ -108,6 +109,7 @@ extension TimelineLane {
         case .media: return "waveform"
         case .calls: return "megaphone"
         case .player: return "play.rectangle"
+        case .device: return "cable.connector"
         }
     }
 
@@ -124,6 +126,7 @@ extension TimelineLane {
         case .media: return Gallery.next
         case .calls: return Color(hex: "#F2C46D")
         case .player: return Color(hex: "#7FD3E8")
+        case .device: return Color(hex: "#C9A6F2")
         }
     }
 
@@ -142,6 +145,7 @@ extension TimelineLane {
         case .media: return Deck.trackMedia
         case .calls: return Color(hex: "#6B5521")
         case .player: return Color(hex: "#1F5866")
+        case .device: return Color(hex: "#4A3766")
         }
     }
 }
@@ -658,7 +662,7 @@ struct TimelineCanvas: View {
                          outputID: outputID)
             case .media:
                 MediaLane(item: item, player: model.media, metrics: metrics, width: width)
-            case .lyrics, .notes, .fx, .control, .osc, .ptz, .calls, .player:
+            case .lyrics, .notes, .fx, .control, .osc, .ptz, .calls, .player, .device:
                 CueLane(kind: lane.trackKind ?? .notes, lane: lane, show: show, item: item, metrics: metrics, width: width,
                         locked: locked, model: model, focus: focus)
             }

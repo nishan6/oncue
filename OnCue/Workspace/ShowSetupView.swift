@@ -16,7 +16,7 @@ struct ShowSetupView: View {
     }
 
     enum Tab: String, CaseIterable, Identifiable {
-        case switchers = "Switchers", outputs = "Outputs", tally = "Tally", osc = "OSC", ptz = "PTZ", monitors = "Monitors", controls = "Controls"
+        case switchers = "Switchers", outputs = "Outputs", tally = "Tally", devices = "Devices", osc = "OSC", ptz = "PTZ", monitors = "Monitors", controls = "Controls"
         var id: String { rawValue }
     }
 
@@ -44,6 +44,7 @@ struct ShowSetupView: View {
                     case .switchers: switchersTab
                     case .outputs: outputsTab
                     case .tally: TallySetup(show: show, model: model)
+                    case .devices: DevicesSetup(show: show, model: model)
                     case .osc: oscTab
                     case .ptz: ptzTab
                     case .monitors: MonitorsSetup(show: show, model: model)

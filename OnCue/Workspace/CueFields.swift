@@ -18,6 +18,7 @@ struct CueFields: View {
             case .ptz: ptzFields
             case .calls: callFields
             case .player: playerFields
+            case .device: deviceFields
             default: EmptyView()
             }
             PropertyRow(label: kind == .lyrics ? "Lyric" : (kind == .notes ? "Note" : (kind == .calls ? "Call" : "Label"))) {
@@ -113,6 +114,117 @@ struct CueFields: View {
             }
             .labelsHidden()
             .frame(maxWidth: 200)
+        }
+    }
+
+    // MARK: Device commands
+
+    @ViewBuilder private var deviceFields: some View {
+        let targets = show.deviceTargets
+        let target = targets.first { $0.id == cue.sendTargetID }
+        let send = cue.send ?? DeviceSend(kind: target?.kind.sendKinds.first ?? .text)
+        PropertyRow(label: "Target") {
+            Picker("Target", selection: Binding(get: { cue.sendTargetID }, set: { id in
+                model.updateCue(cue.id, "Change Device Target") { c in
+                    c.sendTargetID = id
+                    let kinds = targets.first { $0.id == id }?.kind.sendKinds ?? [.text]
+                    if c.send == nil || !kinds.contains(c.send!.kind) { c.send = DeviceSend(kind: kinds[0]) }
+                }
+            })) {
+                Text("Choose…").tag(UUID?.none)
+                ForEach(targets) { Text("\($0.name) (\($0.kind.label))").tag(UUID?.some($0.id)) }
+            }
+            .labelsHidden().frame(maxWidth: 240)
+        }
+        if targets.isEmpty {
+            Text("Add targets in Show Setup › Devices: a grandMA3 over MIDI, a projector on serial, Companion over HTTP…")
+                .font(.ocMeta).foregroundStyle(Gallery.faint).fixedSize(horizontal: false, vertical: true)
+        }
+        if let target {
+            if target.kind.sendKinds.count > 1 {
+                PropertyRow(label: "Send") {
+                    Picker("Send", selection: Binding(get: { send.kind }, set: { k in setSend { $0.kind = k } })) {
+                        ForEach(target.kind.sendKinds) { Text($0.label).tag($0) }
+                    }
+                    .labelsHidden().frame(maxWidth: 200)
+                }
+            }
+            switch send.kind {
+            case .midiNote, .midiCC, .midiProgram:
+                PropertyRow(label: "Channel") { intField(send.channel, 1...16) { v in setSend { $0.channel = v } } }
+                PropertyRow(label: send.kind == .midiProgram ? "Program" : (send.kind == .midiNote ? "Note" : "CC")) {
+                    intField(send.number, send.kind == .midiProgram ? 1...128 : 0...127) { v in setSend { $0.number = v } }
+                }
+                if send.kind != .midiProgram {
+                    PropertyRow(label: send.kind == .midiNote ? "Velocity" : "Value") { intField(send.value, 0...127) { v in setSend { $0.value = v } } }
+                }
+            case .msc:
+                PropertyRow(label: "Command") {
+                    Picker("", selection: Binding(get: { send.msc }, set: { v in setSend { $0.msc = v } })) {
+                        ForEach(MSCCommand.allCases) { Text($0.label).tag($0) }
+                    }
+                    .labelsHidden().frame(width: 120)
+                }
+                PropertyRow(label: "Cue") { textField("12.5", send.mscCue) { v in setSend { $0.mscCue = v } } }
+                PropertyRow(label: "Cue list") { textField("optional", send.mscList) { v in setSend { $0.mscList = v } } }
+                PropertyRow(label: "Device ID") { intField(send.mscDevice, 0...127) { v in setSend { $0.mscDevice = v } } }
+            case .text:
+                PropertyRow(label: "String") { textField("e.g. PLAY\\r or \\x02POW\\x03", send.text) { v in setSend { $0.text = v } } }
+                Text("\\r \\n \\t and \\xHH work in the string. The target adds its line ending (\(target.lineEnding.label)).")
+                    .font(.ocMeta).foregroundStyle(Gallery.faint)
+            case .http:
+                PropertyRow(label: "Method") {
+                    Picker("", selection: Binding(get: { send.method }, set: { v in setSend { $0.method = v } })) {
+                        ForEach(HTTPMethod.allCases) { Text($0.rawValue).tag($0) }
+                    }
+                    .labelsHidden().pickerStyle(.segmented).frame(width: 160)
+                }
+                PropertyRow(label: "Path") { textField("/api/location/1/0/0/press", send.path) { v in setSend { $0.path = v } } }
+                if send.method != .get {
+                    PropertyRow(label: "Body") { textField("optional", send.body) { v in setSend { $0.body = v } } }
+                }
+            case .dmx:
+                PropertyRow(label: "Channel") { intField(send.dmxChannel, 1...512) { v in setSend { $0.dmxChannel = v } } }
+                PropertyRow(label: "Level") { intField(send.dmxLevel, 0...255) { v in setSend { $0.dmxLevel = v } } }
+                PropertyRow(label: "Fade") {
+                    CommitField(placeholder: "0", value: String(format: "%g", send.dmxFade), font: .readout(13), width: 60) { text in
+                        guard let v = Double(text.replacingOccurrences(of: ",", with: ".")), v >= 0, v <= 600 else { return false }
+                        setSend { $0.dmxFade = v }
+                        return true
+                    }
+                }
+            }
+            HStack {
+                Button("Send Now") { model.engine?.sendDevice(send, target: target.id) }
+                    .buttonStyle(QuietButtonStyle())
+                    .disabled(model.engine == nil)
+                Text(target.simulated ? "Simulated target: nothing leaves this Mac." : (model.engine == nil ? "Send Now works in Live Mode." : ""))
+                    .font(.ocMeta).foregroundStyle(Gallery.faint)
+            }
+        }
+    }
+
+    private func setSend(_ change: @escaping (inout DeviceSend) -> Void) {
+        let kind = show.deviceTargets.first { $0.id == cue.sendTargetID }?.kind.sendKinds.first ?? .text
+        model.updateCue(cue.id, "Change Device Command") { c in
+            var s = c.send ?? DeviceSend(kind: kind)
+            change(&s)
+            c.send = s
+        }
+    }
+
+    private func intField(_ value: Int, _ range: ClosedRange<Int>, set: @escaping (Int) -> Void) -> some View {
+        CommitField(placeholder: "\(range.lowerBound)", value: String(value), font: .readout(13), width: 64) { text in
+            guard let v = Int(text.trimmingCharacters(in: .whitespaces)), range.contains(v) else { return false }
+            set(v)
+            return true
+        }
+    }
+
+    private func textField(_ placeholder: String, _ value: String, set: @escaping (String) -> Void) -> some View {
+        CommitField(placeholder: placeholder, value: value, font: .readout(13)) { text in
+            set(text)
+            return true
         }
     }
 
@@ -237,6 +349,7 @@ extension TrackKind {
         case .notes: return "Note"
         case .calls: return "Cue"
         case .player: return "Player cue"
+        case .device: return "Device command"
         }
     }
 }
@@ -270,6 +383,9 @@ extension Show {
         case .calls:
             let call = cue.text.isEmpty ? "Cue" : cue.text
             return cue.callRole.isEmpty ? call : "\(cue.callRole.uppercased()) · \(call)"
+        case .device:
+            let target = deviceTargets.first { $0.id == cue.sendTargetID }?.name ?? "No target"
+            return "\(target): \(cue.send?.summary ?? "nothing set")" + suffix
         case .player:
             let action = cue.playerAction ?? .play
             var parts = [cue.playerName.isEmpty ? "Player" : cue.playerName, action.short]

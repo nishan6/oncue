@@ -13,6 +13,20 @@ struct TallySetup: View {
             ForEach(show.tallyOutputs) { config in
                 TallyOutputCard(config: config, show: show, model: model)
             }
+            Text("TALLY IN").font(.ocTag).tracking(0.6).foregroundStyle(Gallery.faint)
+            Text("A switcher or tally system reporting what is really on program (TSL over UDP). A cut OnCue didn't make pauses automation, as an ATEM's own read-back does. Use it for switchers OnCue drives through Companion.")
+                .font(.ocMeta).foregroundStyle(Gallery.dim).fixedSize(horizontal: false, vertical: true)
+            ForEach(show.tallyInputs) { config in
+                TallyInputCard(config: config, show: show, model: model)
+            }
+            Button {
+                var c = TallyInputConfig(name: "Tally in \(show.tallyInputs.count + 1)")
+                c.switcherID = show.mainOutput?.switcherID
+                model.edit("Add Tally Input") { $0.tallyInputs.append(c) }
+            } label: { Label("Tally input", systemImage: "plus") }
+            .buttonStyle(QuietButtonStyle())
+            Rectangle().fill(Gallery.hairline).frame(height: 1)
+            Text("TALLY OUT").font(.ocTag).tracking(0.6).foregroundStyle(Gallery.faint)
             HStack(spacing: Space.s) {
                 Button {
                     model.edit("Add Tally Output") { $0.tallyOutputs.append(TallyOutputConfig(name: "Tally \(show.tallyOutputs.count + 1)")) }
@@ -137,6 +151,14 @@ struct LiveDeviceStrip: View {
                 Label("FAILED OVER: reading program and tally from \(mirror?.name ?? "the parallel switcher")", systemImage: "arrow.triangle.branch")
                     .font(.ocTag).foregroundStyle(Gallery.amber)
             }
+            if let sent = engine.recentDeviceSends.first, sent.simulated || sent.error != nil {
+                HStack(spacing: Space.s) {
+                    Text(sent.simulated ? "SIMULATED" : "DEVICE ERROR").font(.ocTag).tracking(0.6)
+                        .foregroundStyle(sent.error != nil ? Gallery.tally : Gallery.faint)
+                    Text("\(sent.target): \(sent.summary)").font(.ocMeta).foregroundStyle(Gallery.dim)
+                    if let error = sent.error { Text(error).font(.ocMeta).foregroundStyle(Gallery.tally) }
+                }
+            }
             ForEach(show.tallyOutputs.filter(\.simulated)) { output in
                 if let now = engine.tallyNow(output.id) {
                     HStack(spacing: 4) {
@@ -153,6 +175,197 @@ struct LiveDeviceStrip: View {
                     }
                 }
             }
+        }
+    }
+}
+
+private struct TallyInputCard: View {
+    let config: TallyInputConfig
+    let show: Show
+    @ObservedObject var model: WorkspaceModel
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Space.s) {
+            HStack {
+                CommitField(placeholder: "Name", value: config.name, font: .ocHeading, width: 220) { text in
+                    let t = text.trimmingCharacters(in: .whitespaces)
+                    guard !t.isEmpty else { return false }
+                    update("Rename Tally Input") { $0.name = t }
+                    return true
+                }
+                Spacer()
+                Toggle("On", isOn: Binding(get: { config.enabled }, set: { v in update("Turn Tally Input \(v ? "On" : "Off")") { $0.enabled = v } }))
+                    .toggleStyle(.switch)
+                IconButton(symbol: "trash", help: "Delete this tally input") {
+                    model.edit("Delete Tally Input") { $0.tallyInputs.removeAll { $0.id == config.id } }
+                }
+            }
+            PropertyRow(label: "Listen") {
+                HStack {
+                    Picker("", selection: Binding(get: { config.version }, set: { v in update("Change Tally Protocol") { $0.version = v } })) {
+                        ForEach(TSLVersion.allCases) { Text($0.label).tag($0) }
+                    }
+                    .labelsHidden().frame(width: 160)
+                    Text("UDP port").font(.ocMeta).foregroundStyle(Gallery.dim)
+                    CommitField(placeholder: "8901", value: String(config.port), font: .readout(13), width: 70) { text in
+                        guard let p = Int(text), (1...65535).contains(p) else { return false }
+                        update("Change Tally Port") { $0.port = p }
+                        return true
+                    }
+                }
+            }
+            PropertyRow(label: "Reports") {
+                Picker("", selection: Binding(get: { config.switcherID }, set: { v in update("Change Tally Switcher") { $0.switcherID = v } })) {
+                    ForEach(show.switchers.filter { $0.mirrorOf == nil }) { Text($0.name).tag(UUID?.some($0.id)) }
+                }
+                .labelsHidden().frame(width: 220)
+            }
+            PropertyRow(label: "Tally number") {
+                Picker("", selection: Binding(get: { config.indexMode }, set: { v in update("Change Tally Numbering") { $0.indexMode = v } })) {
+                    ForEach(TallyIndexMode.allCases) { Text($0.label).tag($0) }
+                }
+                .labelsHidden().pickerStyle(.segmented).frame(width: 260)
+            }
+        }
+        .padding(Space.m)
+        .background(Gallery.raised, in: RoundedRectangle(cornerRadius: Radius.m))
+    }
+
+    private func update(_ name: String, _ change: @escaping (inout TallyInputConfig) -> Void) {
+        model.edit(name) { s in
+            if let i = s.tallyInputs.firstIndex(where: { $0.id == config.id }) { change(&s.tallyInputs[i]) }
+        }
+    }
+}
+
+/// Show Setup › Devices: targets for Device commands cues.
+struct DevicesSetup: View {
+    let show: Show
+    @ObservedObject var model: WorkspaceModel
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Space.l) {
+            Text("Gear that Device commands cues talk to: a grandMA3 or Ableton over MIDI / MSC, Companion or a playback server over TCP, UDP or HTTP, a projector or router on serial, house lights over Art-Net or sACN. Built from the protocol specs; each stays Built until tested on the real thing. Mark one Simulated to rehearse without it.")
+                .font(.ocMeta).foregroundStyle(Gallery.dim).fixedSize(horizontal: false, vertical: true)
+            ForEach(show.deviceTargets) { target in
+                DeviceTargetCard(target: target, model: model)
+            }
+            Menu {
+                ForEach(DeviceTargetKind.allCases) { kind in
+                    Button(kind.label) {
+                        model.edit("Add Device") { $0.deviceTargets.append(DeviceTarget(name: kind.label, kind: kind)) }
+                    }
+                }
+            } label: { Label("Device", systemImage: "plus") }
+            .menuStyle(.borderlessButton)
+            .fixedSize()
+        }
+    }
+}
+
+private struct DeviceTargetCard: View {
+    let target: DeviceTarget
+    @ObservedObject var model: WorkspaceModel
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Space.s) {
+            HStack {
+                CommitField(placeholder: "Name", value: target.name, font: .ocHeading, width: 220) { text in
+                    let t = text.trimmingCharacters(in: .whitespaces)
+                    guard !t.isEmpty else { return false }
+                    update("Rename Device") { $0.name = t }
+                    return true
+                }
+                Pill(text: target.kind.label.uppercased(), color: Gallery.dim)
+                if target.simulated { Pill(text: "SIMULATED", color: Gallery.amber) }
+                Spacer()
+                IconButton(symbol: "trash", help: "Delete this device") {
+                    model.edit("Delete Device") { $0.deviceTargets.removeAll { $0.id == target.id } }
+                }
+            }
+            switch target.kind {
+            case .midi:
+                PropertyRow(label: "Destination") {
+                    CommitField(placeholder: "As macOS names it, e.g. IAC Driver Bus 1", value: target.midiDestination, font: .ocBody) { text in
+                        update("Change MIDI Destination") { $0.midiDestination = text.trimmingCharacters(in: .whitespaces) }
+                        return true
+                    }
+                }
+            case .tcp, .udp:
+                hostPort
+                lineEnding
+            case .http:
+                PropertyRow(label: "Address") {
+                    CommitField(placeholder: "http://192.168.10.20:8000", value: target.baseURL, font: .readout(13)) { text in
+                        update("Change Device Address") { $0.baseURL = text.trimmingCharacters(in: .whitespaces) }
+                        return true
+                    }
+                }
+            case .serial:
+                PropertyRow(label: "Port") {
+                    CommitField(placeholder: "/dev/cu.usbserial-…", value: target.serialPath, font: .readout(13)) { text in
+                        update("Change Serial Port") { $0.serialPath = text.trimmingCharacters(in: .whitespaces) }
+                        return true
+                    }
+                }
+                PropertyRow(label: "Baud") {
+                    Picker("", selection: Binding(get: { target.baud }, set: { v in update("Change Baud Rate") { $0.baud = v } })) {
+                        ForEach([1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200], id: \.self) { Text(String($0)).tag($0) }
+                    }
+                    .labelsHidden().frame(width: 120)
+                }
+                lineEnding
+            case .artNet, .sACN:
+                PropertyRow(label: "Universe") {
+                    CommitField(placeholder: target.kind == .artNet ? "0" : "1", value: String(target.universe), font: .readout(13), width: 70) { text in
+                        guard let u = Int(text), u >= 0, u <= (target.kind == .artNet ? 32767 : 63999) else { return false }
+                        update("Change Universe") { $0.universe = u }
+                        return true
+                    }
+                }
+                PropertyRow(label: "Send to") {
+                    CommitField(placeholder: target.kind == .artNet ? "Broadcast (empty) or a node's IP" : "Multicast (empty) or an IP", value: target.host, font: .readout(13)) { text in
+                        update("Change DMX Address") { $0.host = text.trimmingCharacters(in: .whitespaces) }
+                        return true
+                    }
+                }
+            }
+            Toggle("Simulated: nothing leaves this Mac", isOn: Binding(get: { target.simulated }, set: { v in update("Change Device Simulation") { $0.simulated = v } }))
+                .toggleStyle(.checkbox)
+        }
+        .padding(Space.m)
+        .background(Gallery.raised, in: RoundedRectangle(cornerRadius: Radius.m))
+    }
+
+    private var hostPort: some View {
+        PropertyRow(label: "Address") {
+            HStack {
+                CommitField(placeholder: "192.168.10.20", value: target.host, font: .readout(13), width: 170) { text in
+                    update("Change Device Address") { $0.host = text.trimmingCharacters(in: .whitespaces) }
+                    return true
+                }
+                Text("port").font(.ocMeta).foregroundStyle(Gallery.dim)
+                CommitField(placeholder: "port", value: target.port > 0 ? String(target.port) : "", font: .readout(13), width: 70) { text in
+                    guard let p = Int(text), (1...65535).contains(p) else { return false }
+                    update("Change Device Port") { $0.port = p }
+                    return true
+                }
+            }
+        }
+    }
+
+    private var lineEnding: some View {
+        PropertyRow(label: "Line ending") {
+            Picker("", selection: Binding(get: { target.lineEnding }, set: { v in update("Change Line Ending") { $0.lineEnding = v } })) {
+                ForEach(LineEnding.allCases) { Text($0.label).tag($0) }
+            }
+            .labelsHidden().pickerStyle(.segmented).frame(width: 240)
+        }
+    }
+
+    private func update(_ name: String, _ change: @escaping (inout DeviceTarget) -> Void) {
+        model.edit(name) { s in
+            if let i = s.deviceTargets.firstIndex(where: { $0.id == target.id }) { change(&s.deviceTargets[i]) }
         }
     }
 }
