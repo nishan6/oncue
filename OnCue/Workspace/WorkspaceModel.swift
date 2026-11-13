@@ -943,6 +943,8 @@ final class WorkspaceModel: ObservableObject {
 
     /// The shot bar under the timeline (type "cu push 2s lead" with shots selected).
     @Published var shotBarOpen = false
+    /// ⌘K: jump to a song or shot, or open a tool.
+    @Published var paletteOpen = false
     @Published var shotBarText = ""
     @Published var triggerRoutesOpen = false
     @Published var deviceStatusOpen = false

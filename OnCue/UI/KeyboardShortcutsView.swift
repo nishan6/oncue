@@ -34,7 +34,7 @@ struct KeyboardShortcutsView: View {
             ("⌥⌘I", "Show or hide the inspector"), ("⇧⌘L", "Project Library"),
         ]),
         ShortcutGroup(title: "Windows and tools", keys: [
-            ("⌘L", "Enter Live Mode"), ("⌥⌘K", "Pre-show check"), ("⌥⌘D", "Device status"), ("⌥⌘S", "Show setup"),
+            ("⌘K", "Go to any song, shot (\"cam 3\", \"#12\") or tool"), ("⌘L", "Enter Live Mode"), ("⌥⌘K", "Pre-show check"), ("⌥⌘D", "Device status"), ("⌥⌘S", "Show setup"),
             ("⌥⌘C", "Cameras"), ("⌥⌘R", "Trigger routes"), ("⌥⌘P", "Camera plot"), ("⇧⌘E", "Export"),
             ("⌥⌘,", "Project properties"), ("⌘,", "Settings (this Mac)"), ("⌘/", "This list"),
         ]),
