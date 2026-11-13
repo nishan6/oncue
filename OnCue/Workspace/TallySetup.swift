@@ -159,6 +159,12 @@ struct LiveDeviceStrip: View {
                     if let error = sent.error { Text(error).font(.ocMeta).foregroundStyle(Gallery.tally) }
                 }
             }
+            ForEach(engine.consoleReadBack, id: \.name) { console in
+                HStack(spacing: Space.s) {
+                    Text(console.name.uppercased()).font(.ocTag).tracking(0.6).foregroundStyle(Gallery.faint)
+                    Text(console.summary).font(.ocMeta).foregroundStyle(Gallery.dim)
+                }
+            }
             ForEach(show.tallyOutputs.filter(\.simulated)) { output in
                 if let now = engine.tallyNow(output.id) {
                     HStack(spacing: 4) {

@@ -1179,6 +1179,13 @@ extension EngineController {
         }
     }
 
+    /// What consoles report back (X32/M32), by device target name.
+    public var consoleReadBack: [(name: String, summary: String)] {
+        engine.show.deviceTargets.compactMap { t in
+            deviceOut.consoleState[t.id].map { (t.name, $0.summary) }
+        }
+    }
+
     /// Sends one Device command now (Test in the cue inspector, or a trigger).
     public func sendDevice(_ payload: DeviceSend, target: UUID) {
         guard let t = engine.show.deviceTargets.first(where: { $0.id == target }) else { return }

@@ -231,3 +231,32 @@ public enum ConsoleWire {
         s.kind == .grandMA2 ? ["Login \"\(s.user)\" \"\(s.password)\""] : []
     }
 }
+
+/// What a console reported back.
+public struct ConsoleReadBack: Equatable {
+    public var scene: Int?
+    public var muted: Set<Int> = []
+    public init() {}
+
+    /// X32/M32 replies and /xremote updates. Returns true when something changed.
+    public mutating func apply(address: String, value: Int?) -> Bool {
+        if address == "/-show/prepos/current", let v = value, v != scene {
+            scene = v
+            return true
+        }
+        let parts = address.split(separator: "/")
+        if parts.count == 4, parts[0] == "ch", parts[2] == "mix", parts[3] == "on", let ch = Int(parts[1]), let v = value {
+            let wasMuted = muted.contains(ch)
+            if v == 0 { muted.insert(ch) } else { muted.remove(ch) }
+            return wasMuted != (v == 0)
+        }
+        return false
+    }
+
+    public var summary: String {
+        var parts: [String] = []
+        if let scene { parts.append("scene \(scene)") }
+        if !muted.isEmpty { parts.append("muted " + muted.sorted().map(String.init).joined(separator: ", ")) }
+        return parts.isEmpty ? "connected, nothing reported yet" : parts.joined(separator: " · ")
+    }
+}

@@ -61,3 +61,16 @@ final class ConsoleTests: XCTestCase {
         }
     }
 }
+
+final class ConsoleReadBackTests: XCTestCase {
+    func testX32Updates() {
+        var s = ConsoleReadBack()
+        XCTAssertTrue(s.apply(address: "/-show/prepos/current", value: 7))
+        XCTAssertFalse(s.apply(address: "/-show/prepos/current", value: 7))
+        XCTAssertTrue(s.apply(address: "/ch/03/mix/on", value: 0))
+        XCTAssertTrue(s.apply(address: "/ch/05/mix/on", value: 0))
+        XCTAssertTrue(s.apply(address: "/ch/05/mix/on", value: 1))
+        XCTAssertFalse(s.apply(address: "/ch/01/mix/fader", value: 1))
+        XCTAssertEqual(s.summary, "scene 7 · muted 3")
+    }
+}

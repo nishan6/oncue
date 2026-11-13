@@ -65,8 +65,45 @@ final class DeviceOutputService {
         record(target, payload.summary, error: error)
     }
 
+    /// What consoles that report back say now (X32/M32: current scene and muted channels).
+    private(set) var consoleState: [UUID: ConsoleReadBack] = [:]
+    private var lastRemote: [UUID: Double] = [:]
+    private var listening: Set<UUID> = []
+
+    /// X32/M32: subscribe with /xremote (renewed every 9 s) and ask for the current scene.
+    private func tickConsoles(_ targets: [DeviceTarget], now: Double) {
+        for t in targets where t.kind == .console && t.console.kind == .x32 && !t.simulated {
+            guard now - (lastRemote[t.id] ?? 0) >= 9,
+                  let c = connection(t, host: t.host, port: t.port > 0 ? t.port : 10023, udp: true) else { continue }
+            lastRemote[t.id] = now
+            if !listening.contains(t.id) {
+                listening.insert(t.id)
+                receiveConsole(c, id: t.id)
+            }
+            c.send(content: OSC.encode(address: "/xremote", args: []), completion: .contentProcessed { _ in })
+            c.send(content: OSC.encode(address: "/-show/prepos/current", args: []), completion: .contentProcessed { _ in })
+        }
+    }
+
+    private func receiveConsole(_ c: NWConnection, id: UUID) {
+        c.receiveMessage { [weak self] data, _, _, error in
+            if let data, let (address, args) = OSC.decode(data) {
+                DispatchQueue.main.async {
+                    guard let self else { return }
+                    var s = self.consoleState[id] ?? ConsoleReadBack()
+                    if s.apply(address: address, value: args.first.flatMap {
+                        switch $0 { case .int(let v): return Int(v); case .float(let v): return Int(v); default: return nil }
+                    }) { self.consoleState[id] = s }
+                }
+            }
+            if error == nil { self?.receiveConsole(c, id: id) }
+            else { DispatchQueue.main.async { self?.listening.remove(id) } }
+        }
+    }
+
     /// Keeps DMX alive (every second) and runs fades (about 30 Hz).
     func tick(targets: [DeviceTarget], now: Double) {
+        tickConsoles(targets, now: now)
         let changed = mixer.advance(now: now)
         for t in targets where (t.kind == .artNet || t.kind == .sACN) && !t.simulated {
             let last = lastDMX[t.id] ?? 0
