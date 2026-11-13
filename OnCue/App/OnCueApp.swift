@@ -93,6 +93,9 @@ struct LibraryCommands: Commands {
         CommandGroup(after: .appInfo) {
             Button("Check for Updates…") { Updater.shared.check(manual: true) }
         }
+        CommandGroup(after: .help) {
+            Button("Open Sample Project") { SampleProject.open() }
+        }
         CommandGroup(before: .windowList) {
             Button("Project Library") { openWindow(id: LibraryModel.windowID) }
                 .keyboardShortcut("l", modifiers: [.command, .shift])
@@ -105,6 +108,31 @@ struct LibraryCommands: Commands {
                 .disabled(workspace == nil)
             Button("Versions…") { workspace?.versionsOpen = true }
                 .disabled(workspace == nil)
+        }
+    }
+}
+
+
+/// Help › Open Sample Project: a fresh copy of "Live at the Arena" (songs, shots with details,
+/// cues, the Simulator switcher) to try every feature without real kit.
+enum SampleProject {
+    static func open() {
+        let folder = MachineProfileStore.defaultDirectory.appendingPathComponent("Samples", isDirectory: true)
+        let stamp = Date().formatted(.dateTime.year().month(.twoDigits).day(.twoDigits).hour().minute())
+            .replacingOccurrences(of: "/", with: "-").replacingOccurrences(of: ":", with: ".")
+        let url = folder.appendingPathComponent("Sample – Live at the Arena \(stamp).oncue")
+        do {
+            try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+            var project = Project(migrating: ScreenshotRun.decorated(Show.sample()))
+            project.artist = "Neon Skyline"
+            project.venue = "City Arena"
+            project.properties.shots.cast = ScreenshotRun.sampleCast
+            try ProjectPackage.write(project, to: url)
+            NSDocumentController.shared.openDocument(withContentsOf: url, display: true) { _, _, error in
+                if let error { NSAlert(error: error).runModal() }
+            }
+        } catch {
+            NSAlert(error: error).runModal()
         }
     }
 }
