@@ -201,7 +201,6 @@ extension Show {
 // MARK: - Switchers and outputs
 
 extension Show {
-    @discardableResult
     /// A second switcher running in parallel with `main`: no outputs or shot tracks of its own,
     /// it gets every command `main` gets.
     @discardableResult
@@ -212,6 +211,7 @@ extension Show {
         return config.id
     }
 
+    @discardableResult
     public mutating func addSwitcher(name: String, kind: SwitcherKind, role: SwitcherRole) -> UUID {
         var config = SwitcherConfig(name: name, kind: kind, role: role)
         if role == .sub { config.parentID = mainOutput?.switcherID }
