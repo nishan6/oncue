@@ -562,6 +562,9 @@ public struct ShowSettings: Codable, Hashable {
     public var unusedCameraMinutes: Double = 10
     public var manualCutWindow: Double = 0.4
     public var monitors: [MonitorConfig] = []
+    /// Going live also starts the crew page and opens the operator monitors.
+    public var liveStartsCrew: Bool = false
+    public var liveOpensMonitors: Bool = false
     /// Tour mode: what tonight is called ("Night 3, Pune"). Written into tonight's switch log.
     public var nightLabel: String = ""
 }

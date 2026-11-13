@@ -359,6 +359,8 @@ extension ShowSettings {
         manualCutWindow = try c.value("manualCutWindow", 0.4)
         monitors = try c.value("monitors", [])
         nightLabel = try c.value("nightLabel", "")
+        liveStartsCrew = try c.value("liveStartsCrew", false)
+        liveOpensMonitors = try c.value("liveOpensMonitors", false)
     }
 }
 

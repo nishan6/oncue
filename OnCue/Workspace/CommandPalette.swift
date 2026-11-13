@@ -130,6 +130,7 @@ struct CommandPalette: View {
                              search: (title + " " + detail).lowercased(), run: run))
         }
         tool(model.isLive ? "Exit Live Mode" : "Enter Live Mode", "⌘L", "dot.radiowaves.left.and.right") { model.toggleLive() }
+        if !model.isLive { tool("Go Live…", "Scene, mode, crew page, monitors · ⌥⌘L", "play.circle") { model.goLiveOpen = true } }
         tool("Pre-show Check", "⌥⌘K", "checklist") { model.preShowCheckOpen = true }
         tool("Device Status", "⌥⌘D", "antenna.radiowaves.left.and.right") { model.deviceStatusOpen = true }
         tool("Show Setup", "Switchers, tally, devices, monitors · ⌥⌘S", "gearshape") { model.switcherSetupOpen = true }

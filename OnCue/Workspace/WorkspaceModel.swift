@@ -921,7 +921,22 @@ final class WorkspaceModel: ObservableObject {
         configureTriggers(controller)
         engine = controller
         startBackupLink(controller, role: BackupRole(rawValue: profile.backupRole) ?? .off, primaryHost: profile.primaryHost)
+        // The mode used last time on this Mac (nothing is sent until GO), and what this show
+        // asks to start with Live Mode.
+        if let mode = lastLiveMode, mode != .display { controller.setMode(mode) }
+        if show.settings.liveStartsCrew, !crew.running { crew.start() }
+        if show.settings.liveOpensMonitors, !show.settings.monitors.isEmpty {
+            DispatchQueue.main.async { self.monitors.open(model: self, engine: controller, show: self.show) }
+        }
     }
+
+    /// The main output's mode last used in Live Mode for this show on this Mac.
+    var lastLiveMode: OutputMode? {
+        get { attachedShowID.flatMap { UserDefaults.standard.string(forKey: "liveMode.\($0.uuidString)") }.flatMap(OutputMode.init) }
+        set { if let id = attachedShowID { UserDefaults.standard.set(newValue?.rawValue, forKey: "liveMode.\(id.uuidString)") } }
+    }
+
+    @Published var goLiveOpen = false
 
     /// Trigger Routes for the live engine: song N from a value, and rehearsal notes filed on the
     /// shot on air (Inspector › Reviews).
@@ -952,6 +967,7 @@ final class WorkspaceModel: ObservableObject {
     /// Leaves Live Mode, selecting the song and the shot that was on air.
     func exitLive() {
         guard let controller = engine else { return }
+        lastLiveMode = controller.status.mode(show.mainOutput?.id)
         let cursor = controller.status.cursor
         let onAir = show.liveNow(cursor)
         monitors.close()
