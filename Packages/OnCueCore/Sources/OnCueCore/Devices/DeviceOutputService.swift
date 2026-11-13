@@ -147,6 +147,15 @@ final class DeviceOutputService {
         let messages = ConsoleWire.messages(action, settings: s)
         guard !messages.isEmpty else { return "\(s.kind.label) can't do “\(action.kind.label)”" }
         let port = target.port > 0 ? target.port : s.kind.defaultPort
+        if s.kind.http {
+            for case .http(let path) in messages {
+                guard let url = URL(string: "http://\(target.host):\(port)\(path)"), !target.host.isEmpty else { return "No address set" }
+                URLSession.shared.dataTask(with: URLRequest(url: url, timeoutInterval: 3)) { _, _, error in
+                    if let error { NSLog("OnCue console \(target.name): \(error.localizedDescription)") }
+                }.resume()
+            }
+            return nil
+        }
         let isNew = connections[target.id] == nil
         guard let c = connection(target, host: target.host, port: port, udp: s.kind.udp) else { return "No address set" }
         if isNew {
@@ -165,6 +174,7 @@ final class DeviceOutputService {
                 })
             case .line(let text): data = Data((text + "\r\n").utf8)
             case .bytes(let b): data = Data(b)
+            case .http: continue
             }
             c.send(content: data, completion: .contentProcessed { _ in })
         }

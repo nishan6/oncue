@@ -7,12 +7,14 @@ import Foundation
 // console's notes say where its protocol comes from; all stay Built until tested on the desk.
 
 public enum ConsoleKind: String, Codable, CaseIterable, Identifiable {
-    case grandMA3, grandMA2, xpression, resolume, x32, yamahaRCP, allenHeath
+    case grandMA3, grandMA2, avolites, xpression, resolume, x32, wing, yamahaRCP, allenHeath
     public var id: String { rawValue }
     public var label: String {
         switch self {
         case .grandMA3: return "grandMA3 (OSC)"
         case .grandMA2: return "grandMA2 (Telnet)"
+        case .avolites: return "Avolites Titan (WebAPI)"
+        case .wing: return "Behringer WING (OSC)"
         case .xpression: return "Ross XPression (RossTalk)"
         case .resolume: return "Resolume Arena / Avenue (OSC)"
         case .x32: return "Behringer X32 / Midas M32 (OSC)"
@@ -24,6 +26,8 @@ public enum ConsoleKind: String, Codable, CaseIterable, Identifiable {
         switch self {
         case .grandMA3: return 8000
         case .grandMA2: return 30000
+        case .avolites: return 4430
+        case .wing: return 2223
         case .xpression: return 7788
         case .resolume: return 7000
         case .x32: return 10023
@@ -32,11 +36,15 @@ public enum ConsoleKind: String, Codable, CaseIterable, Identifiable {
         }
     }
     /// UDP for the OSC consoles, TCP for the rest.
-    public var udp: Bool { self == .grandMA3 || self == .resolume || self == .x32 }
+    public var udp: Bool { self == .grandMA3 || self == .resolume || self == .x32 || self == .wing }
+    /// Avolites is driven over HTTP.
+    public var http: Bool { self == .avolites }
 
     public var actions: [ConsoleActionKind] {
         switch self {
         case .grandMA3, .grandMA2: return [.goCue, .goNext, .command]
+        case .avolites: return [.goNext]
+        case .wing: return [.mute, .fader]
         case .xpression: return [.take, .takeOut, .cueGraphic, .next, .clearLayer]
         case .resolume: return [.playClip, .column, .clearLayer]
         case .x32: return [.scene, .mute, .fader]
@@ -49,6 +57,8 @@ public enum ConsoleKind: String, Codable, CaseIterable, Identifiable {
         switch self {
         case .grandMA3: return "Turn on OSC input in the MA3 (In & Out › OSC) with \"Receive Command\" and the prefix set below. Built from MA3's OSC documentation."
         case .grandMA2: return "Turn on Telnet in the MA2 (Setup › Console › Global Settings). OnCue logs in with the user and password set below. Built from the MA2 command-line documentation."
+        case .avolites: return "Titan WebAPI on port 4430. GO plays the next cue on the playback with the user number set as the sequence. Going to a specific cue isn't built yet. Built from Avolites' Titan API reference."
+        case .wing: return "WING OSC on port 2223: mute and fader in dB. Scene recall over OSC isn't confirmed yet, so it isn't offered. Built from the WING remote protocols document."
         case .xpression: return "RossTalk on port 7788. Framebuffer 1 is RossTalk 0. Built from Ross's XPression RossTalk command list."
         case .resolume: return "Turn on OSC input in Resolume's Preferences › OSC (default port 7000). Built from Resolume's OSC documentation."
         case .x32: return "X32 and M32 listen for OSC on port 10023. Built from the widely used X32 OSC reference (not an official Behringer document)."
@@ -120,6 +130,8 @@ public enum ConsoleMessage: Equatable {
     case osc(String, [ConsoleOSCValue])
     case line(String)
     case bytes([UInt8])
+    /// HTTP GET path (with query) on the console.
+    case http(String)
 }
 
 public enum ConsoleOSCValue: Equatable {
@@ -163,6 +175,18 @@ public enum ConsoleWire {
             case .goCue: return [.line("Goto Executor \(a.list) Cue \(num)")]
             case .goNext: return [.line("Go Executor \(a.list)")]
             case .command: return a.text.isEmpty ? [] : [.line(a.text)]
+            default: return []
+            }
+        case .avolites:
+            switch a.kind {
+            case .goNext: return [.http("/titan/script/2/CueLists/Play?handle_userNumber=\(max(1, a.list))")]
+            default: return []
+            }
+        case .wing:
+            let ch = max(1, min(a.channel, 40))
+            switch a.kind {
+            case .mute: return [.osc("/ch/\(ch)/mute", [.int(a.on ? 1 : 0)])]
+            case .fader: return [.osc("/ch/\(ch)/fdr", [.float(max(-144, min(a.level, 10)))])]
             default: return []
             }
         case .xpression:

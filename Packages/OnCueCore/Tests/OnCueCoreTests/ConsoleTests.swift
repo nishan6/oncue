@@ -74,3 +74,17 @@ final class ConsoleReadBackTests: XCTestCase {
         XCTAssertEqual(s.summary, "scene 7 · muted 3")
     }
 }
+
+final class MoreConsoleTests: XCTestCase {
+    func testAvolitesAndWing() {
+        var a = ConsoleAction(kind: .goNext)
+        a.list = 6
+        XCTAssertEqual(ConsoleWire.messages(a, settings: ConsoleSettings(kind: .avolites)), [.http("/titan/script/2/CueLists/Play?handle_userNumber=6")])
+        var m = ConsoleAction(kind: .mute)
+        m.channel = 2
+        XCTAssertEqual(ConsoleWire.messages(m, settings: ConsoleSettings(kind: .wing)), [.osc("/ch/2/mute", [.int(1)])])
+        var f = ConsoleAction(kind: .fader)
+        f.channel = 2; f.level = -2
+        XCTAssertEqual(ConsoleWire.messages(f, settings: ConsoleSettings(kind: .wing)), [.osc("/ch/2/fdr", [.float(-2)])])
+    }
+}
