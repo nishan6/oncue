@@ -1,0 +1,20 @@
+soak: 5.50 h of show time at 1.0× (about 5.50 h real)
+soak: 0.00 h show, 23 MB, 0 takes
+soak: 0.50 h show, 23 MB, 137 takes
+soak: 1.00 h show, 23 MB, 274 takes
+soak: 1.50 h show, 24 MB, 411 takes
+soak: 2.00 h show, 24 MB, 548 takes
+soak: 2.50 h show, 24 MB, 685 takes
+soak: 3.00 h show, 25 MB, 822 takes
+soak: 3.50 h show, 25 MB, 959 takes
+soak: 4.00 h show, 25 MB, 1096 takes
+soak: 4.50 h show, 25 MB, 1234 takes
+soak: 5.00 h show, 25 MB, 1371 takes
+soak: 5.50 h show, 25 MB, 1508 takes
+Ran 5.50 h of show time in 5.50 h real at 1.0×.
+Memory: 24 MB after the first quarter, 25 MB at the end (peak 26 MB): +1.0 MB, +0.25 MB per show hour.
+Scripted takes: 1508 (373 in the last quarter).
+Longest stretch without a take: 1 show minutes.
+Take timing (show ms after plan): median 24.7, 99th percentile 124.3, latest 142.9, earliest -0.0; limit 73.3.
+FAIL: 99% of takes should land within 73 ms; the 99th percentile was 124 ms
+FAIL
