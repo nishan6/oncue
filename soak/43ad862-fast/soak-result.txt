@@ -1,0 +1,8 @@
+Ran 24.00 h of show time in 4.80 h real at 5.0×.
+Memory: 25 MB after the first quarter, 25 MB at the end (peak 26 MB): +0.4 MB, +0.02 MB per show hour.
+Scripted takes: 6512 (1621 in the last quarter).
+Longest stretch without a take: 0 show minutes.
+Take timing (show ms after plan): median 99.2, 99th percentile 1744.7, latest 5648.5, earliest -17.4; limit 206.7.
+FAIL: 99% of takes should land within 207 ms; the 99th percentile was 1745 ms
+FAIL: a take landed 17 ms early
+FAIL
